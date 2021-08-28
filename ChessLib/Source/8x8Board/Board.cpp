@@ -3,10 +3,7 @@
 
 namespace chesslib
 {
-	Board::Board() 
-	{
-
-	}
+	Board::Board() { }
 
 	Board::Board(std::string_view piece_placement) 
 	{

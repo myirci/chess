@@ -13,7 +13,7 @@ namespace chesslib
 		Board();
 		Board(std::string_view piece_placement);
 	private:
-		// std::array<Square, 64> board;
+		std::array<Square, 64> board;
 	};
 }
 

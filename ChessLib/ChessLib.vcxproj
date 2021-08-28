@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Source\8x8Board\Board.cpp" />
     <ClCompile Include="Source\Chess\Fen.cpp" />
+    <ClCompile Include="Source\Chess\FenLight.cpp" />
     <ClCompile Include="Source\Chess\Move.cpp" />
     <ClCompile Include="Source\x88Board\x88Board.cpp" />
   </ItemGroup>
@@ -28,6 +29,7 @@
     <ClInclude Include="Source\8x8Board\Board.hpp" />
     <ClInclude Include="Source\Chess\Definitions.hpp" />
     <ClInclude Include="Source\Chess\Fen.hpp" />
+    <ClInclude Include="Source\Chess\FenLight.hpp" />
     <ClInclude Include="Source\Chess\Move.hpp" />
     <ClInclude Include="Source\x88Board\Square.hpp" />
     <ClInclude Include="Source\x88Board\x88Board.hpp" />
