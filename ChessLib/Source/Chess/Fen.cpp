@@ -23,7 +23,7 @@ namespace chesslib
         if (diff != MinNumberOfFields && diff != MaxNumberOfFields) 
             throw std::logic_error("Invalid FEN string.");
 
-        if (IsValid(first, diff))
+        if (IsValid(first, (int)diff))
             Init(first, last);
         else
             throw std::logic_error("Invalid FEN string.");

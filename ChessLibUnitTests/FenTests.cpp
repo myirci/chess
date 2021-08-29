@@ -3,7 +3,7 @@
 #include <vector>
 
 #include <Chess/Fen.hpp>
-#include <Chess/FenLight.hpp>
+#include <Chess/FenHelper.hpp>
 
 using namespace chesslib;
 
@@ -304,29 +304,3 @@ TEST(FenTest, invalid_full_move_clock)
 TEST(FenTest, valid_position) {}
 
 TEST(FenTest, invalid_position) {}
-
-TEST(FenLightTest, get_ranks_starting_position) 
-{
-    auto ranks = FenLight::GetRanks(Fen::StartingPosition);
-    EXPECT_EQ(ranks[0], "rnbqkbnr");
-    EXPECT_EQ(ranks[1], "pppppppp");
-    EXPECT_EQ(ranks[2], "8");
-    EXPECT_EQ(ranks[3], "8");
-    EXPECT_EQ(ranks[4], "8");
-    EXPECT_EQ(ranks[5], "8");
-    EXPECT_EQ(ranks[6], "PPPPPPPP");
-    EXPECT_EQ(ranks[7], "RNBQKBNR");
-}
-
-TEST(FenLightTest, get_ranks_pos1)
-{
-    auto ranks = FenLight::GetRanks("6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1 b KQkq c3 0 2");
-    EXPECT_EQ(ranks[0], "6k1");
-    EXPECT_EQ(ranks[1], "pp3pp1");
-    EXPECT_EQ(ranks[2], "3p4");
-    EXPECT_EQ(ranks[3], "2pP2p1");
-    EXPECT_EQ(ranks[4], "4Pp2");
-    EXPECT_EQ(ranks[5], "8");
-    EXPECT_EQ(ranks[6], "1P3PP1");
-    EXPECT_EQ(ranks[7], "6K1");
-}

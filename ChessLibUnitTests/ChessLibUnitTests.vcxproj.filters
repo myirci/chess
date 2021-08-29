@@ -5,6 +5,7 @@
     <ClCompile Include="FenTests.cpp" />
     <ClCompile Include="MoveTests.cpp" />
     <ClCompile Include="x88Board_SquareTests.cpp" />
+    <ClCompile Include="BoardTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
