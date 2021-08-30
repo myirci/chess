@@ -5,9 +5,6 @@
 
 namespace chesslib 
 {
-    const std::regex Fen::not_white_space = std::regex("[^\\s]+");
-    const std::regex Fen::not_rank_separator = std::regex("[^/]+");
-
     const std::unordered_set<char> Fen::ValidCharSet
     {
         charset::WhiteKing, charset::WhiteQueen, charset::WhiteRook, charset::WhiteBishop, 
@@ -18,7 +15,7 @@ namespace chesslib
 
     Fen::Fen(std::string_view fen_string) : fen_str{ "" }
     {
-        auto [first, last] = ParseString(fen_string, not_white_space);
+        auto [first, last] = regex::parse_string(fen_string, regex::not_white_space);
         auto diff = std::distance(first, last);
         if (diff != MinNumberOfFields && diff != MaxNumberOfFields) 
             throw std::logic_error("Invalid FEN string.");
@@ -29,7 +26,7 @@ namespace chesslib
             throw std::logic_error("Invalid FEN string.");
     }
 
-    bool Fen::IsValid(csvregex_token_it it, int num_fields) 
+    bool Fen::IsValid(regex::csvregex_token_it it, int num_fields)
     {
         std::string_view pp{ it->first, it->second };
         if(!ValidatePiecePlacement(pp))
@@ -68,7 +65,7 @@ namespace chesslib
 
     bool Fen::ValidatePiecePlacement(std::string_view pp)
     {
-        auto [first, last] = ParseString(pp, not_rank_separator);
+        auto [first, last] = regex::parse_string(pp, regex::not_forward_slash);
         auto diff = std::distance(first, last);
         if (diff != 8)
             return false;
@@ -99,7 +96,7 @@ namespace chesslib
             num_extra_black_pieces <= (8 - chars[charset::BlackPawn]);
     }
 
-    bool Fen::CheckRank(int rank, csvregex_token_it tit, std::unordered_map<char, int>& chars)
+    bool Fen::CheckRank(int rank, regex::csvregex_token_it tit, std::unordered_map<char, int>& chars)
     {
         auto square_count{ 0 };
         bool digit{ false };
@@ -162,7 +159,7 @@ namespace chesslib
              fmc[0] != '0' && std::all_of(fmc.begin(), fmc.end(), [](char c) { return std::isdigit(c); }));
     }
 
-    void Fen::Init(csvregex_token_it first, csvregex_token_it last)
+    void Fen::Init(regex::csvregex_token_it first, regex::csvregex_token_it last)
     {
         while (first != last)
         {
@@ -174,9 +171,26 @@ namespace chesslib
         fen_str.pop_back();
     }
 
-    std::pair<Fen::csvregex_token_it, Fen::csvregex_token_it> Fen::ParseString(std::string_view str, const std::regex& pattern)
+    std::vector<std::string_view> Fen::GetFlattenedFields(std::string_view fen) 
     {
-        return std::make_pair(csvregex_token_it(str.cbegin(), str.cend(), pattern, 0), csvregex_token_it());
+        std::vector<std::string_view> flattened_fields;
+        auto [fields_first, fields_last] = regex::parse_string(fen, regex::not_white_space);
+        auto [ranks_first, ranks_last] = regex::parse_string(std::string_view{ fields_first->first, fields_first->second }, regex::not_forward_slash);
+        
+        while (ranks_first != ranks_last) 
+        {
+            flattened_fields.emplace_back(std::string_view{ ranks_first->first, ranks_first->second });
+            ranks_first++;
+        }
+        std::reverse(flattened_fields.begin(), flattened_fields.end());
+        
+        fields_first++;
+        while(fields_first != fields_last)
+        {
+            flattened_fields.emplace_back(std::string_view{ fields_first->first, fields_first->second });
+            fields_first++;
+        }
+        return flattened_fields;
     }
 }
 

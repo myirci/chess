@@ -3,7 +3,6 @@
 #include <vector>
 
 #include <Chess/Fen.hpp>
-#include <Chess/FenHelper.hpp>
 
 using namespace chesslib;
 
@@ -300,7 +299,3 @@ TEST(FenTest, invalid_full_move_clock)
     EXPECT_THROW(Fen("6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1 b - - 0 as"), std::logic_error);
     EXPECT_THROW(Fen("6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1 b - - 0 12s"), std::logic_error);
 }
-
-TEST(FenTest, valid_position) {}
-
-TEST(FenTest, invalid_position) {}

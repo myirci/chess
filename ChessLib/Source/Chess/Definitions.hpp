@@ -7,6 +7,7 @@ namespace chesslib
 {
     using Square = int8_t;
     using Piece = int8_t;
+    using Color = int8_t;
 
     namespace pieceset 
     {
@@ -17,13 +18,10 @@ namespace chesslib
 
     namespace color 
     {
-        enum class Color : int8_t 
-        {
-            Black = -1,
-            White = 1
-        };
+        constexpr Color White = 1;
+        constexpr Color Black = -1;
 
-        inline constexpr Color get_color(Piece p) { return p > 0 ? Color::White : Color::Black; }
+        inline constexpr Color get_color(Piece p) { return p > 0 ? White : Black; }
     }
 
     namespace charset
@@ -76,6 +74,14 @@ namespace chesslib
             a8, b8, c8, d8, e8, f8, g8, h8
         };
     }
+
+    enum class Castling : int8_t
+    {
+        WHITE_KS = 1,
+        WHITE_QS = 2,
+        BLACK_KS = 4,
+        BLACK_QS = 8
+    };
 
     inline const std::unordered_map<char, Piece> char_to_piece =
     {

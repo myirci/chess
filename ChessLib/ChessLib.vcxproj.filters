@@ -24,6 +24,9 @@
     <ClCompile Include="Source\x88Board\x88Board.cpp">
       <Filter>x88Board</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Chess\Utility.cpp">
+      <Filter>Chess</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Chess\Fen.hpp">
@@ -43,6 +46,9 @@
     </ClInclude>
     <ClInclude Include="Source\x88Board\x88Board.hpp">
       <Filter>x88Board</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Chess\Utility.hpp">
+      <Filter>Chess</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
