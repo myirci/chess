@@ -1,10 +1,11 @@
-#include "Board.hpp"
 
-#include <Chess/Definitions.hpp>
-#include <Chess/Fen.hpp>
+#include <ChessLib/8x8Board/Board.hpp>
+#include <ChessLib/Chess/Definitions.hpp>
+#include <ChessLib/Chess/Fen.hpp>
+
 #include <cctype>
 
-namespace chesslib
+namespace chesslib::basic_board
 {
 	Board::Board(std::string_view fen) : 
 		board{ { } },
@@ -82,13 +83,20 @@ namespace chesslib
 	}
 
 	const Board::BoardArray& Board::GetBoard() const { return board; }
+	
 	const Board::PieceMap& Board::GetWhitePieces() const { return white_pieces; }
+	
 	const Board::PieceMap& Board::GetBlackPieces() const { return black_pieces; }
 
-	bool Board::QueryCastling(Castling c) const
-	{
-		return castling_rights & static_cast<int8_t>(c);
-	}
+	Color Board::GetActiveColor() const { return active_color; }
+	
+	Square Board::GetEnPassantSquare() const { return en_passant_target; };
+	
+	uint16_t Board::GetHalfMoveClock() const { return half_move_clock; };
+	
+	uint16_t Board::GetFullMoveClock() const { return full_move_clock; };
+
+	bool Board::QueryCastling(Castling c) const { return castling_rights & static_cast<int8_t>(c); }
 
 	void Board::SetCastling(Castling c, bool flag) 
 	{ 

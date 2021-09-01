@@ -1,7 +1,6 @@
-#include "x88Board.hpp"
+#include <ChessLib/x88Board/x88Board.hpp>
 
-
-namespace chesslib
+namespace chesslib::x88board
 {
 
 }

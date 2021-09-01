@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include "Definitions.hpp"
+#include <ChessLib/Chess/Definitions.hpp>
 
 namespace chesslib 
 {

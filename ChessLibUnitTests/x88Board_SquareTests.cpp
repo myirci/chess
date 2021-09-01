@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include <x88Board/Square.hpp>
+#include <ChessLib/x88Board/Square.hpp>
 
 using namespace chesslib::x88board::square;
 

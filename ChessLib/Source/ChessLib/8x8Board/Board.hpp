@@ -4,9 +4,9 @@
 #include <unordered_map>
 #include <string_view>
 
-#include<Chess/Definitions.hpp>
+#include<ChessLib/Chess/Definitions.hpp>
 
-namespace chesslib 
+namespace chesslib::basic_board
 {
 	class Board
 	{
@@ -20,6 +20,11 @@ namespace chesslib
 		const BoardArray& GetBoard() const;
 		const PieceMap& GetWhitePieces() const;
 		const PieceMap& GetBlackPieces() const;
+
+		Color GetActiveColor() const;
+		Square GetEnPassantSquare() const;
+		uint16_t GetHalfMoveClock() const;
+		uint16_t GetFullMoveClock() const;
 
 		inline bool QueryCastling(Castling c) const;
 		inline void SetCastling(Castling c, bool flag);

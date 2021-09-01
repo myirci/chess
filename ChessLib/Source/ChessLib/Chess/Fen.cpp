@@ -1,5 +1,6 @@
 #include "Fen.hpp"
-#include "Definitions.hpp"
+
+#include <ChessLib/Chess/Definitions.hpp>
 
 #include <algorithm>
 

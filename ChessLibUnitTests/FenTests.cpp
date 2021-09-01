@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include <Chess/Fen.hpp>
+#include <ChessLib/Chess/Fen.hpp>
 
 using namespace chesslib;
 

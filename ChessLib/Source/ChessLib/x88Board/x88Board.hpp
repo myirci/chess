@@ -1,6 +1,6 @@
 #pragma once
 
-namespace chesslib
+namespace chesslib::x88board
 {
 
 }

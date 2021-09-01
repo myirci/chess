@@ -19,20 +19,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\8x8Board\Board.cpp" />
-    <ClCompile Include="Source\Chess\Fen.cpp" />
-    <ClCompile Include="Source\Chess\Move.cpp" />
-    <ClCompile Include="Source\Chess\Utility.cpp" />
-    <ClCompile Include="Source\x88Board\x88Board.cpp" />
+    <ClCompile Include="Source\ChessLib\8x8Board\Board.cpp" />
+    <ClCompile Include="Source\ChessLib\Chess\Fen.cpp" />
+    <ClCompile Include="Source\ChessLib\Chess\Move.cpp" />
+    <ClCompile Include="Source\ChessLib\Chess\Utility.cpp" />
+    <ClCompile Include="Source\ChessLib\x88Board\x88Board.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\8x8Board\Board.hpp" />
-    <ClInclude Include="Source\Chess\Definitions.hpp" />
-    <ClInclude Include="Source\Chess\Fen.hpp" />
-    <ClInclude Include="Source\Chess\Move.hpp" />
-    <ClInclude Include="Source\Chess\Utility.hpp" />
-    <ClInclude Include="Source\x88Board\Square.hpp" />
-    <ClInclude Include="Source\x88Board\x88Board.hpp" />
+    <ClInclude Include="Source\ChessLib\8x8Board\Board.hpp" />
+    <ClInclude Include="Source\ChessLib\Chess\Definitions.hpp" />
+    <ClInclude Include="Source\ChessLib\Chess\Fen.hpp" />
+    <ClInclude Include="Source\ChessLib\Chess\Move.hpp" />
+    <ClInclude Include="Source\ChessLib\Chess\Utility.hpp" />
+    <ClInclude Include="Source\ChessLib\x88Board\Square.hpp" />
+    <ClInclude Include="Source\ChessLib\x88Board\x88Board.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

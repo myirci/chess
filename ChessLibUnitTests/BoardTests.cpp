@@ -1,9 +1,10 @@
 #include "pch.h"
 
-#include <Chess/Fen.hpp>
-#include <8x8Board/Board.hpp>
+#include <ChessLib/Chess/Fen.hpp>
+#include <ChessLib/8x8Board/Board.hpp>
 
 using namespace chesslib;
+using namespace chesslib::basic_board;
 
 TEST(BoardTest, constructor_starting_pos)
 {

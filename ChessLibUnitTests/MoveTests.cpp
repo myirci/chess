@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include <Chess/Move.hpp>
+#include <ChessLib/Chess/Move.hpp>
 
 using namespace chesslib;
 
