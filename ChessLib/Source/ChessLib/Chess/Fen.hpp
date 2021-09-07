@@ -58,7 +58,7 @@ namespace chesslib
         static constexpr uint8_t HalfMoveClock = 4;
         static constexpr uint8_t FullMoveClock = 5;
 
-        static bool IsValid(regex::csvregex_token_it it, int num_fields);
+        static bool IsValid(utility::regex::csvregex_token_it it, int num_fields);
         static bool ValidatePiecePlacement(std::string_view pp);
         static bool ValidateNumberOfPieces(std::unordered_map<char, int>& chars);
         inline static bool ValidateActiveColor(std::string_view ac);
@@ -66,9 +66,9 @@ namespace chesslib
         inline static bool ValidateEnPassantTargetSquare(std::string_view ep, char active_color);
         static bool ValidateHalfMoveClock(std::string_view hmc, std::string_view ep);
         static bool ValidateFullMoveClock(std::string_view fmc);
-        inline static bool CheckRank(int rank, regex::csvregex_token_it tit, std::unordered_map<char, int>& chars);
+        inline static bool CheckRank(int rank, utility::regex::csvregex_token_it tit, std::unordered_map<char, int>& chars);
 
-        void Init(regex::csvregex_token_it first, regex::csvregex_token_it last);
+        void Init(utility::regex::csvregex_token_it first, utility::regex::csvregex_token_it last);
 
         std::string fen_str;
         std::vector<std::string_view> fields;

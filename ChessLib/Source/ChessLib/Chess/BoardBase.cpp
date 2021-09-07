@@ -1,5 +1,9 @@
 #include "BoardBase.hpp"
 
+#include <ChessLib/Chess/Utility.hpp>
+
+#include <stdexcept>
+
 namespace chesslib
 {
 	BoardBase::BoardBase() :
@@ -25,5 +29,51 @@ namespace chesslib
 		castling_rights = flag
 			? castling_rights | static_cast<int8_t>(c)
 			: castling_rights & ~static_cast<int8_t>(c);
+	}
+
+	const BoardBase::PieceMap& BoardBase::GetWhitePieces() const { return white_pieces; }
+
+	const BoardBase::PieceMap& BoardBase::GetBlackPieces() const { return black_pieces; }
+
+	void BoardBase::SetActiveColor(char side_to_move) 
+	{
+		active_color = side_to_move == charset::White ? color::White : color::Black;
+	}
+
+	void BoardBase::SetCastlingRights(std::string_view castling_availability)
+	{
+		if (castling_availability != "-")
+		{
+			for (char c : castling_availability)
+			{
+				switch (c)
+				{
+					case charset::WhiteKing: SetCastling(Castling::WHITE_KS, true); break;
+					case charset::WhiteQueen: SetCastling(Castling::WHITE_QS, true); break;
+					case charset::BlackKing: SetCastling(Castling::BLACK_KS, true); break;
+					case charset::BlackQueen: SetCastling(Castling::BLACK_QS, true); break;
+					default:
+						throw std::logic_error("Fen parse error - invalid castling rights.");
+				}
+			}
+		}
+	}
+
+	void BoardBase::SetEnPassantSquare(Square ep) { en_passant_target = ep; }
+
+	void BoardBase::SetHalfMoveClock(std::string_view hmc) 
+	{
+		auto h = utility::numeric::to_int(hmc);
+		if (!h.has_value())
+			throw std::logic_error("Fen parse error - invalid half move clock.");
+		half_move_clock = static_cast<uint16_t>(h.value());
+	}
+
+	void BoardBase::SetFullMoveClock(std::string_view fmc) 
+	{
+		auto f = utility::numeric::to_int(fmc);
+		if (!f.has_value())
+			throw std::logic_error("Fen parse error - invalid full move clock.");
+		full_move_clock = static_cast<uint16_t>(f.value());
 	}
 }

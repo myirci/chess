@@ -3,7 +3,7 @@
 #include <charconv>
 
 
-namespace chesslib 
+namespace chesslib::utility 
 {
 	namespace regex 
 	{

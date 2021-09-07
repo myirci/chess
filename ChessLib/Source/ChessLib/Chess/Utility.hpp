@@ -4,7 +4,7 @@
 #include <regex>
 #include <optional>
 
-namespace chesslib 
+namespace chesslib::utility 
 {
 	namespace regex 
 	{
@@ -21,5 +21,10 @@ namespace chesslib
 	namespace numeric 
 	{
 		std::optional<int> to_int(std::string_view sv);
+	}
+
+	namespace chess 
+	{
+		
 	}
 }

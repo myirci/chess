@@ -8,23 +8,23 @@
 
 namespace chesslib::basic_board
 {
-	class Board :public BoardBase
+	class Board : public BoardBase
 	{
 	public:
-		
-		using BoardArray = std::array<Square, 64>;
-		using PieceMap = std::unordered_multimap<Piece, Square>;
+
+		constexpr static int BOARDSIZE = 64;
+		using BoardArray = std::array<Square, BOARDSIZE>;
 
 		Board(std::string_view fen);
 
 		const BoardArray& GetBoard() const;
-		const PieceMap& GetWhitePieces() const;
-		const PieceMap& GetBlackPieces() const;
-
+		
 	private:
+
+		using const_rank_iterator = std::vector<std::string_view>::const_iterator;
+		void SetBoard(const_rank_iterator first, const_rank_iterator last);
+
 		BoardArray board;
-		PieceMap white_pieces;
-		PieceMap black_pieces;
 	};
 }
 
