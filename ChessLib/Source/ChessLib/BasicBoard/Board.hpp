@@ -26,7 +26,7 @@ namespace chesslib::basic_board
 		uint16_t GetHalfMoveClock() const;
 		uint16_t GetFullMoveClock() const;
 
-		inline bool QueryCastling(Castling c) const;
+		bool QueryCastling(Castling c) const;
 		inline void SetCastling(Castling c, bool flag);
 
 	private:
