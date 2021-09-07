@@ -1,19 +1,22 @@
 #pragma once
 
+#include<ChessLib/Chess/Definitions.hpp>
+
+#include <array>
+#include <unordered_map>
+
 namespace chesslib::x88board
 {
-
+	class Board 
+	{
+	private:
+		using BoardArray = std::array<Square, 128>;
+		using PieceMap = std::unordered_multimap<Piece, Square>;
+	};
 }
 
-class Board
-{
-//    Board();
-//    Board(Board const& brd);
-//    Board& operator=(Board const& brd) = delete;
-//    Board(Board&& brd) = delete;
-//    Board& operator=(Board&& brd) = delete;
-//
-//    int8_t board[128];         
+//class Board
+//{
 //    int16_t half_move_counter;
 //    int16_t full_move_counter;
 //    int8_t en_passant_loc;
@@ -67,4 +70,5 @@ class Board
 //
 //    state::BoardState make_move(Move const& mv);
 //    void unmake_move(Move const& mv, state::BoardState const& st);
-};
+
+//};

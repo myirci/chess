@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ChessLib\BasicBoard\Board.cpp" />
+    <ClCompile Include="Source\ChessLib\Chess\BoardBase.cpp" />
     <ClCompile Include="Source\ChessLib\Chess\Fen.cpp" />
     <ClCompile Include="Source\ChessLib\Chess\Move.cpp" />
     <ClCompile Include="Source\ChessLib\Chess\Utility.cpp" />
@@ -28,6 +29,7 @@
   <ItemGroup>
     <ClInclude Include="Source\ChessLib\BasicBoard\Board.hpp" />
     <ClInclude Include="Source\ChessLib\BasicBoard\Square.hpp" />
+    <ClInclude Include="Source\ChessLib\Chess\BoardBase.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\Definitions.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\Fen.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\Move.hpp" />

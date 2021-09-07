@@ -27,6 +27,9 @@
     <ClCompile Include="Source\ChessLib\X88Board\X88Board.cpp">
       <Filter>X88Board</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ChessLib\Chess\BoardBase.cpp">
+      <Filter>Chess</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ChessLib\Chess\Definitions.hpp">
@@ -52,6 +55,9 @@
     </ClInclude>
     <ClInclude Include="Source\ChessLib\X88Board\X88Board.hpp">
       <Filter>X88Board</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Chess\BoardBase.hpp">
+      <Filter>Chess</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

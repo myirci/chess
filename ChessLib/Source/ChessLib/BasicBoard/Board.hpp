@@ -1,14 +1,14 @@
 #pragma once
 
+#include <ChessLib/Chess/BoardBase.hpp>
+
 #include <array>
 #include <unordered_map>
 #include <string_view>
 
-#include<ChessLib/Chess/Definitions.hpp>
-
 namespace chesslib::basic_board
 {
-	class Board
+	class Board :public BoardBase
 	{
 	public:
 		
@@ -21,23 +21,10 @@ namespace chesslib::basic_board
 		const PieceMap& GetWhitePieces() const;
 		const PieceMap& GetBlackPieces() const;
 
-		Color GetActiveColor() const;
-		Square GetEnPassantSquare() const;
-		uint16_t GetHalfMoveClock() const;
-		uint16_t GetFullMoveClock() const;
-
-		bool QueryCastling(Castling c) const;
-		inline void SetCastling(Castling c, bool flag);
-
 	private:
 		BoardArray board;
 		PieceMap white_pieces;
 		PieceMap black_pieces;
-		Color active_color;
-		int8_t castling_rights;
-		uint16_t half_move_clock;
-		uint16_t full_move_clock;
-		Square en_passant_target; 
 	};
 }
 

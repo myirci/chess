@@ -1,20 +1,13 @@
 
 #include <ChessLib/BasicBoard/Board.hpp>
 #include <ChessLib/BasicBoard/Square.hpp>
-#include <ChessLib/Chess/Definitions.hpp>
 #include <ChessLib/Chess/Fen.hpp>
 
 #include <cctype>
 
 namespace chesslib::basic_board
 {
-	Board::Board(std::string_view fen) : 
-		board{ { } },
-		active_color{ 0 },
-		castling_rights{ 0 },
-		en_passant_target{ squareset::Empty },
-		half_move_clock{ 0 },
-		full_move_clock{ 1 }
+	Board::Board(std::string_view fen) : board{ { } }
 	{
 		auto flattened_fields = Fen::GetFlattenedFields(fen);
 		if (flattened_fields.size() != 13 && flattened_fields.size() != 11)
@@ -86,21 +79,4 @@ namespace chesslib::basic_board
 	const Board::PieceMap& Board::GetWhitePieces() const { return white_pieces; }
 	
 	const Board::PieceMap& Board::GetBlackPieces() const { return black_pieces; }
-
-	Color Board::GetActiveColor() const { return active_color; }
-	
-	Square Board::GetEnPassantSquare() const { return en_passant_target; };
-	
-	uint16_t Board::GetHalfMoveClock() const { return half_move_clock; };
-	
-	uint16_t Board::GetFullMoveClock() const { return full_move_clock; };
-
-	bool Board::QueryCastling(Castling c) const { return castling_rights & static_cast<int8_t>(c); }
-
-	void Board::SetCastling(Castling c, bool flag) 
-	{ 
-		castling_rights = flag 
-			? castling_rights | static_cast<int8_t>(c) 
-			: castling_rights & ~static_cast<int8_t>(c); 
-	}
 }
