@@ -1,4 +1,4 @@
-#include <ChessLib/x88Board/x88Board.hpp>
+#include <ChessLib/X88Board/X88Board.hpp>
 
 namespace chesslib::x88board
 {

@@ -1,5 +1,6 @@
 
-#include <ChessLib/8x8Board/Board.hpp>
+#include <ChessLib/BasicBoard/Board.hpp>
+#include <ChessLib/BasicBoard/Square.hpp>
 #include <ChessLib/Chess/Definitions.hpp>
 #include <ChessLib/Chess/Fen.hpp>
 
@@ -64,10 +65,8 @@ namespace chesslib::basic_board
 
 		// En passant
 		if (flattened_fields[10] != "-") 
-		{
-
-		}
-
+			en_passant_target = get_square_from_chars(flattened_fields[10][0], flattened_fields[10][1]);
+		
 		if (flattened_fields.size() == 13) 
 		{
 			auto hmc = numeric::to_int(flattened_fields[11]);

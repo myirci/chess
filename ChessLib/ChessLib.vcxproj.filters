@@ -1,20 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="x88Board">
-      <UniqueIdentifier>{ed4dd18e-b3c8-4e65-af2b-aa184db79eef}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Chess">
       <UniqueIdentifier>{77329483-c3da-499e-9ee4-18d620c51695}</UniqueIdentifier>
     </Filter>
-    <Filter Include="8x8Board">
+    <Filter Include="BasicBoard">
       <UniqueIdentifier>{b5acf601-0f88-4711-b41e-bbd6b9e3a145}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="X88Board">
+      <UniqueIdentifier>{ed4dd18e-b3c8-4e65-af2b-aa184db79eef}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\ChessLib\8x8Board\Board.cpp">
-      <Filter>8x8Board</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ChessLib\Chess\Fen.cpp">
       <Filter>Chess</Filter>
     </ClCompile>
@@ -24,14 +21,14 @@
     <ClCompile Include="Source\ChessLib\Chess\Utility.cpp">
       <Filter>Chess</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ChessLib\x88Board\x88Board.cpp">
-      <Filter>x88Board</Filter>
+    <ClCompile Include="Source\ChessLib\BasicBoard\Board.cpp">
+      <Filter>BasicBoard</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ChessLib\X88Board\X88Board.cpp">
+      <Filter>X88Board</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\ChessLib\8x8Board\Board.hpp">
-      <Filter>8x8Board</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ChessLib\Chess\Definitions.hpp">
       <Filter>Chess</Filter>
     </ClInclude>
@@ -44,11 +41,17 @@
     <ClInclude Include="Source\ChessLib\Chess\Utility.hpp">
       <Filter>Chess</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ChessLib\x88Board\Square.hpp">
-      <Filter>x88Board</Filter>
+    <ClInclude Include="Source\ChessLib\BasicBoard\Board.hpp">
+      <Filter>BasicBoard</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ChessLib\x88Board\x88Board.hpp">
-      <Filter>x88Board</Filter>
+    <ClInclude Include="Source\ChessLib\BasicBoard\Square.hpp">
+      <Filter>BasicBoard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\X88Board\Square.hpp">
+      <Filter>X88Board</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\X88Board\X88Board.hpp">
+      <Filter>X88Board</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

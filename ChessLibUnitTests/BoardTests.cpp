@@ -1,7 +1,7 @@
 #include "pch.h"
 
 #include <ChessLib/Chess/Fen.hpp>
-#include <ChessLib/8x8Board/Board.hpp>
+#include <ChessLib/BasicBoard/Board.hpp>
 
 using namespace chesslib;
 using namespace chesslib::basic_board;
