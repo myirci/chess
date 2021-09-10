@@ -30,9 +30,11 @@
     <ClInclude Include="Source\ChessLib\BasicBoard\BasicBoard.hpp" />
     <ClInclude Include="Source\ChessLib\BasicBoard\Square.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\BoardBase.hpp" />
+    <ClInclude Include="Source\ChessLib\Chess\ChessUtility.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\Definitions.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\Fen.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\Move.hpp" />
+    <ClInclude Include="Source\ChessLib\Chess\TypeTraits.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\Utility.hpp" />
     <ClInclude Include="Source\ChessLib\X88Board\Square.hpp" />
     <ClInclude Include="Source\ChessLib\x88Board\x88Board.hpp" />

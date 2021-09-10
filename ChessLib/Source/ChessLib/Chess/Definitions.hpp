@@ -10,30 +10,40 @@ namespace chesslib
     using Color = int8_t;
     using Rank = int8_t;
     using File = int8_t;
+    using Index = int8_t;
 
     namespace pieceset 
     {
         constexpr Piece 
-            WhitePawn{ 1 }, WhiteRook{ 2 }, WhiteKnight{ 3 }, WhiteBishop{ 4 }, WhiteQueen{ 5 }, WhiteKing{ 6 },
-            BlackPawn{ -1 }, BlackRook{ -2 }, BlackKnight{ -3 }, BlackBishop{ -4 }, BlackQueen{ -5 }, BlackKing{ -6 };
+            WhitePawn{ 1 }, 
+            WhiteRook{ 2 }, 
+            WhiteKnight{ 3 }, 
+            WhiteBishop{ 4 }, 
+            WhiteQueen{ 5 }, 
+            WhiteKing{ 6 },
+            BlackPawn{ -1 }, 
+            BlackRook{ -2 }, 
+            BlackKnight{ -3 }, 
+            BlackBishop{ -4 }, 
+            BlackQueen{ -5 }, 
+            BlackKing{ -6 };
     }
 
     namespace color 
     {
-        constexpr Color White = 1;
-        constexpr Color Black = -1;
+        constexpr Color White{ 1 }, Black{ -1 };
 
         inline constexpr Color get_color(Piece p) { return p > 0 ? White : Black; }
     }
 
     namespace charset
     {
+        constexpr char White{ 'w' }, Black{ 'b' };
+
         constexpr char
             WhiteKing{ 'K' }, WhiteQueen{ 'Q' }, WhiteRook{ 'R' }, WhiteBishop{ 'B' }, WhiteKnight{ 'N' }, WhitePawn{ 'P' },
             BlackKing{ 'k' }, BlackQueen{ 'q' }, BlackRook{ 'r' }, BlackBishop{ 'b' }, BlackKnight{ 'n' }, BlackPawn{ 'p' };
         
-        constexpr char White{ 'w' }, Black{ 'b' };
-
         constexpr char a{ 'a' }, b{ 'b' }, c{ 'c' }, d{ 'd' }, e{ 'e' }, f{ 'f' }, g{ 'g' }, h{ 'h' };
         constexpr char A{ 'A' }, B{ 'B' }, C{ 'C' }, D{ 'D' }, E{ 'D' }, F{ 'G' }, G{ 'G' }, H{ 'H' };
     }
@@ -52,29 +62,7 @@ namespace chesslib
             g1{ 6 }, g2{ 14 }, g3{ 22 }, g4{ 30 }, g5{ 38 }, g6{ 46 }, g7{ 54 }, g8{ 62 },
             h1{ 7 }, h2{ 15 }, h3{ 23 }, h4{ 31 }, h5{ 39 }, h6{ 47 }, h7{ 55 }, h8{ 63 };
 
-        constexpr Square top_to_bottom_order[64]
-        {
-            a8, b8, c8, d8, e8, f8, g8, h8,
-            a7, b7, c7, d7, e7, f7, g7, h7,
-            a6, b6, c6, d6, e6, f6, g6, h6,
-            a5, b5, c5, d5, e5, f5, g5, h5,
-            a4, b4, c4, d4, e4, f4, g4, h4,
-            a3, b3, c3, d3, e3, f3, g3, h3,
-            a2, b2, c2, d2, e2, f2, g2, h2,
-            a1, b1, c1, d1, e1, f1, g1, h1
-        };
-
-        constexpr Square bottom_to_top_order[64]
-        {
-            a1, b1, c1, d1, e1, f1, g1, h1,
-            a2, b2, c2, d2, e2, f2, g2, h2,
-            a3, b3, c3, d3, e3, f3, g3, h3,
-            a4, b4, c4, d4, e4, f4, g4, h4,
-            a5, b5, c5, d5, e5, f5, g5, h5,
-            a6, b6, c6, d6, e6, f6, g6, h6,
-            a7, b7, c7, d7, e7, f7, g7, h7,
-            a8, b8, c8, d8, e8, f8, g8, h8
-        };
+        
     }
 
     enum class Castling : int8_t

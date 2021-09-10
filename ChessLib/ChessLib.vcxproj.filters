@@ -59,5 +59,11 @@
     <ClInclude Include="Source\ChessLib\Chess\BoardBase.hpp">
       <Filter>Chess</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ChessLib\Chess\ChessUtility.hpp">
+      <Filter>Chess</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Chess\TypeTraits.hpp">
+      <Filter>Chess</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

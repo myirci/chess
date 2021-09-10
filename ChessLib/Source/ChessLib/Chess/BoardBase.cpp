@@ -22,6 +22,8 @@ namespace chesslib
 
 	uint16_t BoardBase::GetFullMoveClock() const { return full_move_clock; };
 
+	bool BoardBase::IsCastlingAvailable() const { return castling_rights != 0; }
+
 	bool BoardBase::QueryCastling(Castling c) const { return castling_rights & static_cast<int8_t>(c); }
 
 	void BoardBase::SetCastling(Castling c, bool flag)

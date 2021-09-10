@@ -14,6 +14,7 @@ namespace chesslib
 		uint16_t GetFullMoveClock() const;
 		Color GetActiveColor() const;
 		Square GetEnPassantSquare() const;
+		bool IsCastlingAvailable() const;
 		bool QueryCastling(Castling c) const;
 		void SetCastling(Castling c, bool flag);
 
