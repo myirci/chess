@@ -1,5 +1,5 @@
 
-#include <ChessLib/BasicBoard/Board.hpp>
+#include <ChessLib/BasicBoard/BasicBoard.hpp>
 #include <ChessLib/BasicBoard/Square.hpp>
 #include <ChessLib/Chess/Fen.hpp>
 
@@ -7,7 +7,7 @@
 
 namespace chesslib::basic_board
 {
-	Board::Board(std::string_view fen) 
+	BasicBoard::BasicBoard(std::string_view fen) 
 	{
 		auto flattened_fields = Fen::GetFlattenedFields(fen);
 		if (flattened_fields.size() != 13 && flattened_fields.size() != 11)
@@ -30,9 +30,9 @@ namespace chesslib::basic_board
 		}
 	}
 
-	const Board::BoardArray& Board::GetBoard() const { return board; }
+	const BasicBoard::BoardArray& BasicBoard::GetBoard() const { return board; }
 
-	void Board::SetBoard(const_rank_iterator first, const_rank_iterator last)
+	void BasicBoard::SetBoard(const_rank_iterator first, const_rank_iterator last)
 	{
 		int idx = 0;
 

@@ -8,14 +8,14 @@
 
 namespace chesslib::basic_board
 {
-	class Board : public BoardBase
+	class BasicBoard : public BoardBase
 	{
 	public:
 
 		constexpr static int BOARDSIZE = 64;
 		using BoardArray = std::array<Square, BOARDSIZE>;
 
-		Board(std::string_view fen);
+		BasicBoard(std::string_view fen);
 
 		const BoardArray& GetBoard() const;
 		

@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\ChessLib\BasicBoard\Board.cpp" />
+    <ClCompile Include="Source\ChessLib\BasicBoard\BasicBoard.cpp" />
     <ClCompile Include="Source\ChessLib\Chess\BoardBase.cpp" />
     <ClCompile Include="Source\ChessLib\Chess\Fen.cpp" />
     <ClCompile Include="Source\ChessLib\Chess\Move.cpp" />
@@ -27,7 +27,7 @@
     <ClCompile Include="Source\ChessLib\x88Board\x88Board.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\ChessLib\BasicBoard\Board.hpp" />
+    <ClInclude Include="Source\ChessLib\BasicBoard\BasicBoard.hpp" />
     <ClInclude Include="Source\ChessLib\BasicBoard\Square.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\BoardBase.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\Definitions.hpp" />
