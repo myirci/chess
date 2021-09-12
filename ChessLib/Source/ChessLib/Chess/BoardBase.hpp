@@ -19,15 +19,18 @@ namespace chesslib
 		void SetCastling(Castling c, bool flag);
 
 		const PieceMap& GetWhitePieces() const;
-		const PieceMap& GetBlackPieces() const;
+		PieceMap& GetWhitePieces();
 
-	protected:
+		const PieceMap& GetBlackPieces() const;
+		PieceMap& GetBlackPieces();
 
 		void SetActiveColor(char side_to_move);
 		void SetCastlingRights(std::string_view castling_availability);
 		void SetEnPassantSquare(Square ep);
 		void SetHalfMoveClock(std::string_view hmc);
 		void SetFullMoveClock(std::string_view fmc);
+
+	protected:
 
 		BoardBase();
 

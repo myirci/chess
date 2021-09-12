@@ -5,6 +5,7 @@
 #include <array>
 #include <unordered_map>
 #include <string_view>
+#include <memory>
 
 namespace chesslib::basic_board
 {
@@ -15,17 +16,20 @@ namespace chesslib::basic_board
 		constexpr static int BOARDSIZE = 64;
 		using BoardArray = std::array<Square, BOARDSIZE>;
 
-		BasicBoard(std::string_view fen);
-
 		const BoardArray& GetBoard() const;
+		BoardArray& GetBoard();
 		
-	private:
+	protected:
 
-		using const_rank_iterator = std::vector<std::string_view>::const_iterator;
-		void SetBoard(const_rank_iterator first, const_rank_iterator last);
-
+		BasicBoard();
 		BoardArray board;
+
+		friend std::unique_ptr<BasicBoard> make_unique_basic_board(std::string_view fen);
+		friend std::shared_ptr<BasicBoard> make_shared_basic_board(std::string_view fen);
 	};
+
+	std::unique_ptr<BasicBoard> make_unique_basic_board(std::string_view fen);
+	std::shared_ptr<BasicBoard> make_shared_basic_board(std::string_view fen);
 }
 
 

@@ -35,7 +35,11 @@ namespace chesslib
 
 	const BoardBase::PieceMap& BoardBase::GetWhitePieces() const { return white_pieces; }
 
+	BoardBase::PieceMap& BoardBase::GetWhitePieces() { return white_pieces; }
+
 	const BoardBase::PieceMap& BoardBase::GetBlackPieces() const { return black_pieces; }
+
+	BoardBase::PieceMap& BoardBase::GetBlackPieces() { return black_pieces; }
 
 	void BoardBase::SetActiveColor(char side_to_move) 
 	{

@@ -4,6 +4,7 @@
 
 #include <array>
 #include <unordered_map>
+#include <memory>
 
 namespace chesslib::x88board
 {
@@ -12,16 +13,19 @@ namespace chesslib::x88board
 	public:
 		constexpr static int BOARDSIZE = 128;
 		using BoardArray = std::array<Square, BOARDSIZE>;
-		
-		Board(std::string_view fen);
 
 		const BoardArray& GetBoard() const;
+		BoardArray& GetBoard();
 
-	private:
+	protected:
 		
-		using const_rank_iterator = std::vector<std::string_view>::const_iterator;
-		void SetBoard(const_rank_iterator first, const_rank_iterator last);
-
+		Board();
 		BoardArray board;
+
+		friend std::unique_ptr<Board> make_unique_x88board(std::string_view fen);
+		friend std::shared_ptr<Board> make_shared_x88board(std::string_view fen);
 	};
+
+	std::unique_ptr<Board> make_unique_x88board(std::string_view fen);
+	std::shared_ptr<Board> make_shared_x88board(std::string_view fen);
 }

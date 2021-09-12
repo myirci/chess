@@ -20,19 +20,19 @@ TEST(BasicBoardTest, constructor_starting_pos)
         pieceset::BlackRook, pieceset::BlackKnight, pieceset::BlackBishop, pieceset::BlackQueen, pieceset::BlackKing, pieceset::BlackBishop, pieceset::BlackKnight, pieceset::BlackRook
     };
 
-    BasicBoard b{ Fen::StartingPosition };
-    const auto& boardArray2 = b.GetBoard();
+    auto b = basic_board::make_unique_basic_board(Fen::StartingPosition);
+    const auto& boardArray2 = b->GetBoard();
 
     EXPECT_TRUE(std::equal(boardArray1.begin(), boardArray1.end(), boardArray2.begin()));
-    EXPECT_EQ(b.GetActiveColor(), color::White);
-    EXPECT_TRUE(b.QueryCastling(Castling::WHITE_KS));
-    EXPECT_TRUE(b.QueryCastling(Castling::WHITE_QS));
-    EXPECT_TRUE(b.QueryCastling(Castling::BLACK_KS));
-    EXPECT_TRUE(b.QueryCastling(Castling::BLACK_QS));
-    EXPECT_EQ(b.GetEnPassantSquare(), squareset::Empty);
-    EXPECT_EQ(b.GetHalfMoveClock(), 0);
-    EXPECT_EQ(b.GetFullMoveClock(), 1);
-    EXPECT_EQ(Fen::StartingPosition, utility::chess::board_to_fen(b));
+    EXPECT_EQ(b->GetActiveColor(), color::White);
+    EXPECT_TRUE(b->QueryCastling(Castling::WHITE_KS));
+    EXPECT_TRUE(b->QueryCastling(Castling::WHITE_QS));
+    EXPECT_TRUE(b->QueryCastling(Castling::BLACK_KS));
+    EXPECT_TRUE(b->QueryCastling(Castling::BLACK_QS));
+    EXPECT_EQ(b->GetEnPassantSquare(), squareset::Empty);
+    EXPECT_EQ(b->GetHalfMoveClock(), 0);
+    EXPECT_EQ(b->GetFullMoveClock(), 1);
+    EXPECT_EQ(Fen::StartingPosition, utility::chess::board_to_fen(*b));
 }
 
 TEST(BasicBoardTest, constructor_pos1)
@@ -51,19 +51,19 @@ TEST(BasicBoardTest, constructor_pos1)
         squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, pieceset::BlackKing, squareset::Empty
     };
 
-    BasicBoard b{ fen };
-    const auto& boardArray2 = b.GetBoard();
+    auto b = basic_board::make_unique_basic_board(fen);
+    const auto& boardArray2 = b->GetBoard();
 
     EXPECT_TRUE(std::equal(boardArray1.begin(), boardArray1.end(), boardArray2.begin()));
-    EXPECT_EQ(b.GetActiveColor(), color::Black);
-    EXPECT_TRUE(b.QueryCastling(Castling::WHITE_KS));
-    EXPECT_FALSE(b.QueryCastling(Castling::WHITE_QS));
-    EXPECT_TRUE(b.QueryCastling(Castling::BLACK_KS));
-    EXPECT_TRUE(b.QueryCastling(Castling::BLACK_QS));
-    EXPECT_EQ(b.GetEnPassantSquare(), squareset::c3);
-    EXPECT_EQ(b.GetHalfMoveClock(), 1);
-    EXPECT_EQ(b.GetFullMoveClock(), 2);
-    EXPECT_EQ(fen, utility::chess::board_to_fen(b));
+    EXPECT_EQ(b->GetActiveColor(), color::Black);
+    EXPECT_TRUE(b->QueryCastling(Castling::WHITE_KS));
+    EXPECT_FALSE(b->QueryCastling(Castling::WHITE_QS));
+    EXPECT_TRUE(b->QueryCastling(Castling::BLACK_KS));
+    EXPECT_TRUE(b->QueryCastling(Castling::BLACK_QS));
+    EXPECT_EQ(b->GetEnPassantSquare(), squareset::c3);
+    EXPECT_EQ(b->GetHalfMoveClock(), 1);
+    EXPECT_EQ(b->GetFullMoveClock(), 2);
+    EXPECT_EQ(fen, utility::chess::board_to_fen(*b));
 }
 
 TEST(BasicBoardTest, constructor_fen_compare) 
@@ -84,10 +84,7 @@ TEST(BasicBoardTest, constructor_fen_compare)
     
     for (auto f : fens) 
     {
-        BasicBoard b{ f };
-        EXPECT_EQ(f, utility::chess::board_to_fen(b));
+        auto b = basic_board::make_unique_basic_board(f);
+        EXPECT_EQ(f, utility::chess::board_to_fen(*b));
     }
 }
-
-
-

@@ -2,10 +2,79 @@
 
 #include <string>
 
+#include <ChessLib/Chess/Fen.hpp>
 #include <ChessLib/Chess/TypeTraits.hpp>
 
 namespace chesslib::utility::chess 
 {
+	using const_rank_iterator = std::vector<std::string_view>::const_iterator;
+
+	// GetBoard()
+	// GetWhitePieces()
+	// GetBlackPieces()
+	// SetActiveColor()
+	// SetCastlingRights()
+	// SetEnPassantSquare()
+	// SetHalfMoveClock()
+	// SetFullMoveClock()
+	template<typename Board>
+	void set_board(Board& brd, std::string_view fen) 
+	{
+		auto flattened_fields = Fen::GetFlattenedFields(fen);
+		if (flattened_fields.size() != 13 && flattened_fields.size() != 11)
+			throw std::logic_error("Fen parse error - field error.");
+
+		auto& b = brd.GetBoard();
+		auto& wp = brd.GetWhitePieces();
+		auto& bp = brd.GetBlackPieces();
+
+		Index idx{ 0 };
+		for (Rank r = 0; r < 8; r++) 
+		{
+			for (char c : flattened_fields[r]) 
+			{
+				if (std::isdigit(c))
+				{
+					for (Index i{ 0 }; i < c - '0'; i++)
+					{
+						if constexpr (!traits::board_traits<Board>::IsBasicBoard)
+							idx = traits::board_traits<Board>::BottomToTop(idx);
+
+						b[idx++] = squareset::Empty;
+					}
+				}
+				else
+				{
+					if constexpr (!traits::board_traits<Board>::IsBasicBoard)
+						idx = traits::board_traits<Board>::BottomToTop(idx);
+
+					Piece p = char_to_piece.at(c);
+					if (color::get_color(p) == color::White) wp.emplace(p, idx);
+					else bp.emplace(p, idx);
+					b[idx++] = p;
+				}
+			}
+		}
+
+		brd.SetActiveColor(flattened_fields[8][0]);
+		
+		brd.SetCastlingRights(flattened_fields[9]);
+
+		if (flattened_fields[10] != "-") 
+		{
+			if constexpr (traits::board_traits<Board>::IsBasicBoard)
+				brd.SetEnPassantSquare(basic_board::get_square_from_chars(flattened_fields[10][0], flattened_fields[10][1]));
+			else
+				brd.SetEnPassantSquare(x88board::get_square_from_chars(flattened_fields[10][0], flattened_fields[10][1]));
+		}
+			
+		if (flattened_fields.size() == 13)
+		{
+			brd.SetHalfMoveClock(flattened_fields[11]);
+			brd.SetFullMoveClock(flattened_fields[12]);
+		}
+	}
+
 	// GetBoard()
 	// GetActiveColor()
 	// IsCastlingAvailable()
@@ -16,7 +85,7 @@ namespace chesslib::utility::chess
 	template<typename Board>
 	std::string board_to_fen(Board const& brd)
 	{
-		auto b = brd.GetBoard();
+		const auto& b = brd.GetBoard();
 
 		int empty_count{ 0 };
 		std::stringstream ss;
