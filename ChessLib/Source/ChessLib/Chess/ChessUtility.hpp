@@ -26,7 +26,7 @@ namespace chesslib::utility::chess
 		auto& wp = brd.GetWhitePieces();
 		auto& bp = brd.GetBlackPieces();
 
-		Index idx{ 0 };
+		Index idx{ 0 }, mapped_idx{ 0 };
 		for (Rank r = 0; r < 8; r++) 
 		{
 			for (char c : flattened_fields[r]) 
@@ -35,21 +35,22 @@ namespace chesslib::utility::chess
 				{
 					for (Index i{ 0 }; i < c - '0'; i++)
 					{
-						if constexpr (!traits::board_traits<Board>::IsBasicBoard)
-							idx = traits::board_traits<Board>::BottomToTop(idx);
-
-						b[idx++] = squareset::Empty;
+						if constexpr (traits::board_traits<Board>::IsBasicBoard) mapped_idx = idx;
+						else mapped_idx = traits::board_traits<Board>::BottomToTop(idx);
+						b[mapped_idx] = squareset::Empty;		
+						idx++;
 					}
 				}
 				else
 				{
-					if constexpr (!traits::board_traits<Board>::IsBasicBoard)
-						idx = traits::board_traits<Board>::BottomToTop(idx);
+					if constexpr (traits::board_traits<Board>::IsBasicBoard) mapped_idx = idx;
+					else mapped_idx = traits::board_traits<Board>::BottomToTop(idx);
 
 					Piece p = char_to_piece.at(c);
-					if (color::get_color(p) == color::White) wp.emplace(p, idx);
-					else bp.emplace(p, idx);
-					b[idx++] = p;
+					if (color::get_color(p) == color::White) wp.emplace(p, mapped_idx);
+					else bp.emplace(p, mapped_idx);
+					b[mapped_idx] = p;
+					idx++;
 				}
 			}
 		}

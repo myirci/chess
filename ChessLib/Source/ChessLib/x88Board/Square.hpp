@@ -64,7 +64,7 @@ namespace chesslib::x88board
         a8, b8, c8, d8, e8, f8, g8, h8, twin(a8), twin(b8), twin(c8), twin(d8), twin(e8), twin(f8), twin(g8), twin(h8)
     };
 
-    constexpr Square get_square(File f, Rank r) { return  r * 16 + f; }
+    constexpr Square get_square(File f, Rank r) { return 16 * r  + f; }
     
     constexpr Rank get_rank(Square s) { return s >> 4; }
 
@@ -72,7 +72,7 @@ namespace chesslib::x88board
 
     constexpr std::pair<File, Rank> get_file_and_rank(Square s) { return { get_file(s), get_rank(s) }; }
 
-    constexpr Square get_square_from_chars(char f, char r) { return get_square(f - 'a', r - '1'); };
+    constexpr Square get_square_from_chars(char f, char r) { return get_square(f - 'a', r - '1'); }
 
     constexpr std::pair<char, char> get_chars(Square s) 
     {

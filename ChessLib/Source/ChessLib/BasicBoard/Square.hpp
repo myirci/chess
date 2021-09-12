@@ -34,7 +34,7 @@ namespace chesslib::basic_board
 
     constexpr File fileA{ 0 }, fileB{ 1 }, fileC{ 2 }, fileD{ 3 }, fileE{ 4 }, fileF{ 5 }, fileG{ 6 }, fileH{ 7 };
 
-    constexpr Square get_square(File f, Rank r) { return 8*r + f; }
+    constexpr Square get_square(File f, Rank r) { return 8 * r + f; }
     
     constexpr Rank get_rank(Square s) { return s >> 3; }
 

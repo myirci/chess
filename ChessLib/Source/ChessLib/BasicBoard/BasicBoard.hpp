@@ -23,12 +23,12 @@ namespace chesslib::basic_board
 		BasicBoard();
 		BoardArray board;
 
-		friend std::unique_ptr<BasicBoard> make_unique_basic_board(std::string_view fen);
-		friend std::shared_ptr<BasicBoard> make_shared_basic_board(std::string_view fen);
+		friend std::unique_ptr<BasicBoard> make_unique_board(std::string_view fen);
+		friend std::shared_ptr<BasicBoard> make_shared_board(std::string_view fen);
 	};
 
-	std::unique_ptr<BasicBoard> make_unique_basic_board(std::string_view fen);
-	std::shared_ptr<BasicBoard> make_shared_basic_board(std::string_view fen);
+	std::unique_ptr<BasicBoard> make_unique_board(std::string_view fen);
+	std::shared_ptr<BasicBoard> make_shared_board(std::string_view fen);
 }
 
 

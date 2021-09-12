@@ -9,14 +9,14 @@ namespace chesslib::basic_board
 
 	BasicBoard::BoardArray& BasicBoard::GetBoard() { return board; }
 
-	std::unique_ptr<BasicBoard> make_unique_basic_board(std::string_view fen) 
+	std::unique_ptr<BasicBoard> make_unique_board(std::string_view fen) 
 	{
 		auto brd = std::unique_ptr<BasicBoard>(new BasicBoard());
 		utility::chess::set_board(*brd, fen);
 		return brd;
 	}
 	
-	std::shared_ptr<BasicBoard> make_shared_basic_board(std::string_view fen) 
+	std::shared_ptr<BasicBoard> make_shared_board(std::string_view fen) 
 	{
 		auto brd = std::shared_ptr<BasicBoard>(new BasicBoard());
 		utility::chess::set_board(*brd, fen);

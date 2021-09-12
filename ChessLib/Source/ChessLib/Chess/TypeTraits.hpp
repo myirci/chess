@@ -24,7 +24,7 @@ namespace chesslib::traits
 	};
 
 	template <>
-	struct board_traits<x88board::Board>
+	struct board_traits<x88board::x88Board>
 	{
 		static constexpr bool IsBasicBoard = false;
 		
