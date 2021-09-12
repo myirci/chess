@@ -1,8 +1,5 @@
-
 #include <ChessLib/BasicBoard/BasicBoard.hpp>
-#include <ChessLib/BasicBoard/Square.hpp>
 #include <ChessLib/Chess/ChessUtility.hpp>
-#include <cctype>
 
 namespace chesslib::basic_board
 {

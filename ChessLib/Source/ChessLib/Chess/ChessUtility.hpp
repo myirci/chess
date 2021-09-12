@@ -7,8 +7,6 @@
 
 namespace chesslib::utility::chess 
 {
-	using const_rank_iterator = std::vector<std::string_view>::const_iterator;
-
 	// GetBoard()
 	// GetWhitePieces()
 	// GetBlackPieces()

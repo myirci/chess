@@ -1,5 +1,4 @@
 #include <ChessLib/X88Board/x88Board.hpp>
-#include <ChessLib/X88Board/Square.hpp>
 #include <ChessLib/Chess/ChessUtility.hpp>
 
 namespace chesslib::x88board

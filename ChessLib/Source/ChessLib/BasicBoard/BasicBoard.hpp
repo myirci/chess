@@ -3,7 +3,6 @@
 #include <ChessLib/Chess/BoardBase.hpp>
 
 #include <array>
-#include <unordered_map>
 #include <string_view>
 #include <memory>
 
