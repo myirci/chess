@@ -20,6 +20,28 @@ TEST(BasicBoardTest, constructor_starting_pos)
         pieceset::BlackRook, pieceset::BlackKnight, pieceset::BlackBishop, pieceset::BlackQueen, pieceset::BlackKing, pieceset::BlackBishop, pieceset::BlackKnight, pieceset::BlackRook
     };
 
+    BoardBase::PieceMap wp
+    {
+        {pieceset::WhitePawn, squareset::a2}, {pieceset::WhitePawn, squareset::b2}, {pieceset::WhitePawn, squareset::c2},
+        {pieceset::WhitePawn, squareset::d2}, {pieceset::WhitePawn, squareset::e2}, {pieceset::WhitePawn, squareset::f2},
+        {pieceset::WhitePawn, squareset::g2}, {pieceset::WhitePawn, squareset::h2},
+        {pieceset::WhiteRook, squareset::a1}, {pieceset::WhiteRook, squareset::h1},
+        {pieceset::WhiteKnight, squareset::b1}, {pieceset::WhiteKnight, squareset::g1},
+        {pieceset::WhiteBishop, squareset::c1}, {pieceset::WhiteBishop, squareset::f1},
+        {pieceset::WhiteQueen, squareset::d1}, {pieceset::WhiteKing, squareset::e1}
+    };
+
+    BoardBase::PieceMap bp
+    {
+        {pieceset::BlackPawn, squareset::a7}, {pieceset::BlackPawn, squareset::b7}, {pieceset::BlackPawn, squareset::c7},
+        {pieceset::BlackPawn, squareset::d7}, {pieceset::BlackPawn, squareset::e7}, {pieceset::BlackPawn, squareset::f7},
+        {pieceset::BlackPawn, squareset::g7}, {pieceset::BlackPawn, squareset::h7},
+        {pieceset::BlackRook, squareset::a8}, {pieceset::BlackRook, squareset::h8},
+        {pieceset::BlackKnight, squareset::b8}, {pieceset::BlackKnight, squareset::g8},
+        {pieceset::BlackBishop, squareset::c8}, {pieceset::BlackBishop, squareset::f8},
+        {pieceset::BlackQueen, squareset::d8}, {pieceset::BlackKing, squareset::e8}
+    };
+
     auto b = basic_board::make_unique_basic_board(Fen::StartingPosition);
     const auto& boardArray2 = b->GetBoard();
 
@@ -32,6 +54,8 @@ TEST(BasicBoardTest, constructor_starting_pos)
     EXPECT_EQ(b->GetEnPassantSquare(), squareset::Empty);
     EXPECT_EQ(b->GetHalfMoveClock(), 0);
     EXPECT_EQ(b->GetFullMoveClock(), 1);
+    EXPECT_EQ(b->GetWhitePieces(), wp);
+    EXPECT_EQ(b->GetBlackPieces(), bp);
     EXPECT_EQ(Fen::StartingPosition, utility::chess::board_to_fen(*b));
 }
 
@@ -51,6 +75,19 @@ TEST(BasicBoardTest, constructor_pos1)
         squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, pieceset::BlackKing, squareset::Empty
     };
 
+    BoardBase::PieceMap wp
+    {
+        {pieceset::WhitePawn, squareset::b2}, {pieceset::WhitePawn, squareset::f2}, {pieceset::WhitePawn, squareset::g2},
+        {pieceset::WhitePawn, squareset::d5}, {pieceset::WhitePawn, squareset::e4}, {pieceset::WhiteKing, squareset::g1}
+    };
+
+    BoardBase::PieceMap bp
+    {
+        {pieceset::BlackPawn, squareset::a7}, {pieceset::BlackPawn, squareset::b7}, {pieceset::BlackPawn, squareset::c5},
+        {pieceset::BlackPawn, squareset::d6}, {pieceset::BlackPawn, squareset::f7}, {pieceset::BlackPawn, squareset::f4},
+        {pieceset::BlackPawn, squareset::g7}, {pieceset::BlackPawn, squareset::g5}, {pieceset::BlackKing, squareset::g8}
+    };
+
     auto b = basic_board::make_unique_basic_board(fen);
     const auto& boardArray2 = b->GetBoard();
 
@@ -63,6 +100,8 @@ TEST(BasicBoardTest, constructor_pos1)
     EXPECT_EQ(b->GetEnPassantSquare(), squareset::c3);
     EXPECT_EQ(b->GetHalfMoveClock(), 1);
     EXPECT_EQ(b->GetFullMoveClock(), 2);
+    EXPECT_EQ(b->GetWhitePieces(), wp);
+    EXPECT_EQ(b->GetBlackPieces(), bp);
     EXPECT_EQ(fen, utility::chess::board_to_fen(*b));
 }
 
