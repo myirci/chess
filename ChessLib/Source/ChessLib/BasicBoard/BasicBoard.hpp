@@ -8,7 +8,7 @@
 
 namespace chesslib::basic_board
 {
-	class BasicBoard : public BoardBase
+	class BasicBoard : public BoardBaseWithPieces
 	{
 	public:
 
@@ -17,6 +17,9 @@ namespace chesslib::basic_board
 
 		const BoardArray& GetBoard() const;
 		BoardArray& GetBoard();
+
+		// void MakeMove(Move const& mv);
+		// void UnmakeMove(Move const& mv);
 		
 	protected:
 

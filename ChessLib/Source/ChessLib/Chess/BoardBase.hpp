@@ -8,8 +8,6 @@ namespace chesslib
 	{
 	public:
 
-		using PieceMap = std::unordered_multimap<Piece, Square>;
-
 		uint16_t GetHalfMoveClock() const;
 		uint16_t GetFullMoveClock() const;
 		Color GetActiveColor() const;
@@ -17,12 +15,6 @@ namespace chesslib
 		bool IsCastlingAvailable() const;
 		bool QueryCastling(Castling c) const;
 		void SetCastling(Castling c, bool flag);
-
-		const PieceMap& GetWhitePieces() const;
-		PieceMap& GetWhitePieces();
-
-		const PieceMap& GetBlackPieces() const;
-		PieceMap& GetBlackPieces();
 
 		void SetActiveColor(char side_to_move);
 		void SetCastlingRights(std::string_view castling_availability);
@@ -39,6 +31,22 @@ namespace chesslib
 		Square en_passant_target;
 		uint16_t half_move_clock;
 		uint16_t full_move_clock;
+	};
+
+	class BoardBaseWithPieces : public BoardBase
+	{
+	public:
+		using PieceMap = std::unordered_multimap<Piece, Square>;
+	
+		const PieceMap& GetWhitePieces() const;
+		PieceMap& GetWhitePieces();
+
+		const PieceMap& GetBlackPieces() const;
+		PieceMap& GetBlackPieces();
+
+	protected:
+
+		BoardBaseWithPieces();
 
 		PieceMap white_pieces;
 		PieceMap black_pieces;

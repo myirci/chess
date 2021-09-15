@@ -33,14 +33,6 @@ namespace chesslib
 			: castling_rights & ~static_cast<int8_t>(c);
 	}
 
-	const BoardBase::PieceMap& BoardBase::GetWhitePieces() const { return white_pieces; }
-
-	BoardBase::PieceMap& BoardBase::GetWhitePieces() { return white_pieces; }
-
-	const BoardBase::PieceMap& BoardBase::GetBlackPieces() const { return black_pieces; }
-
-	BoardBase::PieceMap& BoardBase::GetBlackPieces() { return black_pieces; }
-
 	void BoardBase::SetActiveColor(char side_to_move) 
 	{
 		active_color = side_to_move == charset::White ? color::White : color::Black;
@@ -82,4 +74,14 @@ namespace chesslib
 			throw std::logic_error("Fen parse error - invalid full move clock.");
 		full_move_clock = static_cast<uint16_t>(f.value());
 	}
+
+	BoardBaseWithPieces::BoardBaseWithPieces() { }
+
+	const BoardBaseWithPieces::PieceMap& BoardBaseWithPieces::GetWhitePieces() const { return white_pieces; }
+
+	BoardBaseWithPieces::PieceMap& BoardBaseWithPieces::GetWhitePieces() { return white_pieces; }
+
+	const BoardBaseWithPieces::PieceMap& BoardBaseWithPieces::GetBlackPieces() const { return black_pieces; }
+
+	BoardBaseWithPieces::PieceMap& BoardBaseWithPieces::GetBlackPieces() { return black_pieces; }
 }

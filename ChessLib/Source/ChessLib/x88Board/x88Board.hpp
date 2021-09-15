@@ -8,7 +8,7 @@
 
 namespace chesslib::x88board
 {
-	class x88Board : public BoardBase
+	class x88Board : public BoardBaseWithPieces
 	{
 	public:
 		constexpr static int BOARDSIZE = 128;

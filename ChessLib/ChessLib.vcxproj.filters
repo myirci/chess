@@ -10,6 +10,12 @@
     <Filter Include="X88Board">
       <UniqueIdentifier>{ed4dd18e-b3c8-4e65-af2b-aa184db79eef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="BitBoard">
+      <UniqueIdentifier>{617835eb-ccac-4261-9ae4-c0b496f0f126}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ObjBoard">
+      <UniqueIdentifier>{9428e8db-0154-4876-aaea-3850d14c10cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ChessLib\Chess\Fen.cpp">
@@ -29,6 +35,12 @@
     </ClCompile>
     <ClCompile Include="Source\ChessLib\Chess\BoardBase.cpp">
       <Filter>Chess</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ChessLib\ObjBoard\ObjBoard.cpp">
+      <Filter>ObjBoard</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ChessLib\ObjBoard\PieceObj.cpp">
+      <Filter>ObjBoard</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -64,6 +76,15 @@
     </ClInclude>
     <ClInclude Include="Source\ChessLib\Chess\TypeTraits.hpp">
       <Filter>Chess</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\ObjBoard\PieceObj.hpp">
+      <Filter>ObjBoard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\ObjBoard\ObjBoard.hpp">
+      <Filter>ObjBoard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\ObjBoard\SquareObj.hpp">
+      <Filter>ObjBoard</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

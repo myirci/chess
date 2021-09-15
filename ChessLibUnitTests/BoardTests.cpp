@@ -2,6 +2,8 @@
 
 #include <ChessLib/Chess/Fen.hpp>
 #include <ChessLib/BasicBoard/BasicBoard.hpp>
+#include <ChessLib/X88Board/x88Board.hpp>
+#include <ChessLib/ObjBoard/ObjBoard.hpp>
 #include <ChessLib/Chess/ChessUtility.hpp>
 
 using namespace chesslib;
@@ -12,6 +14,40 @@ class BoardTests : public ::testing::Test
 public:
 
     BoardTests() { }
+
+protected:
+
+    bool check_objboard_pieces(
+        const std::array<Piece, 6>& pieceArray, 
+        const BoardBaseWithPieces::PieceMap& pieces1, 
+        const objboard::ObjBoard::PieceMap& pieces2)
+    {
+        for (Piece p : pieceArray)
+        {
+            auto itp1 = pieces1.equal_range(p);
+            auto itp2 = pieces2.equal_range(p);
+            size_t numPiece1 = std::distance(itp1.first, itp1.second);
+            size_t numPiece2 = std::distance(itp2.first, itp2.second);
+            if (numPiece1 != numPiece2)
+                return false;
+            
+            std::vector<Square> locations1;
+            while (itp1.first != itp1.second)
+            {
+                locations1.push_back(itp1.first->second);
+                itp1.first++;
+            }
+
+            std::vector<Square> locations2;
+            while (itp2.first != itp2.second)
+            {
+                locations2.push_back(itp2.first->second->_loc);
+                itp2.first++;
+            }
+
+            return std::is_permutation(locations1.begin(), locations1.end(), locations2.begin());
+        }
+    }
 
     std::array<Square, 64> boardArray1
     {
@@ -25,7 +61,7 @@ public:
         pieceset::BlackRook, pieceset::BlackKnight, pieceset::BlackBishop, pieceset::BlackQueen, pieceset::BlackKing, pieceset::BlackBishop, pieceset::BlackKnight, pieceset::BlackRook
     };
 
-    BoardBase::PieceMap whitePieces1
+    BoardBaseWithPieces::PieceMap whitePieces1
     {
         {pieceset::WhitePawn, squareset::a2}, {pieceset::WhitePawn, squareset::b2}, {pieceset::WhitePawn, squareset::c2},
         {pieceset::WhitePawn, squareset::d2}, {pieceset::WhitePawn, squareset::e2}, {pieceset::WhitePawn, squareset::f2},
@@ -36,7 +72,7 @@ public:
         {pieceset::WhiteQueen, squareset::d1}, {pieceset::WhiteKing, squareset::e1}
     };
 
-    BoardBase::PieceMap blackPieces1
+    BoardBaseWithPieces::PieceMap blackPieces1
     {
         {pieceset::BlackPawn, squareset::a7}, {pieceset::BlackPawn, squareset::b7}, {pieceset::BlackPawn, squareset::c7},
         {pieceset::BlackPawn, squareset::d7}, {pieceset::BlackPawn, squareset::e7}, {pieceset::BlackPawn, squareset::f7},
@@ -59,13 +95,13 @@ public:
         squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, pieceset::BlackKing, squareset::Empty
     };
 
-    BoardBase::PieceMap whitePieces2
+    BoardBaseWithPieces::PieceMap whitePieces2
     {
         {pieceset::WhitePawn, squareset::b2}, {pieceset::WhitePawn, squareset::f2}, {pieceset::WhitePawn, squareset::g2},
         {pieceset::WhitePawn, squareset::d5}, {pieceset::WhitePawn, squareset::e4}, {pieceset::WhiteKing, squareset::g1}
     };
 
-    BoardBase::PieceMap blackPieces2
+    BoardBaseWithPieces::PieceMap blackPieces2
     {
         {pieceset::BlackPawn, squareset::a7}, {pieceset::BlackPawn, squareset::b7}, {pieceset::BlackPawn, squareset::c5},
         {pieceset::BlackPawn, squareset::d6}, {pieceset::BlackPawn, squareset::f7}, {pieceset::BlackPawn, squareset::f4},
@@ -84,7 +120,7 @@ public:
         pieceset::BlackRook, pieceset::BlackKnight, pieceset::BlackBishop, pieceset::BlackQueen, pieceset::BlackKing, pieceset::BlackBishop, pieceset::BlackKnight, pieceset::BlackRook, 0, 0, 0, 0, 0, 0, 0, 0
     };
 
-    BoardBase::PieceMap whitePieces3
+    BoardBaseWithPieces::PieceMap whitePieces3
     {
         {pieceset::WhitePawn, x88board::a2}, {pieceset::WhitePawn, x88board::b2}, {pieceset::WhitePawn, x88board::c2},
         {pieceset::WhitePawn, x88board::d2}, {pieceset::WhitePawn, x88board::e2}, {pieceset::WhitePawn, x88board::f2},
@@ -95,7 +131,7 @@ public:
         {pieceset::WhiteQueen, x88board::d1}, {pieceset::WhiteKing, x88board::e1}
     };
 
-    BoardBase::PieceMap blackPieces3
+    BoardBaseWithPieces::PieceMap blackPieces3
     {
         {pieceset::BlackPawn, x88board::a7}, {pieceset::BlackPawn, x88board::b7}, {pieceset::BlackPawn, x88board::c7},
         {pieceset::BlackPawn, x88board::d7}, {pieceset::BlackPawn, x88board::e7}, {pieceset::BlackPawn, x88board::f7},
@@ -118,17 +154,29 @@ public:
         squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, pieceset::BlackKing, squareset::Empty, 0, 0, 0, 0, 0, 0, 0, 0
     };
 
-    BoardBase::PieceMap whitePieces4
+    BoardBaseWithPieces::PieceMap whitePieces4
     {
         {pieceset::WhitePawn, x88board::b2}, {pieceset::WhitePawn, x88board::f2}, {pieceset::WhitePawn, x88board::g2},
         {pieceset::WhitePawn, x88board::d5}, {pieceset::WhitePawn, x88board::e4}, {pieceset::WhiteKing, x88board::g1}
     };
 
-    BoardBase::PieceMap blackPieces4
+    BoardBaseWithPieces::PieceMap blackPieces4
     {
         {pieceset::BlackPawn, x88board::a7}, {pieceset::BlackPawn, x88board::b7}, {pieceset::BlackPawn, x88board::c5},
         {pieceset::BlackPawn, x88board::d6}, {pieceset::BlackPawn, x88board::f7}, {pieceset::BlackPawn, x88board::f4},
         {pieceset::BlackPawn, x88board::g7}, {pieceset::BlackPawn, x88board::g5}, {pieceset::BlackKing, x88board::g8}
+    };
+
+    std::array<Piece, 6> whitePieceArray
+    {
+        pieceset::WhitePawn, pieceset::WhiteRook, pieceset::WhiteKnight, 
+        pieceset::WhiteBishop, pieceset::WhiteQueen, pieceset::WhiteKing
+    };
+
+    std::array<Piece, 6> blackPieceArray
+    {
+        pieceset::BlackPawn, pieceset::BlackRook, pieceset::BlackKnight,
+        pieceset::BlackBishop, pieceset::BlackQueen, pieceset::BlackKing
     };
 
     std::vector<std::string_view> fens
@@ -238,6 +286,65 @@ TEST_F(BoardTests, x88board_constructor_fen_compare)
     for (auto f : fens)
     {
         auto b = x88board::make_unique_board(f);
+        EXPECT_EQ(f, utility::chess::board_to_fen(*b));
+    }
+}
+TEST_F(BoardTests, objboard_constructor_starting_pos)
+{
+    auto b = objboard::make_unique_board(Fen::StartingPosition);
+    const auto& squareArray = b->GetBoard();
+
+    for (int i = 0; i < boardArray1.size(); i++)
+    {
+        EXPECT_EQ(squareArray[i]._code, i);
+        if (boardArray1[i] == squareset::Empty)
+            EXPECT_EQ(squareArray[i]._piece, nullptr);
+        else
+            EXPECT_EQ(squareArray[i]._piece->_code, boardArray1[i]);
+    }
+
+    EXPECT_TRUE(check_objboard_pieces(whitePieceArray, whitePieces1, b->GetWhitePieces()));
+    EXPECT_TRUE(check_objboard_pieces(blackPieceArray, blackPieces1, b->GetBlackPieces()));
+    EXPECT_EQ(b->GetActiveColor(), color::White);
+    EXPECT_TRUE(b->QueryCastling(Castling::WHITE_KS));
+    EXPECT_TRUE(b->QueryCastling(Castling::WHITE_QS));
+    EXPECT_TRUE(b->QueryCastling(Castling::BLACK_KS));
+    EXPECT_TRUE(b->QueryCastling(Castling::BLACK_QS));
+    EXPECT_EQ(b->GetEnPassantSquare(), squareset::Empty);
+    EXPECT_EQ(b->GetHalfMoveClock(), 0);
+    EXPECT_EQ(b->GetFullMoveClock(), 1);
+    EXPECT_EQ(Fen::StartingPosition, utility::chess::board_to_fen(*b));
+}
+
+TEST_F(BoardTests, objbaord_constructor_pos1)
+{
+    auto b = objboard::make_unique_board(fen1);
+    const auto& squareArray = b->GetBoard();
+    for (int i = 0; i < boardArray2.size(); i++)
+    {
+        if (boardArray2[i] == squareset::Empty)
+            EXPECT_EQ(squareArray[i]._piece, nullptr);
+        else
+            EXPECT_EQ(squareArray[i]._piece->_code, boardArray2[i]);
+    }
+
+    EXPECT_TRUE(check_objboard_pieces(whitePieceArray, whitePieces2, b->GetWhitePieces()));
+    EXPECT_TRUE(check_objboard_pieces(blackPieceArray, blackPieces2, b->GetBlackPieces()));    
+    EXPECT_EQ(b->GetActiveColor(), color::Black);
+    EXPECT_TRUE(b->QueryCastling(Castling::WHITE_KS));
+    EXPECT_FALSE(b->QueryCastling(Castling::WHITE_QS));
+    EXPECT_TRUE(b->QueryCastling(Castling::BLACK_KS));
+    EXPECT_TRUE(b->QueryCastling(Castling::BLACK_QS));
+    EXPECT_EQ(b->GetEnPassantSquare(), squareset::c3);
+    EXPECT_EQ(b->GetHalfMoveClock(), 1);
+    EXPECT_EQ(b->GetFullMoveClock(), 2);
+    EXPECT_EQ(fen1, utility::chess::board_to_fen(*b));
+}
+TEST_F(BoardTests, objboard_constructor_fen_compare)
+{
+    for (auto f : fens)
+    {
+        auto b = objboard::make_unique_board(f);
         EXPECT_EQ(f, utility::chess::board_to_fen(*b));
     }
 }

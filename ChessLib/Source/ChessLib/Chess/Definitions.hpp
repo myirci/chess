@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <unordered_map>
+#include <limits.h>
 
 namespace chesslib 
 {
@@ -14,6 +15,10 @@ namespace chesslib
 
     namespace pieceset 
     {
+        constexpr double
+            PawnValue{ 1.0 }, KnightValue{ 3.0 }, BishopValue{ 3.0 }, RookValue{ 5.0 },
+            QueenValue{ 10.0 }, KingValue{std::numeric_limits<double>::max()};
+
         constexpr Piece 
             WhitePawn{ 1 }, 
             WhiteRook{ 2 }, 
@@ -26,7 +31,8 @@ namespace chesslib
             BlackKnight{ -3 }, 
             BlackBishop{ -4 }, 
             BlackQueen{ -5 }, 
-            BlackKing{ -6 };
+            BlackKing{ -6 },
+            None{ 0 };
     }
 
     namespace color 
@@ -50,7 +56,7 @@ namespace chesslib
 
     namespace squareset 
     {
-        constexpr Square Empty{ -128 };
+        constexpr Square Empty{ -128 }, None{ -127 };
 
         constexpr Square
             a1{ 0 }, a2{ 8 }, a3{ 16 }, a4{ 24 }, a5{ 32 }, a6{ 40 }, a7{ 48 }, a8{ 56 },
@@ -60,9 +66,7 @@ namespace chesslib
             e1{ 4 }, e2{ 12 }, e3{ 20 }, e4{ 28 }, e5{ 36 }, e6{ 44 }, e7{ 52 }, e8{ 60 },
             f1{ 5 }, f2{ 13 }, f3{ 21 }, f4{ 29 }, f5{ 37 }, f6{ 45 }, f7{ 53 }, f8{ 61 },
             g1{ 6 }, g2{ 14 }, g3{ 22 }, g4{ 30 }, g5{ 38 }, g6{ 46 }, g7{ 54 }, g8{ 62 },
-            h1{ 7 }, h2{ 15 }, h3{ 23 }, h4{ 31 }, h5{ 39 }, h6{ 47 }, h7{ 55 }, h8{ 63 };
-
-        
+            h1{ 7 }, h2{ 15 }, h3{ 23 }, h4{ 31 }, h5{ 39 }, h6{ 47 }, h7{ 55 }, h8{ 63 };   
     }
 
     enum class Castling : int8_t

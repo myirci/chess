@@ -33,23 +33,51 @@ namespace chesslib::utility::chess
 			{
 				if (std::isdigit(c))
 				{
-					for (Index i{ 0 }; i < c - '0'; i++)
+					if constexpr (traits::board_traits<Board>::IsObjBoard) 
 					{
-						if constexpr (traits::board_traits<Board>::IsBasicBoard) mapped_idx = idx;
-						else mapped_idx = traits::board_traits<Board>::BottomToTop(idx);
-						b[mapped_idx] = squareset::Empty;		
-						idx++;
+						idx += (c - '0');
+					}
+					else 
+					{
+						for (Index i{ 0 }; i < c - '0'; i++)
+						{
+							if constexpr (traits::board_traits<Board>::IsBasicBoard)
+								mapped_idx = idx;
+							else
+								mapped_idx = traits::board_traits<Board>::BottomToTop(idx);
+							b[mapped_idx] = squareset::Empty;
+							idx++;
+						}
 					}
 				}
 				else
 				{
-					if constexpr (traits::board_traits<Board>::IsBasicBoard) mapped_idx = idx;
-					else mapped_idx = traits::board_traits<Board>::BottomToTop(idx);
-
 					Piece p = char_to_piece.at(c);
-					if (color::get_color(p) == color::White) wp.emplace(p, mapped_idx);
-					else bp.emplace(p, mapped_idx);
-					b[mapped_idx] = p;
+					if constexpr (traits::board_traits<Board>::IsObjBoard) 
+					{
+						auto pobj = objboard::make_shared_piece(p, idx);
+						b[idx]._piece = pobj;
+
+						if (color::get_color(p) == color::White)
+							wp.emplace(p, std::move(pobj));
+						else
+							bp.emplace(p, std::move(pobj));
+					}
+					else 
+					{
+						if constexpr (traits::board_traits<Board>::IsBasicBoard)
+							mapped_idx = idx;
+						else
+							mapped_idx = traits::board_traits<Board>::BottomToTop(idx);
+
+						if (color::get_color(p) == color::White)
+							wp.emplace(p, mapped_idx);
+						else
+							bp.emplace(p, mapped_idx);
+
+						b[mapped_idx] = p;
+					}
+
 					idx++;
 				}
 			}
@@ -61,7 +89,7 @@ namespace chesslib::utility::chess
 
 		if (flattened_fields[10] != "-") 
 		{
-			if constexpr (traits::board_traits<Board>::IsBasicBoard)
+			if constexpr (traits::board_traits<Board>::IsBasicBoard || traits::board_traits<Board>::IsObjBoard)
 				brd.SetEnPassantSquare(basic_board::get_square_from_chars(flattened_fields[10][0], flattened_fields[10][1]));
 			else
 				brd.SetEnPassantSquare(x88board::get_square_from_chars(flattened_fields[10][0], flattened_fields[10][1]));
@@ -95,17 +123,36 @@ namespace chesslib::utility::chess
 			for (File f = 0; f < 8; f++)
 			{
 				auto idx = traits::board_traits<Board>::TopToBottom(i++);
-
-				if (b[idx] == squareset::Empty)
+				
+				bool is_empty{ false };
+				Piece p{ pieceset::None };
+				if constexpr (traits::board_traits<Board>::IsObjBoard) 
+				{
+					if (b[idx]._piece)
+						p = b[idx]._piece->_code;
+					else
+						is_empty = true;
+				}
+				else 
+				{
+					if (b[idx] != squareset::Empty)
+						p = b[idx];
+					else
+						is_empty = true;
+				}
+				
+				if (is_empty) 
+				{
 					empty_count++;
-				else
+				}
+				else 
 				{
 					if (empty_count != 0)
 					{
 						ss << empty_count;
 						empty_count = 0;
 					}
-					auto it = piece_to_char.find(b[idx]);
+					auto it = piece_to_char.find(p);
 					ss << it->second;
 				}
 			}
