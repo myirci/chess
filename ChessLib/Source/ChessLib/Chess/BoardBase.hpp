@@ -26,11 +26,11 @@ namespace chesslib
 
 		BoardBase();
 
-		Color active_color;
-		int8_t castling_rights;
-		Square en_passant_target;
-		uint16_t half_move_clock;
-		uint16_t full_move_clock;
+		Color _active_color;
+		int8_t _castling_rights;
+		Square _enpassant_target;
+		uint16_t _halfmove_clock;
+		uint16_t _fullmove_clock;
 	};
 
 	class BoardBaseWithPieces : public BoardBase
@@ -48,7 +48,7 @@ namespace chesslib
 
 		BoardBaseWithPieces();
 
-		PieceMap white_pieces;
-		PieceMap black_pieces;
+		PieceMap _white_pieces;
+		PieceMap _black_pieces;
 	};
 }

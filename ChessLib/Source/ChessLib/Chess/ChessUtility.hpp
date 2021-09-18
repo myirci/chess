@@ -41,10 +41,7 @@ namespace chesslib::utility::chess
 					{
 						for (Index i{ 0 }; i < c - '0'; i++)
 						{
-							if constexpr (traits::board_traits<Board>::IsBasicBoard)
-								mapped_idx = idx;
-							else
-								mapped_idx = traits::board_traits<Board>::BottomToTop(idx);
+							mapped_idx = traits::board_traits<Board>::BottomToTop(idx);	
 							b[mapped_idx] = squareset::Empty;
 							idx++;
 						}
@@ -58,23 +55,14 @@ namespace chesslib::utility::chess
 						auto pobj = objboard::make_shared_piece(p, idx);
 						b[idx]._piece = pobj;
 
-						if (color::get_color(p) == color::White)
-							wp.emplace(p, std::move(pobj));
-						else
-							bp.emplace(p, std::move(pobj));
+						if (color::get_color(p) == color::White) wp.emplace(p, std::move(pobj));
+						else                                     bp.emplace(p, std::move(pobj));
 					}
 					else 
 					{
-						if constexpr (traits::board_traits<Board>::IsBasicBoard)
-							mapped_idx = idx;
-						else
-							mapped_idx = traits::board_traits<Board>::BottomToTop(idx);
-
-						if (color::get_color(p) == color::White)
-							wp.emplace(p, mapped_idx);
-						else
-							bp.emplace(p, mapped_idx);
-
+						mapped_idx = traits::board_traits<Board>::BottomToTop(idx);
+						if (color::get_color(p) == color::White) wp.emplace(p, mapped_idx);
+						else                                     bp.emplace(p, mapped_idx);
 						b[mapped_idx] = p;
 					}
 
@@ -88,12 +76,7 @@ namespace chesslib::utility::chess
 		brd.SetCastlingRights(flattened_fields[9]);
 
 		if (flattened_fields[10] != "-") 
-		{
-			if constexpr (traits::board_traits<Board>::IsBasicBoard || traits::board_traits<Board>::IsObjBoard)
-				brd.SetEnPassantSquare(basic_board::get_square_from_chars(flattened_fields[10][0], flattened_fields[10][1]));
-			else
-				brd.SetEnPassantSquare(x88board::get_square_from_chars(flattened_fields[10][0], flattened_fields[10][1]));
-		}
+			brd.SetEnPassantSquare(traits::board_traits<Board>::GetSquareFromChars(flattened_fields[10][0], flattened_fields[10][1]));
 			
 		if (flattened_fields.size() == 13)
 		{
@@ -128,16 +111,16 @@ namespace chesslib::utility::chess
 				Piece p{ pieceset::None };
 				if constexpr (traits::board_traits<Board>::IsObjBoard) 
 				{
-					if (b[idx]._piece)
+					if (b[idx]._piece) 
 						p = b[idx]._piece->_code;
 					else
 						is_empty = true;
 				}
 				else 
 				{
-					if (b[idx] != squareset::Empty)
+					if (b[idx] != squareset::Empty) 
 						p = b[idx];
-					else
+					else                     
 						is_empty = true;
 				}
 				
@@ -191,5 +174,11 @@ namespace chesslib::utility::chess
 		ss << ' ' << brd.GetHalfMoveClock() << ' ' << brd.GetFullMoveClock();
 
 		return ss.str();
+	}
+
+	template <typename Board, Color AttackingSide>
+	std::pair<Square, Square> get_king_attackers(Board& const b, Square king_pos) 
+	{
+
 	}
 }

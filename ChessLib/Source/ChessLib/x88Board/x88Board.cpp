@@ -9,6 +9,12 @@ namespace chesslib::x88board
 
 	x88Board::BoardArray& x88Board::GetBoard() { return board; }
 	
+	std::vector<Move> x88Board::GenerateMoves() const 
+	{
+		std::vector<Move> moves;
+		return moves;
+	}
+
 	std::unique_ptr<x88Board> make_unique_board(std::string_view fen)
 	{
 		auto brd = std::unique_ptr<x88Board>(new x88Board());

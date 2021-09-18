@@ -1,10 +1,12 @@
 #pragma once
 
 #include<ChessLib/Chess/BoardBase.hpp>
+#include <ChessLib/Chess/Move.hpp>
 
 #include <array>
 #include <unordered_map>
 #include <memory>
+#include <vector>
 
 namespace chesslib::x88board
 {
@@ -16,6 +18,8 @@ namespace chesslib::x88board
 
 		const BoardArray& GetBoard() const;
 		BoardArray& GetBoard();
+
+		std::vector<Move> GenerateMoves() const;
 
 	protected:
 		

@@ -15,6 +15,12 @@ namespace chesslib::objboard
 	const ObjBoard::PieceMap& ObjBoard::GetBlackPieces() const { return _black_pieces; }
 	ObjBoard::PieceMap& ObjBoard::GetBlackPieces() { return _black_pieces; }
 
+	std::vector<Move> ObjBoard::GenerateMoves() const 
+	{
+		std::vector<Move> moves;
+		return moves;
+	}
+
 	std::unique_ptr<ObjBoard> make_unique_board(std::string_view fen)
 	{
 		auto brd = std::unique_ptr<ObjBoard>(new ObjBoard());

@@ -1,10 +1,12 @@
 #pragma once
 
 #include <ChessLib/Chess/BoardBase.hpp>
+#include <ChessLib/Chess/Move.hpp>
 
 #include <array>
 #include <string_view>
 #include <memory>
+#include <vector>
 
 namespace chesslib::basic_board
 {
@@ -18,13 +20,20 @@ namespace chesslib::basic_board
 		const BoardArray& GetBoard() const;
 		BoardArray& GetBoard();
 
-		// void MakeMove(Move const& mv);
-		// void UnmakeMove(Move const& mv);
+		std::vector<Move> GenerateMoves() const;
 		
 	protected:
 
 		BasicBoard();
 		BoardArray board;
+
+		template <Color SideToMove>
+		void GenerateMoves(std::vector<Move>& moves) const;
+
+		
+
+		template <Color SideToMove>
+		Square GetKingPosition() const;
 
 		friend std::unique_ptr<BasicBoard> make_unique_board(std::string_view fen);
 		friend std::shared_ptr<BasicBoard> make_shared_board(std::string_view fen);

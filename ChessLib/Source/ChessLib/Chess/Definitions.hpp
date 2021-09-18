@@ -12,6 +12,7 @@ namespace chesslib
     using Rank = int8_t;
     using File = int8_t;
     using Index = int8_t;
+    using Direction = int8_t;
 
     namespace pieceset 
     {

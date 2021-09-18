@@ -16,6 +16,9 @@
     <Filter Include="ObjBoard">
       <UniqueIdentifier>{9428e8db-0154-4876-aaea-3850d14c10cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{77ff016f-7854-4dfd-ab1d-bacfbc99a61c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ChessLib\Chess\Fen.cpp">
@@ -41,6 +44,9 @@
     </ClCompile>
     <ClCompile Include="Source\ChessLib\ObjBoard\PieceObj.cpp">
       <Filter>ObjBoard</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ChessLib\Bitboard\BitBoard.cpp">
+      <Filter>BitBoard</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +91,9 @@
     </ClInclude>
     <ClInclude Include="Source\ChessLib\ObjBoard\SquareObj.hpp">
       <Filter>ObjBoard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Bitboard\Bitboard.hpp">
+      <Filter>BitBoard</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

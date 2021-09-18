@@ -2,12 +2,13 @@
 
 #include <ChessLib/Chess/Definitions.hpp>
 #include <ChessLib/Chess/BoardBase.hpp>
+#include <ChessLib/Chess/Move.hpp>
 #include <ChessLib/ObjBoard/PieceObj.hpp>
 #include <ChessLib/ObjBoard/SquareObj.hpp>
 
-
 #include <array>
 #include <memory>
+#include <vector>
 
 using namespace chesslib::squareset;
 
@@ -28,6 +29,8 @@ namespace chesslib::objboard
 
 		const PieceMap& GetBlackPieces() const;
 		PieceMap& GetBlackPieces();
+
+		std::vector<Move> GenerateMoves() const;
 	
 	protected:
 
