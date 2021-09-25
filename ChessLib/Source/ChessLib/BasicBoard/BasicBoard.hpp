@@ -10,6 +10,10 @@
 
 namespace chesslib::basic_board
 {
+	using MoveList = std::vector<Move>;
+
+	// On dimensional array of 64 squares to represent 8x8 board board.
+	// Not suitable for move generation: off-board piece detection is expensive to compute.
 	class BasicBoard : public BoardBaseWithPieces
 	{
 	public:
@@ -20,20 +24,30 @@ namespace chesslib::basic_board
 		const BoardArray& GetBoard() const;
 		BoardArray& GetBoard();
 
-		std::vector<Move> GenerateMoves() const;
+		template<Color Attacker>
+		bool IsUnderAttack(Square sq) const;
+
+		template<Color Attacker>
+		void ComputeChecksAndPins(Square king_pos);
+
+		// template<Color SideToMove>
+		// void ToSquareMoves(Square sq, const VectorList& attacks, MoveList& moves) const;
 		
 	protected:
 
 		BasicBoard();
 		BoardArray board;
 
-		template <Color SideToMove>
-		void GenerateMoves(std::vector<Move>& moves) const;
+		template<Color Attacker>
+		bool IsUnderAttackByAStraightMovingPiece(Square sq) const;
 
-		
+		template<Color Attacker>
+		bool IsUnderAttackByADiagonallyMovingPiece(Square sq) const;
 
-		template <Color SideToMove>
-		Square GetKingPosition() const;
+		template<Color Attacker>
+		bool IsUnderAttackByAKnight(Square sq) const;
+
+		static bool IsInside(Square curr, Square next);
 
 		friend std::unique_ptr<BasicBoard> make_unique_board(std::string_view fen);
 		friend std::shared_ptr<BasicBoard> make_shared_board(std::string_view fen);

@@ -13,6 +13,7 @@ namespace chesslib
     using File = int8_t;
     using Index = int8_t;
     using Direction = int8_t;
+    using Distance = int8_t;
 
     namespace pieceset 
     {
@@ -41,6 +42,8 @@ namespace chesslib
         constexpr Color White{ 1 }, Black{ -1 };
 
         inline constexpr Color get_color(Piece p) { return p > 0 ? White : Black; }
+
+        inline constexpr Color get_opposite_color(Piece p) { return p > 0 ? Black : White; }
     }
 
     namespace charset
@@ -60,8 +63,8 @@ namespace chesslib
         constexpr Square Empty{ -128 }, None{ -127 };
 
         constexpr Square
-            a1{ 0 }, a2{ 8 }, a3{ 16 }, a4{ 24 }, a5{ 32 }, a6{ 40 }, a7{ 48 }, a8{ 56 },
-            b1{ 1 }, b2{ 9 }, b3{ 17 }, b4{ 25 }, b5{ 33 }, b6{ 41 }, b7{ 49 }, b8{ 57 },
+            a1{ 0 }, a2{ 8 },  a3{ 16 }, a4{ 24 }, a5{ 32 }, a6{ 40 }, a7{ 48 }, a8{ 56 },
+            b1{ 1 }, b2{ 9 },  b3{ 17 }, b4{ 25 }, b5{ 33 }, b6{ 41 }, b7{ 49 }, b8{ 57 },
             c1{ 2 }, c2{ 10 }, c3{ 18 }, c4{ 26 }, c5{ 34 }, c6{ 42 }, c7{ 50 }, c8{ 58 },
             d1{ 3 }, d2{ 11 }, d3{ 19 }, d4{ 27 }, d5{ 35 }, d6{ 43 }, d7{ 51 }, d8{ 59 },
             e1{ 4 }, e2{ 12 }, e3{ 20 }, e4{ 28 }, e5{ 36 }, e6{ 44 }, e7{ 52 }, e8{ 60 },

@@ -52,19 +52,23 @@ namespace chesslib::basic_board
         return { f + 'a', r + '1' };
     }
 
-    namespace direction 
+    namespace direction
     {
+        constexpr Direction None{ 0 };
+
         constexpr Direction N{ 8 }, S{ -8 }, E{ 1 }, W{ -1 }, NE{ 9 }, SW{ -9 }, NW{ 7 }, SE{ -7 };
         
         constexpr Direction N1{ 17 }, N2{ 10 }, N3{ -6 }, N4{ -15 }, N5{ -17 }, N6{ -10 }, N7{ 6 }, N8{ 15 };
 
         constexpr std::array<Direction, 8> All{ N, NE, E, SE, S, SW, W, NW };
 
-        constexpr std::array<Direction, 4> Flat{ N, E, S, W };
+        constexpr std::array<Direction, 4> Straight{ N, E, S, W };
         
         constexpr std::array<Direction, 4> Diagonal{ NE, SE, SW, NW };
         
         constexpr std::array<Direction, 8> KnightJumps{ N1, N2, N3, N4, N5, N6, N7, N8 };
+
+        constexpr Direction Reverse(Direction dir) { return -dir; }
     }
 }
 

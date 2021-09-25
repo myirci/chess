@@ -6,6 +6,9 @@
 
 namespace chesslib
 {
+
+#pragma region BoardBase_Methods
+
 	BoardBase::BoardBase() :
 		_active_color{ 0 },
 		_castling_rights{ 0 },
@@ -75,6 +78,14 @@ namespace chesslib
 		_fullmove_clock = static_cast<uint16_t>(f.value());
 	}
 
+	const BoardBase::PinMap& BoardBase::GetPinMap() const { return _pins; }
+
+	const BoardBase::CheckMap& BoardBase::GetCheckMap() const { return _checks; }
+
+#pragma endregion
+
+#pragma region BoardBaseWithPieces_Methods
+
 	BoardBaseWithPieces::BoardBaseWithPieces() { }
 
 	const BoardBaseWithPieces::PieceMap& BoardBaseWithPieces::GetWhitePieces() const { return _white_pieces; }
@@ -84,4 +95,7 @@ namespace chesslib
 	const BoardBaseWithPieces::PieceMap& BoardBaseWithPieces::GetBlackPieces() const { return _black_pieces; }
 
 	BoardBaseWithPieces::PieceMap& BoardBaseWithPieces::GetBlackPieces() { return _black_pieces; }
+
+#pragma endregion
+
 }

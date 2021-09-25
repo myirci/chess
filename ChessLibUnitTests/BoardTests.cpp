@@ -6,8 +6,9 @@
 #include <ChessLib/ObjBoard/ObjBoard.hpp>
 #include <ChessLib/Chess/ChessUtility.hpp>
 
+#include <bitset>
+
 using namespace chesslib;
-using namespace chesslib::basic_board;
 
 class BoardTests : public ::testing::Test 
 {
@@ -194,6 +195,23 @@ protected:
     };
 
     std::string_view fen1{ "6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1 b Kkq c3 1 2" };
+
+    std::vector<std::bitset<64>> white_attacks
+    {
+        { 0x444A55F5FBEEF2DF }, { 0x00A017EF3BFF5BFE }, { 0x1451167EF9EE3FFF }, { 0x040404D4FF7EEFBF },
+        { 0x0A153E5F0BFF7FBE }, { 0x20203FB170DFFAE8 }, { 0x000044FAF5FFFFFE }, { 0x1423A9FFFD5FFBFE },
+        { 0x00002A7F7FBFE9FF }, { 0x080808CADCFF3FFE }
+    };
+
+    std::vector<std::bitset<64>> black_attacks
+    {
+        { 0xFF8FFF4F821E0000 }, { 0xFFFFFBF76AE53808 }, { 0x7EB95F0F17560304 }, { 0xFFBCFAF7B8A00000 },
+        { 0xFFFFF7BB559971D8 }, { 0xF8EFF8F4B0542804 }, { 0x7EBF7F7DEA950000 }, { 0xFFF5B7EAF35CCF20 },
+        { 0xFFF0FFFF74CA2010 }, { 0x7DBEBFCE7F452A00 }
+    };
+
+    std::bitset<64> white_attacks_startpos{ 0x0000000000FFFF7E };
+    std::bitset<64> black_attacks_startpos{ 0x7EFFFF0000000000 };
 };
 
 TEST_F(BoardTests, basic_board_constructor_starting_pos)
@@ -240,6 +258,28 @@ TEST_F(BoardTests, basic_board_constructor_fen_compare)
     {
         auto b = basic_board::make_unique_board(f);
         EXPECT_EQ(f, utility::chess::board_to_fen(*b));
+    }
+}
+
+TEST_F(BoardTests, basic_board_is_under_attack) 
+{
+    // starting position
+    auto b = basic_board::make_unique_board(Fen::StartingPosition);
+    for (Square s{ 0 }; s < 64; s++)
+        EXPECT_EQ(b->IsUnderAttack<color::White>(s), white_attacks_startpos[s]);
+
+    for (Square s{ 0 }; s < 64; s++)
+        EXPECT_EQ(b->IsUnderAttack<color::Black>(s), black_attacks_startpos[s]);
+
+    for (int i{0}; i < fens.size(); i++)
+    {
+        auto brd = basic_board::make_unique_board(fens[i]);
+        
+        for (Square s{ 0 }; s < 64; s++) 
+            EXPECT_EQ(brd->IsUnderAttack<color::White>(s), white_attacks[i][s]);
+       
+        for (Square s{ 0 }; s < 64; s++) 
+            EXPECT_EQ(brd->IsUnderAttack<color::Black>(s), black_attacks[i][s]);    
     }
 }
 

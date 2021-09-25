@@ -174,11 +174,5 @@ namespace chesslib::utility::chess
 		ss << ' ' << brd.GetHalfMoveClock() << ' ' << brd.GetFullMoveClock();
 
 		return ss.str();
-	}
-
-	template <typename Board, Color AttackingSide>
-	std::pair<Square, Square> get_king_attackers(Board& const b, Square king_pos) 
-	{
-
-	}
+	}	
 }
