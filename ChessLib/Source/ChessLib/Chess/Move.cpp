@@ -23,4 +23,13 @@ namespace chesslib
 	bool Move::IsCastle() const { return mtype == MoveType::King_Side_Castle || mtype == MoveType::Queen_Side_Castle; }
 
 	bool Move::IsEnPassantCapture() const { return mtype == MoveType::En_Passant_Capture; }
+
+	bool operator == (const Move m1, const Move m2) 
+	{
+		return
+			m1.from == m2.from &&
+			m1.to == m2.to &&
+			m1.mtype == m2.mtype &&
+			m1.captured == m2.captured;
+	}
 }

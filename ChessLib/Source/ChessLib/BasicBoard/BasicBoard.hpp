@@ -30,6 +30,9 @@ namespace chesslib::basic_board
 		template<Color Attacker>
 		bool IsUnderAttack(Square sq) const;
 
+		template<Color Clr>
+		void GenerateKingMoves(Square king_pos, MoveList& moves) const;
+
 	protected:
 
 		BasicBoard();
@@ -60,6 +63,15 @@ namespace chesslib::basic_board
 
 		template<Color Attacker>
 		inline bool IsNonKingDiagonalAttack(Piece p, Direction dir, Distance dist) const;
+
+		template<Color Attacker>
+		inline bool IsDirectionInvalidForKing(Direction dir) const;
+
+		template<Color Clr>
+		inline bool IsKingSideCastlingPossible() const;
+
+		template<Color Clr>
+		inline bool IsQueenSideCastlingPossible() const;
 
 		friend std::unique_ptr<BasicBoard> make_unique_board(std::string_view fen);
 		friend std::shared_ptr<BasicBoard> make_shared_board(std::string_view fen);

@@ -35,6 +35,8 @@ namespace chesslib
             BlackQueen{ -5 }, 
             BlackKing{ -6 },
             None{ 0 };
+
+        constexpr Piece Reverse(Piece p) { return -p; }
     }
 
     namespace color 

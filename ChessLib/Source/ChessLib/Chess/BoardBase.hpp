@@ -15,9 +15,10 @@ namespace chesslib
 		// value.second : direction from pinned piece to the attacker
 		using PinMap = std::unordered_map<Square, std::pair<Square, Direction>>;
 		
-		// first  : attacker location
-		// second : direction from king location to the attacker	
-		using CheckList = std::vector<std::pair<Square, Direction>>;
+		// 0: attacker location
+		// 1: direction from king location to the attacker
+		// 2: distance from king location to attacker (dist >= 1, number of moves for king to reach the attacker)
+		using CheckList = std::vector<std::tuple<Square, Direction, Distance>>;
 
 		uint16_t GetHalfMoveClock() const;
 		uint16_t GetFullMoveClock() const;

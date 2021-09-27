@@ -231,11 +231,11 @@ protected:
 
     std::vector<BoardBase::CheckList> expected_checks_basic_board
     {
-        {{d8, basic_board::direction::N}, {c5, basic_board::direction::None}},
-        {{c4, basic_board::direction::SW}},
+        {{d8, basic_board::direction::N, 5}, {c5, basic_board::direction::None, 0}},
+        {{c4, basic_board::direction::SW, 1}},
         { },
         { },
-        {{b8, basic_board::direction::NW}, {e4, basic_board::direction::None}}
+        {{b8, basic_board::direction::NW, 2}, {e4, basic_board::direction::None, 0}}
     };
 
     std::vector<std::string_view> move_generator_king_moves_test_fens
@@ -243,7 +243,20 @@ protected:
         "r3k2r/p3p3/8/8/1q6/8/P2P3P/R3K2R w KQkq - 0 1", 
         "r3k2r/1P6/8/8/8/8/3n4/R3K2R b KQkq - 0 1", 
         "r3k2r/1P6/8/8/8/8/3n4/R3K2R w KQkq - 0 1",
-        "8/b7/4k3/8/3nKn2/8/8/8 w - - 0 1"
+        "8/b7/4k3/8/3nKn2/8/8/8 w - - 0 1",
+
+        "8/8/4k3/8/4K3/8/8/8 w - - 0 1",
+        "8/8/4k3/8/4K3/8/8/8 b - - 0 1",
+
+        "6k1/8/8/8/8/8/6q1/7K w - - 0 1",
+        "6k1/8/8/8/5n2/8/6q1/7K w - - 0 1",
+
+        "8/3pp3/2pkp3/2pp4/8/6B1/8/6K1 b - - 0 1",
+        "1B6/3pp3/2pkp3/2pp4/8/8/8/6K1 b - - 0 1",
+        "8/3pp3/2pkp3/2ppP3/8/8/8/6K1 b - - 0 1",
+        "1k6/8/8/3PPP2/3qK3/3PPP2/8/8 w - - 0 1",
+        "1k6/8/8/3PPP2/4Kq2/3PPP2/8/8 w - - 0 1"
+
     };
 
     std::vector<std::vector<Move>> expected_king_moves

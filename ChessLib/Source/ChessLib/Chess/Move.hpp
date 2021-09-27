@@ -26,13 +26,6 @@ namespace chesslib
 
     class Move
     {
-    private:
-
-        Square from;
-        Square to;
-        MoveType mtype;
-        Piece captured;
-
     public:
 
         Move(Square loc_from, Square loc_to, MoveType move_type, Piece captured_piece = pieceset::None);
@@ -46,5 +39,16 @@ namespace chesslib
         bool IsCapture() const;
         bool IsCastle() const;
         bool IsEnPassantCapture() const;
+    
+    private:
+
+        Square from;
+        Square to;
+        MoveType mtype;
+        Piece captured;
+        
+        friend bool operator == (const Move m1, const Move m2);
     };
+
+    bool operator == (const Move m1, const Move m2);
 }

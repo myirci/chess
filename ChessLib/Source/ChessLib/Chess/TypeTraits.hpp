@@ -25,8 +25,6 @@ namespace chesslib::traits
 		static constexpr std::pair<char, char> ToCharPair(Square s) { return basic_board::get_chars(s); }
 
 		static constexpr Square GetSquareFromChars(char f, char r) { return basic_board::get_square_from_chars(f, r); }
-
-		// static constexpr std::array<Direction, 4> StraightDirections = basic_board::direction::Straight;
 	};
 
 	template <>
@@ -68,6 +66,11 @@ namespace chesslib::traits
 		static constexpr Piece Bishop = pieceset::WhiteBishop;
 		static constexpr Piece Queen = pieceset::WhiteQueen;
 		static constexpr Piece King = pieceset::WhiteKing;
+		
+		static constexpr Color Opposite = color::Black;
+
+		static constexpr Castling KingSideCastling = Castling::WHITE_KS;
+		static constexpr Castling QueenSideCastling = Castling::WHITE_QS;
 	};
 
 	template <>
@@ -79,6 +82,11 @@ namespace chesslib::traits
 		static constexpr Piece Bishop = pieceset::BlackBishop;
 		static constexpr Piece Queen = pieceset::BlackQueen;
 		static constexpr Piece King = pieceset::BlackKing;
+		
+		static constexpr Color Opposite = color::White;
+
+		static constexpr Castling KingSideCastling = Castling::BLACK_KS;
+		static constexpr Castling QueenSideCastling = Castling::BLACK_QS;
 	};
 
 	template<typename Board, Piece>
@@ -94,5 +102,22 @@ namespace chesslib::traits
 	struct board_piece_traits<basic_board::BasicBoard, pieceset::BlackPawn>
 	{
 		static constexpr Direction AttackDirections[2] = { basic_board::direction::SE, basic_board::direction::SW };
+	};
+
+	template<typename Board, Color>
+	struct board_color_traits { };
+
+	template <>
+	struct board_color_traits<basic_board::BasicBoard, color::White> 
+	{
+		static constexpr Square KingSideCastleCheckSquares[2] = { squareset::f1, squareset::g1 };
+		static constexpr Square QueenSideCastleCheckSquares[3] = { squareset::d1, squareset::c1, squareset::b1 };
+	};
+
+	template <>
+	struct board_color_traits<basic_board::BasicBoard, color::Black>
+	{
+		static constexpr Square KingSideCastleCheckSquares[2] = { squareset::f8, squareset::g8 };
+		static constexpr Square QueenSideCastleCheckSquares[3] = { squareset::d8, squareset::c8, squareset::b8 };
 	};
 }
