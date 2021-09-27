@@ -15,9 +15,9 @@ namespace chesslib
 		// value.second : direction from pinned piece to the attacker
 		using PinMap = std::unordered_map<Square, std::pair<Square, Direction>>;
 		
-		// key			: attacker location
-		// value		: direction from king location to the attacker	
-		using CheckMap = std::unordered_map<Square, Direction>;
+		// first  : attacker location
+		// second : direction from king location to the attacker	
+		using CheckList = std::vector<std::pair<Square, Direction>>;
 
 		uint16_t GetHalfMoveClock() const;
 		uint16_t GetFullMoveClock() const;
@@ -33,8 +33,8 @@ namespace chesslib
 		void SetHalfMoveClock(std::string_view hmc);
 		void SetFullMoveClock(std::string_view fmc);
 
-		const PinMap& GetPinMap() const;
-		const CheckMap& GetCheckMap() const;
+		const PinMap& GetPins() const;
+		const CheckList& GetChecks() const;
 
 	protected:
 
@@ -49,7 +49,7 @@ namespace chesslib
 		uint16_t _fullmove_clock;
 
 		PinMap _pins;
-		CheckMap _checks;
+		CheckList _checks;
 	};
 
 	class BoardBaseWithPieces : public BoardBase

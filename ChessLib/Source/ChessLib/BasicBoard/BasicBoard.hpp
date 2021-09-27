@@ -25,29 +25,41 @@ namespace chesslib::basic_board
 		BoardArray& GetBoard();
 
 		template<Color Attacker>
-		bool IsUnderAttack(Square sq) const;
-
-		template<Color Attacker>
 		void ComputeChecksAndPins(Square king_pos);
 
-		// template<Color SideToMove>
-		// void ToSquareMoves(Square sq, const VectorList& attacks, MoveList& moves) const;
-		
+		template<Color Attacker>
+		bool IsUnderAttack(Square sq) const;
+
 	protected:
 
 		BasicBoard();
 		BoardArray board;
 
-		template<Color Attacker>
-		bool IsUnderAttackByAStraightMovingPiece(Square sq) const;
+		// template<Color SideToMove>
+		// void ToSquareNonKingMoves(Square sq, MoveList& moves) const;
 
-		template<Color Attacker>
-		bool IsUnderAttackByADiagonallyMovingPiece(Square sq) const;
+		template<Color Attacker, bool IsStraightMovingPiece>
+		bool IsUnderAttack(Square sq, const std::array<Direction, 4>& attack_directions) const;
+
+		template<Color Attacker, bool IsStraightMovingPiece>
+		void ComputeChecksAndPins(Square king_pos, const std::array<Direction, 4>& attack_directions);
 
 		template<Color Attacker>
 		bool IsUnderAttackByAKnight(Square sq) const;
 
 		static bool IsInside(Square curr, Square next);
+
+		template<Color Attacker>
+		inline bool IsStraightAttack(Piece p, Distance dist) const;
+
+		template<Color Attacker>
+		inline bool IsNonKingStraightAttack(Piece p) const;
+
+		template<Color Attacker>
+		inline bool IsDiagonalAttack(Piece p, Direction dir, Distance dist) const;
+
+		template<Color Attacker>
+		inline bool IsNonKingDiagonalAttack(Piece p, Direction dir, Distance dist) const;
 
 		friend std::unique_ptr<BasicBoard> make_unique_board(std::string_view fen);
 		friend std::shared_ptr<BasicBoard> make_shared_board(std::string_view fen);

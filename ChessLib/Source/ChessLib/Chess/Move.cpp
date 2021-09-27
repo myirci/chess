@@ -2,8 +2,11 @@
 
 namespace chesslib 
 {
-	Move::Move(Square loc_from, Square loc_to, MoveType move_type, Piece captured_piece) :
-		from{ loc_from }, to{ loc_to }, mtype{ move_type }, captured{ captured_piece } { }
+	Move::Move(Square loc_from, Square loc_to, MoveType move_type, Piece captured_piece /* = pieceset::None*/) :
+		from{ loc_from }, 
+		to{ loc_to }, 
+		mtype{ move_type }, 
+		captured{ captured_piece } { }
 
 	Square Move::GetFrom() const { return from; }
 

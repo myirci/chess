@@ -9,6 +9,8 @@
 #include <bitset>
 
 using namespace chesslib;
+using namespace chesslib::squareset;
+using namespace chesslib::pieceset;
 
 class BoardTests : public ::testing::Test 
 {
@@ -50,134 +52,115 @@ protected:
         }
     }
 
-    std::array<Square, 64> boardArray1
+    std::array<Square, 64> board_array_1
     {
-        pieceset::WhiteRook, pieceset::WhiteKnight, pieceset::WhiteBishop, pieceset::WhiteQueen, pieceset::WhiteKing, pieceset::WhiteBishop, pieceset::WhiteKnight, pieceset::WhiteRook,
-        pieceset::WhitePawn, pieceset::WhitePawn, pieceset::WhitePawn, pieceset::WhitePawn, pieceset::WhitePawn, pieceset::WhitePawn, pieceset::WhitePawn, pieceset::WhitePawn,
-        squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty,
-        squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty,
-        squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty,
-        squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty,
-        pieceset::BlackPawn, pieceset::BlackPawn, pieceset::BlackPawn, pieceset::BlackPawn, pieceset::BlackPawn, pieceset::BlackPawn, pieceset::BlackPawn, pieceset::BlackPawn,
-        pieceset::BlackRook, pieceset::BlackKnight, pieceset::BlackBishop, pieceset::BlackQueen, pieceset::BlackKing, pieceset::BlackBishop, pieceset::BlackKnight, pieceset::BlackRook
+        WhiteRook, WhiteKnight, WhiteBishop, WhiteQueen, WhiteKing, WhiteBishop, WhiteKnight, WhiteRook,
+        WhitePawn, WhitePawn, WhitePawn, WhitePawn, WhitePawn, WhitePawn, WhitePawn, WhitePawn,
+        Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
+        Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
+        Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
+        Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
+        BlackPawn, BlackPawn, BlackPawn, BlackPawn, BlackPawn, BlackPawn, BlackPawn, BlackPawn,
+        BlackRook, BlackKnight, BlackBishop, BlackQueen, BlackKing, BlackBishop, BlackKnight, BlackRook
     };
 
-    BoardBaseWithPieces::PieceMap whitePieces1
+    BoardBaseWithPieces::PieceMap white_pieces_1
     {
-        {pieceset::WhitePawn, squareset::a2}, {pieceset::WhitePawn, squareset::b2}, {pieceset::WhitePawn, squareset::c2},
-        {pieceset::WhitePawn, squareset::d2}, {pieceset::WhitePawn, squareset::e2}, {pieceset::WhitePawn, squareset::f2},
-        {pieceset::WhitePawn, squareset::g2}, {pieceset::WhitePawn, squareset::h2},
-        {pieceset::WhiteRook, squareset::a1}, {pieceset::WhiteRook, squareset::h1},
-        {pieceset::WhiteKnight, squareset::b1}, {pieceset::WhiteKnight, squareset::g1},
-        {pieceset::WhiteBishop, squareset::c1}, {pieceset::WhiteBishop, squareset::f1},
-        {pieceset::WhiteQueen, squareset::d1}, {pieceset::WhiteKing, squareset::e1}
+        {WhitePawn, a2}, {WhitePawn, b2}, {WhitePawn, c2}, {WhitePawn, d2}, {WhitePawn, e2}, {WhitePawn, f2}, {WhitePawn, g2}, {WhitePawn, h2},
+        {WhiteRook, a1}, {WhiteRook, h1}, {WhiteKnight, b1}, {WhiteKnight, g1}, {WhiteBishop, c1}, {WhiteBishop, f1}, {WhiteQueen, d1}, {WhiteKing, e1}
     };
 
-    BoardBaseWithPieces::PieceMap blackPieces1
+    BoardBaseWithPieces::PieceMap black_pieces_1
     {
-        {pieceset::BlackPawn, squareset::a7}, {pieceset::BlackPawn, squareset::b7}, {pieceset::BlackPawn, squareset::c7},
-        {pieceset::BlackPawn, squareset::d7}, {pieceset::BlackPawn, squareset::e7}, {pieceset::BlackPawn, squareset::f7},
-        {pieceset::BlackPawn, squareset::g7}, {pieceset::BlackPawn, squareset::h7},
-        {pieceset::BlackRook, squareset::a8}, {pieceset::BlackRook, squareset::h8},
-        {pieceset::BlackKnight, squareset::b8}, {pieceset::BlackKnight, squareset::g8},
-        {pieceset::BlackBishop, squareset::c8}, {pieceset::BlackBishop, squareset::f8},
-        {pieceset::BlackQueen, squareset::d8}, {pieceset::BlackKing, squareset::e8}
+        {BlackPawn, a7}, {BlackPawn, b7}, {BlackPawn, c7}, {BlackPawn, d7}, {BlackPawn, e7}, {BlackPawn, f7}, {BlackPawn, g7}, {BlackPawn, h7},
+        {BlackRook, a8}, {BlackRook, h8}, {BlackKnight, b8}, {BlackKnight, g8}, {BlackBishop, c8}, {BlackBishop, f8}, {BlackQueen, d8}, {BlackKing, e8}
     };
 
-    std::array<Square, 64> boardArray2
+    std::array<Square, 64> board_Array_2
     {
-        squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, pieceset::WhiteKing, squareset::Empty,
-        squareset::Empty, pieceset::WhitePawn, squareset::Empty, squareset::Empty, squareset::Empty, pieceset::WhitePawn, pieceset::WhitePawn, squareset::Empty,
-        squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty,
-        squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, pieceset::WhitePawn, pieceset::BlackPawn, squareset::Empty, squareset::Empty,
-        squareset::Empty, squareset::Empty, pieceset::BlackPawn, pieceset::WhitePawn, squareset::Empty, squareset::Empty, pieceset::BlackPawn, squareset::Empty,
-        squareset::Empty, squareset::Empty, squareset::Empty, pieceset::BlackPawn, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty,
-        pieceset::BlackPawn, pieceset::BlackPawn, squareset::Empty, squareset::Empty, squareset::Empty, pieceset::BlackPawn, pieceset::BlackPawn, squareset::Empty,
-        squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, pieceset::BlackKing, squareset::Empty
+        Empty, Empty, Empty, Empty, Empty, Empty, WhiteKing, Empty,
+        Empty, WhitePawn, Empty, Empty, Empty, WhitePawn, WhitePawn, Empty,
+        Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
+        Empty, Empty, Empty, Empty, WhitePawn, BlackPawn, Empty, Empty,
+        Empty, Empty, BlackPawn, WhitePawn, Empty, Empty, BlackPawn, Empty,
+        Empty, Empty, Empty, BlackPawn, Empty, Empty, Empty, Empty,
+        BlackPawn, BlackPawn, Empty, Empty, Empty, BlackPawn, BlackPawn, Empty,
+        Empty, Empty, Empty, Empty, Empty, Empty, BlackKing, Empty
     };
 
-    BoardBaseWithPieces::PieceMap whitePieces2
+    BoardBaseWithPieces::PieceMap white_pieces_2
     {
-        {pieceset::WhitePawn, squareset::b2}, {pieceset::WhitePawn, squareset::f2}, {pieceset::WhitePawn, squareset::g2},
-        {pieceset::WhitePawn, squareset::d5}, {pieceset::WhitePawn, squareset::e4}, {pieceset::WhiteKing, squareset::g1}
+        {WhitePawn, b2}, {WhitePawn, f2}, {WhitePawn, g2}, {WhitePawn, d5}, {WhitePawn, e4}, {WhiteKing, g1}
     };
 
-    BoardBaseWithPieces::PieceMap blackPieces2
+    BoardBaseWithPieces::PieceMap black_pieces_2
     {
-        {pieceset::BlackPawn, squareset::a7}, {pieceset::BlackPawn, squareset::b7}, {pieceset::BlackPawn, squareset::c5},
-        {pieceset::BlackPawn, squareset::d6}, {pieceset::BlackPawn, squareset::f7}, {pieceset::BlackPawn, squareset::f4},
-        {pieceset::BlackPawn, squareset::g7}, {pieceset::BlackPawn, squareset::g5}, {pieceset::BlackKing, squareset::g8}
+        {BlackPawn, a7}, {BlackPawn, b7}, {BlackPawn, c5}, {BlackPawn, d6}, {BlackPawn, f7}, {BlackPawn, f4}, {BlackPawn, g7}, {BlackPawn, g5}, {BlackKing, g8}
     };
 
-    std::array<Square, 128> boardArray3
+    std::array<Square, 128> board_array_x88board_1
     {
-        pieceset::WhiteRook, pieceset::WhiteKnight, pieceset::WhiteBishop, pieceset::WhiteQueen, pieceset::WhiteKing, pieceset::WhiteBishop, pieceset::WhiteKnight, pieceset::WhiteRook, 0, 0, 0, 0, 0, 0, 0, 0,
-        pieceset::WhitePawn, pieceset::WhitePawn, pieceset::WhitePawn, pieceset::WhitePawn, pieceset::WhitePawn, pieceset::WhitePawn, pieceset::WhitePawn, pieceset::WhitePawn, 0, 0, 0, 0, 0, 0, 0, 0,
-        squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, 0, 0, 0, 0, 0, 0, 0, 0,
-        squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, 0, 0, 0, 0, 0, 0, 0, 0,
-        squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, 0, 0, 0, 0, 0, 0, 0, 0,
-        squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, 0, 0, 0, 0, 0, 0, 0, 0,
-        pieceset::BlackPawn, pieceset::BlackPawn, pieceset::BlackPawn, pieceset::BlackPawn, pieceset::BlackPawn, pieceset::BlackPawn, pieceset::BlackPawn, pieceset::BlackPawn, 0, 0, 0, 0, 0, 0, 0, 0,
-        pieceset::BlackRook, pieceset::BlackKnight, pieceset::BlackBishop, pieceset::BlackQueen, pieceset::BlackKing, pieceset::BlackBishop, pieceset::BlackKnight, pieceset::BlackRook, 0, 0, 0, 0, 0, 0, 0, 0
+        WhiteRook, WhiteKnight, WhiteBishop, WhiteQueen, WhiteKing, WhiteBishop, WhiteKnight, WhiteRook, 0, 0, 0, 0, 0, 0, 0, 0,
+        WhitePawn, WhitePawn, WhitePawn, WhitePawn, WhitePawn, WhitePawn, WhitePawn, WhitePawn, 0, 0, 0, 0, 0, 0, 0, 0,
+        Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, 0, 0, 0, 0, 0, 0, 0, 0,
+        Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, 0, 0, 0, 0, 0, 0, 0, 0,
+        Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, 0, 0, 0, 0, 0, 0, 0, 0,
+        Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, 0, 0, 0, 0, 0, 0, 0, 0,
+        BlackPawn, BlackPawn, BlackPawn, BlackPawn, BlackPawn, BlackPawn, BlackPawn, BlackPawn, 0, 0, 0, 0, 0, 0, 0, 0,
+        BlackRook, BlackKnight, BlackBishop, BlackQueen, BlackKing, BlackBishop, BlackKnight, BlackRook, 0, 0, 0, 0, 0, 0, 0, 0
     };
 
-    BoardBaseWithPieces::PieceMap whitePieces3
+    BoardBaseWithPieces::PieceMap white_pieces_x88board_1
     {
-        {pieceset::WhitePawn, x88board::a2}, {pieceset::WhitePawn, x88board::b2}, {pieceset::WhitePawn, x88board::c2},
-        {pieceset::WhitePawn, x88board::d2}, {pieceset::WhitePawn, x88board::e2}, {pieceset::WhitePawn, x88board::f2},
-        {pieceset::WhitePawn, x88board::g2}, {pieceset::WhitePawn, x88board::h2},
-        {pieceset::WhiteRook, x88board::a1}, {pieceset::WhiteRook, x88board::h1},
-        {pieceset::WhiteKnight, x88board::b1}, {pieceset::WhiteKnight, x88board::g1},
-        {pieceset::WhiteBishop, x88board::c1}, {pieceset::WhiteBishop, x88board::f1},
-        {pieceset::WhiteQueen, x88board::d1}, {pieceset::WhiteKing, x88board::e1}
+        {WhitePawn, x88board::a2}, {WhitePawn, x88board::b2}, {WhitePawn, x88board::c2},
+        {WhitePawn, x88board::d2}, {WhitePawn, x88board::e2}, {WhitePawn, x88board::f2},
+        {WhitePawn, x88board::g2}, {WhitePawn, x88board::h2}, {WhiteRook, x88board::a1}, {WhiteRook, x88board::h1},
+        {WhiteKnight, x88board::b1}, {WhiteKnight, x88board::g1}, {WhiteBishop, x88board::c1}, {WhiteBishop, x88board::f1},
+        {WhiteQueen, x88board::d1}, {WhiteKing, x88board::e1}
     };
 
-    BoardBaseWithPieces::PieceMap blackPieces3
+    BoardBaseWithPieces::PieceMap black_pieces_x88board_1
     {
-        {pieceset::BlackPawn, x88board::a7}, {pieceset::BlackPawn, x88board::b7}, {pieceset::BlackPawn, x88board::c7},
-        {pieceset::BlackPawn, x88board::d7}, {pieceset::BlackPawn, x88board::e7}, {pieceset::BlackPawn, x88board::f7},
-        {pieceset::BlackPawn, x88board::g7}, {pieceset::BlackPawn, x88board::h7},
-        {pieceset::BlackRook, x88board::a8}, {pieceset::BlackRook, x88board::h8},
-        {pieceset::BlackKnight, x88board::b8}, {pieceset::BlackKnight, x88board::g8},
-        {pieceset::BlackBishop, x88board::c8}, {pieceset::BlackBishop, x88board::f8},
-        {pieceset::BlackQueen, x88board::d8}, {pieceset::BlackKing, x88board::e8}
+        {BlackPawn, x88board::a7}, {BlackPawn, x88board::b7}, {BlackPawn, x88board::c7},
+        {BlackPawn, x88board::d7}, {BlackPawn, x88board::e7}, {BlackPawn, x88board::f7},
+        {BlackPawn, x88board::g7}, {BlackPawn, x88board::h7}, {BlackRook, x88board::a8}, {BlackRook, x88board::h8},
+        {BlackKnight, x88board::b8}, {BlackKnight, x88board::g8}, {BlackBishop, x88board::c8}, {BlackBishop, x88board::f8},
+        {BlackQueen, x88board::d8}, {BlackKing, x88board::e8}
     };
 
-    std::array<Square, 128> boardArray4
+    std::array<Square, 128> board_array_x88board_2
     {
-        squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, pieceset::WhiteKing, squareset::Empty, 0, 0, 0, 0, 0, 0, 0, 0,
-        squareset::Empty, pieceset::WhitePawn, squareset::Empty, squareset::Empty, squareset::Empty, pieceset::WhitePawn, pieceset::WhitePawn, squareset::Empty, 0, 0, 0, 0, 0, 0, 0, 0,
-        squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, 0, 0, 0, 0, 0, 0, 0, 0,
-        squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, pieceset::WhitePawn, pieceset::BlackPawn, squareset::Empty, squareset::Empty, 0, 0, 0, 0, 0, 0, 0, 0,
-        squareset::Empty, squareset::Empty, pieceset::BlackPawn, pieceset::WhitePawn, squareset::Empty, squareset::Empty, pieceset::BlackPawn, squareset::Empty, 0, 0, 0, 0, 0, 0, 0, 0,
-        squareset::Empty, squareset::Empty, squareset::Empty, pieceset::BlackPawn, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, 0, 0, 0, 0, 0, 0, 0, 0,
-        pieceset::BlackPawn, pieceset::BlackPawn, squareset::Empty, squareset::Empty, squareset::Empty, pieceset::BlackPawn, pieceset::BlackPawn, squareset::Empty, 0, 0, 0, 0, 0, 0, 0, 0,
-        squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, squareset::Empty, pieceset::BlackKing, squareset::Empty, 0, 0, 0, 0, 0, 0, 0, 0
+        Empty, Empty, Empty, Empty, Empty, Empty, WhiteKing, Empty, 0, 0, 0, 0, 0, 0, 0, 0,
+        Empty, WhitePawn, Empty, Empty, Empty, WhitePawn, WhitePawn, Empty, 0, 0, 0, 0, 0, 0, 0, 0,
+        Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, 0, 0, 0, 0, 0, 0, 0, 0,
+        Empty, Empty, Empty, Empty, WhitePawn, BlackPawn, Empty, Empty, 0, 0, 0, 0, 0, 0, 0, 0,
+        Empty, Empty, BlackPawn, WhitePawn, Empty, Empty, BlackPawn, Empty, 0, 0, 0, 0, 0, 0, 0, 0,
+        Empty, Empty, Empty, BlackPawn, Empty, Empty, Empty, Empty, 0, 0, 0, 0, 0, 0, 0, 0,
+        BlackPawn, BlackPawn, Empty, Empty, Empty, BlackPawn, BlackPawn, Empty, 0, 0, 0, 0, 0, 0, 0, 0,
+        Empty, Empty, Empty, Empty, Empty, Empty, BlackKing, Empty, 0, 0, 0, 0, 0, 0, 0, 0
     };
 
-    BoardBaseWithPieces::PieceMap whitePieces4
+    BoardBaseWithPieces::PieceMap white_pieces_x88board_2
     {
-        {pieceset::WhitePawn, x88board::b2}, {pieceset::WhitePawn, x88board::f2}, {pieceset::WhitePawn, x88board::g2},
-        {pieceset::WhitePawn, x88board::d5}, {pieceset::WhitePawn, x88board::e4}, {pieceset::WhiteKing, x88board::g1}
+        {WhitePawn, x88board::b2}, {WhitePawn, x88board::f2}, {WhitePawn, x88board::g2},
+        {WhitePawn, x88board::d5}, {WhitePawn, x88board::e4}, {WhiteKing, x88board::g1}
     };
 
-    BoardBaseWithPieces::PieceMap blackPieces4
+    BoardBaseWithPieces::PieceMap black_pieces_x88board_2
     {
-        {pieceset::BlackPawn, x88board::a7}, {pieceset::BlackPawn, x88board::b7}, {pieceset::BlackPawn, x88board::c5},
-        {pieceset::BlackPawn, x88board::d6}, {pieceset::BlackPawn, x88board::f7}, {pieceset::BlackPawn, x88board::f4},
-        {pieceset::BlackPawn, x88board::g7}, {pieceset::BlackPawn, x88board::g5}, {pieceset::BlackKing, x88board::g8}
+        {BlackPawn, x88board::a7}, {BlackPawn, x88board::b7}, {BlackPawn, x88board::c5},
+        {BlackPawn, x88board::d6}, {BlackPawn, x88board::f7}, {BlackPawn, x88board::f4},
+        {BlackPawn, x88board::g7}, {BlackPawn, x88board::g5}, {BlackKing, x88board::g8}
     };
 
     std::array<Piece, 6> whitePieceArray
     {
-        pieceset::WhitePawn, pieceset::WhiteRook, pieceset::WhiteKnight, 
-        pieceset::WhiteBishop, pieceset::WhiteQueen, pieceset::WhiteKing
+        WhitePawn, WhiteRook, WhiteKnight, WhiteBishop, WhiteQueen, WhiteKing
     };
 
     std::array<Piece, 6> blackPieceArray
     {
-        pieceset::BlackPawn, pieceset::BlackRook, pieceset::BlackKnight,
-        pieceset::BlackBishop, pieceset::BlackQueen, pieceset::BlackKing
+        BlackPawn, BlackRook, BlackKnight, BlackBishop, BlackQueen, BlackKing
     };
 
     std::vector<std::string_view> fens
@@ -212,6 +195,75 @@ protected:
 
     std::bitset<64> white_attacks_startpos{ 0x0000000000FFFF7E };
     std::bitset<64> black_attacks_startpos{ 0x7EFFFF0000000000 };
+
+    std::vector<std::string_view> checks_and_pins_fens
+    {
+        "3qk3/pp2pppb/b6n/2n2P2/2N5/r1PKB2r/P1PRN1PP/1q1r1b1R w - - 0 1",
+        "Q2R2Q1/1p1N1b2/2Ppp3/RPnk1pqR/2Pn4/1q1r1p2/B2R4/K6B b - - 0 1",
+        "rnbqkbnr/p1pppppp/1p6/8/8/5P2/PPPPPKPP/RNBQ1BNR w kq - 0 1",
+        "4r3/q1k5/7b/8/3PPP2/r2NKN1r/3QRN2/2b1q1b1 w - - 0 1",
+        "1B1R4/3n4/2rkn3/2p1p3/3pN3/Q7/6K1/3R4 b - - 0 1"
+    };
+    
+    std::vector<BoardBase::PinMap> expected_pins_basic_board 
+    {
+        { 
+            {e3, {h3, basic_board::direction::E}}, {d2, {d1, basic_board::direction::S}},
+            {c3, {a3, basic_board::direction::W}}, {f5, {h7, basic_board::direction::NE}},
+            {e2, {f1, basic_board::direction::SE}}, {c2, {b1, basic_board::direction::SW}},
+            {c4, {a6, basic_board::direction::NW}} 
+        },
+        { 
+            {f3, {h1, basic_board::direction::SE}} 
+        },
+        { },
+        { 
+            {d2, {c1, basic_board::direction::SW}}, {e2, {e1, basic_board::direction::S}},
+            {f2, {g1, basic_board::direction::SE}}, {f3, {h3, basic_board::direction::E}},
+            {f4, {h6, basic_board::direction::NE}}, {e4, {e8, basic_board::direction::N}},
+            {d4, {a7, basic_board::direction::NW}}, {d3, {a3, basic_board::direction::W}} 
+        },
+        {
+            {c5, {a3, basic_board::direction::SW}}, {d4, {d1, basic_board::direction::S}},
+            {d7, {d8, basic_board::direction::N}}
+        }
+    };
+
+    std::vector<BoardBase::CheckList> expected_checks_basic_board
+    {
+        {{d8, basic_board::direction::N}, {c5, basic_board::direction::None}},
+        {{c4, basic_board::direction::SW}},
+        { },
+        { },
+        {{b8, basic_board::direction::NW}, {e4, basic_board::direction::None}}
+    };
+
+    std::vector<std::string_view> move_generator_king_moves_test_fens
+    {
+        "r3k2r/p3p3/8/8/1q6/8/P2P3P/R3K2R w KQkq - 0 1", 
+        "r3k2r/1P6/8/8/8/8/3n4/R3K2R b KQkq - 0 1", 
+        "r3k2r/1P6/8/8/8/8/3n4/R3K2R w KQkq - 0 1",
+        "8/b7/4k3/8/3nKn2/8/8/8 w - - 0 1"
+    };
+
+    std::vector<std::vector<Move>> expected_king_moves
+    {
+        { 
+            Move(e1, e2, MoveType::Quite), Move(e1, f1, MoveType::Quite), Move(e1, d1, MoveType::Quite),
+            Move(e1, f2, MoveType::Quite), Move(e1, g1, MoveType::King_Side_Castle), Move(e1, c1, MoveType::Queen_Side_Castle)
+        },
+        {
+            Move(e8, f8, MoveType::Quite), Move(e8, e7, MoveType::Quite), Move(e8, d8, MoveType::Quite),
+            Move(e8, f7, MoveType::Quite), Move(e8, d7, MoveType::Quite), Move(e8, g8, MoveType::King_Side_Castle)
+        },
+        {
+            Move(e1, e2, MoveType::Quite), Move(e1, d1, MoveType::Quite), Move(e1, f2, MoveType::Quite),
+            Move(e1, d2, MoveType::Capture, BlackKnight), Move(e1, c1, MoveType::Queen_Side_Castle)
+        },
+        {
+            Move(e4, f4, MoveType::Capture, BlackKnight), Move(e4, e3, MoveType::Quite)
+        }
+    };
 };
 
 TEST_F(BoardTests, basic_board_constructor_starting_pos)
@@ -219,17 +271,17 @@ TEST_F(BoardTests, basic_board_constructor_starting_pos)
     auto b = basic_board::make_unique_board(Fen::StartingPosition);
     const auto& boardArray = b->GetBoard();
 
-    EXPECT_TRUE(std::equal(boardArray.begin(), boardArray.end(), boardArray1.begin()));
+    EXPECT_TRUE(std::equal(boardArray.begin(), boardArray.end(), board_array_1.begin()));
     EXPECT_EQ(b->GetActiveColor(), color::White);
     EXPECT_TRUE(b->QueryCastling(Castling::WHITE_KS));
     EXPECT_TRUE(b->QueryCastling(Castling::WHITE_QS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_KS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_QS));
-    EXPECT_EQ(b->GetEnPassantSquare(), squareset::Empty);
+    EXPECT_EQ(b->GetEnPassantSquare(), Empty);
     EXPECT_EQ(b->GetHalfMoveClock(), 0);
     EXPECT_EQ(b->GetFullMoveClock(), 1);
-    EXPECT_EQ(b->GetWhitePieces(), whitePieces1);
-    EXPECT_EQ(b->GetBlackPieces(), blackPieces1);
+    EXPECT_EQ(b->GetWhitePieces(), white_pieces_1);
+    EXPECT_EQ(b->GetBlackPieces(), black_pieces_1);
     EXPECT_EQ(Fen::StartingPosition, utility::chess::board_to_fen(*b));
 }
 
@@ -238,17 +290,17 @@ TEST_F(BoardTests, basic_baord_constructor_pos1)
     auto b = basic_board::make_unique_board(fen1);
     const auto& boardArray = b->GetBoard();
 
-    EXPECT_TRUE(std::equal(boardArray.begin(), boardArray.end(), boardArray2.begin()));
+    EXPECT_TRUE(std::equal(boardArray.begin(), boardArray.end(), board_Array_2.begin()));
     EXPECT_EQ(b->GetActiveColor(), color::Black);
     EXPECT_TRUE(b->QueryCastling(Castling::WHITE_KS));
     EXPECT_FALSE(b->QueryCastling(Castling::WHITE_QS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_KS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_QS));
-    EXPECT_EQ(b->GetEnPassantSquare(), squareset::c3);
+    EXPECT_EQ(b->GetEnPassantSquare(), c3);
     EXPECT_EQ(b->GetHalfMoveClock(), 1);
     EXPECT_EQ(b->GetFullMoveClock(), 2);
-    EXPECT_EQ(b->GetWhitePieces(), whitePieces2);
-    EXPECT_EQ(b->GetBlackPieces(), blackPieces2);
+    EXPECT_EQ(b->GetWhitePieces(), white_pieces_2);
+    EXPECT_EQ(b->GetBlackPieces(), black_pieces_2);
     EXPECT_EQ(fen1, utility::chess::board_to_fen(*b));
 }
 
@@ -283,22 +335,47 @@ TEST_F(BoardTests, basic_board_is_under_attack)
     }
 }
 
+TEST_F(BoardTests, basic_board_checks_and_pins) 
+{
+    for (int i{ 0 }; i < checks_and_pins_fens.size(); i++)
+    {
+        auto brd = basic_board::make_unique_board(checks_and_pins_fens[i]);
+        auto stm = brd->GetActiveColor();
+        if (stm == color::White)
+        {
+            auto piece_loc = brd->GetWhitePieces().find(WhiteKing)->second;
+            brd->ComputeChecksAndPins<color::Black>(piece_loc);
+        }   
+        else
+        {
+            auto piece_loc = brd->GetBlackPieces().find(BlackKing)->second;
+            brd->ComputeChecksAndPins<color::White>(piece_loc);
+        }
+
+        const auto& checks = brd->GetChecks();
+        EXPECT_TRUE(std::is_permutation(checks.begin(), checks.end(), expected_checks_basic_board[i].begin()));
+
+        const auto& pins = brd->GetPins();
+        EXPECT_EQ(pins, expected_pins_basic_board[i]);
+    }
+}
+
 TEST_F(BoardTests, x88board_constructor_starting_pos)
 {
     auto b = x88board::make_unique_board(Fen::StartingPosition);
     const auto& boardArray = b->GetBoard();
 
-    EXPECT_TRUE(std::equal(boardArray.begin(), boardArray.end(), boardArray3.begin()));
+    EXPECT_TRUE(std::equal(boardArray.begin(), boardArray.end(), board_array_x88board_1.begin()));
     EXPECT_EQ(b->GetActiveColor(), color::White);
     EXPECT_TRUE(b->QueryCastling(Castling::WHITE_KS));
     EXPECT_TRUE(b->QueryCastling(Castling::WHITE_QS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_KS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_QS));
-    EXPECT_EQ(b->GetEnPassantSquare(), squareset::Empty);
+    EXPECT_EQ(b->GetEnPassantSquare(), Empty);
     EXPECT_EQ(b->GetHalfMoveClock(), 0);
     EXPECT_EQ(b->GetFullMoveClock(), 1);
-    EXPECT_EQ(b->GetWhitePieces(), whitePieces3);
-    EXPECT_EQ(b->GetBlackPieces(), blackPieces3);
+    EXPECT_EQ(b->GetWhitePieces(), white_pieces_x88board_1);
+    EXPECT_EQ(b->GetBlackPieces(), black_pieces_x88board_1);
     EXPECT_EQ(Fen::StartingPosition, utility::chess::board_to_fen(*b));
 }
 
@@ -307,7 +384,7 @@ TEST_F(BoardTests, x88baord_constructor_pos1)
     auto b = x88board::make_unique_board(fen1);
     const auto& boardArray = b->GetBoard();
 
-    EXPECT_TRUE(std::equal(boardArray.begin(), boardArray.end(), boardArray4.begin()));
+    EXPECT_TRUE(std::equal(boardArray.begin(), boardArray.end(), board_array_x88board_2.begin()));
     EXPECT_EQ(b->GetActiveColor(), color::Black);
     EXPECT_TRUE(b->QueryCastling(Castling::WHITE_KS));
     EXPECT_FALSE(b->QueryCastling(Castling::WHITE_QS));
@@ -316,8 +393,8 @@ TEST_F(BoardTests, x88baord_constructor_pos1)
     EXPECT_EQ(b->GetEnPassantSquare(), x88board::c3);
     EXPECT_EQ(b->GetHalfMoveClock(), 1);
     EXPECT_EQ(b->GetFullMoveClock(), 2);
-    EXPECT_EQ(b->GetWhitePieces(), whitePieces4);
-    EXPECT_EQ(b->GetBlackPieces(), blackPieces4);
+    EXPECT_EQ(b->GetWhitePieces(), white_pieces_x88board_2);
+    EXPECT_EQ(b->GetBlackPieces(), black_pieces_x88board_2);
     EXPECT_EQ(fen1, utility::chess::board_to_fen(*b));
 }
 
@@ -334,23 +411,23 @@ TEST_F(BoardTests, objboard_constructor_starting_pos)
     auto b = objboard::make_unique_board(Fen::StartingPosition);
     const auto& squareArray = b->GetBoard();
 
-    for (int i = 0; i < boardArray1.size(); i++)
+    for (int i = 0; i < board_array_1.size(); i++)
     {
         EXPECT_EQ(squareArray[i]._code, i);
-        if (boardArray1[i] == squareset::Empty)
+        if (board_array_1[i] == Empty)
             EXPECT_EQ(squareArray[i]._piece, nullptr);
         else
-            EXPECT_EQ(squareArray[i]._piece->_code, boardArray1[i]);
+            EXPECT_EQ(squareArray[i]._piece->_code, board_array_1[i]);
     }
 
-    EXPECT_TRUE(check_objboard_pieces(whitePieceArray, whitePieces1, b->GetWhitePieces()));
-    EXPECT_TRUE(check_objboard_pieces(blackPieceArray, blackPieces1, b->GetBlackPieces()));
+    EXPECT_TRUE(check_objboard_pieces(whitePieceArray, white_pieces_1, b->GetWhitePieces()));
+    EXPECT_TRUE(check_objboard_pieces(blackPieceArray, black_pieces_1, b->GetBlackPieces()));
     EXPECT_EQ(b->GetActiveColor(), color::White);
     EXPECT_TRUE(b->QueryCastling(Castling::WHITE_KS));
     EXPECT_TRUE(b->QueryCastling(Castling::WHITE_QS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_KS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_QS));
-    EXPECT_EQ(b->GetEnPassantSquare(), squareset::Empty);
+    EXPECT_EQ(b->GetEnPassantSquare(), Empty);
     EXPECT_EQ(b->GetHalfMoveClock(), 0);
     EXPECT_EQ(b->GetFullMoveClock(), 1);
     EXPECT_EQ(Fen::StartingPosition, utility::chess::board_to_fen(*b));
@@ -360,22 +437,22 @@ TEST_F(BoardTests, objbaord_constructor_pos1)
 {
     auto b = objboard::make_unique_board(fen1);
     const auto& squareArray = b->GetBoard();
-    for (int i = 0; i < boardArray2.size(); i++)
+    for (int i = 0; i < board_Array_2.size(); i++)
     {
-        if (boardArray2[i] == squareset::Empty)
+        if (board_Array_2[i] == Empty)
             EXPECT_EQ(squareArray[i]._piece, nullptr);
         else
-            EXPECT_EQ(squareArray[i]._piece->_code, boardArray2[i]);
+            EXPECT_EQ(squareArray[i]._piece->_code, board_Array_2[i]);
     }
 
-    EXPECT_TRUE(check_objboard_pieces(whitePieceArray, whitePieces2, b->GetWhitePieces()));
-    EXPECT_TRUE(check_objboard_pieces(blackPieceArray, blackPieces2, b->GetBlackPieces()));    
+    EXPECT_TRUE(check_objboard_pieces(whitePieceArray, white_pieces_2, b->GetWhitePieces()));
+    EXPECT_TRUE(check_objboard_pieces(blackPieceArray, black_pieces_2, b->GetBlackPieces()));    
     EXPECT_EQ(b->GetActiveColor(), color::Black);
     EXPECT_TRUE(b->QueryCastling(Castling::WHITE_KS));
     EXPECT_FALSE(b->QueryCastling(Castling::WHITE_QS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_KS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_QS));
-    EXPECT_EQ(b->GetEnPassantSquare(), squareset::c3);
+    EXPECT_EQ(b->GetEnPassantSquare(), c3);
     EXPECT_EQ(b->GetHalfMoveClock(), 1);
     EXPECT_EQ(b->GetFullMoveClock(), 2);
     EXPECT_EQ(fen1, utility::chess::board_to_fen(*b));

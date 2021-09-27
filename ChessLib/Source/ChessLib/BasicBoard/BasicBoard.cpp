@@ -22,87 +22,28 @@ namespace chesslib::basic_board
 	bool BasicBoard::IsUnderAttack(Square sq) const
 	{	
 		return 
-			IsUnderAttackByAStraightMovingPiece<Attacker>(sq) ||
-			IsUnderAttackByADiagonallyMovingPiece<Attacker>(sq) ||
+			IsUnderAttack<Attacker, true>(sq, direction::Straight) || 
+			IsUnderAttack<Attacker, false>(sq, direction::Diagonal) ||
 			IsUnderAttackByAKnight<Attacker>(sq);
 	}
 
 	template<Color Attacker>
 	void BasicBoard::ComputeChecksAndPins(Square king_pos)
 	{
-		using ctraits = traits::color_traits<Attacker>;
-		using bptraits = traits::board_piece_traits<BasicBoard, ctraits::Pawn>;
-
 		BoardBase::ClearChecksAndPins();
 
-		for (Direction dir : direction::Straight)
-		{
-			Square pin_loc{ squareset::None };
-			for (Square next{ king_pos + dir }; IsInside(next - dir, next); next += dir)
-			{
-				if (board[next] == squareset::Empty)
-					continue;
-				else if (color::get_color(board[next]) == Attacker && (board[next] == ctraits::Rook || board[next] == ctraits::Queen))
-				{
-					if (pin_loc != squareset::None)
-						_pins.emplace(pin_loc, std::make_pair(next, dir));
-					else
-						_checks.emplace(next, dir);
-					break;
-				}
-				else 
-				{
-					if (pin_loc == squareset::None)
-						pin_loc = next;
-					else 
-						break;
-				}
-			}
-		}
+		ComputeChecksAndPins<Attacker, true>(king_pos, direction::Straight);
+		ComputeChecksAndPins<Attacker, false>(king_pos, direction::Diagonal);
 
-		for (Direction dir : direction::Diagonal)
-		{
-			Distance dist{ 1 };
-			Square pin_loc{ squareset::None };
-			for (Square next{ king_pos + dir }; IsInside(next - dir, next); next += dir, dist++)
-			{
-				if (board[next] == squareset::Empty)
-					continue;
-				else if (color::get_color(board[next]) == Attacker)
-				{
-					if (board[next] == ctraits::Bishop ||
-						board[next] == ctraits::Queen ||
-						dist == 1 &&
-						(board[next] == ctraits::King ||
-							(board[next] == ctraits::Pawn &&
-								(dir == direction::Reverse(bptraits::AttackDirections[0]) ||
-									dir == direction::Reverse(bptraits::AttackDirections[1]))))) 
-					{
-						if (pin_loc != squareset::None)
-							_pins.emplace(pin_loc, std::make_pair(next, dir));
-						else
-							_checks.emplace(next, dir);
-					}
-					break;
-				}
-				else 
-				{
-					if (pin_loc == squareset::None)
-						pin_loc = next;
-					else
-						break;
-				}
-			}
-		}
-
+		using ctraits = traits::color_traits<Attacker>;
 		for (Direction dir : direction::KnightJumps)
 			if (Square next{ king_pos + dir }; IsInside(king_pos, next) && board[next] == ctraits::Knight)
-				_checks.emplace(next, direction::None);
+				_checks.emplace_back(next, direction::None);
 	}
-
+	
 	/*
 	template<Color SideToMove>
-	void BasicBoard::ToSquareMoves(Square sq, MoveList& moves) const
+	void BasicBoard::ToSquareNonKingMoves(Square sq, MoveList& moves) const
 	{
 		if(color::get_color(board[sq] == SideToMove))
 			throw std::logic_error("Illegal move generation request.");
@@ -115,20 +56,18 @@ namespace chesslib::basic_board
 			move_type = MoveType::Capture;
 		}
 
-		
 		using stm_traits = traits::color_traits<SideToMove>;
 		using opp_traits = traits::color_traits<color::get_opposite_color(SideToMove)>;
 
 		for (Direction dir : direction::Straight)
 		{
-			Distance dist{ 1 };
 			for (Square next{ sq + dir }; IsInside(next - dir, next); next += dir, dist++)
 			{
 				if (board[next] == squareset::Empty)
 					continue;
 				else if (color::get_color(board[next]) == SideToMove)
 				{
-					if (board[next] == ctraits::Rook || board[next] == ctraits::Queen || board[next] == ctraits::King && dist == 1)
+					if (board[next] == stm_traits::Rook || board[next] == stm_traits::Queen)
 						return true;
 					break;
 				}
@@ -136,8 +75,6 @@ namespace chesslib::basic_board
 					break;
 			}
 		}
-		
-
 	}
 	*/
 
@@ -145,60 +82,67 @@ namespace chesslib::basic_board
 	{
 		return next < 64 && next >= 0 && std::abs(get_file(next) - get_file(curr)) <= 2;
 	}
-
-	template<Color Attacker>
-	bool BasicBoard::IsUnderAttackByAStraightMovingPiece(Square sq) const 
+	
+	template<Color Attacker, bool IsStraightMovingPiece>
+	void BasicBoard::ComputeChecksAndPins(Square king_pos, const std::array<Direction, 4>& attack_directions)
 	{
-		using ctraits = traits::color_traits<Attacker>;
-
-		for (Direction dir : direction::Straight)
+		for (Direction dir : attack_directions)
 		{
+			Square pin_loc{ squareset::None };
 			Distance dist{ 1 };
-			for (Square next{ sq + dir }; IsInside(next - dir, next); next += dir, dist++)
+			for (Square next{ king_pos + dir }; IsInside(next - dir, next); next += dir, dist++)
 			{
 				if (board[next] == squareset::Empty)
 					continue;
-				else if (color::get_color(board[next]) == Attacker)
+
+				bool is_non_king_attack{ false };
+				if constexpr (IsStraightMovingPiece)
+					is_non_king_attack = IsNonKingStraightAttack<Attacker>(board[next]);
+				else
+					is_non_king_attack = IsNonKingDiagonalAttack<Attacker>(board[next], dir, dist);
+				
+				if (is_non_king_attack)
 				{
-					if (board[next] == ctraits::Rook || board[next] == ctraits::Queen || board[next] == ctraits::King && dist == 1)
-						return true;
+					if (pin_loc != squareset::None)
+						_pins.emplace(pin_loc, std::make_pair(next, dir));
+					else
+						_checks.emplace_back(next, dir);
 					break;
 				}
 				else
-					break;
+				{
+					if (pin_loc == squareset::None)
+						pin_loc = next;
+					else
+						break;
+				}
 			}
 		}
-
-		return false;
 	}
 
-	template<Color Attacker>
-	bool BasicBoard::IsUnderAttackByADiagonallyMovingPiece(Square sq) const 
+	template<Color Attacker, bool IsStraightMovingPiece>
+	bool BasicBoard::IsUnderAttack(Square sq, const std::array<Direction, 4>& attack_directions) const
 	{
-		using ctraits = traits::color_traits<Attacker>;
-		using bptraits = traits::board_piece_traits<BasicBoard, ctraits::Pawn>;
-
-		for (Direction dir : direction::Diagonal)
+		for (Direction dir : attack_directions) 
 		{
 			Distance dist{ 1 };
 			for (Square next{ sq + dir }; IsInside(next - dir, next); next += dir, dist++)
 			{
 				if (board[next] == squareset::Empty)
 					continue;
-				else if (color::get_color(board[next]) == Attacker)
+
+				if constexpr (IsStraightMovingPiece) 
 				{
-					if (board[next] == ctraits::Bishop || 
-						board[next] == ctraits::Queen ||
-						dist == 1 && 
-						(board[next] == ctraits::King || 
-						(board[next] == ctraits::Pawn && 
-							(dir == direction::Reverse(bptraits::AttackDirections[0]) || 
-							 dir == direction::Reverse(bptraits::AttackDirections[1])))))
+					if (IsStraightAttack<Attacker>(board[next], dist))
 						return true;
-					break;
 				}
-				else
-					break;
+				else 
+				{
+					if (IsDiagonalAttack<Attacker>(board[next], dir, dist))
+						return true;
+				}
+
+				break;
 			}
 		}
 
@@ -215,6 +159,46 @@ namespace chesslib::basic_board
 				return true;
 		
 		return false;
+	}
+
+	template<Color Attacker>
+	bool BasicBoard::IsStraightAttack(Piece p, Distance dist) const
+	{
+		using ctraits = traits::color_traits<Attacker>;
+		return color::get_color(p) == Attacker && 
+			(p == ctraits::Rook || p == ctraits::Queen || p == ctraits::King && dist == 1);
+	}
+
+	template<Color Attacker>
+	inline bool BasicBoard::IsNonKingStraightAttack(Piece p) const
+	{
+		using ctraits = traits::color_traits<Attacker>;
+		return color::get_color(p) == Attacker && (p == ctraits::Rook || p == ctraits::Queen);
+	}
+
+	template<Color Attacker>
+	bool BasicBoard::IsDiagonalAttack(Piece p, Direction dir, Distance dist) const
+	{
+		using ctraits = traits::color_traits<Attacker>;
+		using bptraits = traits::board_piece_traits<BasicBoard, ctraits::Pawn>;
+
+		return color::get_color(p) == Attacker && (p == ctraits::Bishop || p == ctraits::Queen ||
+			dist == 1 && (p == ctraits::King || (p == ctraits::Pawn &&
+				(dir == direction::Reverse(bptraits::AttackDirections[0]) ||
+				 dir == direction::Reverse(bptraits::AttackDirections[1])))));
+	}
+
+	template<Color Attacker>
+	inline bool BasicBoard::IsNonKingDiagonalAttack(Piece p, Direction dir, Distance dist) const
+	{
+		using ctraits = traits::color_traits<Attacker>;
+		using bptraits = traits::board_piece_traits<BasicBoard, ctraits::Pawn>;
+
+		return
+			color::get_color(p) == Attacker &&
+			(p == ctraits::Bishop || p == ctraits::Queen || dist == 1 && p == ctraits::Pawn &&
+				(dir == direction::Reverse(bptraits::AttackDirections[0]) || 
+			     dir == direction::Reverse(bptraits::AttackDirections[1])));
 	}
 
 	std::unique_ptr<BasicBoard> make_unique_board(std::string_view fen) 

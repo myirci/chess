@@ -35,7 +35,7 @@ namespace chesslib
 
     public:
 
-        Move(Square loc_from, Square loc_to, MoveType move_type, Piece captured_piece);
+        Move(Square loc_from, Square loc_to, MoveType move_type, Piece captured_piece = pieceset::None);
 
         Square GetFrom() const;
         Square GetTo() const;

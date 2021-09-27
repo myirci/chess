@@ -78,9 +78,9 @@ namespace chesslib
 		_fullmove_clock = static_cast<uint16_t>(f.value());
 	}
 
-	const BoardBase::PinMap& BoardBase::GetPinMap() const { return _pins; }
+	const BoardBase::PinMap& BoardBase::GetPins() const { return _pins; }
 
-	const BoardBase::CheckMap& BoardBase::GetCheckMap() const { return _checks; }
+	const BoardBase::CheckList& BoardBase::GetChecks() const { return _checks; }
 
 #pragma endregion
 
