@@ -6,6 +6,8 @@
 
 namespace chesslib::x88board 
 {
+    constexpr Square Empty = chesslib::squareset::Empty;
+
     constexpr Square 
         a1{ 0 }, a2{ 16 }, a3{ 32 }, a4{ 48 }, a5{ 64 }, a6{ 80 }, a7{ 96 }, a8{ 112 },
         b1{ 1 }, b2{ 17 }, b3{ 33 }, b4{ 49 }, b5{ 65 }, b6{ 81 }, b7{ 97 }, b8{ 113 },

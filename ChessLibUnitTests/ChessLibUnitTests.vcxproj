@@ -33,12 +33,15 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClInclude Include="CommonBoardTestBase.hpp" />
+    <ClInclude Include="BasicAndObjectBoardBase.hpp" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BoardTests.cpp" />
+    <ClCompile Include="BasicBoardTests.cpp" />
     <ClCompile Include="FenTests.cpp" />
     <ClCompile Include="MoveTests.cpp" />
+    <ClCompile Include="ObjectBoardTests.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -46,6 +49,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="SquareTests.cpp" />
+    <ClCompile Include="x88BoardTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ChessLib\ChessLib.vcxproj">

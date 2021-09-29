@@ -41,7 +41,9 @@ namespace chesslib
 
 		BoardBase();
 
-		void inline ClearChecksAndPins() { _pins.clear(); _checks.clear(); };
+		inline void ClearChecksAndPins() { _pins.clear(); _checks.clear(); };
+
+		inline bool IsPiecePinned(Square piece_loc) const;
 
 		Color _active_color;
 		int8_t _castling_rights;

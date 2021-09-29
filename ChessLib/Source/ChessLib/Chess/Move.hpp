@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <vector>
 
 #include <ChessLib/Chess/Definitions.hpp>
 
@@ -49,6 +50,8 @@ namespace chesslib
         
         friend bool operator == (const Move m1, const Move m2);
     };
+
+    using MoveList = std::vector<Move>;
 
     bool operator == (const Move m1, const Move m2);
 }

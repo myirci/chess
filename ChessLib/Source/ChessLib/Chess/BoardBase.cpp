@@ -82,6 +82,8 @@ namespace chesslib
 
 	const BoardBase::CheckList& BoardBase::GetChecks() const { return _checks; }
 
+	bool BoardBase::IsPiecePinned(Square piece_loc) const { return _pins.find(piece_loc) != _pins.end(); }
+
 #pragma endregion
 
 #pragma region BoardBaseWithPieces_Methods

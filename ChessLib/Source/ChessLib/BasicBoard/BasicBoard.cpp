@@ -75,11 +75,10 @@ namespace chesslib::basic_board
 			moves.emplace_back(king_pos, bctraits::QueenSideCastleCheckSquares[1], MoveType::Queen_Side_Castle);
 	}
 
-	/*
-	template<Color SideToMove>
+	template<Color Clr>
 	void BasicBoard::ToSquareNonKingMoves(Square sq, MoveList& moves) const
 	{
-		if(color::get_color(board[sq] == SideToMove))
+		if(color::get_color(board[sq] == Clr))
 			throw std::logic_error("Illegal move generation request.");
 
 		MoveType move_type{ MoveType::Quite };
@@ -90,27 +89,24 @@ namespace chesslib::basic_board
 			move_type = MoveType::Capture;
 		}
 
-		using stm_traits = traits::color_traits<SideToMove>;
-		using opp_traits = traits::color_traits<color::get_opposite_color(SideToMove)>;
+		using ctraits = traits::color_traits<Clr>;
+		using octraits = traits::color_traits<color::get_opposite_color(Clr)>;
 
 		for (Direction dir : direction::Straight)
 		{
-			for (Square next{ sq + dir }; IsInside(next - dir, next); next += dir, dist++)
+			for (Square next{ sq + dir }; IsInside(next - dir, next); next += dir)
 			{
 				if (board[next] == squareset::Empty)
 					continue;
-				else if (color::get_color(board[next]) == SideToMove)
-				{
-					if (board[next] == stm_traits::Rook || board[next] == stm_traits::Queen)
-						return true;
-					break;
-				}
-				else
-					break;
+
+				if (color::get_color(board[next]) == Clr &&
+					(board[next] == ctraits::Rook || board[next] == ctraits::Queen) &&
+					!IsPiecePinned(next))
+					moves.emplace(next, sq, move_type, captured_piece);
+				break;
 			}
 		}
 	}
-	*/
 
 	bool BasicBoard::IsInside(Square curr, Square next)
 	{

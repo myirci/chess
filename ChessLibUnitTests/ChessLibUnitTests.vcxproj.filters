@@ -5,10 +5,14 @@
     <ClCompile Include="FenTests.cpp" />
     <ClCompile Include="MoveTests.cpp" />
     <ClCompile Include="SquareTests.cpp" />
-    <ClCompile Include="BoardTests.cpp" />
+    <ClCompile Include="BasicBoardTests.cpp" />
+    <ClCompile Include="ObjectBoardTests.cpp" />
+    <ClCompile Include="x88BoardTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="BasicAndObjectBoardBase.hpp" />
+    <ClInclude Include="CommonBoardTestBase.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
