@@ -75,6 +75,11 @@ namespace chesslib
             h1{ 7 }, h2{ 15 }, h3{ 23 }, h4{ 31 }, h5{ 39 }, h6{ 47 }, h7{ 55 }, h8{ 63 };   
     }
 
+    namespace direction 
+    {
+        constexpr Direction None = 0;
+    }
+
     enum class Castling : int8_t
     {
         WHITE_KS = 1,

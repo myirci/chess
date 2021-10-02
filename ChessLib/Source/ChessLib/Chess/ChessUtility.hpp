@@ -164,7 +164,7 @@ namespace chesslib::utility::chess
 
 		ss << ' ';
 		auto ep = brd.GetEnPassantSquare();
-		if (ep == squareset::Empty) ss << '-';
+		if (ep == squareset::None) ss << '-';
 		else
 		{
 			auto c = traits::board_traits<Board>::ToCharPair(ep);

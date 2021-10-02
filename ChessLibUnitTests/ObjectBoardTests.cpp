@@ -12,9 +12,7 @@ using namespace chesslib;
 using namespace chesslib::squareset;
 using namespace chesslib::pieceset;
 
-class ObjectBoardTests : 
-    public ::testing::Test, 
-    public BasicAndObjectBoardBase
+class ObjectBoardTests : public ::testing::Test, public BasicAndObjectBoardBase
 {
 public:
 
@@ -23,7 +21,7 @@ public:
 protected:
 
     bool check_objboard_pieces(
-        const std::array<Piece, 6>& pieceArray,
+        const std::array<Piece, 6>& pieceArray, 
         const BoardBaseWithPieces::PieceMap& pieces1,
         const objboard::ObjBoard::PieceMap& pieces2)
     {
@@ -50,8 +48,11 @@ protected:
                 itp2.first++;
             }
 
-            return std::is_permutation(locations1.begin(), locations1.end(), locations2.begin());
+            if (!std::is_permutation(locations1.begin(), locations1.end(), locations2.begin()))
+                return false;
         }
+
+        return true;
     }
 
     std::array<Piece, 6> white_pieces_array
@@ -86,7 +87,7 @@ TEST_F(ObjectBoardTests, constructor_starting_pos)
     EXPECT_TRUE(b->QueryCastling(Castling::WHITE_QS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_KS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_QS));
-    EXPECT_EQ(b->GetEnPassantSquare(), Empty);
+    EXPECT_EQ(b->GetEnPassantSquare(), squareset::None);
     EXPECT_EQ(b->GetHalfMoveClock(), 0);
     EXPECT_EQ(b->GetFullMoveClock(), 1);
     EXPECT_EQ(Fen::StartingPosition, utility::chess::board_to_fen(*b));
@@ -94,7 +95,7 @@ TEST_F(ObjectBoardTests, constructor_starting_pos)
 
 TEST_F(ObjectBoardTests, constructor_fen1)
 {
-    auto b = objboard::make_unique_board(fen1);
+    auto b = objboard::make_unique_board(fen_pos1);
     const auto& squareArray = b->GetBoard();
     for (int i = 0; i < board_array_fen1.size(); i++)
     {
@@ -114,11 +115,11 @@ TEST_F(ObjectBoardTests, constructor_fen1)
     EXPECT_EQ(b->GetEnPassantSquare(), c3);
     EXPECT_EQ(b->GetHalfMoveClock(), 1);
     EXPECT_EQ(b->GetFullMoveClock(), 2);
-    EXPECT_EQ(fen1, utility::chess::board_to_fen(*b));
+    EXPECT_EQ(fen_pos1, utility::chess::board_to_fen(*b));
 }
 TEST_F(ObjectBoardTests, constructor_fen_compare)
 {
-    for (auto f : fens)
+    for (auto f : board_setup_fens)
     {
         auto b = objboard::make_unique_board(f);
         EXPECT_EQ(f, utility::chess::board_to_fen(*b));

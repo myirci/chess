@@ -10,9 +10,7 @@ using namespace chesslib;
 using namespace chesslib::pieceset;
 using namespace chesslib::x88board;
 
-class x88BoardTests : 
-    public ::testing::Test, 
-    public CommonBoardTestBase
+class x88BoardTests : public ::testing::Test, public CommonBoardTestBase
 {
 public:
 
@@ -83,7 +81,7 @@ TEST_F(x88BoardTests, constructor_starting_pos)
     EXPECT_TRUE(b->QueryCastling(Castling::WHITE_QS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_KS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_QS));
-    EXPECT_EQ(b->GetEnPassantSquare(), Empty);
+    EXPECT_EQ(b->GetEnPassantSquare(), squareset::None);
     EXPECT_EQ(b->GetHalfMoveClock(), 0);
     EXPECT_EQ(b->GetFullMoveClock(), 1);
     EXPECT_EQ(b->GetWhitePieces(), white_pieces_starting_position);
@@ -93,7 +91,7 @@ TEST_F(x88BoardTests, constructor_starting_pos)
 
 TEST_F(x88BoardTests, constructor_fen1)
 {
-    auto b = make_unique_board(fen1);
+    auto b = make_unique_board(fen_pos1);
     const auto& board_array = b->GetBoard();
 
     EXPECT_TRUE(std::equal(board_array.begin(), board_array.end(), board_array_fen1.begin()));
@@ -107,12 +105,12 @@ TEST_F(x88BoardTests, constructor_fen1)
     EXPECT_EQ(b->GetFullMoveClock(), 2);
     EXPECT_EQ(b->GetWhitePieces(), white_pieces_fen1);
     EXPECT_EQ(b->GetBlackPieces(), black_pieces_fen1);
-    EXPECT_EQ(fen1, utility::chess::board_to_fen(*b));
+    EXPECT_EQ(fen_pos1, utility::chess::board_to_fen(*b));
 }
 
 TEST_F(x88BoardTests, constructor_fen_compare)
 {
-    for (auto f : fens)
+    for (auto f : board_setup_fens)
     {
         auto b = make_unique_board(f);
         EXPECT_EQ(f, utility::chess::board_to_fen(*b));

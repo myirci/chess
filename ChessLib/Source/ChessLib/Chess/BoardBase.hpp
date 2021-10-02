@@ -41,9 +41,11 @@ namespace chesslib
 
 		BoardBase();
 
-		inline void ClearChecksAndPins() { _pins.clear(); _checks.clear(); };
+		inline void ClearChecksAndPins() const { _pins.clear(); _checks.clear(); };
 
-		inline bool IsPiecePinned(Square piece_loc) const;
+		inline bool IsPiecePinned(Square piece_loc) const { return _pins.find(piece_loc) != _pins.end(); }
+
+		Direction GetPinDirection(Square piece_loc) const;
 
 		Color _active_color;
 		int8_t _castling_rights;
@@ -51,15 +53,16 @@ namespace chesslib
 		uint16_t _halfmove_clock;
 		uint16_t _fullmove_clock;
 
-		PinMap _pins;
-		CheckList _checks;
+		mutable PinMap _pins;
+		mutable CheckList _checks;
 	};
 
 	class BoardBaseWithPieces : public BoardBase
 	{
 	public:
 		using PieceMap = std::unordered_multimap<Piece, Square>;
-	
+		using EqualPieceRange = std::pair<PieceMap::const_iterator, PieceMap::const_iterator>;
+
 		const PieceMap& GetWhitePieces() const;
 		PieceMap& GetWhitePieces();
 
@@ -69,6 +72,12 @@ namespace chesslib
 	protected:
 
 		BoardBaseWithPieces();
+
+		template <Color Clr>
+		Square GetKingPosition() const;
+
+		template <Color Clr>
+		EqualPieceRange GetPiecePositions(Piece p) const;
 
 		PieceMap _white_pieces;
 		PieceMap _black_pieces;

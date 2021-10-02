@@ -22,54 +22,88 @@ namespace chesslib::basic_board
 		const BoardArray& GetBoard() const;
 		BoardArray& GetBoard();
 
-		template<Color Attacker>
-		void ComputeChecksAndPins(Square king_pos);
-
-		template<Color Attacker>
-		bool IsUnderAttack(Square sq) const;
-
-		template<Color Clr>
-		void GenerateKingMoves(Square king_pos, MoveList& moves) const;
+		MoveList GenerateMoves() const;
 
 	protected:
 
 		BasicBoard();
 		BoardArray board;
 
-		template<Color Attacker, bool IsStraightMovingPiece>
-		bool IsUnderAttack(Square sq, const std::array<Direction, 4>& attack_directions) const;
-
-		template<Color Attacker, bool IsStraightMovingPiece>
-		void ComputeChecksAndPins(Square king_pos, const std::array<Direction, 4>& attack_directions);
-
-		template<Color Clr>
-		void ToSquareNonKingMoves(Square sq, MoveList& moves) const;
-
-		template<Color Attacker>
-		bool IsUnderAttackByAKnight(Square sq) const;
+#pragma region static_methods
 
 		static bool IsInside(Square curr, Square next);
+		
+		template<Color Attacker>
+		static inline bool IsNonKingStraightAttack(Piece p);
 
 		template<Color Attacker>
-		inline bool IsStraightAttack(Piece p, Distance dist) const;
+		static inline bool IsNonKingDiagonalAttack(Piece p, Direction dir, Distance dist);
 
 		template<Color Attacker>
-		inline bool IsNonKingStraightAttack(Piece p) const;
+		static inline bool IsStraightAttack(Piece p, Distance dist);
 
 		template<Color Attacker>
-		inline bool IsDiagonalAttack(Piece p, Direction dir, Distance dist) const;
+		static inline bool IsDiagonalAttack(Piece p, Direction dir, Distance dist);
+
+#pragma endregion
+
+		template<Color Clr>
+		void GenerateMovesImplementation(MoveList& moves) const;
 
 		template<Color Attacker>
-		inline bool IsNonKingDiagonalAttack(Piece p, Direction dir, Distance dist) const;
+		void ComputeChecksAndPins(Square king_pos) const;
+
+		template<Color Attacker, bool IsStraightMovingPiece>
+		void ComputeChecksAndPins(Square king_pos, const std::array<Direction, 4>& attack_directions) const;
+
+		template<Color Clr>
+		void GenerateKingMoves(Square king_pos, MoveList& moves) const;
 
 		template<Color Attacker>
 		inline bool IsDirectionInvalidForKing(Direction dir) const;
+
+		template<Color Attacker>
+		bool IsUnderAttack(Square sq) const;
+
+		template<Color Attacker, bool IsStraightMovingPiece>
+		bool IsUnderAttack(Square sq, const std::array<Direction, 4>& attack_directions) const;
+
+		template<Color Attacker>
+		bool IsUnderAttackByAKnight(Square sq) const;
 
 		template<Color Clr>
 		inline bool IsKingSideCastlingPossible() const;
 
 		template<Color Clr>
 		inline bool IsQueenSideCastlingPossible() const;
+
+		// Generates check blocking and checker capturing moves
+		template<Color Clr>
+		void GenerateCheckEliminatingMoves(Square king_pos, MoveList& moves) const;
+
+		template<Color Clr>
+		void GenerateCheckEliminatingEnPassantCaptureMoves(Square attacker_loc, MoveList& moves) const;
+
+		// Generates non-king moves to the given square
+		template<Color Clr>
+		void ToSquareMoves(Square sq, MoveList& moves) const;
+
+		template<Color Clr>
+		void GenerateKnightMoves(MoveList& moves) const;
+
+		// Generates non-king piece moves that move straight (horizontal/vertical)
+		template<Color Clr>
+		void GenerateStraightMoves(MoveList& moves) const;
+
+		// Generates non-king piece moves that move diagonally
+		template<Color Clr>
+		void GenerateDiagonalMoves(MoveList& moves) const;
+
+		template<Color Clr>
+		void GeneratePawnMoves(MoveList& moves) const;
+
+		template<Color Clr>
+		void GenerateEnPassantCaptureMoves(Square king_pos, MoveList& moves) const;
 
 		friend std::unique_ptr<BasicBoard> make_unique_board(std::string_view fen);
 		friend std::shared_ptr<BasicBoard> make_shared_board(std::string_view fen);

@@ -10,6 +10,7 @@
 
 namespace chesslib::traits 
 {
+#pragma region BoardTraits
 	template<typename Board>
 	struct board_traits { };
 
@@ -53,6 +54,9 @@ namespace chesslib::traits
 		static constexpr Square GetSquareFromChars(char f, char r) { return basic_board::get_square_from_chars(f, r); }
 	};
 
+#pragma endregion
+
+#pragma region ColorTraits
 
 	template<Color>
 	struct color_traits { };
@@ -67,6 +71,9 @@ namespace chesslib::traits
 		static constexpr Piece Queen = pieceset::WhiteQueen;
 		static constexpr Piece King = pieceset::WhiteKing;
 		
+		static constexpr Piece StraightMovingPieces[2] = { pieceset::WhiteQueen, pieceset::WhiteRook };
+		static constexpr Piece DiagonalMovingPieces[2] = { pieceset::WhiteQueen, pieceset::WhiteBishop };
+
 		static constexpr Color Opposite = color::Black;
 
 		static constexpr Castling KingSideCastling = Castling::WHITE_KS;
@@ -83,12 +90,18 @@ namespace chesslib::traits
 		static constexpr Piece Queen = pieceset::BlackQueen;
 		static constexpr Piece King = pieceset::BlackKing;
 		
+		static constexpr Piece StraightMovingPieces[2] = { pieceset::BlackQueen, pieceset::BlackRook };
+		static constexpr Piece DiagonalMovingPieces[2] = { pieceset::BlackQueen, pieceset::BlackBishop };
+
 		static constexpr Color Opposite = color::White;
 
 		static constexpr Castling KingSideCastling = Castling::BLACK_KS;
 		static constexpr Castling QueenSideCastling = Castling::BLACK_QS;
 	};
 
+#pragma endregion
+
+#pragma region BoardPieceTraits
 	template<typename Board, Piece>
 	struct board_piece_traits { };
 
@@ -96,14 +109,28 @@ namespace chesslib::traits
 	struct board_piece_traits<basic_board::BasicBoard, pieceset::WhitePawn> 
 	{
 		static constexpr Direction AttackDirections[2] = { basic_board::direction::NE, basic_board::direction::NW };
+		static constexpr Direction ReverseAttackDirections[2] = { basic_board::direction::SW, basic_board::direction::SE };
+		static constexpr Direction MoveDirection = basic_board::direction::N;
+		static constexpr Direction ReverseMoveDirection = basic_board::direction::S;
+		static constexpr Rank PromotionRank = 7;
+		static constexpr Rank DoublePushRank = 1;
+		static constexpr Piece Opposite = pieceset::BlackPawn;
 	};
 
 	template <>
 	struct board_piece_traits<basic_board::BasicBoard, pieceset::BlackPawn>
 	{
 		static constexpr Direction AttackDirections[2] = { basic_board::direction::SE, basic_board::direction::SW };
+		static constexpr Direction ReverseAttackDirections[2] = { basic_board::direction::NW, basic_board::direction::NE };
+		static constexpr Direction MoveDirection = basic_board::direction::S;
+		static constexpr Direction ReverseMoveDirection = basic_board::direction::N;
+		static constexpr Rank PromotionRank = 0;
+		static constexpr Rank DoublePushRank = 6;
+		static constexpr Piece Opposite = pieceset::WhitePawn;
 	};
+#pragma endregion
 
+#pragma region BoardColorTraits
 	template<typename Board, Color>
 	struct board_color_traits { };
 
@@ -112,6 +139,8 @@ namespace chesslib::traits
 	{
 		static constexpr Square KingSideCastleCheckSquares[2] = { squareset::f1, squareset::g1 };
 		static constexpr Square QueenSideCastleCheckSquares[3] = { squareset::d1, squareset::c1, squareset::b1 };
+		
+		static constexpr Square ValidPawnMoveSquares[2] = { squareset::a3, squareset::h8 };
 	};
 
 	template <>
@@ -119,5 +148,8 @@ namespace chesslib::traits
 	{
 		static constexpr Square KingSideCastleCheckSquares[2] = { squareset::f8, squareset::g8 };
 		static constexpr Square QueenSideCastleCheckSquares[3] = { squareset::d8, squareset::c8, squareset::b8 };
+		
+		static constexpr Square ValidPawnMoveSquares[2] = { squareset::a1, squareset::h6 };
 	};
+#pragma endregion
 }

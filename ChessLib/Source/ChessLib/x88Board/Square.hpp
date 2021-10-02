@@ -7,6 +7,7 @@
 namespace chesslib::x88board 
 {
     constexpr Square Empty = chesslib::squareset::Empty;
+    constexpr Square None = chesslib::squareset::None;
 
     constexpr Square 
         a1{ 0 }, a2{ 16 }, a3{ 32 }, a4{ 48 }, a5{ 64 }, a6{ 80 }, a7{ 96 }, a8{ 112 },
@@ -86,6 +87,8 @@ namespace chesslib::x88board
 
     namespace direction
     {
+        constexpr Direction None{ chesslib::direction::None };
+
         constexpr Direction N{ 16 }, S{ -16 }, E{ 1 }, W{ -1 }, NE{ 17 }, SW{ -17 }, NW{ 15 }, SE{ -15 };
 
         constexpr Direction N1{ 33 }, N2{ 18 }, N3{ -14 }, N4{ -31 }, N5{ -33 }, N6{ -18 }, N7{ 14 }, N8{ 31 };

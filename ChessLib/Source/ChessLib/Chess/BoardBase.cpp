@@ -12,7 +12,7 @@ namespace chesslib
 	BoardBase::BoardBase() :
 		_active_color{ 0 },
 		_castling_rights{ 0 },
-		_enpassant_target{ squareset::Empty },
+		_enpassant_target{ squareset::None },
 		_halfmove_clock{ 0 },
 		_fullmove_clock{ 1 }	
 	{ }
@@ -82,12 +82,22 @@ namespace chesslib
 
 	const BoardBase::CheckList& BoardBase::GetChecks() const { return _checks; }
 
-	bool BoardBase::IsPiecePinned(Square piece_loc) const { return _pins.find(piece_loc) != _pins.end(); }
+	Direction BoardBase::GetPinDirection(Square piece_loc) const 
+	{
+		auto it = _pins.find(piece_loc);
+		return it == _pins.end() ? direction::None : it->second.second;
+	}
 
 #pragma endregion
 
 #pragma region BoardBaseWithPieces_Methods
 
+	// Explicit initialization
+	template Square BoardBaseWithPieces::GetKingPosition<color::White>() const;
+	template Square BoardBaseWithPieces::GetKingPosition<color::Black>() const;
+	template BoardBaseWithPieces::EqualPieceRange BoardBaseWithPieces::GetPiecePositions<color::White>(Piece) const;
+	template BoardBaseWithPieces::EqualPieceRange BoardBaseWithPieces::GetPiecePositions<color::Black>(Piece) const;
+	
 	BoardBaseWithPieces::BoardBaseWithPieces() { }
 
 	const BoardBaseWithPieces::PieceMap& BoardBaseWithPieces::GetWhitePieces() const { return _white_pieces; }
@@ -98,6 +108,33 @@ namespace chesslib
 
 	BoardBaseWithPieces::PieceMap& BoardBaseWithPieces::GetBlackPieces() { return _black_pieces; }
 
+	template <Color Clr>
+	Square BoardBaseWithPieces::GetKingPosition() const 
+	{
+		if constexpr (Clr == color::White) 
+		{
+			auto it = _white_pieces.find(pieceset::WhiteKing);
+			if (it == _white_pieces.end())
+				throw std::logic_error("White king could not be found");
+			return it->second;
+		}
+		else 
+		{
+			auto it = _black_pieces.find(pieceset::BlackKing);
+			if (it == _black_pieces.end())
+				throw std::logic_error("Black king could not be found");
+			return it->second;
+		}
+	}
+
+	template <Color Clr>
+	BoardBaseWithPieces::EqualPieceRange BoardBaseWithPieces::GetPiecePositions(Piece p) const
+	{
+		if constexpr (Clr == color::White)
+			return _white_pieces.equal_range(p);
+		else 
+			return _black_pieces.equal_range(p);
+	}
 #pragma endregion
 
 }

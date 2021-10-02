@@ -49,9 +49,11 @@ namespace chesslib
         Piece captured;
         
         friend bool operator == (const Move m1, const Move m2);
+        friend bool operator < (const Move m1, const Move m2);
     };
 
     using MoveList = std::vector<Move>;
 
     bool operator == (const Move m1, const Move m2);
+    bool operator < (const Move m1, const Move m2);
 }

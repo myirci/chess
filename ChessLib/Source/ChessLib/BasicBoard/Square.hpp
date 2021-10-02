@@ -54,7 +54,7 @@ namespace chesslib::basic_board
 
     namespace direction
     {
-        constexpr Direction None{ 0 };
+        constexpr Direction None{ chesslib::direction::None };
 
         constexpr Direction N{ 8 }, S{ -8 }, E{ 1 }, W{ -1 }, NE{ 9 }, SW{ -9 }, NW{ 7 }, SE{ -7 };
         

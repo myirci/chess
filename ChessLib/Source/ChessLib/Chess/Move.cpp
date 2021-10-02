@@ -32,4 +32,9 @@ namespace chesslib
 			m1.mtype == m2.mtype &&
 			m1.captured == m2.captured;
 	}
+
+	bool operator < (const Move m1, const Move m2) 
+	{
+		return m1.from < m2.from || m1.from == m2.from && m1.to < m2.to;
+	}
 }
