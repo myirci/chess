@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "BasicAndObjectBoardBase.hpp"
+#include "BasicAndObjectBoardTestBase.hpp"
 
 #include <ChessLib/Chess/Fen.hpp>
 #include <ChessLib/ObjBoard/ObjBoard.hpp>
@@ -12,7 +12,7 @@ using namespace chesslib;
 using namespace chesslib::squareset;
 using namespace chesslib::pieceset;
 
-class ObjectBoardTests : public ::testing::Test, public BasicAndObjectBoardBase
+class ObjectBoardTests : public ::testing::Test, public BasicAndObjectBoardTestBase
 {
 public:
 

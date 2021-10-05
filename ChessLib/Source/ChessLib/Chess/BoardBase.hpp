@@ -1,8 +1,10 @@
 #pragma once
 
 #include<ChessLib/Chess/Definitions.hpp>
+#include <ChessLib/Chess/Move.hpp>
 
 #include <unordered_map>
+#include <stack>
 
 namespace chesslib 
 {
@@ -39,6 +41,22 @@ namespace chesslib
 
 	protected:
 
+		// Last made move and board states to remember before making the move.
+		// This information is required to be able to take the move back.
+		struct State
+		{
+			State(const Move& mv, int8_t castling, Square ept, uint16_t hmc) :
+				move{ mv },
+				castling_rights{ castling }, 
+				enpassant_target{ ept }, 
+				halfmove_clock{ hmc } { }
+
+			Move move;
+			int8_t castling_rights;
+			Square enpassant_target;
+			uint16_t halfmove_clock;
+		};
+
 		BoardBase();
 
 		inline void ClearChecksAndPins() const { _pins.clear(); _checks.clear(); };
@@ -47,11 +65,15 @@ namespace chesslib
 
 		Direction GetPinDirection(Square piece_loc) const;
 
+		void PushToMoveStack(const Move& mv);
+
 		Color _active_color;
 		int8_t _castling_rights;
 		Square _enpassant_target;
 		uint16_t _halfmove_clock;
 		uint16_t _fullmove_clock;
+
+		std::stack<State> _move_stack;
 
 		mutable PinMap _pins;
 		mutable CheckList _checks;
@@ -78,6 +100,15 @@ namespace chesslib
 
 		template <Color Clr>
 		EqualPieceRange GetPiecePositions(Piece p) const;
+
+		template <Color Clr>
+		void UpdatePiecePosition(Piece p, Square current_pos, Square new_pos);
+
+		template <Color Clr>
+		void RemovePiece(Piece p, Square current_pos);
+
+		template <Color Clr>
+		void AddNewPiece(Piece p, Square pos);
 
 		PieceMap _white_pieces;
 		PieceMap _black_pieces;

@@ -11,7 +11,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="BasicAndObjectBoardBase.hpp" />
+    <ClInclude Include="BasicAndObjectBoardTestBase.hpp" />
     <ClInclude Include="CommonBoardTestBase.hpp" />
   </ItemGroup>
   <ItemGroup>

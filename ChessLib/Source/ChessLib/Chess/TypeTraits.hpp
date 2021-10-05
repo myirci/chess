@@ -140,6 +140,12 @@ namespace chesslib::traits
 		static constexpr Square KingSideCastleCheckSquares[2] = { squareset::f1, squareset::g1 };
 		static constexpr Square QueenSideCastleCheckSquares[3] = { squareset::d1, squareset::c1, squareset::b1 };
 		
+		static constexpr Square KingSideRookInitialPosition = squareset::h1;
+		static constexpr Square QueenSideRookInitialPosition = squareset::a1;
+
+		static constexpr Square KingSideRookPositionAfterCastling = squareset::f1;
+		static constexpr Square QueenSideRookPositionAfterCastling = squareset::d1;
+
 		static constexpr Square ValidPawnMoveSquares[2] = { squareset::a3, squareset::h8 };
 	};
 
@@ -149,6 +155,12 @@ namespace chesslib::traits
 		static constexpr Square KingSideCastleCheckSquares[2] = { squareset::f8, squareset::g8 };
 		static constexpr Square QueenSideCastleCheckSquares[3] = { squareset::d8, squareset::c8, squareset::b8 };
 		
+		static constexpr Square KingSideRookInitialPosition = squareset::h8;
+		static constexpr Square QueenSideRookInitialPosition = squareset::a8;
+
+		static constexpr Square KingSideRookPositionAfterCastling = squareset::f8;
+		static constexpr Square QueenSideRookPositionAfterCastling = squareset::d8;
+
 		static constexpr Square ValidPawnMoveSquares[2] = { squareset::a1, squareset::h6 };
 	};
 #pragma endregion

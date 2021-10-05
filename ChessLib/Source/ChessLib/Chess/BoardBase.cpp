@@ -88,6 +88,11 @@ namespace chesslib
 		return it == _pins.end() ? direction::None : it->second.second;
 	}
 
+	void BoardBase::PushToMoveStack(const Move& mv) 
+	{
+		_move_stack.push({ mv, _castling_rights, _enpassant_target, _halfmove_clock });
+	}
+
 #pragma endregion
 
 #pragma region BoardBaseWithPieces_Methods
@@ -97,7 +102,13 @@ namespace chesslib
 	template Square BoardBaseWithPieces::GetKingPosition<color::Black>() const;
 	template BoardBaseWithPieces::EqualPieceRange BoardBaseWithPieces::GetPiecePositions<color::White>(Piece) const;
 	template BoardBaseWithPieces::EqualPieceRange BoardBaseWithPieces::GetPiecePositions<color::Black>(Piece) const;
-	
+	template void BoardBaseWithPieces::UpdatePiecePosition<color::White>(Piece, Square, Square);
+	template void BoardBaseWithPieces::UpdatePiecePosition<color::Black>(Piece, Square, Square);
+	template void BoardBaseWithPieces::RemovePiece<color::White>(Piece, Square);
+	template void BoardBaseWithPieces::RemovePiece<color::Black>(Piece, Square);
+	template void BoardBaseWithPieces::AddNewPiece<color::White>(Piece, Square);
+	template void BoardBaseWithPieces::AddNewPiece<color::Black>(Piece, Square);
+
 	BoardBaseWithPieces::BoardBaseWithPieces() { }
 
 	const BoardBaseWithPieces::PieceMap& BoardBaseWithPieces::GetWhitePieces() const { return _white_pieces; }
@@ -135,6 +146,61 @@ namespace chesslib
 		else 
 			return _black_pieces.equal_range(p);
 	}
+
+	template <Color Clr>
+	void BoardBaseWithPieces::UpdatePiecePosition(Piece p, Square current_pos, Square new_pos) 
+	{
+		PieceMap::iterator first, last;
+		if constexpr (Clr == color::White)
+			std::tie(first, last) = _white_pieces.equal_range(p);
+		else
+			std::tie(first, last) = _black_pieces.equal_range(p);
+
+		for (; first != last; first++) 
+		{
+			if (first->second == current_pos) 
+			{
+				first->second = new_pos;
+				return;
+			}
+		}
+
+		throw std::logic_error("Piece in the given position could not be found.");
+	}
+
+	template <Color Clr>
+	void BoardBaseWithPieces::RemovePiece(Piece p, Square current_pos)
+	{
+		PieceMap::iterator first, last;
+		if constexpr (Clr == color::White)
+			std::tie(first, last) = _white_pieces.equal_range(p);
+		else
+			std::tie(first, last) = _black_pieces.equal_range(p);
+
+		for (; first != last; first++)
+		{
+			if (first->second == current_pos)
+			{
+				if constexpr (Clr == color::White)
+					_white_pieces.erase(first);
+				else 
+					_black_pieces.erase(first);
+				return;
+			}
+		}
+
+		throw std::logic_error("Piece in the given position could not be found.");
+	}
+
+	template <Color Clr>
+	void BoardBaseWithPieces::AddNewPiece(Piece p, Square pos) 
+	{
+		if constexpr (Clr == color::White)
+			_white_pieces.emplace(p, pos);
+		else
+			_black_pieces.emplace(p, pos);
+	}
+
 #pragma endregion
 
 }

@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "BasicAndObjectBoardBase.hpp"
+#include "BasicAndObjectBoardTestBase.hpp"
 
 #include <ChessLib/Chess/Fen.hpp>
 #include <ChessLib/BasicBoard/BasicBoard.hpp>
@@ -12,7 +12,7 @@ using namespace chesslib;
 using namespace chesslib::squareset;
 using namespace chesslib::pieceset;
 
-class BasicBoardTests : public ::testing::Test, public BasicAndObjectBoardBase
+class BasicBoardTests : public ::testing::Test, public BasicAndObjectBoardTestBase
 {
 public:
     BasicBoardTests() { }
@@ -87,12 +87,44 @@ TEST_F(BasicBoardTests, move_generation_check_eliminating_moves)
     }
 }
 
-TEST_F(BasicBoardTests, move_generation)
+TEST_F(BasicBoardTests, move_generation_compare_all_moves)
 {
-    for (auto i{ 0 }; i < move_generation_fens.size(); i++)
+    for (auto i{ 0 }; i < move_generation_all_moves_fens.size(); i++)
     {
-        auto b = basic_board::make_unique_board(move_generation_fens[i]);
+        auto b = basic_board::make_unique_board(move_generation_all_moves_fens[i]);
         auto moves = b->GenerateMoves();
-        EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expected_moves[i].begin()));
+        EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expected_moves_all_moves[i].begin()));
+    }
+}
+
+TEST_F(BasicBoardTests, move_generation_compare_move_subset)
+{
+    for (auto i{ 0 }; i < move_generation_subset.size(); i++)
+    {
+        auto b = basic_board::make_unique_board(move_generation_subset[i]);
+        auto moves = b->GenerateMoves();
+        EXPECT_TRUE(IsSubset(moves, expected_moves_subset[i]));
+    }
+}
+
+TEST_F(BasicBoardTests, move_generation_number_of_moves)
+{
+    for (const auto& p : move_generation_number_of_moves)
+    {
+        auto b = basic_board::make_unique_board(p.first);
+        auto moves = b->GenerateMoves();
+        EXPECT_EQ(p.second, moves.size());
+    }
+}
+
+TEST_F(BasicBoardTests, make_unmake_moves)
+{
+    for (const auto& [move, fen1, fen2] : make_unmake_move_fens) 
+    {
+        auto b = basic_board::make_unique_board(fen1);
+        b->MakeMove(move);
+        EXPECT_EQ(fen2, utility::chess::board_to_fen(*b));
+        b->UnMakeMove();
+        EXPECT_EQ(fen1, utility::chess::board_to_fen(*b));
     }
 }

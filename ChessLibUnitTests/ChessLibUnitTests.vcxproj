@@ -34,7 +34,7 @@
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
     <ClInclude Include="CommonBoardTestBase.hpp" />
-    <ClInclude Include="BasicAndObjectBoardBase.hpp" />
+    <ClInclude Include="BasicAndObjectBoardTestBase.hpp" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>

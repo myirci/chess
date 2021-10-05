@@ -24,6 +24,10 @@ namespace chesslib::basic_board
 
 		MoveList GenerateMoves() const;
 
+		void MakeMove(const Move& move);
+
+		void UnMakeMove();
+
 	protected:
 
 		BasicBoard();
@@ -46,6 +50,15 @@ namespace chesslib::basic_board
 		static inline bool IsDiagonalAttack(Piece p, Direction dir, Distance dist);
 
 #pragma endregion
+
+		template<Color Clr>
+		void MakeMoveImplementation(const Move& move);
+
+		template<Color Clr>
+		inline void MakeQuiteMove(Square from, Square to);
+
+		template<Color Clr>
+		void UnMakeMove(const Move& move);
 
 		template<Color Clr>
 		void GenerateMovesImplementation(MoveList& moves) const;
