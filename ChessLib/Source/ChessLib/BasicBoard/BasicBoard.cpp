@@ -786,19 +786,22 @@ namespace chesslib::basic_board
 				moves.emplace_back(pos, _enpassant_target, MoveType::En_Passant_Capture, otraits::Pawn);
 			}
 			else 
-			{
+			{ 
 				Square ppos{ _enpassant_target + bptraits::ReverseMoveDirection };
 				Direction dir = king_pos > pos ? direction::W : direction::E;
+				bool make_move{ true };
 				for (Square next{ king_pos + dir }; IsInside(next - dir, next); next += dir)
 				{
 					if (next == pos || next == ppos || board[next] == squareset::Empty)
 						continue;
 
-					if (board[next] != otraits::Rook && board[next] != otraits::Queen)
-						moves.emplace_back(pos, _enpassant_target, MoveType::En_Passant_Capture, otraits::Pawn);
-
+					if (board[next] == otraits::Rook || board[next] == otraits::Queen)
+						make_move = false;
 					break;
 				}
+
+				if(make_move)
+					moves.emplace_back(pos, _enpassant_target, MoveType::En_Passant_Capture, otraits::Pawn);
 			}
 		}
 	}

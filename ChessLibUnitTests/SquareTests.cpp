@@ -1,4 +1,4 @@
-#include "pch.h"
+#include <pch.h>
 
 #include <ChessLib/X88Board/Square.hpp>
 #include <ChessLib/BasicBoard/Square.hpp>

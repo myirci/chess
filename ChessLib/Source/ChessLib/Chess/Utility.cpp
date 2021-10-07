@@ -1,6 +1,7 @@
 #include <ChessLib/Chess/Utility.hpp>
 
 #include <charconv>
+#include <random>
 
 
 namespace chesslib::utility 
@@ -23,6 +24,35 @@ namespace chesslib::utility
 			return (result.ec == std::errc::invalid_argument || result.ec == std::errc::result_out_of_range)
 				? std::nullopt
 				: std::optional<int>(out);
+		}
+
+		int get_random(int lower_limit, int upper_limit)
+		{
+			std::random_device rd;
+			std::default_random_engine generator{ rd() };
+			std::uniform_int_distribution<int> distribution(lower_limit, upper_limit);
+			return distribution(generator);
+		}
+	}
+
+	namespace string_processing 
+	{
+		void ltrim(std::string& s)
+		{
+			s.erase(s.begin(), std::find_if(s.begin(), s.end(), 
+				[](int ch) { return !std::isspace(ch); }));
+		}
+
+		void rtrim(std::string& s)
+		{
+			s.erase(std::find_if(s.rbegin(), s.rend(), 
+				[](int ch) { return !std::isspace(ch); }).base(), s.end());
+		}
+
+		void trim(std::string& s)
+		{
+			ltrim(s);
+			rtrim(s);
 		}
 	}
 }

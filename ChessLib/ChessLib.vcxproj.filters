@@ -19,6 +19,9 @@
     <Filter Include="Engine">
       <UniqueIdentifier>{77ff016f-7854-4dfd-ab1d-bacfbc99a61c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Perft">
+      <UniqueIdentifier>{ca56f1c5-eca3-46d6-924d-1f6a2235d666}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ChessLib\Chess\Fen.cpp">
@@ -94,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="Source\ChessLib\Bitboard\Bitboard.hpp">
       <Filter>BitBoard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Perft\Perft.hpp">
+      <Filter>Perft</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

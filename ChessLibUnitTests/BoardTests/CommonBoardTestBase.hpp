@@ -108,6 +108,7 @@ protected:
     std::vector<std::pair<std::string_view, int>> move_generation_number_of_moves
     {
         {"8/2p5/3p4/KP5r/1R3pPk/8/4P3/8 b - g3 0 1", 17},
+        {"8/2p5/3p4/KP4r1/5pPk/8/4P3/1R6 b - g3 0 1", 18},
         {"8/8/3p4/1Pp4r/1KR2pk1/8/4P1P1/8 w - c6 0 1", 7},
         {"8/2p5/3p4/KP3R1r/5p2/8/4PkP1/8 b - - 0 1", 20},
         {"8/2p5/3p4/KP4kr/5pP1/8/4P3/6R1 b - g3 0 1", 16},
