@@ -501,15 +501,18 @@ namespace chesslib::basic_board
 		using ctraits = traits::color_traits<Clr>;
 		using bptraits = traits::board_piece_traits<BasicBoard, ctraits::Pawn>;
 
-		if (_enpassant_target == squareset::None)
+		if (_enpassant_target == squareset::None || board[attacker_loc] != bptraits::Opposite)
 			return;
 
 		Direction dirs[2] = { -1, 1 };
 		for (auto i{ 0 }; i < 2; i++) 
 		{
 			Square next{ attacker_loc + dirs[i] };
-			if (IsInside(next, _enpassant_target) && board[next] == ctraits::Pawn)
-				moves.emplace_back(next, _enpassant_target, MoveType::En_Passant_Capture, ctraits::Opposite);
+			if (auto pin_dir = GetPinDirection(next);
+				pin_dir == direction::None && 
+				board[next] == ctraits::Pawn &&
+				IsInside(next, _enpassant_target))
+				moves.emplace_back(next, _enpassant_target, MoveType::En_Passant_Capture, bptraits::Opposite);
 		}
 	}
 

@@ -2,7 +2,6 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <filesystem>
 
 #include <ChessLib/Chess/Fen.hpp>
 #include <ChessLib/Chess/Move.hpp>
@@ -28,6 +27,7 @@ namespace arguments
 	constexpr std::string_view logfile_argument_specifier{ "logfile" };
 	constexpr std::string_view epdfile_argument_specifier{ "epdfile" };
 	constexpr std::string_view directory_path_argument_specifier{ "directory" };
+	constexpr std::string_view read_files_recursively_argument_specifier{ "recursive" };
 
 	constexpr std::string_view basicboard_argument_specifier{ "basicboard" };
 	constexpr std::string_view x88board_argument_specifier{ "x88board" };
@@ -35,18 +35,24 @@ namespace arguments
 	constexpr std::string_view bitboard_argument_specifier{ "bitboard" };
 }
 
+enum class board_type { basic, x88, obj, bitboard };
+
 void print_about();
 void print_usage();
 void print_help(int exit_code);
 
-void execute_epdfile(std::string_view fpath);
+std::vector<std::pair<std::string, uint64_t>> get_positions_from_epd_file(std::string_view fpath, int depth);
 
-void perft_for_basic_board(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log);
-void perft_for_object_board(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log);
-void perft_for_x88_board(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log);
-void perft_for_bitboard(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log);
+void execute_perft(
+	board_type board, 
+	std::string_view fen, int depth, bool divide, bool stats, 
+	std::ofstream& log, 
+	std::optional<uint64_t> expected_result = std::nullopt);
 
-enum class board_type { basic, x88, obj, bitboard };
+uint64_t perft_for_basic_board(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log);
+uint64_t perft_for_object_board(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log);
+uint64_t perft_for_x88_board(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log);
+uint64_t perft_for_bitboard(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log);
 
 int main(int argc, char* argv[]) 
 {
@@ -56,7 +62,9 @@ int main(int argc, char* argv[])
 	bool stats{ false };
 	board_type board{ board_type::basic };
 	std::ofstream log;
-	std::string_view epdfile_path{""};
+	std::string_view epdfile_path{ "" };
+	std::string_view directory_path{ "" };
+	bool read_files_recursively{ false };
 
 	for (int i{ 1 }; i < argc; i++)
 	{
@@ -95,29 +103,63 @@ int main(int argc, char* argv[])
 
 				depth = std::stoi(argv[i]);
 			}
-			else if (arg == arguments::logfile_argument_specifier) 
+			else if (arg == arguments::logfile_argument_specifier)
 			{
 				i++;
 				if (i >= argc)
 					print_help(1);
 
 				log.open(argv[i], std::ios::app);
-				if (!log.is_open()) 
+				if (!log.is_open())
 				{
 					std::cout << "File could not be opened" << std::endl;
 					exit(3);
 				}
 			}
-			else if (arg == arguments::epdfile_argument_specifier) 
+			else if (arg == arguments::epdfile_argument_specifier)
 			{
 				i++;
 				if (i >= argc)
 					print_help(1);
 
+				if (!chesslib::utility::filesystem::IsFileOrDirectoryExist(argv[i]))
+				{
+					std::cout << argv[i] << " could not be found, please verify the given path\n";
+					print_help(1);
+				}
+
+				if (!chesslib::utility::filesystem::VerifyFileExtension(argv[i], ".epd"))
+				{
+					std::cout << argv[i] << " is not an epd file.\n";
+					print_help(1);
+				}
+
 				epdfile_path = argv[i];
+			}
+			else if (arg == arguments::directory_path_argument_specifier)
+			{
+				i++;
+				if (i >= argc)
+					print_help(1);
+
+				if (!chesslib::utility::filesystem::IsFileOrDirectoryExist(argv[i]))
+				{
+					std::cout << argv[i] << " could not be found, please verify the given path\n";
+					print_help(1);
+				}
+
+				if (!chesslib::utility::filesystem::IsDirectory(argv[i]))
+				{
+					std::cout << argv[i] << " is not a directory\n";
+					print_help(1);
+				}
+
+				directory_path = argv[i];
 			}
 			else if (arg == arguments::divide_argument_specifier)
 				divide = true;
+			else if (arg == arguments::read_files_recursively_argument_specifier)
+				read_files_recursively = true;
 			else if (arg == arguments::stat_argument_specifier)
 				stats = true;
 			else if (arg == arguments::about_argument_specifier)
@@ -131,9 +173,21 @@ int main(int argc, char* argv[])
 			print_help(1);
 	}
 
-	if (!epdfile_path.empty()) 
+	if (!epdfile_path.empty() || !directory_path.empty()) 
 	{
+		std::vector<std::string> files;
+		if (!directory_path.empty()) 
+			files = chesslib::utility::filesystem::GetFilesFromDirectory(directory_path, ".epd", read_files_recursively);
+		
+		if (!epdfile_path.empty())
+			files.emplace_back(epdfile_path);
 
+		for (const auto& fpath : files) 
+		{
+			auto fen_positions = get_positions_from_epd_file(fpath, depth);
+			for (const auto& [fen, expected_perft_result] : fen_positions) 
+				execute_perft(board, fen, depth, divide, stats, log, expected_perft_result);
+		}
 	}
 	else 
 	{
@@ -158,13 +212,7 @@ int main(int argc, char* argv[])
 			exit(2);
 		}
 
-		// execute perft
-		if (board == board_type::basic)
-			perft_for_basic_board(fen, depth, divide, stats, log);
-		else
-		{
-			std::cout << "Perft has not been implemented for the other board types yet." << std::endl;
-		}
+		execute_perft(board, fen, depth, divide, stats, log);
 	}
 
 	if (log.is_open())
@@ -173,19 +221,62 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-void perft_for_basic_board(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log)
+void execute_perft(
+	board_type board, 
+	std::string_view fen, int depth, bool divide, bool stats, 
+	std::ofstream& log, 
+	std::optional<uint64_t> expected_result /* = std::nullopt*/)
+{
+	static uint64_t count{ 0 };
+	count++;
+
+	std::cout << "\n---------------------------------------------------------------------------\n\n";
+	std::cout << "Position: " << count << std::endl;
+	std::cout << fen << "\nDepth: " << depth << std::endl;
+
+	if (log.is_open())
+	{
+		log << "\n---------------------------------------------------------------------------\n\n";
+		log << "Position: " << count << std::endl;
+		log << fen << "\nDepth: " << depth << std::endl;
+	}
+
+	// execute perft
+	uint64_t perft_res{ 0 };
+	if (board == board_type::basic)
+		perft_res = perft_for_basic_board(fen, depth, divide, stats, log);
+	else
+	{
+		std::cout << "Perft has not been implemented for the other board types yet." << std::endl;
+	}
+
+	if (expected_result.has_value())
+	{
+		bool pass{ perft_res == expected_result.value() };
+		if (pass) 
+		{
+			std::cout << "PASS\n";
+			if (log.is_open())
+				log << "PASS\n";
+		}
+		else 
+		{
+			std::cout << "FAIL\tEXPECTED: " << expected_result.value() << std::endl;
+			if (log.is_open())
+				log << "FAIL\tEXPECTED: " << expected_result.value() << std::endl;
+		}
+	}
+}
+
+uint64_t perft_for_basic_board(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log)
 {
 	auto board = chesslib::basic_board::make_unique_board(fen);
+
+	uint64_t total{ 0 };
+
 	if (divide) 
 	{
 		auto num_nodes_per_move = chesslib::perft::perft_divide(*board, depth);
-
-		std::cout << fen << std::endl;
-		
-		if (log.is_open())
-			log << fen << std::endl;
-
-		unsigned long total{ 0 };
 		for (const auto& [move, num_nodes] : num_nodes_per_move) 
 		{
 			auto [c1, c2] = chesslib::basic_board::get_chars(move.GetFrom());
@@ -206,52 +297,52 @@ void perft_for_basic_board(std::string_view fen, int depth, bool divide, bool st
 			log << "\t---------\n";
 			log << "\tSum\t" << total << std::endl;
 		}
-			
 	}
 	else 
 	{
-		auto num_nodes = chesslib::perft::perft(*board, depth);
-		std::cout << fen << std::endl;
-		std::cout << "Number of nodes: " << num_nodes << std::endl;
+		total = chesslib::perft::perft(*board, depth);
+		std::cout << "Number of nodes: " << total << std::endl;
 
-		if (!log.is_open())
-			return;
-
-		log << fen << "\n";
-		log << "Number of nodes: " << num_nodes << "\n";
+		if (log.is_open())
+			log << "Number of nodes: " << total << "\n";
 	}
+	return total;
 }
 
-void perft_for_object_board(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log)
+uint64_t perft_for_object_board(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log)
 {
+	return 0;
 }
 
-void perft_for_x88_board(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log)
+uint64_t perft_for_x88_board(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log)
 {
+	return 0;
 }
 
-void perft_for_bitboard(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log)
+uint64_t perft_for_bitboard(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log)
 {
+	return 0;
 }
 
 void print_usage()
 {
 	std::cout
-		<< "Usage: Perft "
-		<< "[-" << arguments::fen_string_argument_specifier << " fen_string{\"Starting Position\"}]" << " "
-		<< "[-" << arguments::depth_argument_specifier << " depth_value{1}]" << " "
-		<< "[-" << arguments::divide_argument_specifier << "]" << " "
-		<< "[-" << arguments::stat_argument_specifier << "]" << " "
+		<< "Usage:\nPerft "
+		<< "[-" << arguments::fen_string_argument_specifier << " fen_string{\"Starting Position\"}]" << "\n"
+		<< "[-" << arguments::depth_argument_specifier << " depth_value{1}]" << "\n"
+		<< "[-" << arguments::divide_argument_specifier << "]" << "\n"
+		<< "[-" << arguments::stat_argument_specifier << "]" << "\n"
 		<< "[-" << arguments::board_argument_specifier << " board_representation{"
 		<< arguments::basicboard_argument_specifier << "}("
 		<< arguments::basicboard_argument_specifier << ", "
 		<< arguments::x88board_argument_specifier << ", "
 		<< arguments::objboard_argument_specifier << ", "
-		<< arguments::bitboard_argument_specifier << ")]" << " "
-		<< "[-" << arguments::logfile_argument_specifier << " logfile_path]" << " "
-		<< "[-" << arguments::epdfile_argument_specifier << " epdfile_path]" << " "
-		<< "[-" << arguments::directory_path_argument_specifier << " directory_path]" << " "
-		<< "[-" << arguments::help_argument_specifier << "]" << " "
+		<< arguments::bitboard_argument_specifier << ")]" << "\n"
+		<< "[-" << arguments::logfile_argument_specifier << " logfile_path]" << "\n"
+		<< "[-" << arguments::epdfile_argument_specifier << " epdfile_path]" << "\n"
+		<< "[-" << arguments::directory_path_argument_specifier << " directory_path] -> Directory path to look for .epd files." << "\n"
+		<< "[-" << arguments::read_files_recursively_argument_specifier << "] -> Read the files recursively in the given directory."  << "\n"
+		<< "[-" << arguments::help_argument_specifier << "]" << "\n"
 		<< "[-" << arguments::about_argument_specifier << "]" 
 		<< std::endl;
 }
@@ -267,18 +358,19 @@ void print_about()
 	std::cout << "\n------------------------------------------\n";
 	std::cout << "Computes perft for different board representations.\n";
 	std::cout << "Not the fastest perft application but well tested and trustable.\n";
-	std::cout << "Execute -help command for usage.\n";
+	std::cout << "Execute -help command for getting information on how to use.\n";
 	std::cout << "Developed by Murat Yirci.\n";
 	std::cout << "\n------------------------------------------\n";
 	exit(0);
 }
 
-void execute_epdfile(std::string_view fpath)
+std::vector<std::pair<std::string, uint64_t>> get_positions_from_epd_file(std::string_view fpath, int depth)
 {
-	/*
 	auto file = std::ifstream(std::string(fpath), std::ios::out);
 	if (!file.is_open())
 		throw std::runtime_error("Epd file could not be opened.");
+
+	std::vector<std::pair<std::string, uint64_t>> fen_positions;
 
 	std::string line, token, fen;
 	while (std::getline(file, line))
@@ -296,11 +388,15 @@ void execute_epdfile(std::string_view fpath)
 			}
 
 			auto pos = token.find_first_of(' ');
-			auto depth = std::stoi((token.substr(0, pos)).substr(1));
-			auto perft_val = std::stoull(token.substr(pos));
+			auto d = std::stoi((token.substr(0, pos)).substr(1));
+			if (depth == d) 
+			{
+				fen_positions.emplace_back(fen, std::stoull(token.substr(pos)));
+				break;
+			}
 		}
 	}
 
 	file.close();
-	*/
+	return fen_positions;
 }

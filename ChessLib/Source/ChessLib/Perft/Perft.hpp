@@ -10,25 +10,25 @@ namespace chesslib::perft
     {
         Stats() { }
 
-        unsigned long num_nodes{ 0 };
-        unsigned long num_captures{ 0 };
-        unsigned long num_promotions{ 0 };
-        unsigned long num_enpassant_captures{ 0 };
-        unsigned long num_castles{ 0 };
-        unsigned long num_checks{ 0 };
-        unsigned long num_double_checks{ 0 };
-        unsigned long num_discovery_checks{ 0 };
-        unsigned long num_check_mates{ 0 };
-        unsigned long num_stale_mates{ 0 };
+        uint64_t num_nodes{ 0 };
+        uint64_t num_captures{ 0 };
+        uint64_t num_promotions{ 0 };
+        uint64_t num_enpassant_captures{ 0 };
+        uint64_t num_castles{ 0 };
+        uint64_t num_checks{ 0 };
+        uint64_t num_double_checks{ 0 };
+        uint64_t num_discovery_checks{ 0 };
+        uint64_t num_check_mates{ 0 };
+        uint64_t num_stale_mates{ 0 };
     };
 
     template <typename Board>
-    unsigned long perft(Board& board, int depth) 
+    uint64_t perft(Board& board, int depth) 
     {
         if (depth <= 1)
             return board.GenerateMoves().size();
 
-        unsigned long sum{ 0 };
+        uint64_t sum{ 0 };
         auto moves = board.GenerateMoves();
         for (auto const& mv : moves)
         {
@@ -40,9 +40,9 @@ namespace chesslib::perft
     }
 
     template <typename Board>
-    std::vector<std::pair<Move,unsigned long>> perft_divide(Board& board, int depth)
+    std::vector<std::pair<Move, uint64_t>> perft_divide(Board& board, int depth)
     {
-        std::vector<std::pair<Move, unsigned long>> perft_results;
+        std::vector<std::pair<Move, uint64_t>> perft_results;
 
         if (depth <= 1) 
         {

@@ -38,4 +38,18 @@ namespace chesslib::utility
 		// trim from both ends (in place)
 		void trim(std::string& s);
 	}
+
+	namespace filesystem 
+	{
+		bool IsFileOrDirectoryExist(std::string_view path);
+
+		bool IsDirectory(std::string_view path);
+
+		bool VerifyFileExtension(std::string_view fpath, std::string_view extension);
+
+		std::vector<std::string> GetFilesFromDirectory(
+			std::string_view path, 
+			std::string_view file_extension,
+			bool recursive = false);
+	}
 }

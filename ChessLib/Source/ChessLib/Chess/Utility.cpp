@@ -2,7 +2,7 @@
 
 #include <charconv>
 #include <random>
-
+#include <filesystem>
 
 namespace chesslib::utility 
 {
@@ -53,6 +53,55 @@ namespace chesslib::utility
 		{
 			ltrim(s);
 			rtrim(s);
+		}
+	}
+
+	namespace filesystem 
+	{
+		bool IsFileOrDirectoryExist(std::string_view path)
+		{
+			std::filesystem::path p{ path };
+			return std::filesystem::exists(p);
+		}
+
+		bool IsDirectory(std::string_view path) 
+		{
+			std::filesystem::path p{ path };
+			return std::filesystem::is_directory(p);
+		}
+
+		bool VerifyFileExtension(std::string_view fpath, std::string_view extension)
+		{
+			std::filesystem::path p{ fpath };
+			return p.extension() == extension;
+		}
+
+		std::vector<std::string> GetFilesFromDirectory(
+			std::string_view path,
+			std::string_view file_extension,
+			bool recursive /* = false */) 
+		{
+			std::vector<std::string> files;
+			if (recursive) 
+			{
+				for (const auto& entry : std::filesystem::recursive_directory_iterator{ path }) 
+				{
+					if (std::filesystem::is_regular_file(entry.status()) && 
+						entry.path().extension() == file_extension)
+						files.emplace_back(entry.path().string());
+				}
+			}
+			else 
+			{
+				for (const auto& entry : std::filesystem::directory_iterator{ path })
+				{
+					if (std::filesystem::is_regular_file(entry.status()) &&
+						entry.path().extension() == file_extension)
+						files.emplace_back(entry.path().string());
+				}
+			}
+
+			return files;
 		}
 	}
 }
