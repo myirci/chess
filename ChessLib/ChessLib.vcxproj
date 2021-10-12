@@ -24,9 +24,9 @@
     <ClCompile Include="Source\ChessLib\Chess\BoardBase.cpp" />
     <ClCompile Include="Source\ChessLib\Chess\Fen.cpp" />
     <ClCompile Include="Source\ChessLib\Chess\Move.cpp" />
-    <ClCompile Include="Source\ChessLib\Chess\Utility.cpp" />
     <ClCompile Include="Source\ChessLib\ObjBoard\ObjBoard.cpp" />
     <ClCompile Include="Source\ChessLib\ObjBoard\PieceObj.cpp" />
+    <ClCompile Include="Source\ChessLib\Utility\Utility.cpp" />
     <ClCompile Include="Source\ChessLib\x88Board\x88Board.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -39,11 +39,12 @@
     <ClInclude Include="Source\ChessLib\Chess\Fen.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\Move.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\TypeTraits.hpp" />
-    <ClInclude Include="Source\ChessLib\Chess\Utility.hpp" />
     <ClInclude Include="Source\ChessLib\ObjBoard\PieceObj.hpp" />
     <ClInclude Include="Source\ChessLib\ObjBoard\ObjBoard.hpp" />
     <ClInclude Include="Source\ChessLib\ObjBoard\SquareObj.hpp" />
     <ClInclude Include="Source\ChessLib\Perft\Perft.hpp" />
+    <ClInclude Include="Source\ChessLib\Utility\IterableStack.hpp" />
+    <ClInclude Include="Source\ChessLib\Utility\Utility.hpp" />
     <ClInclude Include="Source\ChessLib\X88Board\Square.hpp" />
     <ClInclude Include="Source\ChessLib\x88Board\x88Board.hpp" />
   </ItemGroup>

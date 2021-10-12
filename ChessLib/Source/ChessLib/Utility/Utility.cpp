@@ -1,4 +1,4 @@
-#include <ChessLib/Chess/Utility.hpp>
+#include <ChessLib/Utility/Utility.hpp>
 
 #include <charconv>
 #include <random>

@@ -1,9 +1,11 @@
 #pragma once
 
 #include <string>
+#include <sstream>
 
 #include <ChessLib/Chess/Fen.hpp>
 #include <ChessLib/Chess/TypeTraits.hpp>
+#include <ChessLib/Chess/BoardBase.hpp>
 
 namespace chesslib::utility::chess 
 {
@@ -175,4 +177,27 @@ namespace chesslib::utility::chess
 
 		return ss.str();
 	}	
+
+
+	template<typename Board>
+	std::string to_string(const Move& move) 
+	{
+		using btraits = traits::board_traits<Board>;
+		std::string move_string{ "__-__" };
+		std::tie(move_string[0], move_string[1]) = btraits::ToCharPair(move.GetFrom());
+		std::tie(move_string[3], move_string[4]) = btraits::ToCharPair(move.GetTo());
+		return move_string;
+	}
+
+	template<typename Board>
+	std::string to_string(const utility::IterableStack<BoardBase::State>& move_stack) 
+	{
+		auto [first, last] = move_stack.bottom_to_top();
+		std::stringstream ss{""};
+		if (first != last)
+			ss << to_string<Board>(first->move);
+		for (first++; first != last; first++) 
+			ss << ", " << to_string<Board>(first->move);
+		return ss.str();
+	}
 }

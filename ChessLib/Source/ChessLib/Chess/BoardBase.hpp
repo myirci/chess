@@ -2,15 +2,32 @@
 
 #include<ChessLib/Chess/Definitions.hpp>
 #include <ChessLib/Chess/Move.hpp>
+#include <ChessLib/Utility/IterableStack.hpp>
 
 #include <unordered_map>
-#include <stack>
+#include <optional>
 
 namespace chesslib 
 {
 	class BoardBase
 	{
 	public:
+
+		// Last made move and board states to remember before making the move.
+		// This information is required to be able to take the move back.
+		struct State
+		{
+			State(const Move& mv, int8_t castling, Square ept, uint16_t hmc) :
+				move{ mv },
+				castling_rights{ castling },
+				enpassant_target{ ept },
+				halfmove_clock{ hmc } { }
+
+			Move move;
+			int8_t castling_rights;
+			Square enpassant_target;
+			uint16_t halfmove_clock;
+		};
 
 		// key			: pinned piece location
 		// value.first	: attacker location
@@ -36,26 +53,11 @@ namespace chesslib
 		void SetHalfMoveClock(std::string_view hmc);
 		void SetFullMoveClock(std::string_view fmc);
 
-		const PinMap& GetPins() const;
-		const CheckList& GetChecks() const;
+		const PinMap& GetPins() const { return _pins; }
+		const CheckList& GetChecks() const { return _checks; }
+		const utility::IterableStack<State>& GetMoveStack() const { return _move_stack;  }
 
 	protected:
-
-		// Last made move and board states to remember before making the move.
-		// This information is required to be able to take the move back.
-		struct State
-		{
-			State(const Move& mv, int8_t castling, Square ept, uint16_t hmc) :
-				move{ mv },
-				castling_rights{ castling }, 
-				enpassant_target{ ept }, 
-				halfmove_clock{ hmc } { }
-
-			Move move;
-			int8_t castling_rights;
-			Square enpassant_target;
-			uint16_t halfmove_clock;
-		};
 
 		BoardBase();
 
@@ -73,7 +75,7 @@ namespace chesslib
 		uint16_t _halfmove_clock;
 		uint16_t _fullmove_clock;
 
-		std::stack<State> _move_stack;
+		utility::IterableStack<State> _move_stack;
 
 		mutable PinMap _pins;
 		mutable CheckList _checks;

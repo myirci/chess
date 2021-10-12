@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>FEN Viewer</title>
+  <link rel="stylesheet" href="../../lib/chessboardjs/css/chessboard-1.0.0.min.css">
+</head>
+<body>
+
+<div id="myBoard" style="width: 500px"></div>
+<br>
+<button id="PrevBtn" style="margin-left: 4em">Previous Position</button>
+<button id="NextBtn" style="margin-left: 4em">Next Position</button>
+
+<p id="counter"></p>
+<p id="fen"></p>
+
+<script src="../../lib/jquery/jquery-3.6.0.min.js"></script>
+<script src="../../lib/chessboardjs/js/chessboard-1.0.0.min.js"></script>
+
+<script>
+
+// Array of fen positions to be displayed
+let fen_strings = [
+'r1n1k2r/p1p1qpb1/b4Np1/1B1p4/1p2P3/2N2Q1p/PPPB1PPP/R3K2R b KQkq - 0 3',
+'r3k2r/p1p1qpb1/b4Np1/1B1p4/1pn1P3/2N2Q1p/PPPB1PPP/R3K2R b KQkq - 0 3',
+'r3k2r/p1p1qpb1/b4Np1/1B1p4/np2P3/2N2Q1p/PPPB1PPP/R3K2R b KQkq - 0 3',
+'r3k2r/p1p1qpb1/bn3N2/1B1p2p1/1p2P3/2N2Q1p/PPPB1PPP/R3K2R b KQkq - 0 3',
+'r3k2r/p1p1qpb1/bn3Np1/1B1p4/4P3/1pN2Q1p/PPPB1PPP/R3K2R b KQkq - 0 3',
+'r3k2r/p1p1qpb1/bn3Np1/1B1p4/4P3/2p2Q1p/PPPB1PPP/R3K2R b KQkq - 0 3',
+'r3k2r/p3qpb1/bn3Np1/1Bpp4/1p2P3/2N2Q1p/PPPB1PPP/R3K2R b KQkq - 0 3',
+'r3k2r/p1p1qpb1/bn3Np1/1B6/1p1pP3/2N2Q1p/PPPB1PPP/R3K2R b KQkq - 0 3',
+'r3k2r/p1p1qpb1/bn3Np1/1B6/1p2p3/2N2Q1p/PPPB1PPP/R3K2R b KQkq - 0 3',
+'r3k2r/p1p1qpb1/bn3Np1/1B1p4/1p2P3/2N2Q2/PPPB1PpP/R3K2R b KQkq - 0 3'
+]
+
+var index = 0;
+
+var config = {
+	pieceTheme: '../../lib/chessboardjs/img/chesspieces/wikipedia/{piece}.png',
+	position: fen_strings[index]
+}
+var board = Chessboard('myBoard', config)
+
+$(document).ready(function(){
+  document.getElementById("fen").innerHTML = fen_strings[index];
+  document.getElementById("counter").innerHTML = `Position: ${index + 1}`;  
+})
+
+$('#PrevBtn').on('click', function () 
+{
+	if(index > 1)
+	{
+		index = index - 1;
+		board.position(fen_strings[index]);
+		document.getElementById("fen").innerHTML = fen_strings[index];
+		document.getElementById("counter").innerHTML = `Position: ${index + 1}`;
+	}
+})
+$('#NextBtn').on('click', function ()
+{
+	if(index < fen_strings.length - 1)
+	{
+		index = index + 1;
+		board.position(fen_strings[index]);
+		document.getElementById("fen").innerHTML = fen_strings[index];
+		document.getElementById("counter").innerHTML = `Position: ${index + 1}`;
+	}
+})
+</script>
+</body>
+</html>

@@ -28,6 +28,8 @@ namespace chesslib::basic_board
 
 		void UnMakeMove();
 
+		void ComputeChecksAndPins() const;
+
 	protected:
 
 		BasicBoard();

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ChessLib/Chess/Utility.hpp>
+#include <ChessLib/Utility/Utility.hpp>
 
 #include <string>
 #include <string_view>

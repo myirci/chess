@@ -22,15 +22,15 @@
     <Filter Include="Perft">
       <UniqueIdentifier>{ca56f1c5-eca3-46d6-924d-1f6a2235d666}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{9df33fd3-962f-482e-bc2f-e6962d5eb121}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ChessLib\Chess\Fen.cpp">
       <Filter>Chess</Filter>
     </ClCompile>
     <ClCompile Include="Source\ChessLib\Chess\Move.cpp">
-      <Filter>Chess</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ChessLib\Chess\Utility.cpp">
       <Filter>Chess</Filter>
     </ClCompile>
     <ClCompile Include="Source\ChessLib\BasicBoard\BasicBoard.cpp">
@@ -51,6 +51,9 @@
     <ClCompile Include="Source\ChessLib\Bitboard\BitBoard.cpp">
       <Filter>BitBoard</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ChessLib\Utility\Utility.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ChessLib\Chess\Definitions.hpp">
@@ -60,9 +63,6 @@
       <Filter>Chess</Filter>
     </ClInclude>
     <ClInclude Include="Source\ChessLib\Chess\Move.hpp">
-      <Filter>Chess</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ChessLib\Chess\Utility.hpp">
       <Filter>Chess</Filter>
     </ClInclude>
     <ClInclude Include="Source\ChessLib\BasicBoard\BasicBoard.hpp">
@@ -100,6 +100,12 @@
     </ClInclude>
     <ClInclude Include="Source\ChessLib\Perft\Perft.hpp">
       <Filter>Perft</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Utility\Utility.hpp">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Utility\IterableStack.hpp">
+      <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

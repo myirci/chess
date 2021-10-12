@@ -5,7 +5,7 @@
 
 #include <ChessLib/Chess/Fen.hpp>
 #include <ChessLib/Chess/Move.hpp>
-#include <ChessLib/Chess/Utility.hpp>
+#include <ChessLib/Utility/Utility.hpp>
 #include <ChessLib/Perft/Perft.hpp>
 
 #include <ChessLib/BasicBoard/BasicBoard.hpp>
@@ -276,35 +276,52 @@ uint64_t perft_for_basic_board(std::string_view fen, int depth, bool divide, boo
 
 	if (divide) 
 	{
-		auto num_nodes_per_move = chesslib::perft::perft_divide(*board, depth);
-		for (const auto& [move, num_nodes] : num_nodes_per_move) 
+		if (stats) 
 		{
-			auto [c1, c2] = chesslib::basic_board::get_chars(move.GetFrom());
-			auto [c3, c4] = chesslib::basic_board::get_chars(move.GetTo());
-			total += num_nodes;
-			
-			std::cout << "\t" << c1 << c2 << "-" << c3 << c4 << "\t" << num_nodes << std::endl;
 
-			if (log.is_open()) 
-				log << "\t" << c1 << c2 << "-" << c3 << c4 << "\t" << num_nodes << std::endl;
 		}
-
-		std::cout << "\t-------------\n";
-		std::cout << "\tSum\t" << total << std::endl;
-
-		if (log.is_open()) 
+		else 
 		{
-			log << "\t---------\n";
-			log << "\tSum\t" << total << std::endl;
+			auto num_nodes_per_move = chesslib::perft::perft_divide(*board, depth);
+			for (const auto& [move, num_nodes] : num_nodes_per_move)
+			{
+				auto [c1, c2] = chesslib::basic_board::get_chars(move.GetFrom());
+				auto [c3, c4] = chesslib::basic_board::get_chars(move.GetTo());
+				total += num_nodes;
+
+				std::cout << "\t" << c1 << c2 << "-" << c3 << c4 << "\t" << num_nodes << std::endl;
+
+				if (log.is_open())
+					log << "\t" << c1 << c2 << "-" << c3 << c4 << "\t" << num_nodes << std::endl;
+			}
+
+			std::cout << "\t-------------\n";
+			std::cout << "\tSum\t" << total << std::endl;
+
+			if (log.is_open())
+			{
+				log << "\t---------\n";
+				log << "\tSum\t" << total << std::endl;
+			}
 		}
 	}
 	else 
 	{
-		total = chesslib::perft::perft(*board, depth);
-		std::cout << "Number of nodes: " << total << std::endl;
+		if (stats) 
+		{
+			auto stats = chesslib::perft::perft_statistics(*board, depth);
+			std::cout << *stats << std::endl;
+			if(log.is_open())
+				log << *stats << std::endl;
+		}
+		else 
+		{
+			total = chesslib::perft::perft(*board, depth);
+			std::cout << "Number of nodes: " << total << std::endl;
 
-		if (log.is_open())
-			log << "Number of nodes: " << total << "\n";
+			if (log.is_open())
+				log << "Number of nodes: " << total << "\n";
+		}
 	}
 	return total;
 }

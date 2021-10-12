@@ -112,6 +112,14 @@ namespace chesslib::basic_board
 		return moves;
 	}
 
+	void BasicBoard::ComputeChecksAndPins() const 
+	{
+		if (_active_color == color::White) 
+			ComputeChecksAndPins<color::Black>(GetKingPosition<color::White>());
+		else
+			ComputeChecksAndPins<color::White>(GetKingPosition<color::Black>());
+	}
+
 	template<Color Clr>
 	void BasicBoard::MakeMoveImplementation(const Move& move)
 	{

@@ -1,6 +1,6 @@
 #include "BoardBase.hpp"
 
-#include <ChessLib/Chess/Utility.hpp>
+#include <ChessLib/Utility/Utility.hpp>
 
 #include <stdexcept>
 
@@ -77,10 +77,6 @@ namespace chesslib
 			throw std::logic_error("Fen parse error - invalid full move clock.");
 		_fullmove_clock = static_cast<uint16_t>(f.value());
 	}
-
-	const BoardBase::PinMap& BoardBase::GetPins() const { return _pins; }
-
-	const BoardBase::CheckList& BoardBase::GetChecks() const { return _checks; }
 
 	Direction BoardBase::GetPinDirection(Square piece_loc) const 
 	{
