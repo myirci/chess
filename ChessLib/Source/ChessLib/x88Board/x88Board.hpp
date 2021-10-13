@@ -19,7 +19,7 @@ namespace chesslib::x88board
 		const BoardArray& GetBoard() const;
 		BoardArray& GetBoard();
 
-		std::vector<Move> GenerateMoves() const;
+		MoveList GenerateMoves() const;
 
 	protected:
 		

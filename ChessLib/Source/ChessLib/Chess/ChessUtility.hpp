@@ -178,7 +178,6 @@ namespace chesslib::utility::chess
 		return ss.str();
 	}	
 
-
 	template<typename Board>
 	std::string to_string(const Move& move) 
 	{

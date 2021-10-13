@@ -9,9 +9,9 @@ namespace chesslib::x88board
 
 	x88Board::BoardArray& x88Board::GetBoard() { return board; }
 	
-	std::vector<Move> x88Board::GenerateMoves() const 
+	MoveList x88Board::GenerateMoves() const 
 	{
-		std::vector<Move> moves;
+		MoveList moves;
 		return moves;
 	}
 
