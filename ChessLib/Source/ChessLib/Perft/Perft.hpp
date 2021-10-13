@@ -175,8 +175,17 @@ namespace chesslib::perft
             {
                 if (checks.empty())
                     stat.num_stale_mates[depth]++;
-                else
+                else 
+                {
                     stat.num_check_mates[depth]++;
+                    /*
+                    if (depth == 0) 
+                    {
+                        auto fen_str = utility::chess::board_to_fen(board);
+                        std::cout << "\"" << fen_str << "\" " << utility::chess::to_string<Board>(move_stack) << std::endl;
+                    }*/
+                }
+                    
             }
 
             if (depth > 0)
@@ -201,24 +210,22 @@ namespace chesslib::perft
     }
 
     template <typename Board>
-    std::vector<std::pair<Move, std::unique_ptr<Stats>>> perft_divide_statistics(Board& board, int depth)
+    std::vector<std::pair<std::optional<Move>, std::unique_ptr<Stats>>> perft_divide_statistics(Board& board, int depth)
     {
-        std::vector<std::unique_ptr<Stats>> perft_results;
+        std::vector<std::pair<std::optional<Move>, std::unique_ptr<Stats>>> perft_results;
         
-        /*
-        if(depth == 0)
-            perft_results.emplace_back(mv, perft_statistics(board, 0));
+        if (depth == 0) 
+            perft_results.emplace_back(std::nullopt, perft_statistics(board, 0));
         else
         {
             auto moves = board.GenerateMoves();
-            for (auto const& mv : moves)
+            for (auto const& move : moves)
             {
-                board.MakeMove(mv);
-                perft_results.emplace_back(mv, perft_statistics(board, depth - 1));
+                board.MakeMove(move);
+                perft_results.emplace_back(move, perft_statistics(board, depth - 1));
                 board.UnMakeMove();
             }
         }
-        */
         return perft_results;
     }
 }

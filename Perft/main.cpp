@@ -278,21 +278,33 @@ uint64_t perft_for_basic_board(std::string_view fen, int depth, bool divide, boo
 	{
 		if (stats) 
 		{
+			auto res = chesslib::perft::perft_divide_statistics(*board, depth);
+			for (const auto& p : res) 
+			{
+				if (p.first.has_value()) 
+				{
+					auto mv_str = chesslib::utility::chess::to_string<chesslib::basic_board::BasicBoard>(p.first.value());
+					std::cout << mv_str << std::endl;
+					if (log.is_open())
+						log << mv_str << std::endl;
 
+					std::cout << *p.second << "\n\n";
+					if (log.is_open())
+						log << *p.second << "\n\n";
+				}
+			}
 		}
 		else 
 		{
 			auto num_nodes_per_move = chesslib::perft::perft_divide(*board, depth);
 			for (const auto& [move, num_nodes] : num_nodes_per_move)
 			{
-				auto [c1, c2] = chesslib::basic_board::get_chars(move.GetFrom());
-				auto [c3, c4] = chesslib::basic_board::get_chars(move.GetTo());
 				total += num_nodes;
+				auto mv_str = chesslib::utility::chess::to_string<chesslib::basic_board::BasicBoard>(move);
 
-				std::cout << "\t" << c1 << c2 << "-" << c3 << c4 << "\t" << num_nodes << std::endl;
-
+				std::cout << "\t" << mv_str << "\t" << num_nodes << std::endl;
 				if (log.is_open())
-					log << "\t" << c1 << c2 << "-" << c3 << c4 << "\t" << num_nodes << std::endl;
+					log << "\t" << mv_str << "\t" << num_nodes << std::endl;
 			}
 
 			std::cout << "\t-------------\n";
