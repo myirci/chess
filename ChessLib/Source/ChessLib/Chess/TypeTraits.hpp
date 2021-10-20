@@ -1,12 +1,12 @@
 #pragma once
 
-#include <ChessLib/BasicBoard/BasicBoard.hpp>
-#include <ChessLib/BasicBoard/Square.hpp>
+#include <ChessLib/Board/BasicBoard/BasicBoard.hpp>
+#include <ChessLib/Board/BasicBoard/Square.hpp>
 
-#include <ChessLib/X88Board/x88Board.hpp>
-#include <ChessLib/X88Board/Square.hpp>
+#include <ChessLib/Board/X88Board/x88Board.hpp>
+#include <ChessLib/Board/X88Board/Square.hpp>
 
-#include <ChessLib/ObjBoard/ObjBoard.hpp>
+#include <ChessLib/Board/ObjBoard/ObjBoard.hpp>
 
 namespace chesslib::traits 
 {

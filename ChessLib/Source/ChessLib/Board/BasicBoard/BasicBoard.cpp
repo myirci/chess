@@ -1,4 +1,4 @@
-#include <ChessLib/BasicBoard/BasicBoard.hpp>
+#include <ChessLib/Board/BasicBoard/BasicBoard.hpp>
 #include <ChessLib/Chess/ChessUtility.hpp>
 
 #include <stdexcept>
@@ -317,8 +317,7 @@ namespace chesslib::basic_board
 		using ctraits = traits::color_traits<Attacker>;
 		for (Direction dir : direction::KnightJumps) 
 		{
-			if (Square next{ king_pos + dir };
-				IsInside(king_pos, next) && board[next] == ctraits::Knight)
+			if (Square next{ king_pos + dir }; board[next] == ctraits::Knight && IsInside(king_pos, next))
 				_checks.emplace_back(next, direction::None, 0);
 		}
 	}

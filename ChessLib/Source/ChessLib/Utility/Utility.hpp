@@ -3,6 +3,7 @@
 #include <string_view>
 #include <regex>
 #include <optional>
+#include <vector>
 
 #include <ChessLib/Chess/Definitions.hpp>
 

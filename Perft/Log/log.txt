@@ -1,0 +1,19 @@
+Position: 1
+rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+Depth: 5
+Number of nodes: 4865609
+Perft ended: 240ms milliseconds.
+
+Position: 1
+rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+Depth: 6
+Number of nodes: 119060324
+Perft ended: 5839ms milliseconds.
+
+Position: 1
+rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+Depth: 7
+Number of nodes: 3195901860
+Perft ended: 172543ms milliseconds.
+----------------------------------------------------------------------------------
+

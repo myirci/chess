@@ -1,14 +1,14 @@
 #pragma once
 
 #include <ChessLib/Chess/Definitions.hpp>
-#include <ChessLib/ObjBoard/PieceObj.hpp>
+#include <ChessLib/Board/ObjBoard/PieceObj.hpp>
 
 #include <memory>
 #include <array>
 
 namespace chesslib::objboard
 {
-	constexpr Index N{ 0 }, NE{ 1 }, E{ 2 }, SE{ 3 }, S{ 4 }, SW{ 5 }, W{ 6 }, NW{ 7 };
+	constexpr Direction N{ 0 }, NE{ 1 }, E{ 2 }, SE{ 3 }, S{ 4 }, SW{ 5 }, W{ 6 }, NW{ 7 };
 
 	struct SquareObj
 	{

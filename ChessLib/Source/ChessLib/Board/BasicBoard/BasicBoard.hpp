@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ChessLib/Chess/BoardBase.hpp>
+#include <ChessLib/Board/MailboxBoardBase.hpp>
 #include <ChessLib/Chess/Move.hpp>
 
 #include <array>
@@ -12,7 +12,7 @@ namespace chesslib::basic_board
 {
 	// On dimensional array of 64 squares to represent 8x8 board board.
 	// Not suitable for move generation: off-board piece detection is expensive to compute.
-	class BasicBoard : public BoardBaseWithPieces
+	class BasicBoard : public MailboxBoardBase
 	{
 	public:
 

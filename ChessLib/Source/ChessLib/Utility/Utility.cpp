@@ -105,4 +105,3 @@ namespace chesslib::utility
 		}
 	}
 }
-

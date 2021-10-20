@@ -82,18 +82,11 @@ namespace chesslib::objboard
 	}
 	{ }
 
-	const std::array<SquareObj, 64>& ObjBoard::GetBoard() const { return _squares; }
-	std::array<SquareObj, 64>& ObjBoard::GetBoard() { return _squares; }
+	
 
-	const ObjBoard::PieceMap& ObjBoard::GetWhitePieces() const { return _white_pieces;  }
-	ObjBoard::PieceMap& ObjBoard::GetWhitePieces() { return _white_pieces; }
-
-	const ObjBoard::PieceMap& ObjBoard::GetBlackPieces() const { return _black_pieces; }
-	ObjBoard::PieceMap& ObjBoard::GetBlackPieces() { return _black_pieces; }
-
-	std::vector<Move> ObjBoard::GenerateMoves() const 
+	MoveList ObjBoard::GenerateMoves() const 
 	{
-		std::vector<Move> moves;
+		MoveList moves;
 		return moves;
 	}
 

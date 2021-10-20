@@ -3,7 +3,7 @@
 #include "BasicAndObjectBoardTestBase.hpp"
 
 #include <ChessLib/Chess/Fen.hpp>
-#include <ChessLib/ObjBoard/ObjBoard.hpp>
+#include <ChessLib/Board/ObjBoard/ObjBoard.hpp>
 #include <ChessLib/Chess/ChessUtility.hpp>
 
 #include <bitset>
@@ -22,7 +22,7 @@ protected:
 
     bool check_objboard_pieces(
         const std::array<Piece, 6>& pieceArray, 
-        const BoardBaseWithPieces::PieceMap& pieces1,
+        const MailboxBoardBase::PieceMap& pieces1,
         const objboard::ObjBoard::PieceMap& pieces2)
     {
         for (Piece p : pieceArray)

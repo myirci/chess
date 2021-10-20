@@ -3,7 +3,7 @@
 #include "BasicAndObjectBoardTestBase.hpp"
 
 #include <ChessLib/Chess/Fen.hpp>
-#include <ChessLib/BasicBoard/BasicBoard.hpp>
+#include <ChessLib/Board/BasicBoard/BasicBoard.hpp>
 #include <ChessLib/Chess/ChessUtility.hpp>
 
 #include <bitset>

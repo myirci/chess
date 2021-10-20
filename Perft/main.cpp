@@ -6,14 +6,15 @@
 #include <ChessLib/Chess/Fen.hpp>
 #include <ChessLib/Chess/Move.hpp>
 #include <ChessLib/Utility/Utility.hpp>
+#include <ChessLib/Utility/Timer.hpp>
 #include <ChessLib/Perft/Perft.hpp>
 
-#include <ChessLib/BasicBoard/BasicBoard.hpp>
-#include <ChessLib/BasicBoard/Square.hpp>
+#include <ChessLib/Board/BasicBoard/BasicBoard.hpp>
+#include <ChessLib/Board/BasicBoard/Square.hpp>
 
-#include <ChessLib/ObjBoard/ObjBoard.hpp>
-#include <ChessLib/X88Board/x88Board.hpp>
-#include <ChessLib/Bitboard/Bitboard.hpp>
+#include <ChessLib/Board/ObjBoard/ObjBoard.hpp>
+#include <ChessLib/Board/X88Board/x88Board.hpp>
+#include <ChessLib/Board/Bitboard/Bitboard.hpp>
 
 namespace arguments
 {
@@ -28,11 +29,11 @@ namespace arguments
 	constexpr std::string_view epdfile_argument_specifier{ "epdfile" };
 	constexpr std::string_view directory_path_argument_specifier{ "directory" };
 	constexpr std::string_view read_files_recursively_argument_specifier{ "recursive" };
-
 	constexpr std::string_view basicboard_argument_specifier{ "basicboard" };
 	constexpr std::string_view x88board_argument_specifier{ "x88board" };
 	constexpr std::string_view objboard_argument_specifier{ "objboard" };
 	constexpr std::string_view bitboard_argument_specifier{ "bitboard" };
+	constexpr std::string_view time_argument_specifier{ "time" };
 }
 
 enum class board_type { basic, x88, obj, bitboard };
@@ -45,14 +46,18 @@ std::vector<std::pair<std::string, uint64_t>> get_positions_from_epd_file(std::s
 
 void execute_perft(
 	board_type board, 
-	std::string_view fen, int depth, bool divide, bool stats, 
+	std::string_view fen, 
+	int depth, 
+	bool divide, 
+	bool stats,
+	bool measeure_time,
 	std::ofstream& log, 
 	std::optional<uint64_t> expected_result = std::nullopt);
 
-uint64_t perft_for_basic_board(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log);
-uint64_t perft_for_object_board(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log);
-uint64_t perft_for_x88_board(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log);
-uint64_t perft_for_bitboard(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log);
+uint64_t perft_for_basic_board(std::string_view fen, int depth, bool divide, bool stats, bool measure_time, std::ofstream& log);
+uint64_t perft_for_object_board(std::string_view fen, int depth, bool divide, bool stats, bool measure_time, std::ofstream& log);
+uint64_t perft_for_x88_board(std::string_view fen, int depth, bool divide, bool stats, bool measure_time, std::ofstream& log);
+uint64_t perft_for_bitboard(std::string_view fen, int depth, bool divide, bool stats, bool measure_time, std::ofstream& log);
 
 int main(int argc, char* argv[]) 
 {
@@ -60,6 +65,7 @@ int main(int argc, char* argv[])
 	int depth{ 1 };
 	bool divide{ false };
 	bool stats{ false };
+	bool measure_time{ false };
 	board_type board{ board_type::basic };
 	std::ofstream log;
 	std::string_view epdfile_path{ "" };
@@ -162,6 +168,8 @@ int main(int argc, char* argv[])
 				read_files_recursively = true;
 			else if (arg == arguments::stat_argument_specifier)
 				stats = true;
+			else if (arg == arguments::time_argument_specifier)
+				measure_time = true;
 			else if (arg == arguments::about_argument_specifier)
 				print_about();
 			else if (arg == arguments::help_argument_specifier)
@@ -186,13 +194,13 @@ int main(int argc, char* argv[])
 		{
 			auto fen_positions = get_positions_from_epd_file(fpath, depth);
 			for (const auto& [fen, expected_perft_result] : fen_positions) 
-				execute_perft(board, fen, depth, divide, stats, log, expected_perft_result);
+				execute_perft(board, fen, depth, divide, stats, measure_time, log, expected_perft_result);
 		}
 	}
 	else 
 	{
 		// validate depth
-		if (depth > 10)
+		if (depth > 8)
 		{
 			std::cout << "Computing perft will take a long time, would you like to continue? (press y for yes, n for no)" << std::endl;
 			char response{ 'n' };
@@ -212,7 +220,7 @@ int main(int argc, char* argv[])
 			exit(2);
 		}
 
-		execute_perft(board, fen, depth, divide, stats, log);
+		execute_perft(board, fen, depth, divide, stats, measure_time, log);
 	}
 
 	if (log.is_open())
@@ -223,7 +231,11 @@ int main(int argc, char* argv[])
 
 void execute_perft(
 	board_type board, 
-	std::string_view fen, int depth, bool divide, bool stats, 
+	std::string_view fen, 
+	int depth, 
+	bool divide, 
+	bool stats, 
+	bool measure_time,
 	std::ofstream& log, 
 	std::optional<uint64_t> expected_result /* = std::nullopt*/)
 {
@@ -244,7 +256,7 @@ void execute_perft(
 	// execute perft
 	uint64_t perft_res{ 0 };
 	if (board == board_type::basic)
-		perft_res = perft_for_basic_board(fen, depth, divide, stats, log);
+		perft_res = perft_for_basic_board(fen, depth, divide, stats, measure_time, log);
 	else
 	{
 		std::cout << "Perft has not been implemented for the other board types yet." << std::endl;
@@ -268,11 +280,18 @@ void execute_perft(
 	}
 }
 
-uint64_t perft_for_basic_board(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log)
+uint64_t perft_for_basic_board(std::string_view fen, int depth, bool divide, bool stats, bool measure_time, std::ofstream& log)
 {
 	auto board = chesslib::basic_board::make_unique_board(fen);
-
 	uint64_t total{ 0 };
+
+	using Timer = chesslib::utility::time::Timer<std::chrono::milliseconds>;
+	std::optional<Timer> timer{std::nullopt};
+	if (measure_time) 
+	{
+		timer = Timer{};
+		timer.value().Start("Pertf started:");
+	}
 
 	if (divide) 
 	{
@@ -335,20 +354,29 @@ uint64_t perft_for_basic_board(std::string_view fen, int depth, bool divide, boo
 				log << "Number of nodes: " << total << "\n";
 		}
 	}
+
+	if (timer.has_value())
+	{
+		timer.value().End("Perft ended:");
+		std::cout << timer.value();
+		if (log.is_open())
+			log << "\n" << timer.value();
+	}
+
 	return total;
 }
 
-uint64_t perft_for_object_board(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log)
+uint64_t perft_for_object_board(std::string_view fen, int depth, bool divide, bool stats, bool measure_time, std::ofstream& log)
 {
 	return 0;
 }
 
-uint64_t perft_for_x88_board(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log)
+uint64_t perft_for_x88_board(std::string_view fen, int depth, bool divide, bool stats, bool measure_time, std::ofstream& log)
 {
 	return 0;
 }
 
-uint64_t perft_for_bitboard(std::string_view fen, int depth, bool divide, bool stats, std::ofstream& log)
+uint64_t perft_for_bitboard(std::string_view fen, int depth, bool divide, bool stats, bool measure_time, std::ofstream& log)
 {
 	return 0;
 }
@@ -361,6 +389,7 @@ void print_usage()
 		<< "[-" << arguments::depth_argument_specifier << " depth_value{1}]" << "\n"
 		<< "[-" << arguments::divide_argument_specifier << "]" << "\n"
 		<< "[-" << arguments::stat_argument_specifier << "]" << "\n"
+		<< "[-" << arguments::time_argument_specifier << "]" << "\n"
 		<< "[-" << arguments::board_argument_specifier << " board_representation{"
 		<< arguments::basicboard_argument_specifier << "}("
 		<< arguments::basicboard_argument_specifier << ", "

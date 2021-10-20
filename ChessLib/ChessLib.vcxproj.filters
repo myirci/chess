@@ -4,18 +4,6 @@
     <Filter Include="Chess">
       <UniqueIdentifier>{77329483-c3da-499e-9ee4-18d620c51695}</UniqueIdentifier>
     </Filter>
-    <Filter Include="BasicBoard">
-      <UniqueIdentifier>{b5acf601-0f88-4711-b41e-bbd6b9e3a145}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="X88Board">
-      <UniqueIdentifier>{ed4dd18e-b3c8-4e65-af2b-aa184db79eef}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="BitBoard">
-      <UniqueIdentifier>{617835eb-ccac-4261-9ae4-c0b496f0f126}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ObjBoard">
-      <UniqueIdentifier>{9428e8db-0154-4876-aaea-3850d14c10cb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine">
       <UniqueIdentifier>{77ff016f-7854-4dfd-ab1d-bacfbc99a61c}</UniqueIdentifier>
     </Filter>
@@ -25,6 +13,21 @@
     <Filter Include="Utility">
       <UniqueIdentifier>{9df33fd3-962f-482e-bc2f-e6962d5eb121}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Board">
+      <UniqueIdentifier>{d5906a71-65c2-451b-ada0-266e44e26e9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Board\ObjBoard">
+      <UniqueIdentifier>{9428e8db-0154-4876-aaea-3850d14c10cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Board\BitBoard">
+      <UniqueIdentifier>{617835eb-ccac-4261-9ae4-c0b496f0f126}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Board\BasicBoard">
+      <UniqueIdentifier>{b5acf601-0f88-4711-b41e-bbd6b9e3a145}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Board\X88Board">
+      <UniqueIdentifier>{ed4dd18e-b3c8-4e65-af2b-aa184db79eef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ChessLib\Chess\Fen.cpp">
@@ -33,26 +36,26 @@
     <ClCompile Include="Source\ChessLib\Chess\Move.cpp">
       <Filter>Chess</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ChessLib\BasicBoard\BasicBoard.cpp">
-      <Filter>BasicBoard</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ChessLib\x88Board\x88Board.cpp">
-      <Filter>X88Board</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ChessLib\Chess\BoardBase.cpp">
-      <Filter>Chess</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ChessLib\ObjBoard\ObjBoard.cpp">
-      <Filter>ObjBoard</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ChessLib\ObjBoard\PieceObj.cpp">
-      <Filter>ObjBoard</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ChessLib\Bitboard\BitBoard.cpp">
-      <Filter>BitBoard</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ChessLib\Utility\Utility.cpp">
       <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ChessLib\Board\BasicBoard\BasicBoard.cpp">
+      <Filter>Board\BasicBoard</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ChessLib\Board\Bitboard\BitBoard.cpp">
+      <Filter>Board\BitBoard</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ChessLib\Board\ObjBoard\ObjBoard.cpp">
+      <Filter>Board\ObjBoard</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ChessLib\Board\ObjBoard\PieceObj.cpp">
+      <Filter>Board\ObjBoard</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ChessLib\Board\X88Board\x88Board.cpp">
+      <Filter>Board\X88Board</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ChessLib\Chess\ChessUtility.cpp">
+      <Filter>Chess</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -65,38 +68,11 @@
     <ClInclude Include="Source\ChessLib\Chess\Move.hpp">
       <Filter>Chess</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ChessLib\BasicBoard\BasicBoard.hpp">
-      <Filter>BasicBoard</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ChessLib\BasicBoard\Square.hpp">
-      <Filter>BasicBoard</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ChessLib\X88Board\Square.hpp">
-      <Filter>X88Board</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ChessLib\x88Board\x88Board.hpp">
-      <Filter>X88Board</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ChessLib\Chess\BoardBase.hpp">
-      <Filter>Chess</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ChessLib\Chess\ChessUtility.hpp">
       <Filter>Chess</Filter>
     </ClInclude>
     <ClInclude Include="Source\ChessLib\Chess\TypeTraits.hpp">
       <Filter>Chess</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ChessLib\ObjBoard\PieceObj.hpp">
-      <Filter>ObjBoard</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ChessLib\ObjBoard\ObjBoard.hpp">
-      <Filter>ObjBoard</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ChessLib\ObjBoard\SquareObj.hpp">
-      <Filter>ObjBoard</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ChessLib\Bitboard\Bitboard.hpp">
-      <Filter>BitBoard</Filter>
     </ClInclude>
     <ClInclude Include="Source\ChessLib\Perft\Perft.hpp">
       <Filter>Perft</Filter>
@@ -105,6 +81,39 @@
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="Source\ChessLib\Utility\IterableStack.hpp">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Board\BasicBoard\BasicBoard.hpp">
+      <Filter>Board\BasicBoard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Board\BasicBoard\Square.hpp">
+      <Filter>Board\BasicBoard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Board\Bitboard\Bitboard.hpp">
+      <Filter>Board\BitBoard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Board\ObjBoard\ObjBoard.hpp">
+      <Filter>Board\ObjBoard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Board\ObjBoard\PieceObj.hpp">
+      <Filter>Board\ObjBoard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Board\ObjBoard\SquareObj.hpp">
+      <Filter>Board\ObjBoard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Board\X88Board\Square.hpp">
+      <Filter>Board\X88Board</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Board\X88Board\x88Board.hpp">
+      <Filter>Board\X88Board</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Board\BoardBase.hpp">
+      <Filter>Board</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Board\MailboxBoardBase.hpp">
+      <Filter>Board</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Utility\Timer.hpp">
       <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>

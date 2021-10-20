@@ -1,7 +1,7 @@
 #include <pch.h>
 
-#include <ChessLib/X88Board/Square.hpp>
-#include <ChessLib/BasicBoard/Square.hpp>
+#include <ChessLib/Board/X88Board/Square.hpp>
+#include <ChessLib/Board/BasicBoard/Square.hpp>
 
 using namespace chesslib;
 TEST(SquareTest_Basic_Board, square_file_rank)

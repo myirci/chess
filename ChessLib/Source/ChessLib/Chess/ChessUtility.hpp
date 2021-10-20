@@ -3,20 +3,58 @@
 #include <string>
 #include <sstream>
 
+#include <ChessLib/Utility/Utility.hpp>
 #include <ChessLib/Chess/Fen.hpp>
 #include <ChessLib/Chess/TypeTraits.hpp>
-#include <ChessLib/Chess/BoardBase.hpp>
+#include <ChessLib/Board/BoardBase.hpp>
 
 namespace chesslib::utility::chess 
 {
-	// GetBoard()
-	// GetWhitePieces()
-	// GetBlackPieces()
-	// SetActiveColor()
-	// SetCastlingRights()
-	// SetEnPassantSquare()
-	// SetHalfMoveClock()
-	// SetFullMoveClock()
+	namespace fenhelpers
+	{
+		Color GetColorFromChar(char c);
+
+		template<typename Board>
+		void SetCastlingRights(Board& brd, std::string_view castling_availability)
+		{
+			if (castling_availability != "-")
+			{
+				for (char c : castling_availability)
+				{
+					switch (c)
+					{
+					case charset::WhiteKing: brd.SetCastling(Castling::WHITE_KS, true); break;
+					case charset::WhiteQueen: brd.SetCastling(Castling::WHITE_QS, true); break;
+					case charset::BlackKing: brd.SetCastling(Castling::BLACK_KS, true); break;
+					case charset::BlackQueen: brd.SetCastling(Castling::BLACK_QS, true); break;
+					default:
+						throw std::logic_error("Fen parse error - invalid castling rights.");
+					}
+				}
+			}
+		}
+
+		template<typename Board>
+		void SetHalfMoveClock(Board& brd, std::string_view hmc)
+		{
+			auto h = utility::numeric::to_int(hmc);
+			if (!h.has_value())
+				throw std::logic_error("Fen parse error - invalid half move clock.");
+			brd.SetHalfMoveClock(static_cast<uint16_t>(h.value()));
+		}
+
+		template<typename Board>
+		void SetFullMoveClock(Board& brd, std::string_view fmc)
+		{
+			auto f = utility::numeric::to_int(fmc);
+			if (!f.has_value())
+				throw std::logic_error("Fen parse error - invalid full move clock.");
+			brd.SetFullMoveClock(static_cast<uint16_t>(f.value()));
+		}
+	}
+
+	// GetBoard(), GetWhitePieces(), GetBlackPieces(), SetActiveColor(), SetEnPassantSquare()
+	// SetHalfMoveClock(), SetFullMoveClock()
 	template<typename Board>
 	void set_board(Board& brd, std::string_view fen) 
 	{
@@ -73,27 +111,22 @@ namespace chesslib::utility::chess
 			}
 		}
 
-		brd.SetActiveColor(flattened_fields[8][0]);
+		brd.SetActiveColor(fenhelpers::GetColorFromChar(flattened_fields[8][0]));
 		
-		brd.SetCastlingRights(flattened_fields[9]);
+		fenhelpers::SetCastlingRights(brd, flattened_fields[9]);
 
 		if (flattened_fields[10] != "-") 
 			brd.SetEnPassantSquare(traits::board_traits<Board>::GetSquareFromChars(flattened_fields[10][0], flattened_fields[10][1]));
 			
 		if (flattened_fields.size() == 13)
 		{
-			brd.SetHalfMoveClock(flattened_fields[11]);
-			brd.SetFullMoveClock(flattened_fields[12]);
+			fenhelpers::SetHalfMoveClock(brd, flattened_fields[11]);
+			fenhelpers::SetFullMoveClock(brd, flattened_fields[12]);
 		}
 	}
 
-	// GetBoard()
-	// GetActiveColor()
-	// IsCastlingAvailable()
-	// QueryCastling(Castling)
-	// GetEnPassantSquare()
-	// GetHalfMoveClock()
-	// GetFullMoveClock()
+	// GetBoard(), GetActiveColor(), IsCastlingAvailable(), QueryCastling(Castling)
+	// GetEnPassantSquare(), GetHalfMoveClock(), GetFullMoveClock()
 	template<typename Board>
 	std::string board_to_fen(Board const& brd)
 	{
@@ -199,4 +232,6 @@ namespace chesslib::utility::chess
 			ss << ", " << to_string<Board>(first->move);
 		return ss.str();
 	}
+
+	
 }

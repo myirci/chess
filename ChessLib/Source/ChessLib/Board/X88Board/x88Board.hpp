@@ -1,6 +1,6 @@
 #pragma once
 
-#include<ChessLib/Chess/BoardBase.hpp>
+#include <ChessLib/Board/MailboxBoardBase.hpp>
 #include <ChessLib/Chess/Move.hpp>
 
 #include <array>
@@ -10,7 +10,7 @@
 
 namespace chesslib::x88board
 {
-	class x88Board : public BoardBaseWithPieces
+	class x88Board : public MailboxBoardBase
 	{
 	public:
 		constexpr static int BOARDSIZE = 128;

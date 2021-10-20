@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ChessLib/Chess/BoardBase.hpp>
+#include <ChessLib/Board/BoardBase.hpp>
 
 #include <array>
 

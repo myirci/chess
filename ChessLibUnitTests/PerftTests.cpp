@@ -3,7 +3,7 @@
 #include <ChessLib/Chess/Fen.hpp>
 #include <ChessLib/Perft/Perft.hpp>
 #include <ChessLib/Chess/Definitions.hpp>
-#include <ChessLib/BasicBoard/BasicBoard.hpp>
+#include <ChessLib/Board/BasicBoard/BasicBoard.hpp>
 
 using namespace chesslib;
 
