@@ -18,46 +18,11 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Source\ChessLib\Board\BasicBoard\BasicBoard.cpp" />
-    <ClCompile Include="Source\ChessLib\Board\Bitboard\BitBoard.cpp" />
-    <ClCompile Include="Source\ChessLib\Board\ObjBoard\ObjBoard.cpp" />
-    <ClCompile Include="Source\ChessLib\Board\ObjBoard\PieceObj.cpp" />
-    <ClCompile Include="Source\ChessLib\Board\X88Board\x88Board.cpp" />
-    <ClCompile Include="Source\ChessLib\Chess\ChessUtility.cpp" />
-    <ClCompile Include="Source\ChessLib\Chess\Fen.cpp" />
-    <ClCompile Include="Source\ChessLib\Chess\Move.cpp" />
-    <ClCompile Include="Source\ChessLib\MoveGenerator\PrecomputeMoves.cpp" />
-    <ClCompile Include="Source\ChessLib\Utility\Utility.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Source\ChessLib\Board\BasicBoard\BasicBoard.hpp" />
-    <ClInclude Include="Source\ChessLib\Board\BasicBoard\Square.hpp" />
-    <ClInclude Include="Source\ChessLib\Board\Bitboard\Bitboard.hpp" />
-    <ClInclude Include="Source\ChessLib\Board\BoardBase.hpp" />
-    <ClInclude Include="Source\ChessLib\Board\MailboxBoardBase.hpp" />
-    <ClInclude Include="Source\ChessLib\Board\ObjBoard\ObjBoard.hpp" />
-    <ClInclude Include="Source\ChessLib\Board\ObjBoard\PieceObj.hpp" />
-    <ClInclude Include="Source\ChessLib\Board\ObjBoard\SquareObj.hpp" />
-    <ClInclude Include="Source\ChessLib\Board\X88Board\Square.hpp" />
-    <ClInclude Include="Source\ChessLib\Board\X88Board\x88Board.hpp" />
-    <ClInclude Include="Source\ChessLib\Chess\ChessUtility.hpp" />
-    <ClInclude Include="Source\ChessLib\Chess\Definitions.hpp" />
-    <ClInclude Include="Source\ChessLib\Chess\Fen.hpp" />
-    <ClInclude Include="Source\ChessLib\Chess\LightMove.hpp" />
-    <ClInclude Include="Source\ChessLib\Chess\Move.hpp" />
-    <ClInclude Include="Source\ChessLib\Chess\TypeTraits.hpp" />
-    <ClInclude Include="Source\ChessLib\MoveGenerator\PrecomputeMoves.hpp" />
-    <ClInclude Include="Source\ChessLib\Perft\Perft.hpp" />
-    <ClInclude Include="Source\ChessLib\Utility\IterableStack.hpp" />
-    <ClInclude Include="Source\ChessLib\Utility\Timer.hpp" />
-    <ClInclude Include="Source\ChessLib\Utility\Utility.hpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{0c1df93a-a8a3-4b0e-934b-241f1c3c40f7}</ProjectGuid>
-    <RootNamespace>ChessLib</RootNamespace>
+    <ProjectGuid>{962c10b5-4153-4408-94d8-458718afb8eb}</ProjectGuid>
+    <RootNamespace>Test</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -75,13 +40,13 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -152,8 +117,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\myirci\Documents\dev\github\chess\ChessLib\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>C:\Users\myirci\Documents\dev\github\chess\ChessLib\Source</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -169,7 +133,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\myirci\Documents\dev\github\chess\ChessLib\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\myirci\Documents\dev\github\chess\ChessLib\Source</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -178,6 +142,14 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ChessLib\ChessLib.vcxproj">
+      <Project>{0c1df93a-a8a3-4b0e-934b-241f1c3c40f7}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

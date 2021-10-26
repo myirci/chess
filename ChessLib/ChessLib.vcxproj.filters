@@ -125,5 +125,8 @@
     <ClInclude Include="Source\ChessLib\MoveGenerator\PrecomputeMoves.hpp">
       <Filter>MoveGenerator</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ChessLib\Chess\LightMove.hpp">
+      <Filter>Chess</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
