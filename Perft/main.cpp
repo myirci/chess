@@ -290,7 +290,7 @@ uint64_t perft_for_basic_board(std::string_view fen, int depth, bool divide, boo
 	if (measure_time) 
 	{
 		timer = Timer{};
-		timer.value().Start("Pertf started:");
+		timer.value().Start("");
 	}
 
 	if (divide) 

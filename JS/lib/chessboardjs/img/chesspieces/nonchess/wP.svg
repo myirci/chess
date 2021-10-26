@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Layer_1"
+   style="enable-background:new 0 0 133.051 132.95"
+   space="preserve"
+   sodipodi:version="0.32"
+   viewBox="0 0 133.051 132.95"
+   version="1.1"
+   sodipodi:docname="bQ.svg"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs16" />
+  <sodipodi:namedview
+     id="base"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     pagecolor="#ffffff"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="4.3186967"
+     inkscape:cx="68.654973"
+     inkscape:cy="64.7186"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Layer_1" />
+  <path
+     id="path3"
+     fill="#ffff3e"
+     d="m 118.16724,67.114194 c 0,24.455733 -17.82445,46.209436 -41.933327,51.032736 C 52.006919,122.99327 27.024901,109.77388 17.55199,87.046149 8.0567322,64.258032 16.431427,37.240891 37.079642,23.657639 57.766966,10.04658 86.067575,13.135524 103.34771,30.806384 c 9.45775,9.664869 14.82113,22.815924 14.82113,36.307016"
+     style="stroke-width:0.7963" />
+  <path
+     id="path7"
+     fill="#ffe600"
+     d="m 65.876684,28.271193 c 23.93568,0 41.822386,20.905195 43.840036,43.597973 2.28982,-25.856404 -16.066187,-53.109507 -43.840036,-53.109507 -27.77385,0 -46.129858,27.253103 -43.840845,53.109507 C 24.056684,49.176388 41.944196,28.271193 65.87828,28.271193"
+     style="stroke-width:0.7963" />
+  <path
+     id="path9"
+     fill="#ffb600"
+     d="m 65.876684,108.59805 c -24.782489,0 -41.120046,-23.756588 -42.975681,-46.369918 -2.075915,25.599786 14.062113,56.488438 42.975681,56.488438 28.915163,0 45.052396,-30.887857 42.976476,-56.488438 -1.85164,22.614125 -18.192392,46.366738 -42.976476,46.366738"
+     style="stroke-width:0.7963" />
+  <path
+     id="path11"
+     fill="#494848"
+     d="m 13.582929,67.114194 c 0,2.087898 5.381737,1.053483 7.104882,1.053483 H 66.381895 C 63.465557,63.279231 60.547623,58.389992 57.632082,53.501546 54.959172,49.019875 52.286261,44.538999 49.612553,40.058123 46.926074,35.554206 45.118327,30.566451 42.47335,26.131654 42.1549,25.596968 40.540299,22.059936 39.824384,21.911368 c -2.249108,1.276732 -4.398451,2.727455 -6.426479,4.329925 -4.046479,3.199377 -7.602911,7.006534 -10.532817,11.243503 -5.996291,8.674151 -9.282159,19.096161 -9.282159,29.629398"
+     style="stroke-width:0.7963" />
+  <path
+     id="path13"
+     fill="#5e5d5d"
+     d="m 44.806262,29.47245 c -0.82446,-1.083673 -1.6154,-2.185619 -2.332912,-3.340796 -6.651549,4.852694 -12.117089,11.262572 -15.69028,18.671908 -1.857231,3.852441 -3.198076,7.94561 -4.006573,12.143651 -0.256996,1.330757 -1.37277,11.778984 -0.267371,11.220464 1.344836,-8.361125 4.751221,-16.358377 10.05075,-23.000243 2.451831,-3.073849 5.28756,-5.843412 8.42817,-8.218118 2.984976,-2.256328 6.981173,-3.237513 3.818216,-7.476866"
+     style="stroke-width:0.7963" />
+  <path
+     id="path15"
+     fill="#494848"
+     d="m 91.657623,21.912162 c -2.762301,4.145606 -4.185352,8.755982 -6.713803,12.995337 -2.913146,4.881294 -5.825493,9.761001 -8.737841,14.642295 -3.702487,6.206491 -7.404976,12.412186 -11.107465,18.618677 h 51.786946 c 2.72,0 0.24422,-10.180487 -0.19794,-12.189731 -3.13662,-14.205332 -12.323,-26.849506 -25.03309,-34.066578"
+     style="stroke-width:0.7963" />
+  <path
+     id="path17"
+     fill="#5e5d5d"
+     d="m 86.676542,29.47245 c 0.823663,-1.082879 1.613804,-2.185619 2.331315,-3.340796 6.65155,4.852694 12.117893,11.262572 15.690273,18.671908 1.85804,3.852441 3.19888,7.94561 4.00738,12.143651 0.25699,1.329167 1.37436,11.778984 0.26817,11.220464 C 107.62804,59.806552 104.22086,51.8093 98.922126,45.167434 96.468702,42.093585 93.632177,39.324022 90.491566,36.949316 87.504195,34.692988 83.509595,33.711803 86.674148,29.47245"
+     style="stroke-width:0.7963" />
+  <path
+     id="path19"
+     fill="#494848"
+     d="M 92.611379,111.94282 C 83.685979,97.15831 74.759782,82.373802 65.834383,67.587705 56.209829,81.940015 46.583679,96.292326 36.959125,110.64463 c 16.575399,10.94002 38.583615,11.45643 55.652254,1.295"
+     style="stroke-width:0.7963" />
+  <path
+     id="path21"
+     fill="#383838"
+     d="m 65.876684,118.71974 c 9.281361,0 18.481314,-2.51453 26.450562,-7.25203 -1.489295,-2.53041 -2.977793,-5.05925 -4.467887,-7.58888 -0.0399,-0.0667 -7.864694,2.7783 -8.766572,3.01744 -4.306667,1.13452 -8.761784,1.70496 -13.216103,1.70496 -8.169577,0 -16.292864,-1.94012 -23.561361,-5.65433 -1.628968,0.56011 -3.963474,5.7012 -5.001033,7.19324 8.430563,5.57726 18.438215,8.5804 28.562394,8.5804"
+     style="stroke-width:0.7963" />
+  <path
+     id="path5"
+     fill="#ff0000"
+     d="m 12.735323,67.114194 c 0,24.373901 17.486854,46.196726 41.377042,51.592046 24.057793,5.43266 49.325535,-6.8953 59.848775,-29.079616 C 124.53067,67.34936 117.74743,40.066067 98.142363,25.108362 78.50058,10.125234 50.236684,10.887141 31.418562,26.876879 19.663023,36.865101 12.735323,51.724291 12.735323,67.116578 m 1.69601,0 c 0,-24.516114 18.260234,-46.202285 42.531126,-50.44005 24.378638,-4.256037 48.996711,10.000936 57.354641,33.187087 8.38906,23.268777 -1.70718,49.84339 -23.316332,61.931425 C 69.32058,123.92281 41.285745,118.39321 25.747107,99.128625 18.454666,90.090602 14.42814,78.704092 14.42814,67.114988"
+     style="stroke-width:0.7963" />
+  <metadata
+     id="metadata13">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title>Architetto -- nucleare simbolo</dc:title>
+        <dc:date>2010-03-19T12:59:10</dc:date>
+        <dc:description>Drawing by Francesco 'Architetto' Rollandin. From OCAL 0.18 release.</dc:description>
+        <dc:source>http://openclipart.org/detail/32497/architetto----nucleare-simbolo-by-anonymous</dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Anonymous</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>abstract</rdf:li>
+            <rdf:li>clip art</rdf:li>
+            <rdf:li>clipart</rdf:li>
+            <rdf:li>nuclear</rdf:li>
+            <rdf:li>radioactivity</rdf:li>
+            <rdf:li>sign</rdf:li>
+            <rdf:li>symbol</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

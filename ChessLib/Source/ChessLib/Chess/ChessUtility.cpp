@@ -17,5 +17,4 @@ namespace chesslib::utility::chess
 			throw std::logic_error("Color char error.");
 		}
 	}
-
 }

@@ -11,18 +11,14 @@
 namespace chesslib::traits 
 {
 #pragma region BoardTraits
+
 	template<typename Board>
-	struct board_traits { };
-
-	template <>
-	struct board_traits<basic_board::BasicBoard>
+	struct board_traits
 	{
-		static constexpr bool IsObjBoard = false;
-
 		static constexpr Square TopToBottom(Square s) { return basic_board::top_to_bottom_order[s]; }
 
 		static constexpr Square BottomToTop(Square s) { return basic_board::bottom_to_top_order[s]; }
-		
+
 		static constexpr std::pair<char, char> ToCharPair(Square s) { return basic_board::get_chars(s); }
 
 		static constexpr Square GetSquareFromChars(char f, char r) { return basic_board::get_square_from_chars(f, r); }
@@ -31,27 +27,13 @@ namespace chesslib::traits
 	template <>
 	struct board_traits<x88board::x88Board>
 	{
-		static constexpr bool IsObjBoard = false;
-
 		static constexpr Square TopToBottom(Square s) { return x88board::top_to_bottom_order[s]; }
 
 		static constexpr Square BottomToTop(Square s) { return x88board::bottom_to_top_order[s]; }
-		
+
 		static constexpr std::pair<char, char> ToCharPair(Square s) { return x88board::get_chars(s); }
 
 		static constexpr Square GetSquareFromChars(char f, char r) { return x88board::get_square_from_chars(f, r); }
-	};
-
-	template <>
-	struct board_traits<objboard::ObjBoard>
-	{
-		static constexpr bool IsObjBoard = true;
-
-		static constexpr Square TopToBottom(Square s) { return basic_board::top_to_bottom_order[s]; }
-
-		static constexpr std::pair<char, char> ToCharPair(Square s) { return basic_board::get_chars(s); }
-
-		static constexpr Square GetSquareFromChars(char f, char r) { return basic_board::get_square_from_chars(f, r); }
 	};
 
 #pragma endregion
@@ -64,6 +46,8 @@ namespace chesslib::traits
 	template <>
 	struct color_traits<color::White> 
 	{
+		static constexpr Color Opposite = color::Black;
+
 		static constexpr Piece Pawn = pieceset::WhitePawn;
 		static constexpr Piece Rook = pieceset::WhiteRook;
 		static constexpr Piece Knight = pieceset::WhiteKnight;
@@ -71,18 +55,18 @@ namespace chesslib::traits
 		static constexpr Piece Queen = pieceset::WhiteQueen;
 		static constexpr Piece King = pieceset::WhiteKing;
 		
-		static constexpr Piece StraightMovingPieces[2] = { pieceset::WhiteQueen, pieceset::WhiteRook };
-		static constexpr Piece DiagonalMovingPieces[2] = { pieceset::WhiteQueen, pieceset::WhiteBishop };
-
-		static constexpr Color Opposite = color::Black;
-
 		static constexpr Castling KingSideCastling = Castling::WHITE_KS;
 		static constexpr Castling QueenSideCastling = Castling::WHITE_QS;
+
+		static constexpr Piece StraightMovingPieces[2] = { pieceset::WhiteQueen, pieceset::WhiteRook };
+		static constexpr Piece DiagonalMovingPieces[2] = { pieceset::WhiteQueen, pieceset::WhiteBishop };
 	};
 
 	template <>
 	struct color_traits<color::Black> 
 	{
+		static constexpr Color Opposite = color::White;
+
 		static constexpr Piece Pawn = pieceset::BlackPawn;
 		static constexpr Piece Rook = pieceset::BlackRook;
 		static constexpr Piece Knight = pieceset::BlackKnight;
@@ -90,13 +74,11 @@ namespace chesslib::traits
 		static constexpr Piece Queen = pieceset::BlackQueen;
 		static constexpr Piece King = pieceset::BlackKing;
 		
-		static constexpr Piece StraightMovingPieces[2] = { pieceset::BlackQueen, pieceset::BlackRook };
-		static constexpr Piece DiagonalMovingPieces[2] = { pieceset::BlackQueen, pieceset::BlackBishop };
-
-		static constexpr Color Opposite = color::White;
-
 		static constexpr Castling KingSideCastling = Castling::BLACK_KS;
 		static constexpr Castling QueenSideCastling = Castling::BLACK_QS;
+
+		static constexpr Piece StraightMovingPieces[2] = { pieceset::BlackQueen, pieceset::BlackRook };
+		static constexpr Piece DiagonalMovingPieces[2] = { pieceset::BlackQueen, pieceset::BlackBishop };		
 	};
 
 #pragma endregion
@@ -108,25 +90,29 @@ namespace chesslib::traits
 	template <>
 	struct board_piece_traits<basic_board::BasicBoard, pieceset::WhitePawn> 
 	{
+		static constexpr Piece Opposite = pieceset::BlackPawn;
+		
 		static constexpr Direction AttackDirections[2] = { basic_board::direction::NE, basic_board::direction::NW };
 		static constexpr Direction ReverseAttackDirections[2] = { basic_board::direction::SW, basic_board::direction::SE };
 		static constexpr Direction MoveDirection = basic_board::direction::N;
 		static constexpr Direction ReverseMoveDirection = basic_board::direction::S;
+		
 		static constexpr Rank PromotionRank = 7;
 		static constexpr Rank DoublePushRank = 1;
-		static constexpr Piece Opposite = pieceset::BlackPawn;
 	};
 
 	template <>
 	struct board_piece_traits<basic_board::BasicBoard, pieceset::BlackPawn>
 	{
+		static constexpr Piece Opposite = pieceset::WhitePawn;
+		
 		static constexpr Direction AttackDirections[2] = { basic_board::direction::SE, basic_board::direction::SW };
 		static constexpr Direction ReverseAttackDirections[2] = { basic_board::direction::NW, basic_board::direction::NE };
 		static constexpr Direction MoveDirection = basic_board::direction::S;
 		static constexpr Direction ReverseMoveDirection = basic_board::direction::N;
+		
 		static constexpr Rank PromotionRank = 0;
 		static constexpr Rank DoublePushRank = 6;
-		static constexpr Piece Opposite = pieceset::WhitePawn;
 	};
 #pragma endregion
 
@@ -137,7 +123,7 @@ namespace chesslib::traits
 	template <>
 	struct board_color_traits<basic_board::BasicBoard, color::White> 
 	{
-		static constexpr Square KingSideCastleCheckSquares[2] = { squareset::f1, squareset::g1 };
+		static constexpr Square KingSideCastleCheckSquares[2]  = { squareset::f1, squareset::g1 };
 		static constexpr Square QueenSideCastleCheckSquares[3] = { squareset::d1, squareset::c1, squareset::b1 };
 		
 		static constexpr Square KingSideRookInitialPosition = squareset::h1;

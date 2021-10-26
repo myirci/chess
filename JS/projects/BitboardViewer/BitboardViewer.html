@@ -1,0 +1,292 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>Big Board Viewer</title>
+  <link rel="stylesheet" href="../../lib/chessboardjs/css/chessboard-1.0.0.min.css">
+  
+  <style>
+	table.layout-table, table.layout-table th, table.layout-table td
+	{
+		padding-top: 20px;
+		padding-bottom: 20px;
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+	
+	table.info-table, table.info-table th, table.info-table td
+	{
+		border: 2px solid brown;
+		border-collapse: collapse;
+	}
+	
+	table.info-table th, table.info-table td 
+	{
+		padding-top: 0px;
+		padding-bottom: 0px;
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+  </style>
+
+</head>
+<body>
+
+<table class ="layout-table">
+	<tr>
+		<td>
+			<div id="myBoard" style="width: 500px"></div>
+			<br>
+			<button id="PrevBtn" style="margin-left: 4em">Previous Position</button>
+			<button id="NextBtn" style="margin-left: 4em">Next Position</button>
+		</td>
+		
+		<td>
+			<table class="info-table">
+				<tr>
+					<td> Bitboard </td>
+					<td> <p id="counter"></p> </td>
+				</tr>
+				<tr>
+					<td> Name </td>
+					<td> <p id="bname"></p> </td>
+				</tr>
+				<tr>
+					<td> Binary </td>
+					<td> <p id="binary"></p></td>
+				</tr>
+				<tr>
+					<td> Hex </td>
+					<td> <p id="hex"></p> </td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
+
+<script src="../../lib/jquery/jquery-3.6.0.min.js"></script>
+<script src="../../lib/chessboardjs/js/chessboard-1.0.0.min.js"></script>
+
+<script>
+
+let occupied = 'b'; //'n';
+let empty = 'r'; // 'q';
+let use_single_icon = false;
+
+const squares = {
+	a1: 63, b1: 62, c1: 61, d1: 60, e1: 59, f1: 58, g1: 57, h1: 56,
+	a2: 55, b2: 54, c2: 53, d2: 52, e2: 51, f2: 50, g2: 49, h2: 48,
+	a3: 47, b3: 46, c3: 45, d3: 44, e3: 43, f3: 42, g3: 41, h3: 40,
+	a4: 39, b4: 38, c4: 37, d4: 36, e4: 35, f4: 34, g4: 33, h4: 32,
+	a5: 31, b5: 30, c5: 29, d5: 28, e5: 27, f5: 26, g5: 25, h5: 24,
+	a6: 23, b6: 22, c6: 21, d6: 20, e6: 19, f6: 18, g6: 17, h6: 16,
+	a7: 15, b7: 14, c7: 13, d7: 12, e7: 11, f7: 10, g7: 9, h7: 8,
+	a8: 7, b8: 6, c8: 5, d8: 4, e8: 3, f8: 2, g8: 1, h8: 0
+}
+
+let visit_order = 
+[
+	squares.a8, squares.b8, squares.c8, squares.d8, squares.e8, squares.f8, squares.g8, squares.h8,
+	squares.a7, squares.b7, squares.c7, squares.d7, squares.e7, squares.f7, squares.g7, squares.h7,
+	squares.a6, squares.b6, squares.c6, squares.d6, squares.e6, squares.f6, squares.g6, squares.h6,
+	squares.a5, squares.b5, squares.c5, squares.d5, squares.e5, squares.f5, squares.g5, squares.h5,
+	squares.a4, squares.b4, squares.c4, squares.d4, squares.e4, squares.f4, squares.g4, squares.h4,
+	squares.a3, squares.b3, squares.c3, squares.d3, squares.e3, squares.f3, squares.g3, squares.h3,
+	squares.a2, squares.b2, squares.c2, squares.d2, squares.e2, squares.f2, squares.g2, squares.h2,
+	squares.a1, squares.b1, squares.c1, squares.d1, squares.e1, squares.f1, squares.g1, squares.h1
+]
+
+function to_binary_string(bitboard)
+{
+	let binary_str = bitboard.toString(2);
+	if(binary_str.length < 64)
+	{
+		let num_zeros_needed = 64 - binary_str.length;
+		for(let i = 0; i < num_zeros_needed; i++)
+			binary_str = '0' + binary_str;
+	}
+	return binary_str;
+}
+
+function to_hex_string(bitboard)
+{
+	let hex_str = bitboard.toString(16);
+	if(hex_str.length < 16)
+	{
+		let num_zeros_needed = 16 - hex_str.length;
+		for(let i = 0; i < num_zeros_needed; i++)
+			hex_str = '0' + hex_str;
+	}
+	return '0x' + hex_str.toUpperCase();
+}
+
+function to_fen(bitboard, char_o, char_e)
+{
+	let binary_str = to_binary_string(bitboard);
+	
+	let fen_str = "";
+		
+	if(use_single_icon)
+	{	
+		let empty = 0;
+
+		for (let i = 0; i < 64; i++)
+		{		
+			if(i > 0 && i % 8 == 0)
+			{
+				if(empty != 0)
+				{
+					fen_str += empty;
+					empty = 0;
+				}
+				fen_str += '/';
+			}
+			
+			if(binary_str[visit_order[i]] == '0')
+			{
+				empty++;
+			}			
+			else
+			{
+				if(empty != 0)
+				{
+					fen_str += empty;
+					empty = 0;
+				}
+				fen_str += char_o;
+			}
+		}
+		if(empty != 0)
+		{
+			fen_str += empty;
+			empty = 0;
+		}	
+	}
+	else
+	{
+		for (let i = 0; i < 64; i++)
+		{		
+			if(i > 0 && i % 8 == 0)
+				fen_str += '/';
+			
+			if(binary_str[visit_order[i]] == '0')
+				fen_str += char_e;
+			else
+				fen_str += char_o;
+		}
+	}
+	return fen_str;
+}
+
+let bitboards = 
+[
+
+BigInt('0xAA55AA55AA55AA55'),
+BigInt('0x0101010101010101'),
+BigInt('0xff'),
+
+BigInt('0x1020408'),
+BigInt('0x102040810'),
+BigInt('0x10204081020'),
+BigInt('0x1020408102040'),
+BigInt('0x102040810204080'),
+BigInt('0x204081020408000'),
+BigInt('0x408102040800000'),
+BigInt('0x0101010101010101'),
+BigInt('0x8000000000000000'),
+BigInt('0x0404040404040404'),
+BigInt('0x4080000000000000'),
+BigInt('0x2040800000000000'),
+BigInt('0x1020408000000000'),
+BigInt('0x810204080000000'),
+BigInt('0x8080808080808080'),
+BigInt('0x0101010101010101'),
+BigInt('0x0202020202020202'),
+BigInt('0x0404040404040404'),
+BigInt('0x0808080808080808'),
+BigInt('0x1010101010101010'),
+BigInt('0x2020202020202020'),
+BigInt('0x4040404040404040'),
+
+
+BigInt('0xff00'),
+BigInt('0xff0000'),
+BigInt('0xff000000'),
+BigInt('0xff00000000'),
+BigInt('0xff0000000000'),
+BigInt('0xff000000000000'),
+BigInt('0xff00000000000000'),
+
+BigInt('0x80'),
+BigInt('0x8040'),
+BigInt('0x804020'),
+BigInt('0x80402010'),
+BigInt('0x8040201008'),
+BigInt('0x804020100804'),
+BigInt('0x80402010080402'),
+BigInt('0x8040201008040201'),
+
+BigInt('0x4020100804020100'),
+BigInt('0x2010080402010000'),
+BigInt('0x1008040201000000'),
+BigInt('0x804020100000000'),
+BigInt('0x402010000000000'),
+BigInt('0x201000000000000'),
+BigInt('0x100000000000000')
+]
+
+let bitboard_names = 
+[
+'Dark Squares',
+'File-A', 'Rank-1', 'Name-3' 
+]
+
+var index = 0;
+
+var config = {
+	pieceTheme: '../../lib/chessboardjs/img/chesspieces/nonchess/{piece}.svg',
+	showNotation: false,
+	appearSpeed: 'fast',
+	moveSpeed: 'fast',
+	snapSpeed: 'fast',
+	snapbackSpeed: 'fast',
+	trashSpeed: 'fast',
+	position: to_fen(bitboards[index], occupied, empty)
+}
+var board = Chessboard('myBoard', config)
+
+$(document).ready(function(){
+  document.getElementById("counter").innerHTML = index + 1; 
+  document.getElementById("bname").innerHTML = bitboard_names[index]; 
+  document.getElementById("binary").innerHTML = to_binary_string(bitboards[index]);
+  document.getElementById("hex").innerHTML = to_hex_string(bitboards[index]);
+})
+
+$('#PrevBtn').on('click', function () 
+{
+	if(index >= 1)
+	{
+		index = index - 1;
+		board.position(to_fen(bitboards[index], occupied, empty));
+		document.getElementById("counter").innerHTML = index + 1;
+		document.getElementById("bname").innerHTML = bitboard_names[index];
+		document.getElementById("binary").innerHTML = to_binary_string(bitboards[index]);
+		document.getElementById("hex").innerHTML = to_hex_string(bitboards[index]);
+	}
+})
+$('#NextBtn').on('click', function ()
+{
+	if(index < bitboards.length - 1)
+	{
+		index = index + 1;
+		board.position(to_fen(bitboards[index], occupied, empty));
+		document.getElementById("counter").innerHTML = index + 1;
+		document.getElementById("bname").innerHTML = bitboard_names[index];
+		document.getElementById("binary").innerHTML = to_binary_string(bitboards[index]);
+		document.getElementById("hex").innerHTML = to_hex_string(bitboards[index]);
+	}
+})
+</script>
+</body>
+</html>

@@ -76,12 +76,14 @@ namespace chesslib::utility::time
 
 		auto it = commands.begin();
 		auto start = it->_tp;
+		bool start_log{ !it->_log.empty() };
 
-		// os << it->_log << std::endl;
+		if(start_log)
+			os << it->_log << std::endl;
 		for (it++; it != commands.end(); it++) 
 		{
 			auto d = it->_tp - start;
-			if (it->_ctype == CommandType::TagTimePoint)
+			if (it->_ctype == CommandType::TagTimePoint && start_log) 
 				os << "\t";
 			os << it->_log << " " << std::chrono::duration_cast<T>(d) << " " << unit << ".\n";
 		}

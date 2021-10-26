@@ -82,8 +82,6 @@ namespace chesslib::objboard
 	}
 	{ }
 
-	
-
 	MoveList ObjBoard::GenerateMoves() const 
 	{
 		MoveList moves;

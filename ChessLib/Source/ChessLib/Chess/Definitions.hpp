@@ -22,12 +22,12 @@ namespace chesslib
             QueenValue{ 10.0 }, KingValue{std::numeric_limits<double>::max()};
 
         constexpr Piece 
-            WhitePawn{ 1 }, 
-            WhiteRook{ 2 }, 
-            WhiteKnight{ 3 }, 
-            WhiteBishop{ 4 }, 
-            WhiteQueen{ 5 }, 
-            WhiteKing{ 6 },
+            WhitePawn{ 1 },   // 0000 0001
+            WhiteRook{ 2 },   // 0000 0010
+            WhiteKnight{ 3 }, // 0000 0011 
+            WhiteBishop{ 4 }, // 0000 0100
+            WhiteQueen{ 5 },  // 0000 0101
+            WhiteKing{ 6 },   // 0000 0110  
             BlackPawn{ -1 }, 
             BlackRook{ -2 }, 
             BlackKnight{ -3 }, 

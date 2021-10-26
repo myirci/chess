@@ -73,10 +73,9 @@ namespace chesslib::utility::chess
 			{
 				if (std::isdigit(c))
 				{
-					if constexpr (traits::board_traits<Board>::IsObjBoard) 
-					{
+					if constexpr (std::is_same_v<Board, objboard::ObjBoard>)
 						idx += (c - '0');
-					}
+
 					else 
 					{
 						for (Index i{ 0 }; i < c - '0'; i++)
@@ -90,7 +89,7 @@ namespace chesslib::utility::chess
 				else
 				{
 					Piece p = char_to_piece.at(c);
-					if constexpr (traits::board_traits<Board>::IsObjBoard) 
+					if constexpr (std::is_same_v<Board, objboard::ObjBoard>)
 					{
 						auto pobj = objboard::make_shared_piece(p, idx);
 						b[idx]._piece = pobj;
@@ -144,7 +143,7 @@ namespace chesslib::utility::chess
 				
 				bool is_empty{ false };
 				Piece p{ pieceset::None };
-				if constexpr (traits::board_traits<Board>::IsObjBoard) 
+				if constexpr (std::is_same_v<Board, objboard::ObjBoard>)
 				{
 					if (b[idx]._piece) 
 						p = b[idx]._piece->_code;
@@ -232,6 +231,4 @@ namespace chesslib::utility::chess
 			ss << ", " << to_string<Board>(first->move);
 		return ss.str();
 	}
-
-	
 }

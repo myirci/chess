@@ -17,5 +17,7 @@ namespace chesslib::bitboard
 
 		std::array<Bitset, 6> _white_pieces;
 		std::array<Bitset, 6> _black_pieces;
+		Bitset _white_all_pieces;
+		Bitset _black_all_pieces;
 	};
 }

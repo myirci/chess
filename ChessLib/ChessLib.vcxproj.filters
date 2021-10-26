@@ -28,6 +28,9 @@
     <Filter Include="Board\X88Board">
       <UniqueIdentifier>{ed4dd18e-b3c8-4e65-af2b-aa184db79eef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MoveGenerator">
+      <UniqueIdentifier>{5ca2657c-c692-4f41-b056-c7599636fe45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ChessLib\Chess\Fen.cpp">
@@ -56,6 +59,9 @@
     </ClCompile>
     <ClCompile Include="Source\ChessLib\Chess\ChessUtility.cpp">
       <Filter>Chess</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ChessLib\MoveGenerator\PrecomputeMoves.cpp">
+      <Filter>MoveGenerator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="Source\ChessLib\Utility\Timer.hpp">
       <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\MoveGenerator\PrecomputeMoves.hpp">
+      <Filter>MoveGenerator</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

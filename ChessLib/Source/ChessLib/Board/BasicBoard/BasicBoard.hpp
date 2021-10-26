@@ -16,6 +16,12 @@ namespace chesslib::basic_board
 	{
 	public:
 
+#pragma region static_methods
+
+		static inline bool IsInside(Square curr, Square next);
+
+#pragma endregion
+
 		constexpr static int BOARDSIZE = 64;
 		using BoardArray = std::array<Square, BOARDSIZE>;
 
@@ -34,24 +40,6 @@ namespace chesslib::basic_board
 
 		BasicBoard();
 		BoardArray board;
-
-#pragma region static_methods
-
-		static bool IsInside(Square curr, Square next);
-		
-		template<Color Attacker>
-		static inline bool IsNonKingStraightAttack(Piece p);
-
-		template<Color Attacker>
-		static inline bool IsNonKingDiagonalAttack(Piece p, Direction dir, Distance dist);
-
-		template<Color Attacker>
-		static inline bool IsStraightAttack(Piece p, Distance dist);
-
-		template<Color Attacker>
-		static inline bool IsDiagonalAttack(Piece p, Direction dir, Distance dist);
-
-#pragma endregion
 
 		template<Color Clr>
 		void MakeMoveImplementation(const Move& move);
