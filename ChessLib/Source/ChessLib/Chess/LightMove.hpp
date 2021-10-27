@@ -23,7 +23,6 @@ namespace chesslib
 		constexpr static uint16_t ReadMoveType = ~ClearMoveType;
 		constexpr static uint16_t PromotionBitMask = 0x0008;
 		constexpr static uint16_t CaptureBitMask = 0x0004;
-
 	public:
 
 		LightMove(Square from, Square to, MoveType mtype)

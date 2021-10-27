@@ -114,21 +114,13 @@ namespace chesslib::movegenerator
 			if constexpr (clr == ColorsToCompute::White || clr == ColorsToCompute::White_Black)
 			{
 				num_moves += 5;
-				moves.emplace_back(from, next, MoveType::Capture, pieceset::BlackPawn);
-				moves.emplace_back(from, next, MoveType::Capture, pieceset::BlackRook);
-				moves.emplace_back(from, next, MoveType::Capture, pieceset::BlackKnight);
-				moves.emplace_back(from, next, MoveType::Capture, pieceset::BlackBishop);
-				moves.emplace_back(from, next, MoveType::Capture, pieceset::BlackQueen);
+				moves.emplace_back(from, next, MoveType::Capture);
 			}
 
 			if constexpr (clr == ColorsToCompute::Black || clr == ColorsToCompute::White_Black)
 			{
 				num_moves += 5;
-				moves.emplace_back(from, next, MoveType::Capture, pieceset::WhitePawn);
-				moves.emplace_back(from, next, MoveType::Capture, pieceset::WhiteRook);
-				moves.emplace_back(from, next, MoveType::Capture, pieceset::WhiteKnight);
-				moves.emplace_back(from, next, MoveType::Capture, pieceset::WhiteBishop);
-				moves.emplace_back(from, next, MoveType::Capture, pieceset::WhiteQueen);
+				moves.emplace_back(from, next, MoveType::Capture);
 			}
 		}
 	};

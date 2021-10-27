@@ -48,7 +48,7 @@ namespace chesslib::basic_board
 		inline void MakeQuiteMove(Square from, Square to);
 
 		template<Color Clr>
-		void UnMakeMove(const Move& move);
+		void UnMakeMove(const Move& move, Piece captured);
 
 		template<Color Clr>
 		void GenerateMovesImplementation(MoveList& moves) const;

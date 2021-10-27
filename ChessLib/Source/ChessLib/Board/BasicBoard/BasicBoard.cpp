@@ -26,8 +26,6 @@ namespace chesslib::basic_board
 
 	void BasicBoard::MakeMove(const Move& move) 
 	{
-		PushToMoveStack(move);
-
 		auto side_to_move = GetActiveColor();
 		if (side_to_move == color::White)
 			MakeMoveImplementation<color::White>(move);
@@ -54,9 +52,9 @@ namespace chesslib::basic_board
 
 		// restore the board and piece positions
 		if (_active_color == color::White)
-			UnMakeMove<color::White>(previous_state.move);
+			UnMakeMove<color::White>(previous_state.move, previous_state.captured_piece);
 		else
-			UnMakeMove<color::Black>(previous_state.move);
+			UnMakeMove<color::Black>(previous_state.move, previous_state.captured_piece);
 
 		_move_stack.pop();
 	}
@@ -92,8 +90,15 @@ namespace chesslib::basic_board
 		using boctraits = traits::board_color_traits<BasicBoard, ctraits::Opposite>;
 
 		Square from{ move.GetFrom() }, to{ move.GetTo() };
-		Piece captured{ move.GetCapturedPiece() };
+
+		Piece captured{ pieceset::None };
+		if (move.IsCapture())
+			captured = move.IsEnPassantCapture() ? octraits::Pawn : board[to];
+		
 		MoveType mtype{ move.GetMoveType() };
+
+		// push move to the stack
+		PushToMoveStack(move, captured);
 
 		// update half move clock
 		_halfmove_clock = board[from] == ctraits::Pawn || move.IsCapture() ? 0 : _halfmove_clock + 1;
@@ -188,14 +193,13 @@ namespace chesslib::basic_board
 	}
 
 	template<Color Clr>
-	void BasicBoard::UnMakeMove(const Move& move)
+	void BasicBoard::UnMakeMove(const Move& move, Piece captured)
 	{
 		using ctraits = traits::color_traits<Clr>;
 		using bctraits = traits::board_color_traits<BasicBoard, Clr>;
 		using bptraits = traits::board_piece_traits<BasicBoard, ctraits::Pawn>;
 
 		Square from{ move.GetFrom() }, to{ move.GetTo() };
-		Piece captured{ move.GetCapturedPiece() };
 		MoveType mtype{ move.GetMoveType() };
 
 		if (!move.IsPromotion() && !move.IsCapture())
@@ -339,9 +343,9 @@ namespace chesslib::basic_board
 				IsInside(king_pos, next) && board[next] && !IsUnderAttack<ctraits::Opposite>(next))
 			{
 				if (board[next] == squareset::Empty)
-					moves.emplace_back(king_pos, next, MoveType::Quite);
+					moves.emplace_back(king_pos, next);
 				else if (color::get_color(board[next]) != Clr)
-					moves.emplace_back(king_pos, next, MoveType::Capture, board[next]);
+					moves.emplace_back(king_pos, next, MoveType::Capture);
 			}
 		}
 
@@ -493,7 +497,7 @@ namespace chesslib::basic_board
 				pin_dir == direction::None && 
 				board[next] == ctraits::Pawn &&
 				IsInside(next, _enpassant_target))
-				moves.emplace_back(next, _enpassant_target, MoveType::En_Passant_Capture, bptraits::Opposite);
+				moves.emplace_back(next, _enpassant_target, MoveType::En_Passant_Capture);
 		}
 	}
 
@@ -521,7 +525,7 @@ namespace chesslib::basic_board
 
 				if ((board[next] == ctraits::Rook || board[next] == ctraits::Queen) && 
 					!IsPiecePinned(next))
-					moves.emplace_back(next, sq, move_type, captured_piece);
+					moves.emplace_back(next, sq, move_type);
 
 				break;
 			}
@@ -536,7 +540,7 @@ namespace chesslib::basic_board
 
 				if ((board[next] == ctraits::Bishop || board[next] == ctraits::Queen) && 
 					!IsPiecePinned(next))
-					moves.emplace_back(next, sq, move_type, captured_piece);
+					moves.emplace_back(next, sq, move_type);
 
 				break;
 			}
@@ -545,7 +549,7 @@ namespace chesslib::basic_board
 		for (Direction dir : direction::KnightJumps)
 			if (Square next{ sq + dir }; IsInside(sq, next) && board[next] == ctraits::Knight &&
 				!IsPiecePinned(next))
-				moves.emplace_back(next, sq, move_type, captured_piece);
+				moves.emplace_back(next, sq, move_type);
 
 		if (sq >= bctraits::ValidPawnMoveSquares[0] && sq <= bctraits::ValidPawnMoveSquares[1]) 
 		{
@@ -585,14 +589,14 @@ namespace chesslib::basic_board
 					{
 						if (get_rank(sq) == bptraits::PromotionRank)
 						{
-							moves.emplace_back(next, sq, MoveType::Queen_Promotion_Capture, captured_piece);
-							moves.emplace_back(next, sq, MoveType::Rook_Promotion_Capture, captured_piece);
-							moves.emplace_back(next, sq, MoveType::Bishop_Promotion_Capture, captured_piece);
-							moves.emplace_back(next, sq, MoveType::Knight_Promotion_Capture, captured_piece);
+							moves.emplace_back(next, sq, MoveType::Queen_Promotion_Capture);
+							moves.emplace_back(next, sq, MoveType::Rook_Promotion_Capture);
+							moves.emplace_back(next, sq, MoveType::Bishop_Promotion_Capture);
+							moves.emplace_back(next, sq, MoveType::Knight_Promotion_Capture);
 						}
 						else
 						{
-							moves.emplace_back(next, sq, move_type, captured_piece);
+							moves.emplace_back(next, sq, move_type);
 						}
 					}
 				}
@@ -618,9 +622,9 @@ namespace chesslib::basic_board
 				if (IsInside(first->second, next))
 				{
 					if (board[next] == squareset::Empty)
-						moves.emplace_back(first->second, next, MoveType::Quite);
+						moves.emplace_back(first->second, next);
 					else if (color::get_color(board[next]) != Clr)
-						moves.emplace_back(first->second, next, MoveType::Capture, board[next]);
+						moves.emplace_back(first->second, next, MoveType::Capture);
 				}
 			}
 		}
@@ -645,11 +649,11 @@ namespace chesslib::basic_board
 					for (Square next{ first->second + dir }; IsInside(next - dir, next); next += dir)
 					{
 						if (board[next] == squareset::Empty)
-							moves.emplace_back(first->second, next, MoveType::Quite);
+							moves.emplace_back(first->second, next);
 						else 
 						{
 							if(color::get_color(board[next]) != Clr)
-								moves.emplace_back(first->second, next, MoveType::Capture, board[next]);
+								moves.emplace_back(first->second, next, MoveType::Capture);
 							break;
 						}
 					}
@@ -677,11 +681,11 @@ namespace chesslib::basic_board
 					for (Square next{ first->second + dir }; IsInside(next - dir, next); next += dir)
 					{
 						if (board[next] == squareset::Empty)
-							moves.emplace_back(first->second, next, MoveType::Quite);
+							moves.emplace_back(first->second, next);
 						else
 						{
 							if (color::get_color(board[next]) != Clr)
-								moves.emplace_back(first->second, next, MoveType::Capture, board[next]);
+								moves.emplace_back(first->second, next, MoveType::Capture);
 							break;
 						}
 					}
@@ -715,7 +719,7 @@ namespace chesslib::basic_board
 					moves.emplace_back(first->second, next, MoveType::Bishop_Promotion);
 				}
 				else
-					moves.emplace_back(first->second, next, MoveType::Quite);
+					moves.emplace_back(first->second, next);
 
 				if (Square pos{ next + bptraits::MoveDirection }; 
 					get_rank(first->second) == bptraits::DoublePushRank && 
@@ -733,13 +737,13 @@ namespace chesslib::basic_board
 				{
 					if (get_rank(next) == bptraits::PromotionRank) 
 					{
-						moves.emplace_back(first->second, next, MoveType::Queen_Promotion_Capture, board[next]);
-						moves.emplace_back(first->second, next, MoveType::Rook_Promotion_Capture, board[next]);
-						moves.emplace_back(first->second, next, MoveType::Knight_Promotion_Capture, board[next]);
-						moves.emplace_back(first->second, next, MoveType::Bishop_Promotion_Capture, board[next]);
+						moves.emplace_back(first->second, next, MoveType::Queen_Promotion_Capture);
+						moves.emplace_back(first->second, next, MoveType::Rook_Promotion_Capture);
+						moves.emplace_back(first->second, next, MoveType::Knight_Promotion_Capture);
+						moves.emplace_back(first->second, next, MoveType::Bishop_Promotion_Capture);
 					}
 					else 
-						moves.emplace_back(first->second, next, MoveType::Capture, board[next]);
+						moves.emplace_back(first->second, next, MoveType::Capture);
 				}
 			}
 		}
@@ -767,7 +771,7 @@ namespace chesslib::basic_board
 			
 			if (get_rank(king_pos) != get_rank(pos))
 			{
-				moves.emplace_back(pos, _enpassant_target, MoveType::En_Passant_Capture, otraits::Pawn);
+				moves.emplace_back(pos, _enpassant_target, MoveType::En_Passant_Capture);
 			}
 			else 
 			{ 
@@ -785,7 +789,7 @@ namespace chesslib::basic_board
 				}
 
 				if(make_move)
-					moves.emplace_back(pos, _enpassant_target, MoveType::En_Passant_Capture, otraits::Pawn);
+					moves.emplace_back(pos, _enpassant_target, MoveType::En_Passant_Capture);
 			}
 		}
 	}

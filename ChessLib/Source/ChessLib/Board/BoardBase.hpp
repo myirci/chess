@@ -16,16 +16,19 @@ namespace chesslib
 		// This information is required to be able to take the move back.
 		struct State
 		{
-			State(const Move& mv, int8_t castling, Square ept, uint16_t hmc) :
+			State(const Move& mv, uint16_t hmc, int8_t castling, Square ept, Piece captured) :
 				move{ mv },
 				castling_rights{ castling },
 				enpassant_target{ ept },
-				halfmove_clock{ hmc } { }
+				halfmove_clock{ hmc },
+				captured_piece{ captured }
+			{ }
 
 			Move move;
+			uint16_t halfmove_clock;
 			int8_t castling_rights;
 			Square enpassant_target;
-			uint16_t halfmove_clock;
+			Piece captured_piece;
 		};
 
 		using MoveStack = utility::IterableStack<State>;
@@ -82,9 +85,9 @@ namespace chesslib
 			return it == _pins.end() ? direction::None : it->second.second;
 		}
 		
-		void PushToMoveStack(const Move& mv) 
+		void PushToMoveStack(const Move& mv, Piece captured = pieceset::None) 
 		{
-			_move_stack.push({ mv, _castling_rights, _enpassant_target, _halfmove_clock });
+			_move_stack.push({ mv, _halfmove_clock, _castling_rights, _enpassant_target, captured });
 		}
 
 		Color _active_color;

@@ -11,11 +11,11 @@ int main()
 {
 	std::string_view fpath{""};
 
-	PrecomputeMoves<ColorsToCompute::White> move_gen;
+	// PrecomputeMoves<ColorsToCompute::White> move_gen;
 
-	chesslib::MoveList moves;
+	// chesslib::MoveList moves;
 	// move_gen.ComputeStraightSlidingPieceMoves(moves);
 	// move_gen.ComputeDiagonallySlidingPieceMoves(moves);
-	move_gen.ComputeKnightMoves(moves);
-	std::cout << moves.size() << std::endl;
+	// move_gen.ComputeKnightMoves(moves);
+	// std::cout << moves.size() << std::endl;
 }
