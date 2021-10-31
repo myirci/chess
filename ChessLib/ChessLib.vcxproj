@@ -26,8 +26,9 @@
     <ClCompile Include="Source\ChessLib\Board\X88Board\x88Board.cpp" />
     <ClCompile Include="Source\ChessLib\Chess\ChessUtility.cpp" />
     <ClCompile Include="Source\ChessLib\Chess\Fen.cpp" />
+    <ClCompile Include="Source\ChessLib\Chess\LightMove.cpp" />
     <ClCompile Include="Source\ChessLib\Chess\Move.cpp" />
-    <ClCompile Include="Source\ChessLib\MoveGenerator\PrecomputeMoves.cpp" />
+    <ClCompile Include="Source\ChessLib\MoveGenerator\MoveConnectivity.cpp" />
     <ClCompile Include="Source\ChessLib\Utility\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -47,6 +48,7 @@
     <ClInclude Include="Source\ChessLib\Chess\LightMove.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\Move.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\TypeTraits.hpp" />
+    <ClInclude Include="Source\ChessLib\MoveGenerator\MoveConnectivity.hpp" />
     <ClInclude Include="Source\ChessLib\MoveGenerator\PrecomputeMoves.hpp" />
     <ClInclude Include="Source\ChessLib\Perft\Perft.hpp" />
     <ClInclude Include="Source\ChessLib\Utility\IterableStack.hpp" />

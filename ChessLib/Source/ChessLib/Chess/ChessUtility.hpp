@@ -210,11 +210,24 @@ namespace chesslib::utility::chess
 		return ss.str();
 	}	
 
-	template<typename Board>
-	std::string to_string(const Move& move) 
+	template<typename Board, typename MoveType>
+	std::string to_string(const MoveType& move)
 	{
 		using btraits = traits::board_traits<Board>;
 		std::string move_string{ "__-__" };
+		std::tie(move_string[0], move_string[1]) = btraits::ToCharPair(move.GetFrom());
+		std::tie(move_string[3], move_string[4]) = btraits::ToCharPair(move.GetTo());
+		return move_string;
+	}
+
+	std::string_view to_string(MoveType mtype);
+
+	template<typename Board, typename MV>
+	std::string to_string_long(const MV& move)
+	{
+		using btraits = traits::board_traits<Board>;
+		std::string move_string{ "__-__ " };
+		move_string += to_string(move.GetMoveType());
 		std::tie(move_string[0], move_string[1]) = btraits::ToCharPair(move.GetFrom());
 		std::tie(move_string[3], move_string[4]) = btraits::ToCharPair(move.GetTo());
 		return move_string;

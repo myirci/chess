@@ -60,7 +60,10 @@
     <ClCompile Include="Source\ChessLib\Chess\ChessUtility.cpp">
       <Filter>Chess</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ChessLib\MoveGenerator\PrecomputeMoves.cpp">
+    <ClCompile Include="Source\ChessLib\Chess\LightMove.cpp">
+      <Filter>Chess</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ChessLib\MoveGenerator\MoveConnectivity.cpp">
       <Filter>MoveGenerator</Filter>
     </ClCompile>
   </ItemGroup>
@@ -127,6 +130,9 @@
     </ClInclude>
     <ClInclude Include="Source\ChessLib\Chess\LightMove.hpp">
       <Filter>Chess</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\MoveGenerator\MoveConnectivity.hpp">
+      <Filter>MoveGenerator</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

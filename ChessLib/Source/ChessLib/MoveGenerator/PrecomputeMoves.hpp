@@ -1,127 +1,156 @@
 #pragma once
 
 #include <ChessLib/Chess/Definitions.hpp>
-#include <ChessLib/Chess/Move.hpp>
+#include <ChessLib/Chess/LightMove.hpp>
 #include <ChessLib/Board/BasicBoard/Square.hpp>
 #include <ChessLib/Board/BasicBoard/BasicBoard.hpp>
+#include <ChessLib/Chess/TypeTraits.hpp>
 
 namespace chesslib::movegenerator 
 {
-	enum class ColorsToCompute 
-	{
-		White,
-		Black,
-		White_Black
-	};
-
-	// Computes all possible moves for all pieces for the given color(s).
-	template <ColorsToCompute clr>
 	class PrecomputeMoves
 	{
 	public:
 		
-		MoveList ComputeMoves() 
+		LightMoveList ComputeDiagonallySlidingPieceMoves()
 		{
-			MoveList moves;
-			ComputeStraightSlidingPieceMoves(moves);
-			ComputeDiagonallySlidingPieceMoves(moves);
-			ComputeKnightMoves(moves);
-			ComputeKingMoves(moves);
-		}
-		
-		int ComputeDiagonallySlidingPieceMoves(MoveList& moves) 
-		{
-			return ComputeSlidingPieceMoves(moves, basic_board::direction::Diagonal);
+			return ComputeSlidingPieceMoves(basic_board::direction::Diagonal);
 		}
 
-		int ComputeStraightSlidingPieceMoves(MoveList& moves) 
+		LightMoveList ComputeStraightSlidingPieceMoves()
 		{
-			return ComputeSlidingPieceMoves(moves, basic_board::direction::Straight);
+			return ComputeSlidingPieceMoves(basic_board::direction::Straight);
 		}
 
-		int ComputeKnightMoves(MoveList& moves) 
+		LightMoveList ComputeKnightMoves()
 		{
-			return ComputeNonSlidingPieceMoves(moves, basic_board::direction::KnightJumps);
+			return ComputeNonSlidingPieceMoves(basic_board::direction::KnightJumps);
 		}
 
-		int ComputeKingMoves(MoveList& moves) 
+		LightMoveList ComputeKingMoves()
 		{
-			int num_moves = ComputeNonSlidingPieceMoves(moves, basic_board::direction::All);
-
-			if constexpr (clr == ColorsToCompute::White || clr == ColorsToCompute::White_Black) 
-			{
-				num_moves += 2;
-				moves.emplace_back(squareset::e1, squareset::f1, MoveType::King_Side_Castle);
-				moves.emplace_back(squareset::e1, squareset::c1, MoveType::Queen_Side_Castle);
-			}
 			
-			if constexpr (clr == ColorsToCompute::Black || clr == ColorsToCompute::White_Black)
-			{
-				num_moves += 2;
-				moves.emplace_back(squareset::e8, squareset::f8, MoveType::King_Side_Castle);
-				moves.emplace_back(squareset::e8, squareset::c8, MoveType::Queen_Side_Castle);
-			}
-			return num_moves;
+			auto moves = ComputeNonSlidingPieceMoves(basic_board::direction::All);
+			moves.emplace_back(squareset::e1, squareset::f1, MoveType::King_Side_Castle);
+			moves.emplace_back(squareset::e1, squareset::c1, MoveType::Queen_Side_Castle);
+			moves.emplace_back(squareset::e8, squareset::f8, MoveType::King_Side_Castle);
+			moves.emplace_back(squareset::e8, squareset::c8, MoveType::Queen_Side_Castle);
+			return moves;
 		}
 
-		int ComputePawnMoves(MoveList& moves) 
+		LightMoveList ComputePawnMoves()
 		{
-			return 0;
+			LightMoveList moves;
+			ComputePawnMoves<color::White>(moves);
+			ComputePawnMoves<color::Black>(moves);
+			return moves;
 		}
 
 	protected:
 
-		int ComputeNonSlidingPieceMoves(MoveList & moves, const std::array<Direction, 8>& dirs)
+		template <Color CLR>
+		void ComputePawnMoves(LightMoveList& moves) 
 		{
-			int num_moves{ 0 };
+			using ctraits = traits::color_traits<CLR>;
+			using bptraits = traits::board_piece_traits<basic_board::BasicBoard, ctraits::Pawn>;
 
+			Square const * order = nullptr;
+			if constexpr (CLR == color::White)
+				order = basic_board::bottom_to_top_order;
+			else
+				order = basic_board::top_to_bottom_order;
+
+			// Double pawn push
+			for (int i = 8; i < 16; i++)
+			{
+				Square from = order[i];
+				Square next = from + 2 * bptraits::MoveDirection;
+				moves.emplace_back(from, next, MoveType::Double_Pawn_Push);
+			}
+
+			// Single push and normal capture
+			for (int i = 8; i < 48; i++)
+			{
+				Square from = order[i];
+				Square next = from + bptraits::MoveDirection;
+				moves.emplace_back(from, next);
+
+				for (int j = 0; j < 2; j++)
+				{
+					next = from + bptraits::AttackDirections[j];
+					if (basic_board::BasicBoard::IsInside(from, next))
+						moves.emplace_back(from, next, MoveType::Capture);
+				}
+			}
+
+			// En passant capture
+			for (int i = 32; i < 40; i++)
+			{
+				Square from = order[i];
+				for (int j = 0; j < 2; j++)
+				{
+					Square next = from + bptraits::AttackDirections[j];
+					if (basic_board::BasicBoard::IsInside(from, next))
+						moves.emplace_back(from, next, MoveType::En_Passant_Capture);
+				}
+			}
+
+			// Promotion
+			for (int i = 48; i < 56; i++)
+			{
+				Square from = order[i];
+				Square next = from + bptraits::MoveDirection;
+				moves.emplace_back(from, next, MoveType::Queen_Promotion);
+				moves.emplace_back(from, next, MoveType::Knight_Promotion);
+				moves.emplace_back(from, next, MoveType::Rook_Promotion);
+				moves.emplace_back(from, next, MoveType::Bishop_Promotion);
+
+				for (int j = 0; j < 2; j++)
+				{
+					next = from + bptraits::AttackDirections[j];
+					if (basic_board::BasicBoard::IsInside(from, next))
+					{
+						moves.emplace_back(from, next, MoveType::Queen_Promotion_Capture);
+						moves.emplace_back(from, next, MoveType::Knight_Promotion_Capture);
+						moves.emplace_back(from, next, MoveType::Rook_Promotion_Capture);
+						moves.emplace_back(from, next, MoveType::Bishop_Promotion_Capture);
+					}
+				}
+			}
+		}
+
+		LightMoveList ComputeNonSlidingPieceMoves(const std::array<Direction, 8>& dirs)
+		{
+			LightMoveList moves;
 			for (int i = 0; i < 64; i++)
 			{
 				Square from = basic_board::bottom_to_top_order[i];
 
 				for (Direction dir : dirs) 
-				{
-					Square next{ from + dir };
-					if(basic_board::BasicBoard::IsInside(from, next))
-						AddMoves(from, next, moves, num_moves);
-				}
+					if(Square next{ from + dir }; basic_board::BasicBoard::IsInside(from, next))
+						AddMoves(from, next, moves);
 			}
-
-			return num_moves;
+			return moves;
 		}
 		
-		int ComputeSlidingPieceMoves(MoveList& moves, const std::array<Direction, 4>& dirs) 
+		LightMoveList ComputeSlidingPieceMoves(const std::array<Direction, 4>& dirs)
 		{
-			int num_moves{ 0 };
-
+			LightMoveList moves;
 			for (int i = 0; i < 64; i++)
 			{
 				Square from = basic_board::bottom_to_top_order[i];
 
 				for (Direction dir : dirs)
 					for (Square next{ from + dir }; basic_board::BasicBoard::IsInside(next - dir, next); next += dir)
-						AddMoves(from, next, moves, num_moves);
+						AddMoves(from, next, moves);
 			}
-
-			return num_moves;
+			return moves;
 		}
 	
-		void AddMoves(Square from, Square next, MoveList& moves, int& num_moves)
+		void AddMoves(Square from, Square next, LightMoveList& moves)
 		{
-			num_moves++;
 			moves.emplace_back(from, next, MoveType::Quite);
-
-			if constexpr (clr == ColorsToCompute::White || clr == ColorsToCompute::White_Black)
-			{
-				num_moves += 5;
-				moves.emplace_back(from, next, MoveType::Capture);
-			}
-
-			if constexpr (clr == ColorsToCompute::Black || clr == ColorsToCompute::White_Black)
-			{
-				num_moves += 5;
-				moves.emplace_back(from, next, MoveType::Capture);
-			}
+			moves.emplace_back(from, next, MoveType::Capture);
 		}
 	};
 }

@@ -1,0 +1,440 @@
+a2-a1 Knight Promotion
+a2-a1 Bishop Promotion
+a2-a1 Rook Promotion
+a2-a1 Queen Promotion
+a2-b1 Knight Promotion Capture
+a2-b1 Bishop Promotion Capture
+a2-b1 Rook Promotion Capture
+a2-b1 Queen Promotio n Capture
+a2-a3 Quite
+a2-b3 Capture
+a2-a4 Double Pawn Push
+b2-a1 Knight Promotion Capture
+b2-a1 Bishop Promotion Capture
+b2-a1 Rook Promotion Capture
+b2-a1 Queen Promotio n Capture
+b2-b1 Knight Promotion
+b2-b1 Bishop Promotion
+b2-b1 Rook Promotion
+b2-b1 Queen Promotion
+b2-c1 Knight Promotion Capture
+b2-c1 Bishop Promotion Capture
+b2-c1 Rook Promotion Capture
+b2-c1 Queen Promotio n Capture
+b2-a3 Capture
+b2-b3 Quite
+b2-c3 Capture
+b2-b4 Double Pawn Push
+c2-b1 Knight Promotion Capture
+c2-b1 Bishop Promotion Capture
+c2-b1 Rook Promotion Capture
+c2-b1 Queen Promotio n Capture
+c2-c1 Knight Promotion
+c2-c1 Bishop Promotion
+c2-c1 Rook Promotion
+c2-c1 Queen Promotion
+c2-d1 Knight Promotion Capture
+c2-d1 Bishop Promotion Capture
+c2-d1 Rook Promotion Capture
+c2-d1 Queen Promotio n Capture
+c2-b3 Capture
+c2-c3 Quite
+c2-d3 Capture
+c2-c4 Double Pawn Push
+d2-c1 Knight Promotion Capture
+d2-c1 Bishop Promotion Capture
+d2-c1 Rook Promotion Capture
+d2-c1 Queen Promotio n Capture
+d2-d1 Knight Promotion
+d2-d1 Bishop Promotion
+d2-d1 Rook Promotion
+d2-d1 Queen Promotion
+d2-e1 Knight Promotion Capture
+d2-e1 Bishop Promotion Capture
+d2-e1 Rook Promotion Capture
+d2-e1 Queen Promotio n Capture
+d2-c3 Capture
+d2-d3 Quite
+d2-e3 Capture
+d2-d4 Double Pawn Push
+e2-d1 Knight Promotion Capture
+e2-d1 Bishop Promotion Capture
+e2-d1 Rook Promotion Capture
+e2-d1 Queen Promotio n Capture
+e2-e1 Knight Promotion
+e2-e1 Bishop Promotion
+e2-e1 Rook Promotion
+e2-e1 Queen Promotion
+e2-f1 Knight Promotion Capture
+e2-f1 Bishop Promotion Capture
+e2-f1 Rook Promotion Capture
+e2-f1 Queen Promotio n Capture
+e2-d3 Capture
+e2-e3 Quite
+e2-f3 Capture
+e2-e4 Double Pawn Push
+f2-e1 Knight Promotion Capture
+f2-e1 Bishop Promotion Capture
+f2-e1 Rook Promotion Capture
+f2-e1 Queen Promotio n Capture
+f2-f1 Knight Promotion
+f2-f1 Bishop Promotion
+f2-f1 Rook Promotion
+f2-f1 Queen Promotion
+f2-g1 Knight Promotion Capture
+f2-g1 Bishop Promotion Capture
+f2-g1 Rook Promotion Capture
+f2-g1 Queen Promotio n Capture
+f2-e3 Capture
+f2-f3 Quite
+f2-g3 Capture
+f2-f4 Double Pawn Push
+g2-f1 Knight Promotion Capture
+g2-f1 Bishop Promotion Capture
+g2-f1 Rook Promotion Capture
+g2-f1 Queen Promotio n Capture
+g2-g1 Knight Promotion
+g2-g1 Bishop Promotion
+g2-g1 Rook Promotion
+g2-g1 Queen Promotion
+g2-h1 Knight Promotion Capture
+g2-h1 Bishop Promotion Capture
+g2-h1 Rook Promotion Capture
+g2-h1 Queen Promotio n Capture
+g2-f3 Capture
+g2-g3 Quite
+g2-h3 Capture
+g2-g4 Double Pawn Push
+h2-g1 Knight Promotion Capture
+h2-g1 Bishop Promotion Capture
+h2-g1 Rook Promotion Capture
+h2-g1 Queen Promotio n Capture
+h2-h1 Knight Promotion
+h2-h1 Bishop Promotion
+h2-h1 Rook Promotion
+h2-h1 Queen Promotion
+h2-g3 Capture
+h2-h3 Quite
+h2-h4 Double Pawn Push
+a3-a2 Quite
+a3-b2 Capture
+a3-a4 Quite
+a3-b4 Capture
+b3-a2 Capture
+b3-b2 Quite
+b3-c2 Capture
+b3-a4 Capture
+b3-b4 Quite
+b3-c4 Capture
+c3-b2 Capture
+c3-c2 Quite
+c3-d2 Capture
+c3-b4 Capture
+c3-c4 Quite
+c3-d4 Capture
+d3-c2 Capture
+d3-d2 Quite
+d3-e2 Capture
+d3-c4 Capture
+d3-d4 Quite
+d3-e4 Capture
+e3-d2 Capture
+e3-e2 Quite
+e3-f2 Capture
+e3-d4 Capture
+e3-e4 Quite
+e3-f4 Capture
+f3-e2 Capture
+f3-f2 Quite
+f3-g2 Capture
+f3-e4 Capture
+f3-f4 Quite
+f3-g4 Capture
+g3-f2 Capture
+g3-g2 Quite
+g3-h2 Capture
+g3-f4 Capture
+g3-g4 Quite
+g3-h4 Capture
+h3-g2 Capture
+h3-h2 Quite
+h3-g4 Capture
+h3-h4 Quite
+a4-a3 Quite
+a4-b3 Capture
+a4-b3 En-passant Capture
+a4-a5 Quite
+a4-b5 Capture
+b4-a3 Capture
+b4-a3 En-passant Capture
+b4-b3 Quite
+b4-c3 Capture
+b4-c3 En-passant Capture
+b4-a5 Capture
+b4-b5 Quite
+b4-c5 Capture
+c4-b3 Capture
+c4-b3 En-passant Capture
+c4-c3 Quite
+c4-d3 Capture
+c4-d3 En-passant Capture
+c4-b5 Capture
+c4-c5 Quite
+c4-d5 Capture
+d4-c3 Capture
+d4-c3 En-passant Capture
+d4-d3 Quite
+d4-e3 Capture
+d4-e3 En-passant Capture
+d4-c5 Capture
+d4-d5 Quite
+d4-e5 Capture
+e4-d3 Capture
+e4-d3 En-passant Capture
+e4-e3 Quite
+e4-f3 Capture
+e4-f3 En-passant Capture
+e4-d5 Capture
+e4-e5 Quite
+e4-f5 Capture
+f4-e3 Capture
+f4-e3 En-passant Capture
+f4-f3 Quite
+f4-g3 Capture
+f4-g3 En-passant Capture
+f4-e5 Capture
+f4-f5 Quite
+f4-g5 Capture
+g4-f3 Capture
+g4-f3 En-passant Capture
+g4-g3 Quite
+g4-h3 Capture
+g4-h3 En-passant Capture
+g4-f5 Capture
+g4-g5 Quite
+g4-h5 Capture
+h4-g3 Capture
+h4-g3 En-passant Capture
+h4-h3 Quite
+h4-g5 Capture
+h4-h5 Quite
+a5-a4 Quite
+a5-b4 Capture
+a5-a6 Quite
+a5-b6 Capture
+a5-b6 En-passant Capture
+b5-a4 Capture
+b5-b4 Quite
+b5-c4 Capture
+b5-a6 Capture
+b5-a6 En-passant Capture
+b5-b6 Quite
+b5-c6 Capture
+b5-c6 En-passant Capture
+c5-b4 Capture
+c5-c4 Quite
+c5-d4 Capture
+c5-b6 Capture
+c5-b6 En-passant Capture
+c5-c6 Quite
+c5-d6 Capture
+c5-d6 En-passant Capture
+d5-c4 Capture
+d5-d4 Quite
+d5-e4 Capture
+d5-c6 Capture
+d5-c6 En-passant Capture
+d5-d6 Quite
+d5-e6 Capture
+d5-e6 En-passant Capture
+e5-d4 Capture
+e5-e4 Quite
+e5-f4 Capture
+e5-d6 Capture
+e5-d6 En-passant Capture
+e5-e6 Quite
+e5-f6 Capture
+e5-f6 En-passant Capture
+f5-e4 Capture
+f5-f4 Quite
+f5-g4 Capture
+f5-e6 Capture
+f5-e6 En-passant Capture
+f5-f6 Quite
+f5-g6 Capture
+f5-g6 En-passant Capture
+g5-f4 Capture
+g5-g4 Quite
+g5-h4 Capture
+g5-f6 Capture
+g5-f6 En-passant Capture
+g5-g6 Quite
+g5-h6 Capture
+g5-h6 En-passant Capture
+h5-g4 Capture
+h5-h4 Quite
+h5-g6 Capture
+h5-g6 En-passant Capture
+h5-h6 Quite
+a6-a5 Quite
+a6-b5 Capture
+a6-a7 Quite
+a6-b7 Capture
+b6-a5 Capture
+b6-b5 Quite
+b6-c5 Capture
+b6-a7 Capture
+b6-b7 Quite
+b6-c7 Capture
+c6-b5 Capture
+c6-c5 Quite
+c6-d5 Capture
+c6-b7 Capture
+c6-c7 Quite
+c6-d7 Capture
+d6-c5 Capture
+d6-d5 Quite
+d6-e5 Capture
+d6-c7 Capture
+d6-d7 Quite
+d6-e7 Capture
+e6-d5 Capture
+e6-e5 Quite
+e6-f5 Capture
+e6-d7 Capture
+e6-e7 Quite
+e6-f7 Capture
+f6-e5 Capture
+f6-f5 Quite
+f6-g5 Capture
+f6-e7 Capture
+f6-f7 Quite
+f6-g7 Capture
+g6-f5 Capture
+g6-g5 Quite
+g6-h5 Capture
+g6-f7 Capture
+g6-g7 Quite
+g6-h7 Capture
+h6-g5 Capture
+h6-h5 Quite
+h6-g7 Capture
+h6-h7 Quite
+a7-a5 Double Pawn Push
+a7-a6 Quite
+a7-b6 Capture
+a7-a8 Knight Promotion
+a7-a8 Bishop Promotion
+a7-a8 Rook Promotion
+a7-a8 Queen Promotion
+a7-b8 Knight Promotion Capture
+a7-b8 Bishop Promotion Capture
+a7-b8 Rook Promotion Capture
+a7-b8 Queen Promotio n Capture
+b7-b5 Double Pawn Push
+b7-a6 Capture
+b7-b6 Quite
+b7-c6 Capture
+b7-a8 Knight Promotion Capture
+b7-a8 Bishop Promotion Capture
+b7-a8 Rook Promotion Capture
+b7-a8 Queen Promotio n Capture
+b7-b8 Knight Promotion
+b7-b8 Bishop Promotion
+b7-b8 Rook Promotion
+b7-b8 Queen Promotion
+b7-c8 Knight Promotion Capture
+b7-c8 Bishop Promotion Capture
+b7-c8 Rook Promotion Capture
+b7-c8 Queen Promotio n Capture
+c7-c5 Double Pawn Push
+c7-b6 Capture
+c7-c6 Quite
+c7-d6 Capture
+c7-b8 Knight Promotion Capture
+c7-b8 Bishop Promotion Capture
+c7-b8 Rook Promotion Capture
+c7-b8 Queen Promotio n Capture
+c7-c8 Knight Promotion
+c7-c8 Bishop Promotion
+c7-c8 Rook Promotion
+c7-c8 Queen Promotion
+c7-d8 Knight Promotion Capture
+c7-d8 Bishop Promotion Capture
+c7-d8 Rook Promotion Capture
+c7-d8 Queen Promotio n Capture
+d7-d5 Double Pawn Push
+d7-c6 Capture
+d7-d6 Quite
+d7-e6 Capture
+d7-c8 Knight Promotion Capture
+d7-c8 Bishop Promotion Capture
+d7-c8 Rook Promotion Capture
+d7-c8 Queen Promotio n Capture
+d7-d8 Knight Promotion
+d7-d8 Bishop Promotion
+d7-d8 Rook Promotion
+d7-d8 Queen Promotion
+d7-e8 Knight Promotion Capture
+d7-e8 Bishop Promotion Capture
+d7-e8 Rook Promotion Capture
+d7-e8 Queen Promotio n Capture
+e7-e5 Double Pawn Push
+e7-d6 Capture
+e7-e6 Quite
+e7-f6 Capture
+e7-d8 Knight Promotion Capture
+e7-d8 Bishop Promotion Capture
+e7-d8 Rook Promotion Capture
+e7-d8 Queen Promotio n Capture
+e7-e8 Knight Promotion
+e7-e8 Bishop Promotion
+e7-e8 Rook Promotion
+e7-e8 Queen Promotion
+e7-f8 Knight Promotion Capture
+e7-f8 Bishop Promotion Capture
+e7-f8 Rook Promotion Capture
+e7-f8 Queen Promotio n Capture
+f7-f5 Double Pawn Push
+f7-e6 Capture
+f7-f6 Quite
+f7-g6 Capture
+f7-e8 Knight Promotion Capture
+f7-e8 Bishop Promotion Capture
+f7-e8 Rook Promotion Capture
+f7-e8 Queen Promotio n Capture
+f7-f8 Knight Promotion
+f7-f8 Bishop Promotion
+f7-f8 Rook Promotion
+f7-f8 Queen Promotion
+f7-g8 Knight Promotion Capture
+f7-g8 Bishop Promotion Capture
+f7-g8 Rook Promotion Capture
+f7-g8 Queen Promotio n Capture
+g7-g5 Double Pawn Push
+g7-f6 Capture
+g7-g6 Quite
+g7-h6 Capture
+g7-f8 Knight Promotion Capture
+g7-f8 Bishop Promotion Capture
+g7-f8 Rook Promotion Capture
+g7-f8 Queen Promotio n Capture
+g7-g8 Knight Promotion
+g7-g8 Bishop Promotion
+g7-g8 Rook Promotion
+g7-g8 Queen Promotion
+g7-h8 Knight Promotion Capture
+g7-h8 Bishop Promotion Capture
+g7-h8 Rook Promotion Capture
+g7-h8 Queen Promotio n Capture
+h7-h5 Double Pawn Push
+h7-g6 Capture
+h7-h6 Quite
+h7-g8 Knight Promotion Capture
+h7-g8 Bishop Promotion Capture
+h7-g8 Rook Promotion Capture
+h7-g8 Queen Promotio n Capture
+h7-h8 Knight Promotion
+h7-h8 Bishop Promotion
+h7-h8 Rook Promotion
+h7-h8 Queen Promotion

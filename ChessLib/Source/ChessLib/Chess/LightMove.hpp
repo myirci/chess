@@ -25,7 +25,7 @@ namespace chesslib
 		constexpr static uint16_t CaptureBitMask = 0x0004;
 	public:
 
-		LightMove(Square from, Square to, MoveType mtype)
+		LightMove(Square from, Square to, MoveType mtype = MoveType::Quite)
 		{
 			SetFrom(from);
 			SetTo(to);
@@ -60,4 +60,6 @@ namespace chesslib
 			_move |= static_cast<std::uint16_t>(mtype);
 		}
 	};
+
+	using LightMoveList = std::vector<LightMove>;
 }
