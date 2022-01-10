@@ -9,8 +9,11 @@
 
 namespace chesslib::movegenerator 
 {
+	using ray = std::vector<Direction>;
+
 	struct Connection
 	{
+		Connection() : from{ 0 } { }
 		Square from;
 		std::map<Square, std::vector<std::pair<Piece, MoveType>>> edges;
 	};

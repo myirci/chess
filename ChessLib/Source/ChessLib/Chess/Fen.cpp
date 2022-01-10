@@ -8,10 +8,20 @@ namespace chesslib
 {
     const std::unordered_set<char> Fen::ValidCharSet
     {
-        charset::WhiteKing, charset::WhiteQueen, charset::WhiteRook, charset::WhiteBishop, 
-        charset::WhiteKnight, charset::WhitePawn, charset::BlackKing, charset::BlackQueen, 
-        charset::BlackRook, charset::BlackBishop, charset::BlackKnight, charset::BlackPawn,
-        RankSeparator, '1', '2', '3', '4', '5', '6', '7', '8'
+        charset::WhiteKing, 
+        charset::WhiteQueen, 
+        charset::WhiteRook, 
+        charset::WhiteBishop, 
+        charset::WhiteKnight, 
+        charset::WhitePawn, 
+        charset::BlackKing, 
+        charset::BlackQueen, 
+        charset::BlackRook, 
+        charset::BlackBishop, 
+        charset::BlackKnight, 
+        charset::BlackPawn,
+        RankSeparator, 
+        '1', '2', '3', '4', '5', '6', '7', '8'
     };
 
     Fen::Fen(std::string_view fen_string) : fen_str{ "" }
@@ -194,5 +204,3 @@ namespace chesslib
         return flattened_fields;
     }
 }
-
-

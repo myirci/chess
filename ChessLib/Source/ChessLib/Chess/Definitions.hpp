@@ -6,6 +6,7 @@
 
 namespace chesslib 
 {
+    // typedefs all same, gives semantics under different circumstances.
     using Square = int8_t;
     using Piece = int8_t;
     using Color = int8_t;
@@ -38,8 +39,12 @@ namespace chesslib
     namespace pieceset 
     {
         constexpr double
-            PawnValue{ 1.0 }, KnightValue{ 3.0 }, BishopValue{ 3.0 }, RookValue{ 5.0 },
-            QueenValue{ 10.0 }, KingValue{std::numeric_limits<double>::max()};
+            PawnValue{ 1.0 }, 
+            KnightValue{ 3.0 }, 
+            BishopValue{ 3.0 }, 
+            RookValue{ 5.0 },
+            QueenValue{ 10.0 }, 
+            KingValue{std::numeric_limits<double>::max()};
 
         constexpr Piece 
             WhitePawn{ 1 },   // 0000 0001
@@ -56,16 +61,16 @@ namespace chesslib
             BlackKing{ -6 },
             None{ 0 };
 
-        constexpr Piece Reverse(Piece p) { return -p; }
+        constexpr Piece Reverse(Piece p) noexcept { return -p; }
     }
 
     namespace color 
     {
         constexpr Color White{ 1 }, Black{ -1 };
 
-        inline constexpr Color get_color(Piece p) { return p > 0 ? White : Black; }
+        inline constexpr Color get_color(Piece p) noexcept { return p > 0 ? White : Black; }
 
-        inline constexpr Color get_opposite_color(Piece p) { return p > 0 ? Black : White; }
+        inline constexpr Color get_opposite_color(Piece p) noexcept { return p > 0 ? Black : White; }
     }
 
     namespace charset
@@ -110,21 +115,33 @@ namespace chesslib
 
     inline const std::unordered_map<char, Piece> char_to_piece =
     {
-        { charset::WhitePawn,   pieceset::WhitePawn   }, { charset::BlackPawn,   pieceset::BlackPawn   },
-        { charset::WhiteRook,   pieceset::WhiteRook   }, { charset::BlackRook,   pieceset::BlackRook   },
-        { charset::WhiteKnight, pieceset::WhiteKnight }, { charset::BlackKnight, pieceset::BlackKnight },
-        { charset::WhiteBishop, pieceset::WhiteBishop }, { charset::BlackBishop, pieceset::BlackBishop },
-        { charset::WhiteQueen,  pieceset::WhiteQueen  }, { charset::BlackQueen,  pieceset::BlackQueen  },
-        { charset::WhiteKing,   pieceset::WhiteKing   }, { charset::BlackKing,   pieceset::BlackKing   }
+        { charset::WhitePawn,   pieceset::WhitePawn   }, 
+        { charset::BlackPawn,   pieceset::BlackPawn   },
+        { charset::WhiteRook,   pieceset::WhiteRook   }, 
+        { charset::BlackRook,   pieceset::BlackRook   },
+        { charset::WhiteKnight, pieceset::WhiteKnight }, 
+        { charset::BlackKnight, pieceset::BlackKnight },
+        { charset::WhiteBishop, pieceset::WhiteBishop }, 
+        { charset::BlackBishop, pieceset::BlackBishop },
+        { charset::WhiteQueen,  pieceset::WhiteQueen  }, 
+        { charset::BlackQueen,  pieceset::BlackQueen  },
+        { charset::WhiteKing,   pieceset::WhiteKing   }, 
+        { charset::BlackKing,   pieceset::BlackKing   }
     };
 
     const std::unordered_map<Piece, char> piece_to_char =
     {
-        { pieceset::WhitePawn,   charset::WhitePawn   }, { pieceset::BlackPawn,   charset::BlackPawn   },
-        { pieceset::WhiteRook,   charset::WhiteRook   }, { pieceset::BlackRook,   charset::BlackRook   },
-        { pieceset::WhiteKnight, charset::WhiteKnight }, { pieceset::BlackKnight, charset::BlackKnight },
-        { pieceset::WhiteBishop, charset::WhiteBishop }, { pieceset::BlackBishop, charset::BlackBishop },
-        { pieceset::WhiteQueen,  charset::WhiteQueen  }, { pieceset::BlackQueen,  charset::BlackQueen  },
-        { pieceset::WhiteKing,   charset::WhiteKing   }, { pieceset::BlackKing,   charset::BlackKing   }
+        { pieceset::WhitePawn,   charset::WhitePawn   }, 
+        { pieceset::BlackPawn,   charset::BlackPawn   },
+        { pieceset::WhiteRook,   charset::WhiteRook   }, 
+        { pieceset::BlackRook,   charset::BlackRook   },
+        { pieceset::WhiteKnight, charset::WhiteKnight }, 
+        { pieceset::BlackKnight, charset::BlackKnight },
+        { pieceset::WhiteBishop, charset::WhiteBishop }, 
+        { pieceset::BlackBishop, charset::BlackBishop },
+        { pieceset::WhiteQueen,  charset::WhiteQueen  }, 
+        { pieceset::BlackQueen,  charset::BlackQueen  },
+        { pieceset::WhiteKing,   charset::WhiteKing   }, 
+        { pieceset::BlackKing,   charset::BlackKing   }
     };
 }

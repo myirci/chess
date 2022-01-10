@@ -74,6 +74,3 @@ namespace chesslib
         std::vector<std::string_view> fields;
     };
 }
-
-
-

@@ -48,6 +48,7 @@
     <ClInclude Include="Source\ChessLib\Chess\LightMove.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\Move.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\TypeTraits.hpp" />
+    <ClInclude Include="Source\ChessLib\MoveGenerator\BoardConnecivity.hpp" />
     <ClInclude Include="Source\ChessLib\MoveGenerator\MoveConnectivity.hpp" />
     <ClInclude Include="Source\ChessLib\MoveGenerator\PrecomputeMoves.hpp" />
     <ClInclude Include="Source\ChessLib\Perft\Perft.hpp" />

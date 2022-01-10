@@ -29,11 +29,10 @@ namespace chesslib::movegenerator
 
 		LightMoveList ComputeKingMoves()
 		{
-			
 			auto moves = ComputeNonSlidingPieceMoves(basic_board::direction::All);
-			moves.emplace_back(squareset::e1, squareset::f1, MoveType::King_Side_Castle);
+			moves.emplace_back(squareset::e1, squareset::g1, MoveType::King_Side_Castle);
 			moves.emplace_back(squareset::e1, squareset::c1, MoveType::Queen_Side_Castle);
-			moves.emplace_back(squareset::e8, squareset::f8, MoveType::King_Side_Castle);
+			moves.emplace_back(squareset::e8, squareset::g8, MoveType::King_Side_Castle);
 			moves.emplace_back(squareset::e8, squareset::c8, MoveType::Queen_Side_Castle);
 			return moves;
 		}

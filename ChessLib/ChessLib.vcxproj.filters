@@ -134,5 +134,8 @@
     <ClInclude Include="Source\ChessLib\MoveGenerator\MoveConnectivity.hpp">
       <Filter>MoveGenerator</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ChessLib\MoveGenerator\BoardConnecivity.hpp">
+      <Filter>MoveGenerator</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

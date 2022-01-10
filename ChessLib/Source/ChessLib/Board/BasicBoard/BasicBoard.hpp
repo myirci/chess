@@ -10,8 +10,8 @@
 
 namespace chesslib::basic_board
 {
-	// On dimensional array of 64 squares to represent 8x8 board board.
-	// Not suitable for move generation: off-board piece detection is expensive to compute.
+	// One dimensional array of 64 squares to represent 8x8 board board.
+	// Not optimal for move generation: off-board piece detection is expensive to compute.
 	class BasicBoard : public MailboxBoardBase
 	{
 	public:
