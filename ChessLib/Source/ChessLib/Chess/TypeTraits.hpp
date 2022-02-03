@@ -114,6 +114,35 @@ namespace chesslib::traits
 		static constexpr Rank PromotionRank = 0;
 		static constexpr Rank DoublePushRank = 6;
 	};
+
+	template <>
+	struct board_piece_traits<x88board::x88Board, pieceset::WhitePawn>
+	{
+		static constexpr Piece Opposite = pieceset::BlackPawn;
+
+		static constexpr Direction AttackDirections[2] = { x88board::direction::NE, x88board::direction::NW };
+		static constexpr Direction ReverseAttackDirections[2] = { x88board::direction::SW, x88board::direction::SE };
+		static constexpr Direction MoveDirection = x88board::direction::N;
+		static constexpr Direction ReverseMoveDirection = x88board::direction::S;
+
+		static constexpr Rank PromotionRank = 7;
+		static constexpr Rank DoublePushRank = 1;
+	};
+
+	template <>
+	struct board_piece_traits<x88board::x88Board, pieceset::BlackPawn>
+	{
+		static constexpr Piece Opposite = pieceset::WhitePawn;
+
+		static constexpr Direction AttackDirections[2] = { x88board::direction::SE, x88board::direction::SW };
+		static constexpr Direction ReverseAttackDirections[2] = { x88board::direction::NW, x88board::direction::NE };
+		static constexpr Direction MoveDirection = x88board::direction::S;
+		static constexpr Direction ReverseMoveDirection = x88board::direction::N;
+
+		static constexpr Rank PromotionRank = 0;
+		static constexpr Rank DoublePushRank = 6;
+	};
+
 #pragma endregion
 
 #pragma region BoardColorTraits
@@ -148,6 +177,36 @@ namespace chesslib::traits
 		static constexpr Square QueenSideRookPositionAfterCastling = squareset::d8;
 
 		static constexpr Square ValidPawnMoveSquares[2] = { squareset::a1, squareset::h6 };
+	};
+
+	template <>
+	struct board_color_traits<x88board::x88Board, color::White>
+	{
+		static constexpr Square KingSideCastleCheckSquares[2] = { x88board::f1, x88board::g1 };
+		static constexpr Square QueenSideCastleCheckSquares[3] = { x88board::d1, x88board::c1, x88board::b1 };
+
+		static constexpr Square KingSideRookInitialPosition = x88board::h1;
+		static constexpr Square QueenSideRookInitialPosition = x88board::a1;
+
+		static constexpr Square KingSideRookPositionAfterCastling = x88board::f1;
+		static constexpr Square QueenSideRookPositionAfterCastling = x88board::d1;
+
+		static constexpr Square ValidPawnMoveSquares[2] = { x88board::a3, x88board::h8 };
+	};
+
+	template <>
+	struct board_color_traits<x88board::x88Board, color::Black>
+	{
+		static constexpr Square KingSideCastleCheckSquares[2] = { x88board::f8, x88board::g8 };
+		static constexpr Square QueenSideCastleCheckSquares[3] = { x88board::d8, x88board::c8, x88board::b8 };
+
+		static constexpr Square KingSideRookInitialPosition = x88board::h8;
+		static constexpr Square QueenSideRookInitialPosition = x88board::a8;
+
+		static constexpr Square KingSideRookPositionAfterCastling = x88board::f8;
+		static constexpr Square QueenSideRookPositionAfterCastling = x88board::d8;
+
+		static constexpr Square ValidPawnMoveSquares[2] = { x88board::a1, x88board::h6 };
 	};
 #pragma endregion
 }

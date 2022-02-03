@@ -54,10 +54,8 @@ void execute_perft(
 	std::ofstream& log, 
 	std::optional<uint64_t> expected_result = std::nullopt);
 
-uint64_t perft_for_basic_board(std::string_view fen, int depth, bool divide, bool stats, bool measure_time, std::ofstream& log);
-uint64_t perft_for_object_board(std::string_view fen, int depth, bool divide, bool stats, bool measure_time, std::ofstream& log);
-uint64_t perft_for_x88_board(std::string_view fen, int depth, bool divide, bool stats, bool measure_time, std::ofstream& log);
-uint64_t perft_for_bitboard(std::string_view fen, int depth, bool divide, bool stats, bool measure_time, std::ofstream& log);
+template<typename BoardType>
+uint64_t perft(std::string_view fen, int depth, bool divide, bool stats, bool measure_time, std::ofstream& log);
 
 int main(int argc, char* argv[]) 
 {
@@ -256,7 +254,9 @@ void execute_perft(
 	// execute perft
 	uint64_t perft_res{ 0 };
 	if (board == board_type::basic)
-		perft_res = perft_for_basic_board(fen, depth, divide, stats, measure_time, log);
+		perft_res = perft<chesslib::basic_board::BasicBoard>(fen, depth, divide, stats, measure_time, log);
+	else if (board == board_type::x88) 
+		perft_res = perft<chesslib::x88board::x88Board>(fen, depth, divide, stats, measure_time, log);
 	else
 	{
 		std::cout << "Perft has not been implemented for the other board types yet." << std::endl;
@@ -280,29 +280,37 @@ void execute_perft(
 	}
 }
 
-uint64_t perft_for_basic_board(std::string_view fen, int depth, bool divide, bool stats, bool measure_time, std::ofstream& log)
+template<typename BoardType>
+uint64_t perft(std::string_view fen, int depth, bool divide, bool stats, bool measure_time, std::ofstream& log) 
 {
-	auto board = chesslib::basic_board::make_unique_board(fen);
 	uint64_t total{ 0 };
-
+	
+	std::unique_ptr<BoardType> board{ nullptr };
+	if constexpr (std::is_same<BoardType, chesslib::basic_board::BasicBoard>::value)
+		board = chesslib::basic_board::make_unique_board(fen);
+	else if constexpr (std::is_same<BoardType, chesslib::x88board::x88Board>::value)
+		board = chesslib::x88board::make_unique_board(fen);
+	else if constexpr (std::is_same<BoardType, chesslib::objboard::ObjBoard>::value)
+		board = chesslib::objboard::make_unique_board(fen);
+	
 	using Timer = chesslib::utility::time::Timer<std::chrono::milliseconds>;
-	std::optional<Timer> timer{std::nullopt};
-	if (measure_time) 
+	std::optional<Timer> timer{ std::nullopt };
+	if (measure_time)
 	{
 		timer = Timer{};
 		timer.value().Start("");
 	}
 
-	if (divide) 
+	if (divide)
 	{
-		if (stats) 
+		if (stats)
 		{
 			auto res = chesslib::perft::perft_divide_statistics(*board, depth);
-			for (const auto& p : res) 
+			for (const auto& p : res)
 			{
-				if (p.first.has_value()) 
+				if (p.first.has_value())
 				{
-					auto mv_str = chesslib::utility::chess::to_string<chesslib::basic_board::BasicBoard>(p.first.value());
+					auto mv_str = chesslib::utility::chess::to_string<BoardType>(p.first.value());
 					std::cout << mv_str << std::endl;
 					if (log.is_open())
 						log << mv_str << std::endl;
@@ -313,13 +321,13 @@ uint64_t perft_for_basic_board(std::string_view fen, int depth, bool divide, boo
 				}
 			}
 		}
-		else 
+		else
 		{
 			auto num_nodes_per_move = chesslib::perft::perft_divide(*board, depth);
 			for (const auto& [move, num_nodes] : num_nodes_per_move)
 			{
 				total += num_nodes;
-				auto mv_str = chesslib::utility::chess::to_string<chesslib::basic_board::BasicBoard>(move);
+				auto mv_str = chesslib::utility::chess::to_string<BoardType>(move);
 
 				std::cout << "\t" << mv_str << "\t" << num_nodes << std::endl;
 				if (log.is_open())
@@ -336,16 +344,16 @@ uint64_t perft_for_basic_board(std::string_view fen, int depth, bool divide, boo
 			}
 		}
 	}
-	else 
+	else
 	{
-		if (stats) 
+		if (stats)
 		{
 			auto stats = chesslib::perft::perft_statistics(*board, depth);
 			std::cout << *stats << std::endl;
-			if(log.is_open())
+			if (log.is_open())
 				log << *stats << std::endl;
 		}
-		else 
+		else
 		{
 			total = chesslib::perft::perft(*board, depth);
 			std::cout << "Number of nodes: " << total << std::endl;
@@ -364,21 +372,6 @@ uint64_t perft_for_basic_board(std::string_view fen, int depth, bool divide, boo
 	}
 
 	return total;
-}
-
-uint64_t perft_for_object_board(std::string_view fen, int depth, bool divide, bool stats, bool measure_time, std::ofstream& log)
-{
-	return 0;
-}
-
-uint64_t perft_for_x88_board(std::string_view fen, int depth, bool divide, bool stats, bool measure_time, std::ofstream& log)
-{
-	return 0;
-}
-
-uint64_t perft_for_bitboard(std::string_view fen, int depth, bool divide, bool stats, bool measure_time, std::ofstream& log)
-{
-	return 0;
 }
 
 void print_usage()

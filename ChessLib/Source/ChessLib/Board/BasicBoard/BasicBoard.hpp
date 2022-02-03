@@ -15,31 +15,25 @@ namespace chesslib::basic_board
 	class BasicBoard : public MailboxBoardBase
 	{
 	public:
-
-#pragma region static_methods
-
-		static inline bool IsInside(Square curr, Square next);
-
-#pragma endregion
-
 		constexpr static int BOARDSIZE = 64;
 		using BoardArray = std::array<Square, BOARDSIZE>;
+
+		static inline bool IsInside(Square curr, Square next);
 
 		const BoardArray& GetBoard() const;
 		BoardArray& GetBoard();
 
-		MoveList GenerateMoves() const;
-
 		void MakeMove(const Move& move);
-
 		void UnMakeMove();
+
+		MoveList GenerateMoves() const;
 
 		void ComputeChecksAndPins() const;
 
 	protected:
 
 		BasicBoard();
-		BoardArray board;
+		BoardArray _board;
 
 		template<Color Clr>
 		void MakeMoveImplementation(const Move& move);

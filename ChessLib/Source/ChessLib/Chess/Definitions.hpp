@@ -7,14 +7,14 @@
 namespace chesslib 
 {
     // typedefs all same, gives semantics under different circumstances.
-    using Square = int8_t;
-    using Piece = int8_t;
-    using Color = int8_t;
-    using Rank = int8_t;
-    using File = int8_t;
-    using Index = int8_t;
+    using Square    = int8_t;
+    using Piece     = int8_t;
+    using Color     = int8_t;
+    using Rank      = int8_t;
+    using File      = int8_t;
+    using Index     = int8_t;
     using Direction = int8_t;
-    using Distance = int8_t;
+    using Distance  = int8_t;
 
     enum class MoveType : int8_t
     {

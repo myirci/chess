@@ -13,7 +13,7 @@ namespace chesslib
 	public:
 
 		// Last made move and board states to remember before making the move.
-		// This information is required to be able to take the move back.
+		// This information is required for taking back the move.
 		struct State
 		{
 			State(const Move& mv, uint16_t hmc, int8_t castling, Square ept, Piece captured) :

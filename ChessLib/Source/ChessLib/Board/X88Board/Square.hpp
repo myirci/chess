@@ -95,11 +95,13 @@ namespace chesslib::x88board
 
         constexpr std::array<Direction, 8> All{ N, NE, E, SE, S, SW, W, NW };
         
-        constexpr std::array<Direction, 8> Flat{ N, E, S, W };
+        constexpr std::array<Direction, 4> Straight{ N, E, S, W };
         
         constexpr std::array<Direction, 4> Diagonal{ NE, SE, SW, NW };
 
         constexpr std::array<Direction, 8> KnightJumps{ N1, N2, N3, N4, N5, N6, N7, N8 };
+
+        constexpr Direction Reverse(Direction dir) { return -dir; }
     }
 
 }

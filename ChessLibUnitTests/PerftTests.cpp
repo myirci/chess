@@ -33,3 +33,13 @@ TEST_F(PerftTest, basic_board_perft)
 		EXPECT_EQ(sum, expected_sum);
 	}
 }
+
+TEST_F(PerftTest, x88_board_perft) 
+{
+	for (auto [fen, depth, expected_sum] : perft_positions)
+	{
+		auto board = x88board::make_unique_board(fen);
+		auto sum = perft::perft(*board, depth);
+		EXPECT_EQ(sum, expected_sum);
+	}
+}

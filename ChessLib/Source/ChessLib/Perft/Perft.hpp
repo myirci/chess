@@ -62,7 +62,6 @@ namespace chesslib::perft
 
     std::ostream& operator << (std::ostream& os, const Stats& stats)
     {
-        
         for (unsigned int i{ 0 }; i <= stats.depth; i++) 
         {
             os << "\tDepth: " << i << std::endl;
@@ -80,6 +79,7 @@ namespace chesslib::perft
         return os;
     }
 
+    // Board type has GenerateMoves, MakeMove and UnMakeMove methods
     template <typename Board>
     uint64_t perft(Board& board, int depth) 
     {
