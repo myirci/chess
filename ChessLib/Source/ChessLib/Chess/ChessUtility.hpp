@@ -75,7 +75,6 @@ namespace chesslib::utility::chess
 				{
 					if constexpr (std::is_same_v<Board, objboard::ObjBoard>)
 						idx += (c - '0');
-
 					else 
 					{
 						for (Index i{ 0 }; i < c - '0'; i++)
@@ -234,7 +233,7 @@ namespace chesslib::utility::chess
 	}
 
 	template<typename Board>
-	std::string to_string(const utility::IterableStack<BoardBase::State>& move_stack) 
+	std::string to_string(const utility::IterableStack<BoardState>& move_stack) 
 	{
 		auto [first, last] = move_stack.bottom_to_top();
 		std::stringstream ss{""};

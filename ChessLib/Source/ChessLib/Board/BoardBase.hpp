@@ -8,59 +8,47 @@
 
 namespace chesslib 
 {
+	// Represents the board state before making the "move".
+	struct BoardState
+	{
+		BoardState(const Move& mv, uint16_t hmc, int8_t castling, Square ept, Piece captured) :
+			move{ mv },
+			castling_rights{ castling },
+			enpassant_target{ ept },
+			halfmove_clock{ hmc },
+			captured_piece{ captured }
+		{ }
+
+		Move move;
+		uint16_t halfmove_clock;
+		int8_t castling_rights;
+		Square enpassant_target;
+		Piece captured_piece;
+	};
+
+	
+
 	class BoardBase
 	{
 	public:
 
-		// Last made move and board states to remember before making the move.
-		// This information is required for taking back the move.
-		struct State
-		{
-			State(const Move& mv, uint16_t hmc, int8_t castling, Square ept, Piece captured) :
-				move{ mv },
-				castling_rights{ castling },
-				enpassant_target{ ept },
-				halfmove_clock{ hmc },
-				captured_piece{ captured }
-			{ }
-
-			Move move;
-			uint16_t halfmove_clock;
-			int8_t castling_rights;
-			Square enpassant_target;
-			Piece captured_piece;
-		};
-
-		using MoveStack = utility::IterableStack<State>;
-
-		// key			: pinned piece location
-		// value.first	: attacker location
-		// value.second : direction from pinned piece to the attacker
-		using PinMap = std::unordered_map<Square, std::pair<Square, Direction>>;
-		
-		// 0: attacker location
-		// 1: direction from king location to the attacker
-		// 2: distance from king location to attacker (dist >= 1, number of moves for king to reach the attacker)
-		using CheckList = std::vector<std::tuple<Square, Direction, Distance>>;
+		using MoveStack = utility::IterableStack<BoardState>;
 
 		// getters
-		inline Color GetActiveColor() const			 { return _active_color; }
-		inline Square GetEnPassantSquare() const	 { return _enpassant_target; }
-		inline uint16_t GetHalfMoveClock() const	 { return _halfmove_clock; }
-		inline uint16_t GetFullMoveClock() const	 { return _fullmove_clock; }
-		inline bool IsCastlingAvailable() const		 { return _castling_rights != 0; }
-		inline bool QueryCastling(Castling c) const	 { return _castling_rights & static_cast<int8_t>(c); }
-
-		inline const MoveStack& GetMoveStack() const { return _move_stack; }
-		inline const PinMap& GetPins() const		 { return _pins; }
-		inline const CheckList& GetChecks() const	 { return _checks; }
+		Color GetActiveColor() const noexcept          { return _active_color; }
+		Square GetEnPassantSquare() const noexcept     { return _enpassant_target; }
+		uint16_t GetHalfMoveClock() const noexcept     { return _halfmove_clock; }
+		uint16_t GetFullMoveClock() const noexcept     { return _fullmove_clock; }
+		bool IsCastlingAvailable() const noexcept      { return _castling_rights != 0; }
+		bool QueryCastling(Castling c) const noexcept  { return _castling_rights & static_cast<int8_t>(c); }
+		const MoveStack& GetMoveStack() const noexcept { return _move_stack; }
 
 		// setters
-		inline void SetActiveColor(Color side_to_move)	{ _active_color = side_to_move; }
-		inline void SetEnPassantSquare(Square ep)		{ _enpassant_target = ep; }
-		inline void SetHalfMoveClock(uint16_t hmc)		{ _halfmove_clock = hmc; }
-		inline void SetFullMoveClock(uint16_t fmc)		{ _fullmove_clock = fmc; }
-		inline void SetCastling(Castling c, bool flag)  {
+		void SetActiveColor(Color side_to_move)	noexcept { _active_color = side_to_move; }
+		void SetEnPassantSquare(Square ep) noexcept      { _enpassant_target = ep; }
+		void SetHalfMoveClock(uint16_t hmc) noexcept     { _halfmove_clock = hmc; }
+		void SetFullMoveClock(uint16_t fmc)	noexcept     { _fullmove_clock = fmc; }
+		void SetCastling(Castling c, bool flag) noexcept {
 			_castling_rights = flag 
 				? _castling_rights | static_cast<int8_t>(c) 
 				: _castling_rights & ~static_cast<int8_t>(c);
@@ -68,7 +56,7 @@ namespace chesslib
 
 	protected:
 
-		BoardBase() :
+		BoardBase() noexcept :
 			_active_color{ 0 },
 			_castling_rights{ 0 },
 			_enpassant_target{ squareset::None },
@@ -76,29 +64,16 @@ namespace chesslib
 			_fullmove_clock{ 1 }
 		{ }
 
-		inline void ClearChecksAndPins() const			  { _pins.clear(); _checks.clear(); };
-		inline bool IsPiecePinned(Square piece_loc) const { return _pins.find(piece_loc) != _pins.end(); }
-
-		Direction GetPinDirection(Square piece_loc) const 
+		void PushToMoveStack(const Move& mv, Piece captured = pieceset::None)
 		{
-			auto it = _pins.find(piece_loc);
-			return it == _pins.end() ? direction::None : it->second.second;
-		}
-		
-		void PushToMoveStack(const Move& mv, Piece captured = pieceset::None) 
-		{
-			_move_stack.push({ mv, _halfmove_clock, _castling_rights, _enpassant_target, captured });
+			_move_stack.push({mv, _halfmove_clock, _castling_rights, _enpassant_target, captured});
 		}
 
-		Color _active_color;
-		int8_t _castling_rights;
-		Square _enpassant_target;
-		uint16_t _halfmove_clock;
-		uint16_t _fullmove_clock;
-
-		MoveStack _move_stack;
-
-		mutable PinMap _pins;
-		mutable CheckList _checks;
+		Color	        	  _active_color;
+		int8_t			      _castling_rights;
+		Square			      _enpassant_target;
+		uint16_t		      _halfmove_clock;
+		uint16_t		      _fullmove_clock;
+		mutable MoveStack     _move_stack;
 	};
 }

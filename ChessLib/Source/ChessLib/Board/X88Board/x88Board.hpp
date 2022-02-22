@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ChessLib/Board/MailboxBoardBase.hpp>
+#include <ChessLib/Board/PieceCentricBoardBase.hpp>
 #include <ChessLib/Chess/Move.hpp>
 
 #include <array>
@@ -10,17 +10,17 @@
 
 namespace chesslib::x88board
 {
-	class x88Board : public MailboxBoardBase
+	class x88Board : public PieceCentricBoardBase
 	{
 	public:
 
 		constexpr static int BOARDSIZE = 128;
 		using BoardArray = std::array<Square, BOARDSIZE>;
 
-		static inline bool IsInside(Square sq);
+		constexpr static bool IsInside(Square sq) noexcept { return !(0x88 & sq); }
 
-		const BoardArray& GetBoard() const;
-		BoardArray& GetBoard();
+		const BoardArray& GetBoard() const noexcept { return _board; }
+		BoardArray& GetBoard() noexcept             { return _board; }
 
 		void MakeMove(const Move& move);
 		void UnMakeMove();
@@ -29,9 +29,10 @@ namespace chesslib::x88board
 
 	protected:
 		
-		x88Board();
 		BoardArray _board;
 
+		x88Board() : PieceCentricBoardBase(), _board{} { }
+		
 		template<Color Clr>
 		void MakeMoveImplementation(const Move& move);
 

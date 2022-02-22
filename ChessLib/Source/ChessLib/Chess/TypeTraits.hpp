@@ -12,28 +12,61 @@ namespace chesslib::traits
 {
 #pragma region BoardTraits
 
-	template<typename Board>
-	struct board_traits
+	template<typename BoardType>
+	struct board_traits 
 	{
-		static constexpr Square TopToBottom(Square s) { return basic_board::top_to_bottom_order[s]; }
+		static constexpr Direction Reverse(Direction dir) noexcept
+		{
+			return -dir;
+		}
+	};
 
-		static constexpr Square BottomToTop(Square s) { return basic_board::bottom_to_top_order[s]; }
+	template <>
+	struct board_traits<basic_board::BasicBoard>
+	{
+		
 
-		static constexpr std::pair<char, char> ToCharPair(Square s) { return basic_board::get_chars(s); }
-
-		static constexpr Square GetSquareFromChars(char f, char r) { return basic_board::get_square_from_chars(f, r); }
+		static constexpr bool IsInside(Square curr, Square next) noexcept
+		{
+			return
+				next < basic_board::BasicBoard::BOARDSIZE &&
+				next >= 0 &&
+				std::abs(GetFile(next) - GetFile(curr)) <= 2;
+		}
 	};
 
 	template <>
 	struct board_traits<x88board::x88Board>
 	{
-		static constexpr Square TopToBottom(Square s) { return x88board::top_to_bottom_order[s]; }
+		static constexpr Direction N{ 16 }, S{ -16 }, E{ 1 }, W{ -1 }, NE{ 17 }, SW{ -17 }, NW{ 15 }, SE{ -15 };
 
-		static constexpr Square BottomToTop(Square s) { return x88board::bottom_to_top_order[s]; }
+		static constexpr std::array<Direction, 8> AllDirections{ N, NE, E, SE, S, SW, W, NW };
 
-		static constexpr std::pair<char, char> ToCharPair(Square s) { return x88board::get_chars(s); }
+		static constexpr std::array<Direction, 4> StraightDirections{ N, E, S, W };
 
-		static constexpr Square GetSquareFromChars(char f, char r) { return x88board::get_square_from_chars(f, r); }
+		static constexpr std::array<Direction, 4> DiagonalDirections{ NE, SE, SW, NW };
+
+		static constexpr std::array<Direction, 8> KnightJumps{ 33, 18, -14, -31, -33, -18, 14, 31 };
+
+		static constexpr Square TopToBottom(Square s) 
+		{ 
+			return x88board::top_to_bottom_order[s]; 
+		}
+
+		static constexpr Square BottomToTop(Square s) 
+		{ 
+			return x88board::bottom_to_top_order[s]; 
+		}
+
+		static constexpr std::pair<char, char> ToCharPair(Square s) 
+		{ 
+			return x88board::get_chars(s); 
+		}
+
+		static constexpr Square GetSquareFromChars(char f, char r) 
+		{ 
+			return x88board::get_square_from_chars(f, r); 
+		}
 	};
 
 #pragma endregion

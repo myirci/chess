@@ -15,10 +15,9 @@ namespace chesslib::objboard
 	class ObjBoard : public BoardBase  
 	{
 	public:
-		
 		constexpr static int BOARDSIZE = 64;
-
 		using SquareArray = std::array<SquareObj, BOARDSIZE>;
+
 		using PiecePtr = std::shared_ptr<PieceObj>;
 		using PieceMap = std::unordered_multimap<Piece, PiecePtr>;
 

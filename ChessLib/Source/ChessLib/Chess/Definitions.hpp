@@ -103,6 +103,8 @@ namespace chesslib
     namespace direction 
     {
         constexpr Direction None = 0;
+
+        constexpr Direction Reverse(Direction dir) { return -dir; }
     }
 
     enum class Castling : int8_t

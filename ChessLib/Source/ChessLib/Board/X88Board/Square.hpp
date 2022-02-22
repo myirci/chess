@@ -85,25 +85,6 @@ namespace chesslib::x88board
         return { f + 'a', r + '1' };
     }
 
-    namespace direction
-    {
-        constexpr Direction None{ chesslib::direction::None };
-
-        constexpr Direction N{ 16 }, S{ -16 }, E{ 1 }, W{ -1 }, NE{ 17 }, SW{ -17 }, NW{ 15 }, SE{ -15 };
-
-        constexpr Direction N1{ 33 }, N2{ 18 }, N3{ -14 }, N4{ -31 }, N5{ -33 }, N6{ -18 }, N7{ 14 }, N8{ 31 };
-
-        constexpr std::array<Direction, 8> All{ N, NE, E, SE, S, SW, W, NW };
-        
-        constexpr std::array<Direction, 4> Straight{ N, E, S, W };
-        
-        constexpr std::array<Direction, 4> Diagonal{ NE, SE, SW, NW };
-
-        constexpr std::array<Direction, 8> KnightJumps{ N1, N2, N3, N4, N5, N6, N7, N8 };
-
-        constexpr Direction Reverse(Direction dir) { return -dir; }
-    }
-
 }
 
 

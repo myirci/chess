@@ -3,13 +3,6 @@
 
 namespace chesslib::x88board
 {
-	bool x88Board::IsInside(Square sq) { return !(0x88 & sq); }
-
-	x88Board::x88Board() : _board{} { }
-
-	const x88Board::BoardArray& x88Board::GetBoard() const { return _board; }
-	x88Board::BoardArray& x88Board::GetBoard()			   { return _board; }
-	
 	void x88Board::MakeMove(const Move& move)
 	{
 		auto side_to_move = GetActiveColor();

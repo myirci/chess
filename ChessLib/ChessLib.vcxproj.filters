@@ -66,6 +66,9 @@
     <ClCompile Include="Source\ChessLib\MoveGenerator\MoveConnectivity.cpp">
       <Filter>MoveGenerator</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ChessLib\MoveGenerator\MoveGenerator.cpp">
+      <Filter>MoveGenerator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ChessLib\Chess\Definitions.hpp">
@@ -95,9 +98,6 @@
     <ClInclude Include="Source\ChessLib\Board\BasicBoard\BasicBoard.hpp">
       <Filter>Board\BasicBoard</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ChessLib\Board\BasicBoard\Square.hpp">
-      <Filter>Board\BasicBoard</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ChessLib\Board\Bitboard\Bitboard.hpp">
       <Filter>Board\BitBoard</Filter>
     </ClInclude>
@@ -119,7 +119,7 @@
     <ClInclude Include="Source\ChessLib\Board\BoardBase.hpp">
       <Filter>Board</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ChessLib\Board\MailboxBoardBase.hpp">
+    <ClInclude Include="Source\ChessLib\Board\PieceCentricBoardBase.hpp">
       <Filter>Board</Filter>
     </ClInclude>
     <ClInclude Include="Source\ChessLib\Utility\Timer.hpp">
@@ -135,6 +135,12 @@
       <Filter>MoveGenerator</Filter>
     </ClInclude>
     <ClInclude Include="Source\ChessLib\MoveGenerator\BoardConnecivity.hpp">
+      <Filter>MoveGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\MoveGenerator\ChecksAndPins.hpp">
+      <Filter>MoveGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\MoveGenerator\MoveGenerator.hpp">
       <Filter>MoveGenerator</Filter>
     </ClInclude>
   </ItemGroup>

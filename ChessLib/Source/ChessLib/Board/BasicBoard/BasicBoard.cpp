@@ -9,20 +9,6 @@ namespace chesslib::basic_board
 	template void BasicBoard::GenerateMovesImplementation<color::White>(MoveList&) const;
 	template void BasicBoard::GenerateMovesImplementation<color::Black>(MoveList&) const;
 
-	bool BasicBoard::IsInside(Square curr, Square next)
-	{
-		return 
-			next < BOARDSIZE && 
-			next >= 0 && 
-			std::abs(get_file(next) - get_file(curr)) <= 2;
-	}
-
-	BasicBoard::BasicBoard() : _board{} { }
-
-	const BasicBoard::BoardArray& BasicBoard::GetBoard() const { return _board; }
-
-	BasicBoard::BoardArray& BasicBoard::GetBoard() { return _board; }
-
 	void BasicBoard::MakeMove(const Move& move) 
 	{
 		auto side_to_move = GetActiveColor();
@@ -69,14 +55,6 @@ namespace chesslib::basic_board
 			GenerateMovesImplementation<color::Black>(moves);
 
 		return moves;
-	}
-
-	void BasicBoard::ComputeChecksAndPins() const 
-	{
-		if (_active_color == color::White) 
-			ComputeChecksAndPins<color::Black>(GetKingPosition<color::White>());
-		else
-			ComputeChecksAndPins<color::White>(GetKingPosition<color::Black>());
 	}
 
 	template<Color Clr>

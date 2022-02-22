@@ -5,21 +5,21 @@
 
 namespace chesslib 
 {
-	class MailboxBoardBase : public BoardBase
+	class PieceCentricBoardBase : public BoardBase
 	{
 	public:
 
 		using PieceMap = std::unordered_multimap<Piece, Square>;
 		using EqualPieceRange = std::pair<PieceMap::const_iterator, PieceMap::const_iterator>;
 
-		const PieceMap& GetWhitePieces() const { return _white_pieces; }
-		PieceMap& GetWhitePieces()			   { return _white_pieces; }
-		const PieceMap& GetBlackPieces() const { return _black_pieces; }
-		PieceMap& GetBlackPieces()			   { return _black_pieces; }
+		const PieceMap& GetWhitePieces() const noexcept { return _white_pieces; }
+		PieceMap& GetWhitePieces() noexcept			    { return _white_pieces; }
+		const PieceMap& GetBlackPieces() const noexcept { return _black_pieces; }
+		PieceMap& GetBlackPieces() noexcept			    { return _black_pieces; }
 
 	protected:
 
-		MailboxBoardBase() { } 
+		PieceCentricBoardBase() noexcept : BoardBase() { }
 
 		PieceMap _white_pieces;
 		PieceMap _black_pieces;
