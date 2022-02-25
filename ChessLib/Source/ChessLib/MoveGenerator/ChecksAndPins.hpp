@@ -83,6 +83,27 @@ namespace chesslib
 			{
 				Square pin_loc{ squareset::None };
 				Distance dist{ 1 };
+
+				Square next{ king_pos + dir };
+				while (true) 
+				{
+					if constexpr (std::is_same<BoardType, basic_board::BasicBoard>)
+					{
+						if (!basic_board::BasicBoard::IsInside(king_pos, next)
+							break;
+					}
+					else
+					{
+						if (!BoardType::IsInside(next))
+							break;
+					}
+
+
+					next += dir;
+					dist++;
+				}
+
+
 				for (Square next{ king_pos + dir }; IsInside(next - dir, next); next += dir, dist++)
 				{
 					if (_board[next] == squareset::Empty)

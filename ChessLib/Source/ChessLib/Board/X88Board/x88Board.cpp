@@ -203,17 +203,6 @@ namespace chesslib::x88board
 		}
 	}
 
-	MoveList x88Board::GenerateMoves() const 
-	{
-		MoveList moves;
-		auto side_to_move = GetActiveColor();
-		if (side_to_move == color::White)
-			GenerateMovesImplementation<color::White>(moves);
-		else
-			GenerateMovesImplementation<color::Black>(moves);
-		return moves;
-	}
-
 	template<Color Clr>
 	void x88Board::GenerateMovesImplementation(MoveList& moves) const
 	{

@@ -11,6 +11,8 @@
 
 namespace chesslib::basic_board
 {
+	constexpr Direction N{ 8 }, S{ -8 }, E{ 1 }, W{ -1 }, NE{ 9 }, SW{ -9 }, NW{ 7 }, SE{ -7 };
+
 	// One dimensional array of 64 squares to represent 8x8 board board.
 	// Not optimal for move generation: off-board piece detection is expensive to compute.
 	class BasicBoard : public PieceCentricBoardBase
@@ -21,7 +23,7 @@ namespace chesslib::basic_board
 
 		static constexpr int BOARDSIZE = 64;
 		
-		static constexpr Square top_to_bottom_order[64]
+		static constexpr Square TopToBottomOrder[BOARDSIZE]
 		{
 			squareset::a8, squareset::b8, squareset::c8, squareset::d8, squareset::e8, squareset::f8, squareset::g8, squareset::h8,
 			squareset::a7, squareset::b7, squareset::c7, squareset::d7, squareset::e7, squareset::f7, squareset::g7, squareset::h7,
@@ -33,7 +35,7 @@ namespace chesslib::basic_board
 			squareset::a1, squareset::b1, squareset::c1, squareset::d1, squareset::e1, squareset::f1, squareset::g1, squareset::h1
 		};
 
-		static constexpr Square bottom_to_top_order[64]
+		static constexpr Square BottomToTopOrder[BOARDSIZE]
 		{
 			squareset::a1, squareset::b1, squareset::c1, squareset::d1, squareset::e1, squareset::f1, squareset::g1, squareset::h1,
 			squareset::a2, squareset::b2, squareset::c2, squareset::d2, squareset::e2, squareset::f2, squareset::g2, squareset::h2,
@@ -44,8 +46,6 @@ namespace chesslib::basic_board
 			squareset::a7, squareset::b7, squareset::c7, squareset::d7, squareset::e7, squareset::f7, squareset::g7, squareset::h7,
 			squareset::a8, squareset::b8, squareset::c8, squareset::d8, squareset::e8, squareset::f8, squareset::g8, squareset::h8
 		};
-
-		static constexpr Direction N{ 8 }, S{ -8 }, E{ 1 }, W{ -1 }, NE{ 9 }, SW{ -9 }, NW{ 7 }, SE{ -7 };
 
 		static constexpr std::array<Direction, 8> AllDirections{ N, NE, E, SE, S, SW, W, NW };
 
@@ -80,10 +80,15 @@ namespace chesslib::basic_board
 			return GetSquare(f - 'a', r - '1');
 		};
 
-		static constexpr std::pair<char, char> ToCharPair(Square s) noexcept
+		static constexpr std::pair<char, char> GetCharPair(Square s) noexcept
 		{
 			auto [f, r] = GetFileAndRank(s);
 			return { f + 'a', r + '1' };
+		}
+
+		static constexpr bool IsInside(Square curr, Square next) noexcept
+		{
+			return next < BOARDSIZE && next >= 0 && std::abs(GetFile(next) - GetFile(curr)) <= 2;
 		}
 
 #pragma endregion
@@ -95,8 +100,6 @@ namespace chesslib::basic_board
 
 		void MakeMove(const Move& move);
 		void UnMakeMove();
-
-		MoveList GenerateMoves() const;
 
 	protected:
 

@@ -110,9 +110,6 @@
     <ClInclude Include="Source\ChessLib\Board\ObjBoard\SquareObj.hpp">
       <Filter>Board\ObjBoard</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ChessLib\Board\X88Board\Square.hpp">
-      <Filter>Board\X88Board</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ChessLib\Board\X88Board\x88Board.hpp">
       <Filter>Board\X88Board</Filter>
     </ClInclude>

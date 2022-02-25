@@ -44,19 +44,6 @@ namespace chesslib::basic_board
 		_move_stack.pop();
 	}
 
-	MoveList BasicBoard::GenerateMoves() const 
-	{
-		MoveList moves;
-
-		auto side_to_move = GetActiveColor();
-		if (side_to_move == color::White)
-			GenerateMovesImplementation<color::White>(moves);
-		else
-			GenerateMovesImplementation<color::Black>(moves);
-
-		return moves;
-	}
-
 	template<Color Clr>
 	void BasicBoard::MakeMoveImplementation(const Move& move)
 	{

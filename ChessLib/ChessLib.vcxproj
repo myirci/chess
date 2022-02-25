@@ -40,7 +40,6 @@
     <ClInclude Include="Source\ChessLib\Board\ObjBoard\ObjBoard.hpp" />
     <ClInclude Include="Source\ChessLib\Board\ObjBoard\PieceObj.hpp" />
     <ClInclude Include="Source\ChessLib\Board\ObjBoard\SquareObj.hpp" />
-    <ClInclude Include="Source\ChessLib\Board\X88Board\Square.hpp" />
     <ClInclude Include="Source\ChessLib\Board\X88Board\x88Board.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\ChessUtility.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\Definitions.hpp" />
