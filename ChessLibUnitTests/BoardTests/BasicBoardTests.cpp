@@ -12,6 +12,7 @@ using namespace chesslib;
 using namespace chesslib::squareset;
 using namespace chesslib::pieceset;
 
+/*
 class BasicBoardTests : public ::testing::Test, public BasicAndObjectBoardTestBase
 {
 public:
@@ -128,3 +129,5 @@ TEST_F(BasicBoardTests, make_unmake_moves)
         EXPECT_EQ(fen1, utility::chess::board_to_fen(*b));
     }
 }
+
+*/

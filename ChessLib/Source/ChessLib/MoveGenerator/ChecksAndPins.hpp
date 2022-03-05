@@ -2,6 +2,7 @@
 
 #include <ChessLib/Chess/Definitions.hpp>
 #include <ChessLib/Chess/TypeTraits.hpp>
+#include <ChessLib/Chess/ChessUtility.hpp>
 
 #include <unordered_map>
 
@@ -36,10 +37,12 @@ namespace chesslib
 		template <Color Attacker>
 		void Compute(const BoardType& board, Square king_pos)
 		{
-			using ctraits = traits::color_traits<Attacker>;
-			using btraits = traits::board_traits<BoardType>;
+			// get the board array.
+			const auto& _board = board.GetBoard();
 
+			// clear the data structure.
 			Clear();
+
 			Compute<Attacker, true>(king_pos, btraits::StraightDirections);
 			Compute<Attacker, false>(king_pos, btraits::DiagonalDirections);
 
@@ -74,6 +77,18 @@ namespace chesslib
 		}
 
 		template<Color Attacker, bool IsStraightMovingPiece>
+		bool IsNonKingAttacker(Square sq) 
+		{
+			if constexpr (IsStraightMovingPiece)
+				return _board[sq] == ctraits::Rook || _board[sq] == ctraits::Queen;
+			else
+				return _board[sq] == ctraits::Bishop || _board[sq] == ctraits::Queen ||
+				       dist == 1 && _board[next] == ctraits::Pawn &&
+				       (dir == bptraits::ReverseAttackDirections[0] || 
+						dir == bptraits::ReverseAttackDirections[1]);
+		}
+
+		template<Color Attacker, bool IsStraightMovingPiece>
 		void Compute(Square king_pos, const std::array<Direction, 4>& attack_directions)
 		{
 			// using ctraits = traits::color_traits<Attacker>;
@@ -89,7 +104,7 @@ namespace chesslib
 				{
 					if constexpr (std::is_same<BoardType, basic_board::BasicBoard>)
 					{
-						if (!basic_board::BasicBoard::IsInside(king_pos, next)
+						if (!basic_board::BasicBoard::IsInside(next - dir, next)
 							break;
 					}
 					else
@@ -98,25 +113,17 @@ namespace chesslib
 							break;
 					}
 
-
-					next += dir;
-					dist++;
-				}
-
-
-				for (Square next{ king_pos + dir }; IsInside(next - dir, next); next += dir, dist++)
-				{
-					if (_board[next] == squareset::Empty)
-						continue;
-
 					bool is_under_attack{ false }; // excluding king attacks
-
+					
 					if constexpr (IsStraightMovingPiece)
-						is_under_attack = (_board[next] == ctraits::Rook || _board[next] == ctraits::Queen);
+						is_under_attack = _board[next] == ctraits::Rook || 
+						                  _board[next] == ctraits::Queen;
 					else
-						is_under_attack = _board[next] == ctraits::Bishop || _board[next] == ctraits::Queen ||
-						dist == 1 && _board[next] == ctraits::Pawn &&
-						(dir == bptraits::ReverseAttackDirections[0] || dir == bptraits::ReverseAttackDirections[1]);
+						is_under_attack = _board[next] == ctraits::Bishop || 
+										  _board[next] == ctraits::Queen ||
+										  dist == 1 && _board[next] == ctraits::Pawn &&
+										  (dir == bptraits::ReverseAttackDirections[0] || 
+										   dir == bptraits::ReverseAttackDirections[1]);
 
 					if (is_under_attack)
 					{
@@ -133,6 +140,9 @@ namespace chesslib
 						else
 							break;
 					}
+
+					next += dir;
+					dist++;
 				}
 			}
 		}

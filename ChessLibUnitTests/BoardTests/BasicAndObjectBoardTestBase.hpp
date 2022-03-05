@@ -4,7 +4,6 @@
 
 #include <ChessLib/Chess/Definitions.hpp>
 #include <ChessLib/Board/BoardBase.hpp>
-#include <ChessLib/Board/MailboxBoardBase.hpp>
 #include <ChessLib/Chess/Move.hpp>
 
 #include <array>
@@ -13,6 +12,7 @@ using namespace chesslib;
 using namespace chesslib::squareset;
 using namespace chesslib::pieceset;
 
+/*
 class BasicAndObjectBoardTestBase : public CommonBoardTestBase
 {
 protected:
@@ -431,3 +431,4 @@ protected:
         }
     };
 };
+*/

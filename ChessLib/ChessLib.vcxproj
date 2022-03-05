@@ -19,28 +19,27 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\ChessLib\Board\BasicBoard\BasicBoard.cpp" />
+    <ClCompile Include="Source\ChessLib\Board\BasicBoard.cpp" />
     <ClCompile Include="Source\ChessLib\Board\Bitboard\BitBoard.cpp" />
     <ClCompile Include="Source\ChessLib\Board\ObjBoard\ObjBoard.cpp" />
     <ClCompile Include="Source\ChessLib\Board\ObjBoard\PieceObj.cpp" />
-    <ClCompile Include="Source\ChessLib\Board\X88Board\x88Board.cpp" />
+    <ClCompile Include="Source\ChessLib\Board\x88Board.cpp" />
     <ClCompile Include="Source\ChessLib\Chess\ChessUtility.cpp" />
     <ClCompile Include="Source\ChessLib\Chess\Fen.cpp" />
     <ClCompile Include="Source\ChessLib\Chess\LightMove.cpp" />
     <ClCompile Include="Source\ChessLib\Chess\Move.cpp" />
     <ClCompile Include="Source\ChessLib\MoveGenerator\MoveConnectivity.cpp" />
-    <ClCompile Include="Source\ChessLib\MoveGenerator\MoveGenerator.cpp" />
     <ClCompile Include="Source\ChessLib\Utility\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\ChessLib\Board\BasicBoard\BasicBoard.hpp" />
+    <ClInclude Include="Source\ChessLib\Board\BasicBoard.hpp" />
     <ClInclude Include="Source\ChessLib\Board\Bitboard\Bitboard.hpp" />
     <ClInclude Include="Source\ChessLib\Board\BoardBase.hpp" />
     <ClInclude Include="Source\ChessLib\Board\PieceCentricBoardBase.hpp" />
     <ClInclude Include="Source\ChessLib\Board\ObjBoard\ObjBoard.hpp" />
     <ClInclude Include="Source\ChessLib\Board\ObjBoard\PieceObj.hpp" />
     <ClInclude Include="Source\ChessLib\Board\ObjBoard\SquareObj.hpp" />
-    <ClInclude Include="Source\ChessLib\Board\X88Board\x88Board.hpp" />
+    <ClInclude Include="Source\ChessLib\Board\x88Board.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\ChessUtility.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\Definitions.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\Fen.hpp" />
@@ -68,26 +67,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -155,7 +154,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>C:\Users\myirci\Documents\dev\github\chess\ChessLib\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>MaxSpeed</Optimization>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>

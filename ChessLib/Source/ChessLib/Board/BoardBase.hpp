@@ -26,8 +26,6 @@ namespace chesslib
 		Piece captured_piece;
 	};
 
-	
-
 	class BoardBase
 	{
 	public:

@@ -1,12 +1,11 @@
-#include <pch.h>
+#include "pch.h"
 
 #include <vector>
-
 #include <ChessLib/Chess/Fen.hpp>
 
 using namespace chesslib;
 
-TEST(FenTest, default_constructor)
+TEST(FenTests, DefaultConstructor)
 {
     Fen f;
     EXPECT_EQ(f.Get_PiecePlacement(), "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
@@ -18,7 +17,7 @@ TEST(FenTest, default_constructor)
     EXPECT_EQ(f.Get_Fen(), Fen::StartingPosition);
 }
 
-TEST(FenTest, constructor_fen_with_six_fields)
+TEST(FenTests, Constructor_FenWithSixFields)
 {
     std::string_view fs{ "6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1 b KQkq c3 0 2" };
     Fen f(fs);
@@ -31,7 +30,7 @@ TEST(FenTest, constructor_fen_with_six_fields)
     EXPECT_EQ(f.Get_Fen(), fs);
 }
 
-TEST(FenTest, constructor_fen_with_four_fields)
+TEST(FenTests, Constructor_FenWithFourFields)
 {
     std::string_view fs{ "6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1 w KQkq c6" };
     Fen f(fs);
@@ -44,7 +43,7 @@ TEST(FenTest, constructor_fen_with_four_fields)
     EXPECT_EQ(f.Get_Fen(), fs);
 }
 
-TEST(FenTest, constructor_fen_with_spaces)
+TEST(FenTests, Constructor_FenWithSpaces)
 {
     std::string_view fs{ "    6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1   b      Kkq       c3      0    2      " };
     std::string_view fs_clean{ "6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1 b Kkq c3 0 2" };
@@ -58,7 +57,7 @@ TEST(FenTest, constructor_fen_with_spaces)
     EXPECT_EQ(f.Get_Fen(), fs_clean);
 }
 
-TEST(FenTest, constructor_fen_with_various_white_space_chars)
+TEST(FenTests, Constructor_FenWithWhiteSpaces)
 {
     std::string_view fs{ "    6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1  \t w   \t\t  \n -  \t  \v   c6  \f  \r  0    2     \t " };
     std::string_view fs_clean{ "6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1 w - c6 0 2" };
@@ -72,7 +71,7 @@ TEST(FenTest, constructor_fen_with_various_white_space_chars)
     EXPECT_EQ(f.Get_Fen(), fs_clean);
 }
 
-TEST(FenTest, constructor_invalid_number_of_fields)
+TEST(FenTests, Constructor_InvalidNumberOfFields)
 {
     EXPECT_THROW(Fen(""), std::logic_error);
     EXPECT_THROW(Fen(" "), std::logic_error);
@@ -82,7 +81,7 @@ TEST(FenTest, constructor_invalid_number_of_fields)
     EXPECT_THROW(Fen("6k1/pp3pp1/3p4/2pP2p1/ 4Pp2/8/1P3PP1/6K1 b - c6 1 2"), std::logic_error);
 }
 
-TEST(FenTest, constructor_invalid_piece_placement)
+TEST(FenTests, Constructor_InvalidPiecePlacement)
 {
     // Nonsense 
     EXPECT_THROW(Fen("x x x x x x"), std::logic_error);
@@ -145,14 +144,14 @@ TEST(FenTest, constructor_invalid_piece_placement)
     EXPECT_THROW(Fen("5qk1/pp3pqq/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1 b - c6 1 2"), std::logic_error);
 }
 
-TEST(FenTest, invalid_active_color)
+TEST(FenTests, InvalidActiveColor)
 {
     // Invalid characters
     EXPECT_THROW(Fen("6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1 a KQkq c6"), std::logic_error);
     EXPECT_THROW(Fen("6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1 k KQkq c6"), std::logic_error);
 }
 
-TEST(FenTest, castling_rights)
+TEST(FenTests, CastlingRights)
 {
     auto fen_vec = std::vector<std::pair<Fen, std::string_view>>
     { 
@@ -178,7 +177,7 @@ TEST(FenTest, castling_rights)
         EXPECT_EQ(fp.first.Get_CastlingAvailability(), fp.second);
 }
 
-TEST(FenTest, invalid_castling_rights)
+TEST(FenTests, InvalidCastlingRights)
 {
     // Invalid characters
     EXPECT_THROW(Fen("6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1 w KQkqk -"), std::logic_error);
@@ -193,7 +192,7 @@ TEST(FenTest, invalid_castling_rights)
     EXPECT_THROW(Fen("6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1 w qK -"), std::logic_error);
 }
 
-TEST(FenTest, enpassant_target_square)
+TEST(FenTests, EnpassantTargetSquare)
 {
     auto fen_vec = std::vector<std::pair<Fen, std::string_view>>
     { 
@@ -220,7 +219,7 @@ TEST(FenTest, enpassant_target_square)
         EXPECT_EQ(fp.first.Get_EnPassantTargetSquare(), fp.second);
 }
 
-TEST(FenTest, invalid_enpassant_target_square)
+TEST(FenTests, InvalidEnpassantTargetSquare)
 {
     // Invalid characters
     EXPECT_THROW(Fen("6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1 b - a"), std::logic_error);
@@ -243,7 +242,7 @@ TEST(FenTest, invalid_enpassant_target_square)
     EXPECT_THROW(Fen("6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1 b - a6"), std::logic_error);
 }
 
-TEST(FenTest, half_move_clock) 
+TEST(FenTests, HalfMoveClock)
 {
     auto fen_vec = std::vector<std::pair<Fen, std::string_view>>
     {
@@ -258,7 +257,7 @@ TEST(FenTest, half_move_clock)
         EXPECT_EQ(fp.first.Get_HalfMoveClock(), fp.second);
 }
 
-TEST(FenTest, invalid_half_move_clock) 
+TEST(FenTests, InvalidHalfMoveClock)
 {
     // two digit - starts with zer0
     EXPECT_THROW(Fen("6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1 b - - 00 1"), std::logic_error);
@@ -273,7 +272,7 @@ TEST(FenTest, invalid_half_move_clock)
     EXPECT_THROW(Fen("6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1 b - - 1k 1"), std::logic_error);
 }
 
-TEST(FenTest, full_move_clock) 
+TEST(FenTests, FullMoveClock) 
 {
     auto fen_vec = std::vector<std::pair<Fen, std::string_view>>
     {
@@ -288,7 +287,7 @@ TEST(FenTest, full_move_clock)
         EXPECT_EQ(fp.first.Get_FullMoveClock(), fp.second);
 }
 
-TEST(FenTest, invalid_full_move_clock) 
+TEST(FenTests, InvalidFullMoveClock)
 {
     // more than one digit - starts with zer0
     EXPECT_THROW(Fen("6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1 b - - 0 01"), std::logic_error);

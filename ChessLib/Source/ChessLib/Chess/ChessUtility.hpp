@@ -8,7 +8,7 @@
 #include <ChessLib/Chess/TypeTraits.hpp>
 #include <ChessLib/Board/BoardBase.hpp>
 
-namespace chesslib::utility::chess 
+namespace chesslib::utility::chess
 {
 	namespace fenhelpers
 	{
@@ -58,6 +58,7 @@ namespace chesslib::utility::chess
 	template<typename Board>
 	void set_board(Board& brd, std::string_view fen) 
 	{
+		/*
 		auto flattened_fields = Fen::GetFlattenedFields(fen);
 		if (flattened_fields.size() != 13 && flattened_fields.size() != 11)
 			throw std::logic_error("Fen parse error - field error.");
@@ -121,6 +122,7 @@ namespace chesslib::utility::chess
 			fenhelpers::SetHalfMoveClock(brd, flattened_fields[11]);
 			fenhelpers::SetFullMoveClock(brd, flattened_fields[12]);
 		}
+		*/
 	}
 
 	// GetBoard(), GetActiveColor(), IsCastlingAvailable(), QueryCastling(Castling)
@@ -128,6 +130,8 @@ namespace chesslib::utility::chess
 	template<typename Board>
 	std::string board_to_fen(Board const& brd)
 	{
+		return "";
+		/*
 		const auto& b = brd.GetBoard();
 
 		int empty_count{ 0 };
@@ -207,16 +211,20 @@ namespace chesslib::utility::chess
 		ss << ' ' << brd.GetHalfMoveClock() << ' ' << brd.GetFullMoveClock();
 
 		return ss.str();
+		*/
 	}	
 
 	template<typename Board, typename MoveType>
 	std::string to_string(const MoveType& move)
 	{
+		return "";
+		/*
 		using btraits = traits::board_traits<Board>;
 		std::string move_string{ "__-__" };
 		std::tie(move_string[0], move_string[1]) = btraits::ToCharPair(move.GetFrom());
 		std::tie(move_string[3], move_string[4]) = btraits::ToCharPair(move.GetTo());
 		return move_string;
+		*/
 	}
 
 	std::string_view to_string(MoveType mtype);
@@ -224,12 +232,15 @@ namespace chesslib::utility::chess
 	template<typename Board, typename MV>
 	std::string to_string_long(const MV& move)
 	{
+		return "";
+		/*
 		using btraits = traits::board_traits<Board>;
 		std::string move_string{ "__-__ " };
 		move_string += to_string(move.GetMoveType());
 		std::tie(move_string[0], move_string[1]) = btraits::ToCharPair(move.GetFrom());
 		std::tie(move_string[3], move_string[4]) = btraits::ToCharPair(move.GetTo());
 		return move_string;
+		*/
 	}
 
 	template<typename Board>
@@ -242,5 +253,14 @@ namespace chesslib::utility::chess
 		for (first++; first != last; first++) 
 			ss << ", " << to_string<Board>(first->move);
 		return ss.str();
+	}
+
+	template <typename BoardType>
+	bool is_inside(Square sq1, Square sq2 = squareset::None) 
+	{
+		if constexpr (std::is_same<BoardType, BasicBoard>)
+			return typename BoardType::IsInside(sq1, sq2);
+		else 
+			return typename BoardType::IsInside(sq1);
 	}
 }

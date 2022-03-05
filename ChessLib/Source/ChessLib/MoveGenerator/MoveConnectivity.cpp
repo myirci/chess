@@ -4,6 +4,7 @@
 
 namespace chesslib::movegenerator 
 {
+	/*
 	std::ostream& operator << (std::ostream& os, const Connection& connect) 
 	{
 		auto [c1, c2] = basic_board::get_chars(connect.from);
@@ -20,4 +21,5 @@ namespace chesslib::movegenerator
 		}
 		return os;
 	}
+	*/
 }

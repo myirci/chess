@@ -10,6 +10,7 @@ using namespace chesslib;
 using namespace chesslib::pieceset;
 using namespace chesslib::x88board;
 
+/*
 class x88BoardTests : public ::testing::Test, public CommonBoardTestBase
 {
 public:
@@ -116,3 +117,5 @@ TEST_F(x88BoardTests, constructor_fen_compare)
         EXPECT_EQ(f, utility::chess::board_to_fen(*b));
     }
 }
+
+*/

@@ -1,9 +1,12 @@
-#include <ChessLib/Board/X88Board/x88Board.hpp>
+#include <ChessLib/Board/BasicBoard.hpp>
 #include <ChessLib/Chess/ChessUtility.hpp>
 
-namespace chesslib::x88board
+#include <stdexcept>
+
+namespace chesslib
 {
-	void x88Board::MakeMove(const Move& move)
+	/*
+	void BasicBoard::MakeMove(const Move& move) 
 	{
 		auto side_to_move = GetActiveColor();
 		if (side_to_move == color::White)
@@ -12,21 +15,47 @@ namespace chesslib::x88board
 			MakeMoveImplementation<color::Black>(move);
 	}
 
+	void BasicBoard::UnMakeMove()
+	{
+		// get the move and board state before the move was made.
+		const auto& previous_state = _move_stack.top();
+
+		// restore side to move
+		_active_color = color::get_opposite_color(_active_color);
+
+		// restore castling rights, en-passant location and half move clock
+		_castling_rights = previous_state.castling_rights;
+		_enpassant_target = previous_state.enpassant_target;
+		_halfmove_clock = previous_state.halfmove_clock;
+
+		// restore the full move clock
+		if (_active_color == color::Black)
+			_fullmove_clock--;
+
+		// restore the board and piece positions
+		if (_active_color == color::White)
+			UnMakeMove<color::White>(previous_state.move, previous_state.captured_piece);
+		else
+			UnMakeMove<color::Black>(previous_state.move, previous_state.captured_piece);
+
+		_move_stack.pop();
+	}
+
 	template<Color Clr>
-	void x88Board::MakeMoveImplementation(const Move& move)
+	void BasicBoard::MakeMoveImplementation(const Move& move)
 	{
 		using ctraits = traits::color_traits<Clr>;
 		using octraits = traits::color_traits<ctraits::Opposite>;
-		using bptraits = traits::board_piece_traits<x88Board, ctraits::Pawn>;
-		using bctraits = traits::board_color_traits<x88Board, Clr>;
-		using boctraits = traits::board_color_traits<x88Board, ctraits::Opposite>;
+		using bptraits = traits::board_piece_traits<BasicBoard, ctraits::Pawn>;
+		using bctraits = traits::board_color_traits<BasicBoard, Clr>;
+		using boctraits = traits::board_color_traits<BasicBoard, ctraits::Opposite>;
 
 		Square from{ move.GetFrom() }, to{ move.GetTo() };
 
 		Piece captured{ pieceset::None };
 		if (move.IsCapture())
 			captured = move.IsEnPassantCapture() ? octraits::Pawn : _board[to];
-
+		
 		MoveType mtype{ move.GetMoveType() };
 
 		// push move to the stack
@@ -40,7 +69,7 @@ namespace chesslib::x88board
 			_fullmove_clock++;
 
 		// update castling rights
-		if (IsCastlingAvailable())
+		if (IsCastlingAvailable()) 
 		{
 			if (_board[from] == ctraits::King)
 			{
@@ -65,7 +94,7 @@ namespace chesslib::x88board
 		}
 
 		// update board and piece locations
-		if (!move.IsPromotion() && !move.IsCapture())
+		if (!move.IsPromotion() && !move.IsCapture()) 
 		{
 			// Move types: quite, double pawn push, castling 
 			MakeQuiteMove<Clr>(from, to);
@@ -73,9 +102,9 @@ namespace chesslib::x88board
 			if (mtype == MoveType::King_Side_Castle)
 				MakeQuiteMove<Clr>(bctraits::KingSideRookInitialPosition, bctraits::KingSideRookPositionAfterCastling);
 			else if (mtype == MoveType::Queen_Side_Castle)
-				MakeQuiteMove<Clr>(bctraits::QueenSideRookInitialPosition, bctraits::QueenSideRookPositionAfterCastling);
+				MakeQuiteMove<Clr>(bctraits::QueenSideRookInitialPosition, bctraits::QueenSideRookPositionAfterCastling);			
 		}
-		else if (!move.IsPromotion())
+		else if (!move.IsPromotion()) 
 		{
 			// Move types: capture, enpassant capture
 			if (mtype == MoveType::En_Passant_Capture)
@@ -117,45 +146,19 @@ namespace chesslib::x88board
 	}
 
 	template<Color Clr>
-	void x88Board::MakeQuiteMove(Square from, Square to)
+	void BasicBoard::MakeQuiteMove(Square from, Square to) 
 	{
 		UpdatePiecePosition<Clr>(_board[from], from, to);
 		_board[to] = _board[from];
 		_board[from] = squareset::Empty;
 	}
 
-	void x88Board::UnMakeMove()
-	{
-		// get the move and board state before the move was made.
-		const auto& previous_state = _move_stack.top();
-
-		// restore side to move
-		_active_color = color::get_opposite_color(_active_color);
-
-		// restore castling rights, en-passant location and half move clock
-		_castling_rights = previous_state.castling_rights;
-		_enpassant_target = previous_state.enpassant_target;
-		_halfmove_clock = previous_state.halfmove_clock;
-
-		// restore the full move clock
-		if (_active_color == color::Black)
-			_fullmove_clock--;
-
-		// restore the board and piece positions
-		if (_active_color == color::White)
-			UnMakeMove<color::White>(previous_state.move, previous_state.captured_piece);
-		else
-			UnMakeMove<color::Black>(previous_state.move, previous_state.captured_piece);
-
-		_move_stack.pop();
-	}
-
 	template<Color Clr>
-	void x88Board::UnMakeMove(const Move& move, Piece captured)
+	void BasicBoard::UnMakeMove(const Move& move, Piece captured)
 	{
 		using ctraits = traits::color_traits<Clr>;
-		using bctraits = traits::board_color_traits<x88Board, Clr>;
-		using bptraits = traits::board_piece_traits<x88Board, ctraits::Pawn>;
+		using bctraits = traits::board_color_traits<BasicBoard, Clr>;
+		using bptraits = traits::board_piece_traits<BasicBoard, ctraits::Pawn>;
 
 		Square from{ move.GetFrom() }, to{ move.GetTo() };
 		MoveType mtype{ move.GetMoveType() };
@@ -170,14 +173,14 @@ namespace chesslib::x88board
 			else if (mtype == MoveType::Queen_Side_Castle)
 				MakeQuiteMove<Clr>(bctraits::QueenSideRookPositionAfterCastling, bctraits::QueenSideRookInitialPosition);
 		}
-		else if (!move.IsPromotion())
+		else if (!move.IsPromotion()) 
 		{
 			// Move types: capture, enpassant capture
 			MakeQuiteMove<Clr>(to, from);
 
 			if (mtype == MoveType::En_Passant_Capture)
 			{
-				Square removed_pawn_pos{ _enpassant_target + bptraits::ReverseMoveDirection };
+				Square removed_pawn_pos{ _enpassant_target + bptraits::ReverseMoveDirection };	
 				AddNewPiece<ctraits::Opposite>(captured, removed_pawn_pos);
 				_board[removed_pawn_pos] = captured;
 			}
@@ -187,37 +190,37 @@ namespace chesslib::x88board
 				AddNewPiece<ctraits::Opposite>(captured, to);
 			}
 		}
-		else
+		else 
 		{
 			// promotion with/without capture
 			RemovePiece<Clr>(_board[to], to);
 			AddNewPiece<Clr>(ctraits::Pawn, from);
 			_board[from] = ctraits::Pawn;
-			if (captured != pieceset::None)
+			if (captured != pieceset::None) 
 			{
 				_board[to] = captured;
 				AddNewPiece<ctraits::Opposite>(captured, to);
 			}
-			else
+			else 
 				_board[to] = squareset::Empty;
 		}
 	}
 
 	template<Color Clr>
-	void x88Board::GenerateMovesImplementation(MoveList& moves) const
+	void BasicBoard::GenerateMovesImplementation(MoveList& moves) const
 	{
 		using ctraits = traits::color_traits<Clr>;
 
 		auto king_pos{ GetKingPosition<Clr>() };
 		ComputeChecksAndPins<ctraits::Opposite>(king_pos);
-
+	
 		GenerateKingMoves<Clr>(king_pos, moves);
 
 		auto num_checks{ _checks.size() };
 		if (num_checks == 0)
 		{
 			GenerateStraightMoves<Clr>(moves);
-			GenerateDiagonalMoves<Clr>(moves);
+		    GenerateDiagonalMoves<Clr>(moves);
 			GenerateKnightMoves<Clr>(moves);
 			GeneratePawnMoves<Clr>(moves);
 			GenerateEnPassantCaptureMoves<Clr>(king_pos, moves);
@@ -231,7 +234,7 @@ namespace chesslib::x88board
 	}
 
 	template<Color Attacker>
-	void x88Board::ComputeChecksAndPins(Square king_pos) const
+	void BasicBoard::ComputeChecksAndPins(Square king_pos) const
 	{
 		ClearChecksAndPins();
 
@@ -239,22 +242,22 @@ namespace chesslib::x88board
 		ComputeChecksAndPins<Attacker, false>(king_pos, direction::Diagonal);
 
 		using ctraits = traits::color_traits<Attacker>;
-		for (Direction dir : direction::KnightJumps)
-			if (Square next{ king_pos + dir }; IsInside(next) && _board[next] == ctraits::Knight)
+		for (Direction dir : direction::KnightJumps) 
+			if (Square next{ king_pos + dir }; IsInside(king_pos, next) && _board[next] == ctraits::Knight)
 				_checks.emplace_back(next, direction::None, 0);
 	}
 
 	template<Color Attacker, bool IsStraightMovingPiece>
-	void x88Board::ComputeChecksAndPins(Square king_pos, const std::array<Direction, 4>& attack_directions) const
+	void BasicBoard::ComputeChecksAndPins(Square king_pos, const std::array<Direction, 4>& attack_directions) const
 	{
 		using ctraits = traits::color_traits<Attacker>;
-		using bptraits = traits::board_piece_traits<x88Board, ctraits::Pawn>;
+		using bptraits = traits::board_piece_traits<BasicBoard, ctraits::Pawn>;
 
 		for (Direction dir : attack_directions)
 		{
 			Square pin_loc{ squareset::None };
 			Distance dist{ 1 };
-			for (Square next{ king_pos + dir }; IsInside(next); next += dir, dist++)
+			for (Square next{ king_pos + dir }; IsInside(next - dir, next); next += dir, dist++)
 			{
 				if (_board[next] == squareset::Empty)
 					continue;
@@ -262,7 +265,7 @@ namespace chesslib::x88board
 				bool is_non_king_attack{ false };
 				if constexpr (IsStraightMovingPiece)
 					is_non_king_attack = (_board[next] == ctraits::Rook || _board[next] == ctraits::Queen);
-				else
+				else 
 					is_non_king_attack = _board[next] == ctraits::Bishop || _board[next] == ctraits::Queen ||
 					dist == 1 && _board[next] == ctraits::Pawn &&
 					(dir == bptraits::ReverseAttackDirections[0] || dir == bptraits::ReverseAttackDirections[1]);
@@ -287,7 +290,7 @@ namespace chesslib::x88board
 	}
 
 	template<Color Clr>
-	void x88Board::GenerateKingMoves(Square king_pos, MoveList& moves) const
+	void BasicBoard::GenerateKingMoves(Square king_pos, MoveList& moves) const
 	{
 		using ctraits = traits::color_traits<Clr>;
 
@@ -296,8 +299,8 @@ namespace chesslib::x88board
 			if (IsDirectionInvalidForKing<ctraits::Opposite>(dir))
 				continue;
 
-			if (Square next{ king_pos + dir };
-				IsInside(next) && _board[next] && !IsUnderAttack<ctraits::Opposite>(next))
+			if (Square next{ king_pos + dir }; 
+				IsInside(king_pos, next) && _board[next] && !IsUnderAttack<ctraits::Opposite>(next))
 			{
 				if (_board[next] == squareset::Empty)
 					moves.emplace_back(king_pos, next);
@@ -309,7 +312,7 @@ namespace chesslib::x88board
 		if (_checks.size() > 0)
 			return;
 
-		using bctraits = traits::board_color_traits<x88Board, Clr>;
+		using bctraits = traits::board_color_traits<BasicBoard, Clr>;
 
 		if (IsKingSideCastlingPossible<Clr>())
 			moves.emplace_back(king_pos, bctraits::KingSideCastleCheckSquares[1], MoveType::King_Side_Castle);
@@ -319,7 +322,7 @@ namespace chesslib::x88board
 	}
 
 	template<Color Attacker>
-	bool x88Board::IsDirectionInvalidForKing(Direction dir) const
+	bool BasicBoard::IsDirectionInvalidForKing(Direction dir) const
 	{
 		using ctraits = traits::color_traits<Attacker>;
 
@@ -334,7 +337,7 @@ namespace chesslib::x88board
 	}
 
 	template<Color Attacker>
-	bool x88Board::IsUnderAttack(Square sq) const
+	bool BasicBoard::IsUnderAttack(Square sq) const
 	{
 		return
 			IsUnderAttack<Attacker, true>(sq, direction::Straight) ||
@@ -343,15 +346,15 @@ namespace chesslib::x88board
 	}
 
 	template<Color Attacker, bool IsStraightMovingPiece>
-	bool x88Board::IsUnderAttack(Square sq, const std::array<Direction, 4>& attack_directions) const
+	bool BasicBoard::IsUnderAttack(Square sq, const std::array<Direction, 4>& attack_directions) const
 	{
 		using ctraits = traits::color_traits<Attacker>;
-		using bptraits = traits::board_piece_traits<x88Board, ctraits::Pawn>;
+		using bptraits = traits::board_piece_traits<BasicBoard, ctraits::Pawn>;
 
 		for (Direction dir : attack_directions)
 		{
 			Distance dist{ 1 };
-			for (Square next{ sq + dir }; IsInside(next); next += dir, dist++)
+			for (Square next{ sq + dir }; IsInside(next - dir, next); next += dir, dist++)
 			{
 				if (_board[next] == squareset::Empty)
 					continue;
@@ -365,9 +368,10 @@ namespace chesslib::x88board
 				}
 				else
 				{
-					if (_board[next] == ctraits::Bishop || _board[next] == ctraits::Queen ||
+					if(_board[next] == ctraits::Bishop || _board[next] == ctraits::Queen ||
 						dist == 1 && (_board[next] == ctraits::King || (_board[next] == ctraits::Pawn &&
-							(dir == bptraits::ReverseAttackDirections[0] || dir == bptraits::ReverseAttackDirections[1]))))
+							(dir == bptraits::ReverseAttackDirections[0] ||
+							 dir == bptraits::ReverseAttackDirections[1]))))
 						return true;
 				}
 
@@ -379,21 +383,21 @@ namespace chesslib::x88board
 	}
 
 	template<Color Attacker>
-	bool x88Board::IsUnderAttackByAKnight(Square sq) const
+	bool BasicBoard::IsUnderAttackByAKnight(Square sq) const
 	{
 		using ctraits = traits::color_traits<Attacker>;
 
 		for (Direction dir : direction::KnightJumps)
-			if (Square next{ sq + dir }; IsInside(next) && _board[next] == ctraits::Knight)
+			if (Square next{ sq + dir }; IsInside(sq, next) && _board[next] == ctraits::Knight)
 				return true;
 
 		return false;
 	}
 
 	template<Color Clr>
-	bool x88Board::IsKingSideCastlingPossible() const
+	bool BasicBoard::IsKingSideCastlingPossible() const
 	{
-		using bctraits = traits::board_color_traits<x88Board, Clr>;
+		using bctraits = traits::board_color_traits<BasicBoard, Clr>;
 		using ctraits = traits::color_traits<Clr>;
 
 		return
@@ -405,9 +409,9 @@ namespace chesslib::x88board
 	}
 
 	template<Color Clr>
-	bool x88Board::IsQueenSideCastlingPossible() const
+	bool BasicBoard::IsQueenSideCastlingPossible() const
 	{
-		using bctraits = traits::board_color_traits<x88Board, Clr>;
+		using bctraits = traits::board_color_traits<BasicBoard, Clr>;
 		using ctraits = traits::color_traits<Clr>;
 
 		return
@@ -420,13 +424,13 @@ namespace chesslib::x88board
 	}
 
 	template<Color Clr>
-	void x88Board::GenerateCheckEliminatingMoves(Square king_pos, MoveList& moves) const
+	void BasicBoard::GenerateCheckEliminatingMoves(Square king_pos, MoveList& moves) const
 	{
 		auto [attacker_loc, king_to_square_dir, dist] = _checks[0];
-
+		
 		GenerateCheckEliminatingEnPassantCaptureMoves<Clr>(attacker_loc, moves);
 
-		if (king_to_square_dir != direction::None)
+		if (king_to_square_dir != direction::None) 
 		{
 			Square next{ king_pos + king_to_square_dir };
 			for (Index i{ 0 }; i < dist; i++, next += king_to_square_dir)
@@ -437,32 +441,32 @@ namespace chesslib::x88board
 	}
 
 	template<Color Clr>
-	void x88Board::GenerateCheckEliminatingEnPassantCaptureMoves(Square attacker_loc, MoveList& moves) const
+	void BasicBoard::GenerateCheckEliminatingEnPassantCaptureMoves(Square attacker_loc, MoveList& moves) const
 	{
 		using ctraits = traits::color_traits<Clr>;
-		using bptraits = traits::board_piece_traits<x88Board, ctraits::Pawn>;
+		using bptraits = traits::board_piece_traits<BasicBoard, ctraits::Pawn>;
 
 		if (_enpassant_target == squareset::None || _board[attacker_loc] != bptraits::Opposite)
 			return;
 
 		Direction dirs[2] = { -1, 1 };
-		for (auto i{ 0 }; i < 2; i++)
+		for (auto i{ 0 }; i < 2; i++) 
 		{
 			Square next{ attacker_loc + dirs[i] };
 			if (auto pin_dir = GetPinDirection(next);
-				pin_dir == direction::None &&
+				pin_dir == direction::None && 
 				_board[next] == ctraits::Pawn &&
-				IsInside(_enpassant_target))
+				IsInside(next, _enpassant_target))
 				moves.emplace_back(next, _enpassant_target, MoveType::En_Passant_Capture);
 		}
 	}
 
 	template<Color Clr>
-	void x88Board::ToSquareMoves(Square sq, MoveList& moves) const
+	void BasicBoard::ToSquareMoves(Square sq, MoveList& moves) const
 	{
 		using ctraits = traits::color_traits<Clr>;
-		using bctraits = traits::board_color_traits<x88Board, Clr>;
-		using bptraits = traits::board_piece_traits<x88Board, ctraits::Pawn>;
+		using bctraits = traits::board_color_traits<BasicBoard, Clr>;
+		using bptraits = traits::board_piece_traits<BasicBoard, ctraits::Pawn>;
 
 		MoveType move_type{ MoveType::Quite };
 		Piece captured_piece{ pieceset::None };
@@ -474,7 +478,7 @@ namespace chesslib::x88board
 
 		for (Direction dir : direction::Straight)
 		{
-			for (Square next{ sq + dir }; IsInside(next); next += dir)
+			for (Square next{ sq + dir }; IsInside(next - dir, next); next += dir)
 			{
 				if (_board[next] == squareset::Empty)
 					continue;
@@ -489,7 +493,7 @@ namespace chesslib::x88board
 
 		for (Direction dir : direction::Diagonal)
 		{
-			for (Square next{ sq + dir }; IsInside(next); next += dir)
+			for (Square next{ sq + dir }; IsInside(next - dir, next); next += dir)
 			{
 				if (_board[next] == squareset::Empty)
 					continue;
@@ -503,14 +507,14 @@ namespace chesslib::x88board
 		}
 
 		for (Direction dir : direction::KnightJumps)
-			if (Square next{ sq + dir }; IsInside(next) && _board[next] == ctraits::Knight &&
+			if (Square next{ sq + dir }; IsInside(sq, next) && _board[next] == ctraits::Knight &&
 				!IsPiecePinned(next))
 				moves.emplace_back(next, sq, move_type);
 
-		if (sq >= bctraits::ValidPawnMoveSquares[0] && sq <= bctraits::ValidPawnMoveSquares[1])
+		if (sq >= bctraits::ValidPawnMoveSquares[0] && sq <= bctraits::ValidPawnMoveSquares[1]) 
 		{
-			if (move_type == MoveType::Quite)
-			{
+			if (move_type == MoveType::Quite) 
+			{		
 				Square next{ sq + bptraits::ReverseMoveDirection };
 
 				if (_board[next] == ctraits::Pawn && !IsPiecePinned(next))
@@ -531,17 +535,17 @@ namespace chesslib::x88board
 				{
 					next += bptraits::ReverseMoveDirection;
 
-					if (_board[next] == ctraits::Pawn && !IsPiecePinned(next) &&
+					if(_board[next] == ctraits::Pawn && !IsPiecePinned(next) &&
 						get_rank(next) == bptraits::DoublePushRank)
 						moves.emplace_back(next, sq, MoveType::Double_Pawn_Push);
 				}
 			}
-			else
+			else 
 			{
-				for (Direction dir : bptraits::ReverseAttackDirections)
+				for (Direction dir : bptraits::ReverseAttackDirections) 
 				{
-					if (Square next{ sq + dir }; IsInside(next) && _board[next] == ctraits::Pawn &&
-						!IsPiecePinned(next))
+					if (Square next{ sq + dir }; IsInside(sq, next) && _board[next] == ctraits::Pawn &&
+						!IsPiecePinned(next)) 
 					{
 						if (get_rank(sq) == bptraits::PromotionRank)
 						{
@@ -561,21 +565,21 @@ namespace chesslib::x88board
 	}
 
 	template<Color Clr>
-	void x88Board::GenerateKnightMoves(MoveList& moves) const
+	void BasicBoard::GenerateKnightMoves(MoveList& moves) const
 	{
 		using ctraits = traits::color_traits<Clr>;
 
 		auto [first, last] = GetPiecePositions<Clr>(ctraits::Knight);
-
-		for (; first != last; first++)
+		
+		for (; first != last; first++) 
 		{
 			if (IsPiecePinned(first->second))
 				continue;
 
-			for (Direction dir : direction::KnightJumps)
+			for (Direction dir : direction::KnightJumps) 
 			{
 				Square next{ first->second + dir };
-				if (IsInside(next))
+				if (IsInside(first->second, next))
 				{
 					if (_board[next] == squareset::Empty)
 						moves.emplace_back(first->second, next);
@@ -587,13 +591,13 @@ namespace chesslib::x88board
 	}
 
 	template<Color Clr>
-	void x88Board::GenerateStraightMoves(MoveList& moves) const
+	void BasicBoard::GenerateStraightMoves(MoveList& moves) const
 	{
 		using ctraits = traits::color_traits<Clr>;
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < 2; i++) 
 		{
 			auto [first, last] = GetPiecePositions<Clr>(ctraits::StraightMovingPieces[i]);
-			for (; first != last; first++)
+			for (; first != last; first++) 
 			{
 				auto pin_dir = GetPinDirection(first->second);
 
@@ -602,13 +606,13 @@ namespace chesslib::x88board
 					if (pin_dir != direction::None && dir != pin_dir && direction::Reverse(dir) != pin_dir)
 						continue;
 
-					for (Square next{ first->second + dir }; IsInside(next); next += dir)
+					for (Square next{ first->second + dir }; IsInside(next - dir, next); next += dir)
 					{
 						if (_board[next] == squareset::Empty)
 							moves.emplace_back(first->second, next);
-						else
+						else 
 						{
-							if (color::get_color(_board[next]) != Clr)
+							if(color::get_color(_board[next]) != Clr)
 								moves.emplace_back(first->second, next, MoveType::Capture);
 							break;
 						}
@@ -619,7 +623,7 @@ namespace chesslib::x88board
 	}
 
 	template<Color Clr>
-	void x88Board::GenerateDiagonalMoves(MoveList& moves) const
+	void BasicBoard::GenerateDiagonalMoves(MoveList& moves) const
 	{
 		using ctraits = traits::color_traits<Clr>;
 		for (int i = 0; i < 2; i++)
@@ -634,7 +638,7 @@ namespace chesslib::x88board
 					if (pin_dir != direction::None && dir != pin_dir && direction::Reverse(dir) != pin_dir)
 						continue;
 
-					for (Square next{ first->second + dir }; IsInside(next); next += dir)
+					for (Square next{ first->second + dir }; IsInside(next - dir, next); next += dir)
 					{
 						if (_board[next] == squareset::Empty)
 							moves.emplace_back(first->second, next);
@@ -651,10 +655,10 @@ namespace chesslib::x88board
 	}
 
 	template<Color Clr>
-	void x88Board::GeneratePawnMoves(MoveList& moves) const
+	void BasicBoard::GeneratePawnMoves(MoveList& moves) const 
 	{
 		using ctraits = traits::color_traits<Clr>;
-		using bptraits = traits::board_piece_traits<x88Board, ctraits::Pawn>;
+		using bptraits = traits::board_piece_traits<BasicBoard, ctraits::Pawn>;
 
 		auto [first, last] = GetPiecePositions<Clr>(ctraits::Pawn);
 		for (; first != last; first++)
@@ -664,10 +668,10 @@ namespace chesslib::x88board
 			// One square forward, two square forward moves
 			Square next{ first->second + bptraits::MoveDirection };
 			if (_board[next] == squareset::Empty && (pin_dir == direction::None ||
-				pin_dir == bptraits::MoveDirection || pin_dir == bptraits::ReverseMoveDirection))
+				pin_dir == bptraits::MoveDirection || pin_dir == bptraits::ReverseMoveDirection)) 
 			{
 				Rank r = get_rank(next);
-				if (r == bptraits::PromotionRank)
+				if (r == bptraits::PromotionRank) 
 				{
 					moves.emplace_back(first->second, next, MoveType::Queen_Promotion);
 					moves.emplace_back(first->second, next, MoveType::Rook_Promotion);
@@ -677,28 +681,28 @@ namespace chesslib::x88board
 				else
 					moves.emplace_back(first->second, next);
 
-				if (Square pos{ next + bptraits::MoveDirection };
-					get_rank(first->second) == bptraits::DoublePushRank &&
+				if (Square pos{ next + bptraits::MoveDirection }; 
+					get_rank(first->second) == bptraits::DoublePushRank && 
 					_board[pos] == squareset::Empty)
 					moves.emplace_back(first->second, pos, MoveType::Double_Pawn_Push);
 			}
 
 			// Captures
-			for (int i{ 0 }; i < 2; i++)
+			for (int i{ 0 }; i < 2; i++) 
 			{
 				Square next{ first->second + bptraits::AttackDirections[i] };
-				if (IsInside(next) && _board[next] != squareset::Empty &&
+				if (IsInside(first->second, next) && _board[next] != squareset::Empty &&
 					color::get_color(_board[next]) != Clr &&
 					(pin_dir == direction::None || pin_dir == bptraits::AttackDirections[i]))
 				{
-					if (get_rank(next) == bptraits::PromotionRank)
+					if (get_rank(next) == bptraits::PromotionRank) 
 					{
 						moves.emplace_back(first->second, next, MoveType::Queen_Promotion_Capture);
 						moves.emplace_back(first->second, next, MoveType::Rook_Promotion_Capture);
 						moves.emplace_back(first->second, next, MoveType::Knight_Promotion_Capture);
 						moves.emplace_back(first->second, next, MoveType::Bishop_Promotion_Capture);
 					}
-					else
+					else 
 						moves.emplace_back(first->second, next, MoveType::Capture);
 				}
 			}
@@ -706,35 +710,35 @@ namespace chesslib::x88board
 	}
 
 	template<Color Clr>
-	void x88Board::GenerateEnPassantCaptureMoves(Square king_pos, MoveList& moves) const
+	void BasicBoard::GenerateEnPassantCaptureMoves(Square king_pos, MoveList& moves) const
 	{
 		if (_enpassant_target == squareset::None)
 			return;
 
 		using ctraits = traits::color_traits<Clr>;
-		using bptraits = traits::board_piece_traits<x88Board, ctraits::Pawn>;
+		using bptraits = traits::board_piece_traits<BasicBoard, ctraits::Pawn>;
 		using otraits = traits::color_traits<ctraits::Opposite>;
 
 		for (int i{ 0 }; i < 2; i++)
 		{
 			Square pos{ _enpassant_target + bptraits::ReverseAttackDirections[i] };
-			if (!IsInside(pos) || _board[pos] != ctraits::Pawn)
+			if (!IsInside(_enpassant_target, pos) || _board[pos] != ctraits::Pawn)
 				continue;
 
 			auto pin_dir = GetPinDirection(pos);
 			if (pin_dir != direction::None && pin_dir != bptraits::AttackDirections[i])
 				continue;
-
+			
 			if (get_rank(king_pos) != get_rank(pos))
 			{
 				moves.emplace_back(pos, _enpassant_target, MoveType::En_Passant_Capture);
 			}
-			else
-			{
+			else 
+			{ 
 				Square ppos{ _enpassant_target + bptraits::ReverseMoveDirection };
 				Direction dir = king_pos > pos ? direction::W : direction::E;
 				bool make_move{ true };
-				for (Square next{ king_pos + dir }; IsInside(next); next += dir)
+				for (Square next{ king_pos + dir }; IsInside(next - dir, next); next += dir)
 				{
 					if (next == pos || next == ppos || _board[next] == squareset::Empty)
 						continue;
@@ -744,28 +748,31 @@ namespace chesslib::x88board
 					break;
 				}
 
-				if (make_move)
+				if(make_move)
 					moves.emplace_back(pos, _enpassant_target, MoveType::En_Passant_Capture);
 			}
 		}
 	}
-
+	*/
 
 #pragma region factory_functions
-	
-	std::unique_ptr<x88Board> make_unique_board(std::string_view fen)
+
+   /*
+	std::unique_ptr<BasicBoard> make_unique_board(std::string_view fen)
 	{
-		auto brd = std::unique_ptr<x88Board>(new x88Board());
+		auto brd = std::unique_ptr<BasicBoard>(new BasicBoard());
 		utility::chess::set_board(*brd, fen);
 		return brd;
 	}
 
-	std::shared_ptr<x88Board> make_shared_board(std::string_view fen)
+	std::shared_ptr<BasicBoard> make_shared_board(std::string_view fen)
 	{
-		auto brd = std::shared_ptr<x88Board>(new x88Board());
+		auto brd = std::shared_ptr<BasicBoard>(new BasicBoard());
 		utility::chess::set_board(*brd, fen);
 		return brd;
 	}
+	*/
 
 #pragma endregion
+
 }

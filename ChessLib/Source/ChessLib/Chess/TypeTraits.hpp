@@ -1,7 +1,7 @@
 #pragma once
 
-#include <ChessLib/Board/BasicBoard/BasicBoard.hpp>
-#include <ChessLib/Board/X88Board/x88Board.hpp>
+#include <ChessLib/Board/BasicBoard.hpp>
+#include <ChessLib/Board/x88Board.hpp>
 #include <ChessLib/Board/ObjBoard/ObjBoard.hpp>
 
 namespace chesslib::traits 
@@ -75,98 +75,98 @@ namespace chesslib::traits
 	struct board_piece_traits { };
 
 	template <>
-	struct board_piece_traits<basic_board::BasicBoard, pieceset::WhitePawn> 
+	struct board_piece_traits<BasicBoard, pieceset::WhitePawn> 
 	{
 		static constexpr Piece Opposite = pieceset::BlackPawn;
 		
 		static constexpr Rank PromotionRank = 7;
 		static constexpr Rank DoublePushRank = 1;
 		
-		static constexpr Direction MoveDirection = basic_board::N;
-		static constexpr Direction ReverseMoveDirection = basic_board::S;
+		static constexpr Direction MoveDirection = BasicBoard::N;
+		static constexpr Direction ReverseMoveDirection = BasicBoard::S;
 
 		static constexpr Direction AttackDirections[2] = 
 		{ 
-			basic_board::NE, 
-			basic_board::NW 
+			BasicBoard::NE,
+			BasicBoard::NW
 		};
 		
 		static constexpr Direction ReverseAttackDirections[2] = 
 		{ 
-			basic_board::SW, 
-			basic_board::SE 
+			BasicBoard::SW,
+			BasicBoard::SE
 		};
 	};
 
 	template <>
-	struct board_piece_traits<basic_board::BasicBoard, pieceset::BlackPawn>
+	struct board_piece_traits<BasicBoard, pieceset::BlackPawn>
 	{
 		static constexpr Piece Opposite = pieceset::WhitePawn;
 		
 		static constexpr Rank PromotionRank = 0;
 		static constexpr Rank DoublePushRank = 6;
 
-		static constexpr Direction MoveDirection = basic_board::S;
-		static constexpr Direction ReverseMoveDirection = basic_board::N;
+		static constexpr Direction MoveDirection = BasicBoard::S;
+		static constexpr Direction ReverseMoveDirection = BasicBoard::N;
 
 		static constexpr Direction AttackDirections[2] = 
 		{ 
-			basic_board::SE, 
-			basic_board::SW 
+			BasicBoard::SE,
+			BasicBoard::SW
 		};
 
 		static constexpr Direction ReverseAttackDirections[2] = 
 		{ 
-			basic_board::NW, 
-			basic_board::NE 
+			BasicBoard::NW,
+			BasicBoard::NE
 		};
 	};
 
 	template <>
-	struct board_piece_traits<x88board::x88Board, pieceset::WhitePawn>
+	struct board_piece_traits<x88Board, pieceset::WhitePawn>
 	{
 		static constexpr Piece Opposite = pieceset::BlackPawn;
 
 		static constexpr Rank PromotionRank = 7;
 		static constexpr Rank DoublePushRank = 1;
 
-		static constexpr Direction MoveDirection = x88board::N;
-		static constexpr Direction ReverseMoveDirection = x88board::S;
+		static constexpr Direction MoveDirection = x88Board::N;
+		static constexpr Direction ReverseMoveDirection = x88Board::S;
 
 		static constexpr Direction AttackDirections[2] = 
 		{ 
-			x88board::NE, 
-			x88board::NW 
+			x88Board::NE,
+			x88Board::NW
 		};
 		
 		static constexpr Direction ReverseAttackDirections[2] = 
 		{ 
-			x88board::SW, 
-			x88board::SE 
+			x88Board::SW,
+			x88Board::SE
 		};
 	};
 
 	template <>
-	struct board_piece_traits<x88board::x88Board, pieceset::BlackPawn>
+	struct board_piece_traits<x88Board, pieceset::BlackPawn>
 	{
 		static constexpr Piece Opposite = pieceset::WhitePawn;
 
 		static constexpr Rank PromotionRank = 0;
 		static constexpr Rank DoublePushRank = 6;
 
-		static constexpr Direction MoveDirection = x88board::S;
-		static constexpr Direction ReverseMoveDirection = x88board::N;
+		static constexpr Direction MoveDirection = x88Board::S;
+		static constexpr Direction ReverseMoveDirection = x88Board::N;
 
 		static constexpr Direction AttackDirections[2] = 
 		{
-			x88board::SE, 
-			x88board::SW 
+			x88Board::SE,
+			x88Board::SW
 		};
 		
 		static constexpr Direction ReverseAttackDirections[2] = 
 		{ 
-			x88board::NW, 
-			x88board::NE 
+			x88Board::NW,
+			x88Board::NE
 		};
 	};
 
@@ -177,7 +177,7 @@ namespace chesslib::traits
 	struct board_color_traits { };
 
 	template <>
-	struct board_color_traits<basic_board::BasicBoard, color::White> 
+	struct board_color_traits<BasicBoard, color::White> 
 	{
 		static constexpr Square KingSideRookInitialPosition = squareset::h1;
 		static constexpr Square QueenSideRookInitialPosition = squareset::a1;
@@ -206,7 +206,7 @@ namespace chesslib::traits
 	};
 
 	template <>
-	struct board_color_traits<basic_board::BasicBoard, color::Black>
+	struct board_color_traits<BasicBoard, color::Black>
 	{
 		static constexpr Square KingSideRookInitialPosition = squareset::h8;
 		static constexpr Square QueenSideRookInitialPosition = squareset::a8;
@@ -235,60 +235,60 @@ namespace chesslib::traits
 	};
 
 	template <>
-	struct board_color_traits<x88board::x88Board, color::White>
+	struct board_color_traits<x88Board, color::White>
 	{
-		static constexpr Square KingSideRookInitialPosition = x88board::h1;
-		static constexpr Square QueenSideRookInitialPosition = x88board::a1;
+		static constexpr Square KingSideRookInitialPosition = x88Board::h1;
+		static constexpr Square QueenSideRookInitialPosition = x88Board::a1;
 
-		static constexpr Square KingSideRookPositionAfterCastling = x88board::f1;
-		static constexpr Square QueenSideRookPositionAfterCastling = x88board::d1;
+		static constexpr Square KingSideRookPositionAfterCastling = x88Board::f1;
+		static constexpr Square QueenSideRookPositionAfterCastling = x88Board::d1;
 
 		static constexpr Square KingSideCastleCheckSquares[2] = 
 		{ 
-			x88board::f1, 
-			x88board::g1 
+			x88Board::f1,
+			x88Board::g1
 		};
 
 		static constexpr Square QueenSideCastleCheckSquares[3] = 
 		{ 
-			x88board::d1, 
-			x88board::c1, 
-			x88board::b1 
+			x88Board::d1,
+			x88Board::c1,
+			x88Board::b1
 		};
 
 		static constexpr Square ValidPawnMoveSquares[2] = 
 		{ 
-			x88board::a3, 
-			x88board::h8 
+			x88Board::a3,
+			x88Board::h8
 		};
 	};
 
 	template <>
-	struct board_color_traits<x88board::x88Board, color::Black>
+	struct board_color_traits<x88Board, color::Black>
 	{
-		static constexpr Square KingSideRookInitialPosition = x88board::h8;
-		static constexpr Square QueenSideRookInitialPosition = x88board::a8;
+		static constexpr Square KingSideRookInitialPosition = x88Board::h8;
+		static constexpr Square QueenSideRookInitialPosition = x88Board::a8;
 
-		static constexpr Square KingSideRookPositionAfterCastling = x88board::f8;
-		static constexpr Square QueenSideRookPositionAfterCastling = x88board::d8;
+		static constexpr Square KingSideRookPositionAfterCastling = x88Board::f8;
+		static constexpr Square QueenSideRookPositionAfterCastling = x88Board::d8;
 
 		static constexpr Square KingSideCastleCheckSquares[2] = 
 		{ 
-			x88board::f8, 
-			x88board::g8 
+			x88Board::f8,
+			x88Board::g8
 		};
 		
 		static constexpr Square QueenSideCastleCheckSquares[3] = 
 		{ 
-			x88board::d8, 
-			x88board::c8, 
-			x88board::b8 
+			x88Board::d8,
+			x88Board::c8,
+			x88Board::b8
 		};
 
 		static constexpr Square ValidPawnMoveSquares[2] = 
 		{ 
-			x88board::a1, 
-			x88board::h6 
+			x88Board::a1,
+			x88Board::h6
 		};
 	};
 #pragma endregion

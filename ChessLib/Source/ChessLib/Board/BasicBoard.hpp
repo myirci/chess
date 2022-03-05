@@ -9,10 +9,8 @@
 #include <memory>
 #include <vector>
 
-namespace chesslib::basic_board
+namespace chesslib
 {
-	constexpr Direction N{ 8 }, S{ -8 }, E{ 1 }, W{ -1 }, NE{ 9 }, SW{ -9 }, NW{ 7 }, SE{ -7 };
-
 	// One dimensional array of 64 squares to represent 8x8 board board.
 	// Not optimal for move generation: off-board piece detection is expensive to compute.
 	class BasicBoard : public PieceCentricBoardBase
@@ -46,6 +44,8 @@ namespace chesslib::basic_board
 			squareset::a7, squareset::b7, squareset::c7, squareset::d7, squareset::e7, squareset::f7, squareset::g7, squareset::h7,
 			squareset::a8, squareset::b8, squareset::c8, squareset::d8, squareset::e8, squareset::f8, squareset::g8, squareset::h8
 		};
+
+		static constexpr Direction N{ 8 }, S{ -8 }, E{ 1 }, W{ -1 }, NE{ 9 }, SW{ -9 }, NW{ 7 }, SE{ -7 };
 
 		static constexpr std::array<Direction, 8> AllDirections{ N, NE, E, SE, S, SW, W, NW };
 
@@ -98,8 +98,8 @@ namespace chesslib::basic_board
 		const BoardArray& GetBoard() const noexcept { return _board; }
 		BoardArray& GetBoard() noexcept				{ return _board; }
 
-		void MakeMove(const Move& move);
-		void UnMakeMove();
+		// void MakeMove(const Move& move);
+		// void UnMakeMove();
 
 	protected:
 
@@ -107,6 +107,7 @@ namespace chesslib::basic_board
 
 		BasicBoard() noexcept : PieceCentricBoardBase(), _board{} { }
 
+		/*
 		template<Color Clr>
 		void MakeMoveImplementation(const Move& move);
 
@@ -173,11 +174,12 @@ namespace chesslib::basic_board
 
 		template<Color Clr>
 		void GenerateEnPassantCaptureMoves(Square king_pos, MoveList& moves) const;
+		*/
 
-		friend std::unique_ptr<BasicBoard> make_unique_board(std::string_view fen);
-		friend std::shared_ptr<BasicBoard> make_shared_board(std::string_view fen);
+		// friend std::unique_ptr<BasicBoard> make_unique_board(std::string_view fen);
+		// friend std::shared_ptr<BasicBoard> make_shared_board(std::string_view fen);
 	};
 
-	std::unique_ptr<BasicBoard> make_unique_board(std::string_view fen);
-	std::shared_ptr<BasicBoard> make_shared_board(std::string_view fen);
+	// std::unique_ptr<BasicBoard> make_unique_board(std::string_view fen);
+	// std::shared_ptr<BasicBoard> make_shared_board(std::string_view fen);
 }

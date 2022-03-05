@@ -1,7 +1,6 @@
 #pragma once
 
 #include <ChessLib/Chess/Definitions.hpp>
-#include <ChessLib/Board/BasicBoard/Square.hpp>
 #include <ChessLib/Board/BasicBoard/BasicBoard.hpp>
 #include <ChessLib/Chess/TypeTraits.hpp>
 
@@ -9,6 +8,7 @@
 
 namespace chesslib::movegenerator 
 {
+	/*
 	using ray = std::vector<Direction>;
 
 	struct Connection
@@ -247,4 +247,5 @@ namespace chesslib::movegenerator
 	};
 
 	std::ostream& operator << (std::ostream& os, const Connection& connect);
+	*/
 }

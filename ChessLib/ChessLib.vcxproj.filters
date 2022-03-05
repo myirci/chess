@@ -42,9 +42,6 @@
     <ClCompile Include="Source\ChessLib\Utility\Utility.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ChessLib\Board\BasicBoard\BasicBoard.cpp">
-      <Filter>Board\BasicBoard</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ChessLib\Board\Bitboard\BitBoard.cpp">
       <Filter>Board\BitBoard</Filter>
     </ClCompile>
@@ -53,9 +50,6 @@
     </ClCompile>
     <ClCompile Include="Source\ChessLib\Board\ObjBoard\PieceObj.cpp">
       <Filter>Board\ObjBoard</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ChessLib\Board\X88Board\x88Board.cpp">
-      <Filter>Board\X88Board</Filter>
     </ClCompile>
     <ClCompile Include="Source\ChessLib\Chess\ChessUtility.cpp">
       <Filter>Chess</Filter>
@@ -66,8 +60,11 @@
     <ClCompile Include="Source\ChessLib\MoveGenerator\MoveConnectivity.cpp">
       <Filter>MoveGenerator</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ChessLib\MoveGenerator\MoveGenerator.cpp">
-      <Filter>MoveGenerator</Filter>
+    <ClCompile Include="Source\ChessLib\Board\BasicBoard.cpp">
+      <Filter>Board\BasicBoard</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ChessLib\Board\x88Board.cpp">
+      <Filter>Board\X88Board</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -95,9 +92,6 @@
     <ClInclude Include="Source\ChessLib\Utility\IterableStack.hpp">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ChessLib\Board\BasicBoard\BasicBoard.hpp">
-      <Filter>Board\BasicBoard</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ChessLib\Board\Bitboard\Bitboard.hpp">
       <Filter>Board\BitBoard</Filter>
     </ClInclude>
@@ -109,12 +103,6 @@
     </ClInclude>
     <ClInclude Include="Source\ChessLib\Board\ObjBoard\SquareObj.hpp">
       <Filter>Board\ObjBoard</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ChessLib\Board\X88Board\x88Board.hpp">
-      <Filter>Board\X88Board</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ChessLib\Board\BoardBase.hpp">
-      <Filter>Board</Filter>
     </ClInclude>
     <ClInclude Include="Source\ChessLib\Board\PieceCentricBoardBase.hpp">
       <Filter>Board</Filter>
@@ -139,6 +127,15 @@
     </ClInclude>
     <ClInclude Include="Source\ChessLib\MoveGenerator\MoveGenerator.hpp">
       <Filter>MoveGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Board\BasicBoard.hpp">
+      <Filter>Board\BasicBoard</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Board\BoardBase.hpp">
+      <Filter>Board</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Board\x88Board.hpp">
+      <Filter>Board\X88Board</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

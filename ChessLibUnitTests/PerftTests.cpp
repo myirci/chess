@@ -4,7 +4,7 @@
 #include <ChessLib/Perft/Perft.hpp>
 #include <ChessLib/Chess/Definitions.hpp>
 #include <ChessLib/Board/BasicBoard/BasicBoard.hpp>
-
+/*
 using namespace chesslib;
 
 class PerftTest : public ::testing::Test 
@@ -43,3 +43,5 @@ TEST_F(PerftTest, x88_board_perft)
 		EXPECT_EQ(sum, expected_sum);
 	}
 }
+
+*/
