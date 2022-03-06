@@ -3,7 +3,7 @@
 #include "BasicAndObjectBoardTestBase.hpp"
 
 #include <ChessLib/Chess/Fen.hpp>
-#include <ChessLib/Board/ObjBoard/ObjBoard.hpp>
+#include <ChessLib/Board/ObjBoard.hpp>
 #include <ChessLib/Chess/ChessUtility.hpp>
 
 #include <bitset>
@@ -12,12 +12,10 @@ using namespace chesslib;
 using namespace chesslib::squareset;
 using namespace chesslib::pieceset;
 
-class ObjectBoardTests : public ::testing::Test, public BasicAndObjectBoardTestBase
+class ObjectBoardTests : 
+    public ::testing::Test, 
+    public BasicAndObjectBoardTestBase
 {
-public:
-
-    ObjectBoardTests() { }
-
 protected:
 
     bool CheckObjboardPieces(
@@ -65,10 +63,10 @@ protected:
         BlackPawn, BlackRook, BlackKnight, BlackBishop, BlackQueen, BlackKing
     };
 };
-/*
+
 TEST_F(ObjectBoardTests, constructor_starting_pos)
 {
-    auto b = objboard::make_unique_board(Fen::StartingPosition);
+    auto b = objboard::make_unique_ObjectBoard(Fen::StartingPosition);
     const auto& squareArray = b->GetBoard();
 
     for (int i = 0; i < board_array_starting_position.size(); i++)
@@ -95,7 +93,7 @@ TEST_F(ObjectBoardTests, constructor_starting_pos)
 
 TEST_F(ObjectBoardTests, constructor_fen1)
 {
-    auto b = objboard::make_unique_board(fen_pos1);
+    auto b = objboard::make_unique_ObjectBoard(fen_pos1);
     const auto& squareArray = b->GetBoard();
     for (int i = 0; i < board_array_fen1.size(); i++)
     {
@@ -121,8 +119,7 @@ TEST_F(ObjectBoardTests, constructor_fen_compare)
 {
     for (auto f : board_setup_fens)
     {
-        auto b = objboard::make_unique_board(f);
+        auto b = objboard::make_unique_ObjectBoard(f);
         EXPECT_EQ(f, utility::chess::board_to_fen(*b));
     }
 }
-*/

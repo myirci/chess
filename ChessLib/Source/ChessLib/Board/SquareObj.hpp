@@ -1,7 +1,7 @@
 #pragma once
 
 #include <ChessLib/Chess/Definitions.hpp>
-#include <ChessLib/Board/ObjBoard/PieceObj.hpp>
+#include <ChessLib/Board/PieceObj.hpp>
 
 #include <memory>
 #include <array>

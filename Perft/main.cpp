@@ -9,12 +9,11 @@
 #include <ChessLib/Utility/Timer.hpp>
 #include <ChessLib/Perft/Perft.hpp>
 
-#include <ChessLib/Board/BasicBoard/BasicBoard.hpp>
-#include <ChessLib/Board/BasicBoard/Square.hpp>
+#include <ChessLib/Board/BasicBoard.hpp>
 
-#include <ChessLib/Board/ObjBoard/ObjBoard.hpp>
-#include <ChessLib/Board/X88Board/x88Board.hpp>
-#include <ChessLib/Board/Bitboard/Bitboard.hpp>
+#include <ChessLib/Board/ObjBoard.hpp>
+#include <ChessLib/Board/x88Board.hpp>
+#include <ChessLib/Board/Bitboard.hpp>
 
 namespace arguments
 {

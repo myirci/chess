@@ -8,39 +8,39 @@ using namespace chesslib;
 TEST(FenTests, DefaultConstructor)
 {
     Fen f;
-    EXPECT_EQ(f.Get_PiecePlacement(), "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
-    EXPECT_EQ(f.Get_ActiveColor(), "w");
-    EXPECT_EQ(f.Get_CastlingAvailability(), "KQkq");
-    EXPECT_EQ(f.Get_EnPassantTargetSquare(), "-");
-    EXPECT_EQ(f.Get_HalfMoveClock(), "0");
-    EXPECT_EQ(f.Get_FullMoveClock(), "1");
-    EXPECT_EQ(f.Get_Fen(), Fen::StartingPosition);
+    EXPECT_EQ(f.GetPiecePlacement(), "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+    EXPECT_EQ(f.GetActiveColor(), "w");
+    EXPECT_EQ(f.GetCastlingAvailability(), "KQkq");
+    EXPECT_EQ(f.GetEnPassantTargetSquare(), "-");
+    EXPECT_EQ(f.GetHalfMoveClock(), "0");
+    EXPECT_EQ(f.GetFullMoveClock(), "1");
+    EXPECT_EQ(f.GetFen(), Fen::StartingPosition);
 }
 
 TEST(FenTests, Constructor_FenWithSixFields)
 {
     std::string_view fs{ "6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1 b KQkq c3 0 2" };
     Fen f(fs);
-    EXPECT_EQ(f.Get_PiecePlacement(), "6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1");
-    EXPECT_EQ(f.Get_ActiveColor(), "b");
-    EXPECT_EQ(f.Get_CastlingAvailability(), "KQkq");
-    EXPECT_EQ(f.Get_EnPassantTargetSquare(), "c3");
-    EXPECT_EQ(f.Get_HalfMoveClock(), "0");
-    EXPECT_EQ(f.Get_FullMoveClock(), "2");
-    EXPECT_EQ(f.Get_Fen(), fs);
+    EXPECT_EQ(f.GetPiecePlacement(), "6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1");
+    EXPECT_EQ(f.GetActiveColor(), "b");
+    EXPECT_EQ(f.GetCastlingAvailability(), "KQkq");
+    EXPECT_EQ(f.GetEnPassantTargetSquare(), "c3");
+    EXPECT_EQ(f.GetHalfMoveClock(), "0");
+    EXPECT_EQ(f.GetFullMoveClock(), "2");
+    EXPECT_EQ(f.GetFen(), fs);
 }
 
 TEST(FenTests, Constructor_FenWithFourFields)
 {
     std::string_view fs{ "6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1 w KQkq c6" };
     Fen f(fs);
-    EXPECT_EQ(f.Get_PiecePlacement(), "6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1");
-    EXPECT_EQ(f.Get_ActiveColor(), "w");
-    EXPECT_EQ(f.Get_CastlingAvailability(), "KQkq");
-    EXPECT_EQ(f.Get_EnPassantTargetSquare(), "c6");
-    EXPECT_EQ(f.Get_HalfMoveClock(), std::nullopt);
-    EXPECT_EQ(f.Get_FullMoveClock(), std::nullopt);
-    EXPECT_EQ(f.Get_Fen(), fs);
+    EXPECT_EQ(f.GetPiecePlacement(), "6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1");
+    EXPECT_EQ(f.GetActiveColor(), "w");
+    EXPECT_EQ(f.GetCastlingAvailability(), "KQkq");
+    EXPECT_EQ(f.GetEnPassantTargetSquare(), "c6");
+    EXPECT_EQ(f.GetHalfMoveClock(), std::nullopt);
+    EXPECT_EQ(f.GetFullMoveClock(), std::nullopt);
+    EXPECT_EQ(f.GetFen(), fs);
 }
 
 TEST(FenTests, Constructor_FenWithSpaces)
@@ -48,13 +48,13 @@ TEST(FenTests, Constructor_FenWithSpaces)
     std::string_view fs{ "    6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1   b      Kkq       c3      0    2      " };
     std::string_view fs_clean{ "6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1 b Kkq c3 0 2" };
     Fen f(fs);
-    EXPECT_EQ(f.Get_PiecePlacement(), "6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1");
-    EXPECT_EQ(f.Get_ActiveColor(), "b");
-    EXPECT_EQ(f.Get_CastlingAvailability(), "Kkq");
-    EXPECT_EQ(f.Get_EnPassantTargetSquare(), "c3");
-    EXPECT_EQ(f.Get_HalfMoveClock(), "0");
-    EXPECT_EQ(f.Get_FullMoveClock(), "2");
-    EXPECT_EQ(f.Get_Fen(), fs_clean);
+    EXPECT_EQ(f.GetPiecePlacement(), "6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1");
+    EXPECT_EQ(f.GetActiveColor(), "b");
+    EXPECT_EQ(f.GetCastlingAvailability(), "Kkq");
+    EXPECT_EQ(f.GetEnPassantTargetSquare(), "c3");
+    EXPECT_EQ(f.GetHalfMoveClock(), "0");
+    EXPECT_EQ(f.GetFullMoveClock(), "2");
+    EXPECT_EQ(f.GetFen(), fs_clean);
 }
 
 TEST(FenTests, Constructor_FenWithWhiteSpaces)
@@ -62,13 +62,13 @@ TEST(FenTests, Constructor_FenWithWhiteSpaces)
     std::string_view fs{ "    6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1  \t w   \t\t  \n -  \t  \v   c6  \f  \r  0    2     \t " };
     std::string_view fs_clean{ "6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1 w - c6 0 2" };
     Fen f(fs);
-    EXPECT_EQ(f.Get_PiecePlacement(), "6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1");
-    EXPECT_EQ(f.Get_ActiveColor(), "w");
-    EXPECT_EQ(f.Get_CastlingAvailability(), "-");
-    EXPECT_EQ(f.Get_EnPassantTargetSquare(), "c6");
-    EXPECT_EQ(f.Get_HalfMoveClock(), "0");
-    EXPECT_EQ(f.Get_FullMoveClock(), "2");
-    EXPECT_EQ(f.Get_Fen(), fs_clean);
+    EXPECT_EQ(f.GetPiecePlacement(), "6k1/pp3pp1/3p4/2pP2p1/4Pp2/8/1P3PP1/6K1");
+    EXPECT_EQ(f.GetActiveColor(), "w");
+    EXPECT_EQ(f.GetCastlingAvailability(), "-");
+    EXPECT_EQ(f.GetEnPassantTargetSquare(), "c6");
+    EXPECT_EQ(f.GetHalfMoveClock(), "0");
+    EXPECT_EQ(f.GetFullMoveClock(), "2");
+    EXPECT_EQ(f.GetFen(), fs_clean);
 }
 
 TEST(FenTests, Constructor_InvalidNumberOfFields)
@@ -174,7 +174,7 @@ TEST(FenTests, CastlingRights)
     };
 
     for (const auto& fp : fen_vec) 
-        EXPECT_EQ(fp.first.Get_CastlingAvailability(), fp.second);
+        EXPECT_EQ(fp.first.GetCastlingAvailability(), fp.second);
 }
 
 TEST(FenTests, InvalidCastlingRights)
@@ -216,7 +216,7 @@ TEST(FenTests, EnpassantTargetSquare)
     };
 
     for (const auto& fp : fen_vec)
-        EXPECT_EQ(fp.first.Get_EnPassantTargetSquare(), fp.second);
+        EXPECT_EQ(fp.first.GetEnPassantTargetSquare(), fp.second);
 }
 
 TEST(FenTests, InvalidEnpassantTargetSquare)
@@ -254,7 +254,7 @@ TEST(FenTests, HalfMoveClock)
     };
 
     for (const auto& fp : fen_vec)
-        EXPECT_EQ(fp.first.Get_HalfMoveClock(), fp.second);
+        EXPECT_EQ(fp.first.GetHalfMoveClock(), fp.second);
 }
 
 TEST(FenTests, InvalidHalfMoveClock)
@@ -284,7 +284,7 @@ TEST(FenTests, FullMoveClock)
     };
 
     for (const auto& fp : fen_vec)
-        EXPECT_EQ(fp.first.Get_FullMoveClock(), fp.second);
+        EXPECT_EQ(fp.first.GetFullMoveClock(), fp.second);
 }
 
 TEST(FenTests, InvalidFullMoveClock)

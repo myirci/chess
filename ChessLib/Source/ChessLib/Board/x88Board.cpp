@@ -1,7 +1,7 @@
 #include <ChessLib/Board/x88Board.hpp>
 #include <ChessLib/Chess/ChessUtility.hpp>
 
-namespace chesslib::x88board
+namespace chesslib
 {
 	/*
 	void x88Board::MakeMove(const Move& move)
@@ -753,21 +753,20 @@ namespace chesslib::x88board
 	*/
 
 #pragma region factory_functions
-	/*
-	std::unique_ptr<x88Board> make_unique_board(std::string_view fen)
+	
+	std::unique_ptr<x88Board> make_unique_x88Board(std::string_view fen)
 	{
 		auto brd = std::unique_ptr<x88Board>(new x88Board());
 		utility::chess::set_board(*brd, fen);
 		return brd;
 	}
 
-	std::shared_ptr<x88Board> make_shared_board(std::string_view fen)
+	std::shared_ptr<x88Board> make_shared_x88Board(std::string_view fen)
 	{
 		auto brd = std::shared_ptr<x88Board>(new x88Board());
 		utility::chess::set_board(*brd, fen);
 		return brd;
 	}
-	*/
 
 #pragma endregion
 }

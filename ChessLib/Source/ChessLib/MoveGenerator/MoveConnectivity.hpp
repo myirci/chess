@@ -1,7 +1,7 @@
 #pragma once
 
 #include <ChessLib/Chess/Definitions.hpp>
-#include <ChessLib/Board/BasicBoard/BasicBoard.hpp>
+#include <ChessLib/Board/BasicBoard.hpp>
 #include <ChessLib/Chess/TypeTraits.hpp>
 
 #include <map>

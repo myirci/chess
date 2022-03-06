@@ -12,18 +12,16 @@ using namespace chesslib;
 using namespace chesslib::squareset;
 using namespace chesslib::pieceset;
 
-class BasicBoardTests : public ::testing::Test, public BasicAndObjectBoardTestBase
+class BasicBoardTests : 
+    public ::testing::Test, 
+    public BasicAndObjectBoardTestBase
 {
-public:
-    BasicBoardTests() { }
 
-protected:
 };
 
-/*
 TEST_F(BasicBoardTests, constructor_starting_pos)
 {
-    auto b = basic_board::make_unique_board(Fen::StartingPosition);
+    auto b = make_unique_BasicBoard(Fen::StartingPosition);
     const auto& board_array = b->GetBoard();
 
     EXPECT_TRUE(std::equal(board_array.begin(), board_array.end(), board_array_starting_position.begin()));
@@ -42,7 +40,7 @@ TEST_F(BasicBoardTests, constructor_starting_pos)
 
 TEST_F(BasicBoardTests, constructor_fen1)
 {
-    auto b = basic_board::make_unique_board(fen_pos1);
+    auto b = make_unique_BasicBoard(fen_pos1);
     const auto& board_array = b->GetBoard();
 
     EXPECT_TRUE(std::equal(board_array.begin(), board_array.end(), board_array_fen1.begin()));
@@ -58,16 +56,16 @@ TEST_F(BasicBoardTests, constructor_fen1)
     EXPECT_EQ(b->GetBlackPieces(), black_pieces_fen1);
     EXPECT_EQ(fen_pos1, utility::chess::board_to_fen(*b));
 }
-
 TEST_F(BasicBoardTests, constructor_fen_compare)
 {  
     for (auto f : board_setup_fens) 
     {
-        auto b = basic_board::make_unique_board(f);
+        auto b = make_unique_BasicBoard(f);
         EXPECT_EQ(f, utility::chess::board_to_fen(*b));
     }
 }
 
+/*
 TEST_F(BasicBoardTests, move_generation_king_only_moves) 
 {
     for (auto i{0}; i < move_generator_king_move_fens.size(); i++)

@@ -20,9 +20,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ChessLib\Board\BasicBoard.cpp" />
-    <ClCompile Include="Source\ChessLib\Board\Bitboard\BitBoard.cpp" />
-    <ClCompile Include="Source\ChessLib\Board\ObjBoard\ObjBoard.cpp" />
-    <ClCompile Include="Source\ChessLib\Board\ObjBoard\PieceObj.cpp" />
+    <ClCompile Include="Source\ChessLib\Board\BitBoard.cpp" />
+    <ClCompile Include="Source\ChessLib\Board\ObjBoard.cpp" />
+    <ClCompile Include="Source\ChessLib\Board\PieceObj.cpp" />
     <ClCompile Include="Source\ChessLib\Board\x88Board.cpp" />
     <ClCompile Include="Source\ChessLib\Chess\ChessUtility.cpp" />
     <ClCompile Include="Source\ChessLib\Chess\Fen.cpp" />
@@ -33,12 +33,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ChessLib\Board\BasicBoard.hpp" />
-    <ClInclude Include="Source\ChessLib\Board\Bitboard\Bitboard.hpp" />
+    <ClInclude Include="Source\ChessLib\Board\Bitboard.hpp" />
     <ClInclude Include="Source\ChessLib\Board\BoardBase.hpp" />
+    <ClInclude Include="Source\ChessLib\Board\ChessBoard.hpp" />
+    <ClInclude Include="Source\ChessLib\Board\ObjBoard.hpp" />
     <ClInclude Include="Source\ChessLib\Board\PieceCentricBoardBase.hpp" />
-    <ClInclude Include="Source\ChessLib\Board\ObjBoard\ObjBoard.hpp" />
-    <ClInclude Include="Source\ChessLib\Board\ObjBoard\PieceObj.hpp" />
-    <ClInclude Include="Source\ChessLib\Board\ObjBoard\SquareObj.hpp" />
+    <ClInclude Include="Source\ChessLib\Board\PieceObj.hpp" />
+    <ClInclude Include="Source\ChessLib\Board\SquareObj.hpp" />
     <ClInclude Include="Source\ChessLib\Board\x88Board.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\ChessUtility.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\Definitions.hpp" />

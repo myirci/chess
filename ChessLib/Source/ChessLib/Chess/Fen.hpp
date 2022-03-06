@@ -32,14 +32,13 @@ namespace chesslib
 
         Fen(std::string_view fen_string = StartingPosition);
        
-        std::string_view Get_Fen() const { return fen_str; }
-        
-        std::string_view Get_PiecePlacement() const { return fields[PiecePlacement]; }
-        std::string_view Get_ActiveColor() const { return fields[ActiveColor]; }
-        std::string_view Get_CastlingAvailability() const { return fields[CastlingAvailability]; }
-        std::string_view Get_EnPassantTargetSquare() const { return fields[EnPassantTargetSquare]; }
-        std::optional<std::string_view> Get_HalfMoveClock() const { return fields.size() == MaxNumberOfFields ? std::optional<std::string_view>(fields[HalfMoveClock]) : std::nullopt; }
-        std::optional<std::string_view> Get_FullMoveClock() const { return fields.size() == MaxNumberOfFields ? std::optional<std::string_view>(fields[FullMoveClock]) : std::nullopt; }
+        std::string_view GetFen() const                          { return fen_str; }
+        std::string_view GetPiecePlacement() const               { return fields[PiecePlacement]; }
+        std::string_view GetActiveColor() const                  { return fields[ActiveColor]; }
+        std::string_view GetCastlingAvailability() const         { return fields[CastlingAvailability]; }
+        std::string_view GetEnPassantTargetSquare() const        { return fields[EnPassantTargetSquare]; }
+        std::optional<std::string_view> GetHalfMoveClock() const { return fields.size() == MaxNumberOfFields ? std::optional<std::string_view>(fields[HalfMoveClock]) : std::nullopt; }
+        std::optional<std::string_view> GetFullMoveClock() const { return fields.size() == MaxNumberOfFields ? std::optional<std::string_view>(fields[FullMoveClock]) : std::nullopt; }
 
         static std::vector<std::string_view> GetFlattenedFields(std::string_view fen);
 

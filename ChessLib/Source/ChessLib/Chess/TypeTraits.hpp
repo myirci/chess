@@ -2,7 +2,7 @@
 
 #include <ChessLib/Board/BasicBoard.hpp>
 #include <ChessLib/Board/x88Board.hpp>
-#include <ChessLib/Board/ObjBoard/ObjBoard.hpp>
+#include <ChessLib/Board/ObjBoard.hpp>
 
 namespace chesslib::traits 
 {

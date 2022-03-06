@@ -188,10 +188,10 @@ namespace chesslib
 		void GenerateEnPassantCaptureMoves(Square king_pos, MoveList& moves) const;
 		*/
 
-		// friend std::unique_ptr<x88Board> make_unique_board(std::string_view fen);
-		// friend std::shared_ptr<x88Board> make_shared_board(std::string_view fen);
+		friend std::unique_ptr<x88Board> make_unique_x88Board(std::string_view fen);
+		friend std::shared_ptr<x88Board> make_shared_x88Board(std::string_view fen);
 	};
 
-	// std::unique_ptr<x88Board> make_unique_board(std::string_view fen);
-	// std::shared_ptr<x88Board> make_shared_board(std::string_view fen);
+	std::unique_ptr<x88Board> make_unique_x88Board(std::string_view fen);
+	std::shared_ptr<x88Board> make_shared_x88Board(std::string_view fen);
 }

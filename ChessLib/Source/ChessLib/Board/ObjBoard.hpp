@@ -1,10 +1,11 @@
 #pragma once
 
+#include <ChessLib/Board/ChessBoard.hpp>
 #include <ChessLib/Chess/Definitions.hpp>
 #include <ChessLib/Board/BoardBase.hpp>
 #include <ChessLib/Chess/Move.hpp>
-#include <ChessLib/Board/ObjBoard/PieceObj.hpp>
-#include <ChessLib/Board/ObjBoard/SquareObj.hpp>
+#include <ChessLib/Board/PieceObj.hpp>
+#include <ChessLib/Board/SquareObj.hpp>
 
 #include <array>
 #include <memory>
@@ -12,10 +13,12 @@
 
 namespace chesslib::objboard
 {
-	class ObjBoard : public BoardBase  
+	class ObjBoard :
+		public ChessBoard,
+		public BoardBase  
 	{
 	public:
-		constexpr static int BOARDSIZE = 64;
+		
 		using SquareArray = std::array<SquareObj, BOARDSIZE>;
 
 		using PiecePtr = std::shared_ptr<PieceObj>;
@@ -38,10 +41,10 @@ namespace chesslib::objboard
 		PieceMap _black_pieces;
 		SquareArray _squares;
 
-		friend std::unique_ptr<ObjBoard> make_unique_board(std::string_view fen);
-		friend std::shared_ptr<ObjBoard> make_shared_board(std::string_view fen);
+		friend std::unique_ptr<ObjBoard> make_unique_ObjectBoard(std::string_view fen);
+		friend std::shared_ptr<ObjBoard> make_shared_ObjectBoard(std::string_view fen);
 	};
 
-	std::unique_ptr<ObjBoard> make_unique_board(std::string_view fen);
-	std::shared_ptr<ObjBoard> make_shared_board(std::string_view fen);
+	std::unique_ptr<ObjBoard> make_unique_ObjectBoard(std::string_view fen);
+	std::shared_ptr<ObjBoard> make_shared_ObjectBoard(std::string_view fen);
 } 

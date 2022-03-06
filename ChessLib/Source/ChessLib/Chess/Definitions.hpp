@@ -36,6 +36,14 @@ namespace chesslib
         Queen_Promotion_Capture     // 15       1111
     };
 
+    enum class Castling : int8_t
+    {
+        WHITE_KS = 1,
+        WHITE_QS = 2,
+        BLACK_KS = 4,
+        BLACK_QS = 8
+    };
+
     namespace pieceset 
     {
         constexpr double
@@ -107,14 +115,6 @@ namespace chesslib
         constexpr Direction Reverse(Direction dir) { return -dir; }
     }
 
-    enum class Castling : int8_t
-    {
-        WHITE_KS = 1,
-        WHITE_QS = 2,
-        BLACK_KS = 4,
-        BLACK_QS = 8
-    };
-
     inline const std::unordered_map<char, Piece> char_to_piece =
     {
         { charset::WhitePawn,   pieceset::WhitePawn   }, 
@@ -131,7 +131,7 @@ namespace chesslib
         { charset::BlackKing,   pieceset::BlackKing   }
     };
 
-    const std::unordered_map<Piece, char> piece_to_char =
+    inline const std::unordered_map<Piece, char> piece_to_char =
     {
         { pieceset::WhitePawn,   charset::WhitePawn   }, 
         { pieceset::BlackPawn,   charset::BlackPawn   },

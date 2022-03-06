@@ -2,8 +2,7 @@
 
 #include <ChessLib/Chess/Definitions.hpp>
 #include <ChessLib/Chess/LightMove.hpp>
-#include <ChessLib/Board/BasicBoard/Square.hpp>
-#include <ChessLib/Board/BasicBoard/BasicBoard.hpp>
+#include <ChessLib/Board/BasicBoard.hpp>
 #include <ChessLib/Chess/TypeTraits.hpp>
 
 namespace chesslib::movegenerator 

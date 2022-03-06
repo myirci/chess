@@ -4,7 +4,7 @@
 namespace chesslib::utility::chess
 {
 
-	namespace fenhelpers
+	namespace fen
 	{
 		Color GetColorFromChar(char c)
 		{

@@ -10,12 +10,14 @@
 
 namespace chesslib::utility::chess
 {
-	namespace fenhelpers
+	std::string_view to_string(MoveType mtype);
+
+	namespace fen
 	{
 		Color GetColorFromChar(char c);
-
-		template<typename Board>
-		void SetCastlingRights(Board& brd, std::string_view castling_availability)
+		
+		template<typename BoardType>
+		void SetCastlingRights(BoardType& brd, std::string_view castling_availability)
 		{
 			if (castling_availability != "-")
 			{
@@ -33,9 +35,9 @@ namespace chesslib::utility::chess
 				}
 			}
 		}
-
-		template<typename Board>
-		void SetHalfMoveClock(Board& brd, std::string_view hmc)
+		
+		template<typename BoardType>
+		void SetHalfMoveClock(BoardType& brd, std::string_view hmc)
 		{
 			auto h = utility::numeric::to_int(hmc);
 			if (!h.has_value())
@@ -43,8 +45,8 @@ namespace chesslib::utility::chess
 			brd.SetHalfMoveClock(static_cast<uint16_t>(h.value()));
 		}
 
-		template<typename Board>
-		void SetFullMoveClock(Board& brd, std::string_view fmc)
+		template<typename BoardType>
+		void SetFullMoveClock(BoardType& brd, std::string_view fmc)
 		{
 			auto f = utility::numeric::to_int(fmc);
 			if (!f.has_value())
@@ -53,12 +55,17 @@ namespace chesslib::utility::chess
 		}
 	}
 
-	// GetBoard(), GetWhitePieces(), GetBlackPieces(), SetActiveColor(), SetEnPassantSquare()
-	// SetHalfMoveClock(), SetFullMoveClock()
-	template<typename Board>
-	void set_board(Board& brd, std::string_view fen) 
+	// GetBoard()
+	// GetWhitePieces()
+	// GetBlackPieces()
+	// SetActiveColor()
+	// SetEnPassantSquare()
+	// SetHalfMoveClock()
+	// SetFullMoveClock()
+	// GetSquareFromChars()
+	template<typename BoardType>
+	void set_board(BoardType& brd, std::string_view fen)
 	{
-		/*
 		auto flattened_fields = Fen::GetFlattenedFields(fen);
 		if (flattened_fields.size() != 13 && flattened_fields.size() != 11)
 			throw std::logic_error("Fen parse error - field error.");
@@ -74,13 +81,13 @@ namespace chesslib::utility::chess
 			{
 				if (std::isdigit(c))
 				{
-					if constexpr (std::is_same_v<Board, objboard::ObjBoard>)
+					if constexpr (std::is_same_v<BoardType, objboard::ObjBoard>)
 						idx += (c - '0');
 					else 
 					{
 						for (Index i{ 0 }; i < c - '0'; i++)
 						{
-							mapped_idx = traits::board_traits<Board>::BottomToTop(idx);	
+							mapped_idx = typename BoardType::BottomToTopOrder[idx];	
 							b[mapped_idx] = squareset::Empty;
 							idx++;
 						}
@@ -89,19 +96,23 @@ namespace chesslib::utility::chess
 				else
 				{
 					Piece p = char_to_piece.at(c);
-					if constexpr (std::is_same_v<Board, objboard::ObjBoard>)
+					if constexpr (std::is_same_v<BoardType, objboard::ObjBoard>)
 					{
 						auto pobj = objboard::make_shared_piece(p, idx);
 						b[idx]._piece = pobj;
 
-						if (color::get_color(p) == color::White) wp.emplace(p, std::move(pobj));
-						else                                     bp.emplace(p, std::move(pobj));
+						if (color::get_color(p) == color::White) 
+							wp.emplace(p, std::move(pobj));
+						else                                     
+							bp.emplace(p, std::move(pobj));
 					}
 					else 
 					{
-						mapped_idx = traits::board_traits<Board>::BottomToTop(idx);
-						if (color::get_color(p) == color::White) wp.emplace(p, mapped_idx);
-						else                                     bp.emplace(p, mapped_idx);
+						mapped_idx = typename BoardType::BottomToTopOrder[idx];
+						if (color::get_color(p) == color::White) 
+							wp.emplace(p, mapped_idx);
+						else                                     
+							bp.emplace(p, mapped_idx);
 						b[mapped_idx] = p;
 					}
 
@@ -110,28 +121,30 @@ namespace chesslib::utility::chess
 			}
 		}
 
-		brd.SetActiveColor(fenhelpers::GetColorFromChar(flattened_fields[8][0]));
+		brd.SetActiveColor(fen::GetColorFromChar(flattened_fields[8][0]));
 		
-		fenhelpers::SetCastlingRights(brd, flattened_fields[9]);
+		fen::SetCastlingRights(brd, flattened_fields[9]);
 
 		if (flattened_fields[10] != "-") 
-			brd.SetEnPassantSquare(traits::board_traits<Board>::GetSquareFromChars(flattened_fields[10][0], flattened_fields[10][1]));
+			brd.SetEnPassantSquare(typename BoardType::GetSquareFromChars(flattened_fields[10][0], flattened_fields[10][1]));
 			
 		if (flattened_fields.size() == 13)
 		{
-			fenhelpers::SetHalfMoveClock(brd, flattened_fields[11]);
-			fenhelpers::SetFullMoveClock(brd, flattened_fields[12]);
+			fen::SetHalfMoveClock(brd, flattened_fields[11]);
+			fen::SetFullMoveClock(brd, flattened_fields[12]);
 		}
-		*/
 	}
 
-	// GetBoard(), GetActiveColor(), IsCastlingAvailable(), QueryCastling(Castling)
-	// GetEnPassantSquare(), GetHalfMoveClock(), GetFullMoveClock()
-	template<typename Board>
-	std::string board_to_fen(Board const& brd)
+	// GetBoard()
+	// GetActiveColor()
+	// IsCastlingAvailable()
+	// QueryCastling(Castling)
+	// GetEnPassantSquare()
+	// GetHalfMoveClock()
+	// GetFullMoveClock()
+	template<typename BoardType>
+	std::string board_to_fen(BoardType const& brd)
 	{
-		return "";
-		/*
 		const auto& b = brd.GetBoard();
 
 		int empty_count{ 0 };
@@ -142,11 +155,11 @@ namespace chesslib::utility::chess
 		{
 			for (File f = 0; f < 8; f++)
 			{
-				auto idx = traits::board_traits<Board>::TopToBottom(i++);
+				auto idx = typename BoardType::TopToBottomOrder[i++];
 				
 				bool is_empty{ false };
 				Piece p{ pieceset::None };
-				if constexpr (std::is_same_v<Board, objboard::ObjBoard>)
+				if constexpr (std::is_same_v<BoardType, objboard::ObjBoard>)
 				{
 					if (b[idx]._piece) 
 						p = b[idx]._piece->_code;
@@ -204,63 +217,45 @@ namespace chesslib::utility::chess
 		if (ep == squareset::None) ss << '-';
 		else
 		{
-			auto c = traits::board_traits<Board>::ToCharPair(ep);
+			auto c = typename BoardType::GetCharPair(ep);
 			ss << c.first << c.second;
 		}
 
 		ss << ' ' << brd.GetHalfMoveClock() << ' ' << brd.GetFullMoveClock();
 
 		return ss.str();
-		*/
 	}	
 
-	template<typename Board, typename MoveType>
+	// GetCharPair()
+	template<typename BoardType, typename MoveType>
 	std::string to_string(const MoveType& move)
 	{
-		return "";
-		/*
-		using btraits = traits::board_traits<Board>;
 		std::string move_string{ "__-__" };
-		std::tie(move_string[0], move_string[1]) = btraits::ToCharPair(move.GetFrom());
-		std::tie(move_string[3], move_string[4]) = btraits::ToCharPair(move.GetTo());
+		std::tie(move_string[0], move_string[1]) = typename BoardType::GetCharPair(move.GetFrom());
+		std::tie(move_string[3], move_string[4]) = typename BoardType::GetCharPair(move.GetTo());
 		return move_string;
-		*/
 	}
 
-	std::string_view to_string(MoveType mtype);
-
-	template<typename Board, typename MV>
+	// GetCharPair()
+	template<typename BoardType, typename MV>
 	std::string to_string_long(const MV& move)
 	{
-		return "";
-		/*
-		using btraits = traits::board_traits<Board>;
 		std::string move_string{ "__-__ " };
 		move_string += to_string(move.GetMoveType());
-		std::tie(move_string[0], move_string[1]) = btraits::ToCharPair(move.GetFrom());
-		std::tie(move_string[3], move_string[4]) = btraits::ToCharPair(move.GetTo());
+		std::tie(move_string[0], move_string[1]) = typename BoardType::GetCharPair(move.GetFrom());
+		std::tie(move_string[3], move_string[4]) = typename BoardType::GetCharPair(move.GetTo());
 		return move_string;
-		*/
 	}
 
-	template<typename Board>
+	template<typename BoardType>
 	std::string to_string(const utility::IterableStack<BoardState>& move_stack) 
 	{
 		auto [first, last] = move_stack.bottom_to_top();
 		std::stringstream ss{""};
 		if (first != last)
-			ss << to_string<Board>(first->move);
+			ss << to_string<BoardType>(first->move);
 		for (first++; first != last; first++) 
-			ss << ", " << to_string<Board>(first->move);
+			ss << ", " << to_string<BoardType>(first->move);
 		return ss.str();
-	}
-
-	template <typename BoardType>
-	bool is_inside(Square sq1, Square sq2 = squareset::None) 
-	{
-		if constexpr (std::is_same<BoardType, BasicBoard>)
-			return typename BoardType::IsInside(sq1, sq2);
-		else 
-			return typename BoardType::IsInside(sq1);
 	}
 }
