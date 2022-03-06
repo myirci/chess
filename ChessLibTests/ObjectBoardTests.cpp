@@ -1,4 +1,4 @@
-#include <pch.h>
+#include "pch.h"
 
 #include "BasicAndObjectBoardTestBase.hpp"
 
@@ -11,7 +11,7 @@
 using namespace chesslib;
 using namespace chesslib::squareset;
 using namespace chesslib::pieceset;
-/*
+
 class ObjectBoardTests : public ::testing::Test, public BasicAndObjectBoardTestBase
 {
 public:
@@ -20,9 +20,9 @@ public:
 
 protected:
 
-    bool check_objboard_pieces(
+    bool CheckObjboardPieces(
         const std::array<Piece, 6>& pieceArray, 
-        const MailboxBoardBase::PieceMap& pieces1,
+        const PieceCentricBoardBase::PieceMap& pieces1,
         const objboard::ObjBoard::PieceMap& pieces2)
     {
         for (Piece p : pieceArray)
@@ -65,7 +65,7 @@ protected:
         BlackPawn, BlackRook, BlackKnight, BlackBishop, BlackQueen, BlackKing
     };
 };
-
+/*
 TEST_F(ObjectBoardTests, constructor_starting_pos)
 {
     auto b = objboard::make_unique_board(Fen::StartingPosition);
@@ -80,8 +80,8 @@ TEST_F(ObjectBoardTests, constructor_starting_pos)
             EXPECT_EQ(squareArray[i]._piece->_code, board_array_starting_position[i]);
     }
 
-    EXPECT_TRUE(check_objboard_pieces(white_pieces_array, white_pieces_starting_position, b->GetWhitePieces()));
-    EXPECT_TRUE(check_objboard_pieces(black_pieces_array, black_pieces_starting_position, b->GetBlackPieces()));
+    EXPECT_TRUE(CheckObjboardPieces(white_pieces_array, white_pieces_starting_position, b->GetWhitePieces()));
+    EXPECT_TRUE(CheckObjboardPieces(black_pieces_array, black_pieces_starting_position, b->GetBlackPieces()));
     EXPECT_EQ(b->GetActiveColor(), color::White);
     EXPECT_TRUE(b->QueryCastling(Castling::WHITE_KS));
     EXPECT_TRUE(b->QueryCastling(Castling::WHITE_QS));
@@ -105,8 +105,8 @@ TEST_F(ObjectBoardTests, constructor_fen1)
             EXPECT_EQ(squareArray[i]._piece->_code, board_array_fen1[i]);
     }
 
-    EXPECT_TRUE(check_objboard_pieces(white_pieces_array, white_pieces_fen1, b->GetWhitePieces()));
-    EXPECT_TRUE(check_objboard_pieces(black_pieces_array, black_pieces_fen1, b->GetBlackPieces()));
+    EXPECT_TRUE(CheckObjboardPieces(white_pieces_array, white_pieces_fen1, b->GetWhitePieces()));
+    EXPECT_TRUE(CheckObjboardPieces(black_pieces_array, black_pieces_fen1, b->GetBlackPieces()));
     EXPECT_EQ(b->GetActiveColor(), color::Black);
     EXPECT_TRUE(b->QueryCastling(Castling::WHITE_KS));
     EXPECT_FALSE(b->QueryCastling(Castling::WHITE_QS));

@@ -5,7 +5,7 @@
 #include <string_view>
 #include <vector>
 
-class CommonBoardTestBase
+class BoardTestBase
 {
 public:
     static bool IsSubset(const chesslib::MoveList& larger, const chesslib::MoveList& smaller)

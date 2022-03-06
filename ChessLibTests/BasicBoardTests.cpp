@@ -1,9 +1,9 @@
-#include <pch.h>
+#include "pch.h"
 
 #include "BasicAndObjectBoardTestBase.hpp"
 
 #include <ChessLib/Chess/Fen.hpp>
-#include <ChessLib/Board/BasicBoard/BasicBoard.hpp>
+#include <ChessLib/Board/BasicBoard.hpp>
 #include <ChessLib/Chess/ChessUtility.hpp>
 
 #include <bitset>
@@ -12,7 +12,6 @@ using namespace chesslib;
 using namespace chesslib::squareset;
 using namespace chesslib::pieceset;
 
-/*
 class BasicBoardTests : public ::testing::Test, public BasicAndObjectBoardTestBase
 {
 public:
@@ -21,6 +20,7 @@ public:
 protected:
 };
 
+/*
 TEST_F(BasicBoardTests, constructor_starting_pos)
 {
     auto b = basic_board::make_unique_board(Fen::StartingPosition);

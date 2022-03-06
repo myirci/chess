@@ -1,17 +1,17 @@
-#include <pch.h>
+#include "pch.h"
 
-#include "CommonBoardTestBase.hpp"
+#include "BoardTestBase.hpp"
 
 #include <ChessLib/Chess/Fen.hpp>
-#include <ChessLib/Board/X88Board/x88Board.hpp>
+#include <ChessLib/Board/x88Board.hpp>
 #include <ChessLib/Chess/ChessUtility.hpp>
 
 using namespace chesslib;
 using namespace chesslib::pieceset;
-using namespace chesslib::x88board;
 
-/*
-class x88BoardTests : public ::testing::Test, public CommonBoardTestBase
+Square Empty = chesslib::squareset::Empty;
+
+class x88BoardTests : public ::testing::Test, public BoardTestBase
 {
 public:
 
@@ -31,20 +31,20 @@ protected:
         BlackRook, BlackKnight, BlackBishop, BlackQueen, BlackKing, BlackBishop, BlackKnight, BlackRook, 0, 0, 0, 0, 0, 0, 0, 0
     };
 
-    MailboxBoardBase::PieceMap white_pieces_starting_position
+    PieceCentricBoardBase::PieceMap white_pieces_starting_position
     {
-        {WhitePawn, a2}, {WhitePawn, b2}, {WhitePawn, c2}, {WhitePawn, d2}, {WhitePawn, e2}, 
-        {WhitePawn, f2}, {WhitePawn, g2}, {WhitePawn, h2}, {WhiteRook, a1}, {WhiteRook, h1},
-        {WhiteKnight, b1}, {WhiteKnight, g1}, {WhiteBishop, c1}, {WhiteBishop, f1}, {WhiteQueen, d1}, 
-        {WhiteKing, e1}
+        {WhitePawn, x88Board::a2}, {WhitePawn, x88Board::b2}, {WhitePawn, x88Board::c2}, {WhitePawn, x88Board::d2}, 
+        {WhitePawn, x88Board::e2}, {WhitePawn, x88Board::f2}, {WhitePawn, x88Board::g2}, {WhitePawn, x88Board::h2}, 
+        {WhiteRook, x88Board::a1}, {WhiteRook, x88Board::h1}, {WhiteKnight, x88Board::b1}, {WhiteKnight, x88Board::g1}, 
+        {WhiteBishop, x88Board::c1}, {WhiteBishop, x88Board::f1}, {WhiteQueen, x88Board::d1}, {WhiteKing, x88Board::e1}
     };
 
-    MailboxBoardBase::PieceMap black_pieces_starting_position
+    PieceCentricBoardBase::PieceMap black_pieces_starting_position
     {
-        {BlackPawn, a7}, {BlackPawn, b7}, {BlackPawn, c7}, {BlackPawn, d7}, {BlackPawn, e7}, 
-        {BlackPawn, f7}, {BlackPawn, g7}, {BlackPawn, h7}, {BlackRook, a8}, {BlackRook, h8},
-        {BlackKnight, b8}, {BlackKnight, g8}, {BlackBishop, c8}, {BlackBishop, f8}, {BlackQueen, d8}, 
-        {BlackKing, e8}
+        {BlackPawn, x88Board::a7}, {BlackPawn, x88Board::b7}, {BlackPawn, x88Board::c7}, {BlackPawn, x88Board::d7}, 
+        {BlackPawn, x88Board::e7}, {BlackPawn, x88Board::f7}, {BlackPawn, x88Board::g7}, {BlackPawn, x88Board::h7}, 
+        {BlackRook, x88Board::a8}, {BlackRook, x88Board::h8}, {BlackKnight, x88Board::b8}, {BlackKnight, x88Board::g8},
+        {BlackBishop, x88Board::c8}, {BlackBishop, x88Board::f8}, {BlackQueen, x88Board::d8}, {BlackKing, x88Board::e8}
     };
 
     std::array<Square, 128> board_array_fen1
@@ -59,18 +59,21 @@ protected:
         Empty,     Empty,     Empty,     Empty,     Empty,     Empty,     BlackKing, Empty, 0, 0, 0, 0, 0, 0, 0, 0
     };
 
-    MailboxBoardBase::PieceMap white_pieces_fen1
+    PieceCentricBoardBase::PieceMap white_pieces_fen1
     {
-        {WhitePawn, b2}, {WhitePawn, f2}, {WhitePawn, g2}, {WhitePawn, d5}, {WhitePawn, e4}, {WhiteKing, g1}
+        {WhitePawn, x88Board::b2}, {WhitePawn, x88Board::f2}, {WhitePawn, x88Board::g2}, {WhitePawn, x88Board::d5}, 
+        {WhitePawn, x88Board::e4}, {WhiteKing, x88Board::g1}
     };
 
-    MailboxBoardBase::PieceMap black_pieces_fen1
+    PieceCentricBoardBase::PieceMap black_pieces_fen1
     {
-        {BlackPawn, a7}, {BlackPawn, b7}, {BlackPawn, c5}, {BlackPawn, d6}, {BlackPawn, f7}, {BlackPawn, f4},
-        {BlackPawn, g7}, {BlackPawn, g5}, {BlackKing, g8}
+        {BlackPawn, x88Board::a7}, {BlackPawn, x88Board::b7}, {BlackPawn, x88Board::c5}, {BlackPawn, x88Board::d6}, 
+        {BlackPawn, x88Board::f7}, {BlackPawn, x88Board::f4}, {BlackPawn, x88Board::g7}, {BlackPawn, x88Board::g5}, 
+        {BlackKing, x88Board::g8}
     };
 };
 
+/*
 TEST_F(x88BoardTests, constructor_starting_pos)
 {
     auto b = make_unique_board(Fen::StartingPosition);

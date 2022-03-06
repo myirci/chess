@@ -1,10 +1,10 @@
-#include <pch.h>
+#include "pch.h"
 
 #include <ChessLib/Chess/Fen.hpp>
 #include <ChessLib/Perft/Perft.hpp>
 #include <ChessLib/Chess/Definitions.hpp>
-#include <ChessLib/Board/BasicBoard/BasicBoard.hpp>
-/*
+#include <ChessLib/Board/BasicBoard.hpp>
+
 using namespace chesslib;
 
 class PerftTest : public ::testing::Test 
@@ -24,6 +24,7 @@ protected:
 	};
 };
 
+/*
 TEST_F(PerftTest, basic_board_perft)
 {
 	for (auto [fen, depth, expected_sum] : perft_positions) 
