@@ -181,9 +181,31 @@ function to_fen(bitboard, char_o, char_e)
 
 let bitboards = 
 [
+BigInt('0x0000000000000001'), // a1
+BigInt('0x0000000000000002'), // b1
+BigInt('0x0000000000000004'), // c1
+BigInt('0x0000000000000008'), // d1
+BigInt('0x0000000000000010'), // e1
+BigInt('0x0000000000000020'), // f1
+BigInt('0x0000000000000040'), // g1
+BigInt('0x0000000000000080'), // h1
 
-BigInt('0xAA55AA55AA55AA55'),
-BigInt('0x0101010101010101'),
+BigInt('0x0000000000000100'), // a2
+BigInt('0x0000000000000200'), // b2
+BigInt('0x0000000000000400'), // c2
+BigInt('0x0000000000000800'), // d2
+BigInt('0x0000000000001000'), // e2
+BigInt('0x0000000000002000'), // f2
+BigInt('0x0000000000004000'), // g2
+BigInt('0x0000000000008000'), // h2
+
+
+BigInt('0xAA55AA55AA55AA55'), // Dark squares
+BigInt('0x55AA55AA55AA55AA'), // Light squares
+
+BigInt('0x0101010101010101'), // File A
+
+
 BigInt('0xff'),
 
 BigInt('0x1020408'),
@@ -238,8 +260,13 @@ BigInt('0x100000000000000')
 
 let bitboard_names = 
 [
+'a1', 'b1', 'c1', 'd1', 'e1', 'f1', 'g1', 'h1',
+'a2', 'b2', 'c2', 'd2', 'e2', 'f2', 'g2', 'h2',
 'Dark Squares',
-'File-A', 'Rank-1', 'Name-3' 
+'Light Squares',
+'File-A', 
+'Rank-1', 
+'Name-3' 
 ]
 
 var index = 0;

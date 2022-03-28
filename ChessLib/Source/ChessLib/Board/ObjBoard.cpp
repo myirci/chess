@@ -87,23 +87,4 @@ namespace chesslib::objboard
 		MoveList moves;
 		return moves;
 	}
-
-#pragma region factory_functions
-
-	std::unique_ptr<ObjBoard> make_unique_ObjectBoard(std::string_view fen)
-	{
-		auto brd = std::unique_ptr<ObjBoard>(new ObjBoard());
-		utility::chess::set_board(*brd, fen);
-		return brd;
-	}
-
-	std::shared_ptr<ObjBoard> make_shared_ObjectBoard(std::string_view fen)
-	{
-		auto brd = std::shared_ptr<ObjBoard>(new ObjBoard());
-		utility::chess::set_board(*brd, fen);
-		return brd;
-	}
-
-#pragma endregion
-
 }

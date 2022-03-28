@@ -125,7 +125,7 @@
     <ClInclude Include="Source\ChessLib\Board\x88Board.hpp">
       <Filter>Board\X88Board</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ChessLib\Board\Bitboard.hpp">
+    <ClInclude Include="Source\ChessLib\Board\BitBoard.hpp">
       <Filter>Board\BitBoard</Filter>
     </ClInclude>
     <ClInclude Include="Source\ChessLib\Board\ObjBoard.hpp">
@@ -138,6 +138,9 @@
       <Filter>Board\ObjBoard</Filter>
     </ClInclude>
     <ClInclude Include="Source\ChessLib\Board\ChessBoard.hpp">
+      <Filter>Board</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Board\BoardFactory.hpp">
       <Filter>Board</Filter>
     </ClInclude>
   </ItemGroup>

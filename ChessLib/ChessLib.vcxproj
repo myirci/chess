@@ -33,8 +33,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ChessLib\Board\BasicBoard.hpp" />
-    <ClInclude Include="Source\ChessLib\Board\Bitboard.hpp" />
+    <ClInclude Include="Source\ChessLib\Board\BitBoard.hpp" />
     <ClInclude Include="Source\ChessLib\Board\BoardBase.hpp" />
+    <ClInclude Include="Source\ChessLib\Board\BoardFactory.hpp" />
     <ClInclude Include="Source\ChessLib\Board\ChessBoard.hpp" />
     <ClInclude Include="Source\ChessLib\Board\ObjBoard.hpp" />
     <ClInclude Include="Source\ChessLib\Board\PieceCentricBoardBase.hpp" />

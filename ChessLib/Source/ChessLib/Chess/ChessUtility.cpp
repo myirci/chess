@@ -18,6 +18,11 @@ namespace chesslib::utility::chess
 		}
 	}
 
+	template<>
+	void set_board(bitboard::BitBoard& brd, std::string_view fen) 
+	{
+	}
+
 	std::string_view to_string(MoveType mtype) 
 	{
 		const static std::unordered_map<MoveType, std::string_view> mt_str

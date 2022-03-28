@@ -5,9 +5,12 @@
 #include <ChessLib/Chess/Fen.hpp>
 #include <ChessLib/Board/x88Board.hpp>
 #include <ChessLib/Chess/ChessUtility.hpp>
+#include <ChessLib/Board/BoardFactory.hpp>
 
 using namespace chesslib;
 using namespace chesslib::pieceset;
+using namespace chesslib::utility::chess;
+
 
 Square Empty = chesslib::squareset::Empty;
 
@@ -74,7 +77,7 @@ protected:
 
 TEST_F(x88BoardTests, constructor_starting_pos)
 {
-    auto b = make_unique_x88Board(Fen::StartingPosition);
+    auto b = BoardFactory::make_unique_board<x88Board>(Fen::StartingPosition);
     const auto& board_array = b->GetBoard();
 
     EXPECT_TRUE(std::equal(board_array.begin(), board_array.end(), board_array_starting_position.begin()));
@@ -93,7 +96,7 @@ TEST_F(x88BoardTests, constructor_starting_pos)
 
 TEST_F(x88BoardTests, constructor_fen1)
 {
-    auto b = make_unique_x88Board(fen_pos1);
+    auto b = BoardFactory::make_unique_board<x88Board>(fen_pos1);
     const auto& board_array = b->GetBoard();
 
     EXPECT_TRUE(std::equal(board_array.begin(), board_array.end(), board_array_fen1.begin()));
@@ -114,7 +117,7 @@ TEST_F(x88BoardTests, constructor_fen_compare)
 {
     for (auto f : board_setup_fens)
     {
-        auto b = make_unique_x88Board(f);
+        auto b = BoardFactory::make_unique_board<x88Board>(f);
         EXPECT_EQ(f, utility::chess::board_to_fen(*b));
     }
 }

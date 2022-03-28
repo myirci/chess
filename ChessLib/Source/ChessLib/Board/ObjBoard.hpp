@@ -11,6 +11,8 @@
 #include <memory>
 #include <vector>
 
+namespace chesslib { class BoardFactory; }
+
 namespace chesslib::objboard
 {
 	class ObjBoard :
@@ -41,10 +43,6 @@ namespace chesslib::objboard
 		PieceMap _black_pieces;
 		SquareArray _squares;
 
-		friend std::unique_ptr<ObjBoard> make_unique_ObjectBoard(std::string_view fen);
-		friend std::shared_ptr<ObjBoard> make_shared_ObjectBoard(std::string_view fen);
+		friend BoardFactory;
 	};
-
-	std::unique_ptr<ObjBoard> make_unique_ObjectBoard(std::string_view fen);
-	std::shared_ptr<ObjBoard> make_shared_ObjectBoard(std::string_view fen);
 } 

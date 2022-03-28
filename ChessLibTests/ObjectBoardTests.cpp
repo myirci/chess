@@ -5,6 +5,8 @@
 #include <ChessLib/Chess/Fen.hpp>
 #include <ChessLib/Board/ObjBoard.hpp>
 #include <ChessLib/Chess/ChessUtility.hpp>
+#include <ChessLib/Board/BoardFactory.hpp>
+
 
 #include <bitset>
 
@@ -66,7 +68,7 @@ protected:
 
 TEST_F(ObjectBoardTests, constructor_starting_pos)
 {
-    auto b = objboard::make_unique_ObjectBoard(Fen::StartingPosition);
+    auto b = BoardFactory::make_unique_board<objboard::ObjBoard>(Fen::StartingPosition);
     const auto& squareArray = b->GetBoard();
 
     for (int i = 0; i < board_array_starting_position.size(); i++)
@@ -93,7 +95,7 @@ TEST_F(ObjectBoardTests, constructor_starting_pos)
 
 TEST_F(ObjectBoardTests, constructor_fen1)
 {
-    auto b = objboard::make_unique_ObjectBoard(fen_pos1);
+    auto b = BoardFactory::make_unique_board<objboard::ObjBoard>(fen_pos1);
     const auto& squareArray = b->GetBoard();
     for (int i = 0; i < board_array_fen1.size(); i++)
     {
@@ -119,7 +121,7 @@ TEST_F(ObjectBoardTests, constructor_fen_compare)
 {
     for (auto f : board_setup_fens)
     {
-        auto b = objboard::make_unique_ObjectBoard(f);
+        auto b = BoardFactory::make_unique_board<objboard::ObjBoard>(f);
         EXPECT_EQ(f, utility::chess::board_to_fen(*b));
     }
 }

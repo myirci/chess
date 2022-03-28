@@ -8,7 +8,6 @@ namespace chesslib
 	class ChessBoard
 	{
 	public:
-#pragma region Static Members
 
 		static constexpr int BOARDSIZE = 64;
 
@@ -76,13 +75,5 @@ namespace chesslib
 			auto [f, r] = GetFileAndRank(s);
 			return { f + 'a', r + '1' };
 		}
-
-		static constexpr bool IsInside(Square curr, Square next) noexcept
-		{
-			return next < BOARDSIZE&& next >= 0 && std::abs(GetFile(next) - GetFile(curr)) <= 2;
-		}
-
-#pragma endregion
-
 	};
 }

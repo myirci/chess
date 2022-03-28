@@ -754,23 +754,4 @@ namespace chesslib
 		}
 	}
 	*/
-
-#pragma region factory_functions
-
-	std::unique_ptr<BasicBoard> make_unique_BasicBoard(std::string_view fen)
-	{
-		auto brd = std::unique_ptr<BasicBoard>(new BasicBoard());
-		utility::chess::set_board(*brd, fen);
-		return brd;
-	}
-
-	std::shared_ptr<BasicBoard> make_shared_BasicBoard(std::string_view fen)
-	{
-		auto brd = std::shared_ptr<BasicBoard>(new BasicBoard());
-		utility::chess::set_board(*brd, fen);
-		return brd;
-	}
-
-#pragma endregion
-
 }

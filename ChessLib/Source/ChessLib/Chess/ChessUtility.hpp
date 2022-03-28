@@ -5,8 +5,10 @@
 
 #include <ChessLib/Utility/Utility.hpp>
 #include <ChessLib/Chess/Fen.hpp>
-#include <ChessLib/Chess/TypeTraits.hpp>
-#include <ChessLib/Board/BoardBase.hpp>
+#include <ChessLib/Board/BasicBoard.hpp>
+#include <ChessLib/Board/x88Board.hpp>
+#include <ChessLib/Board/ObjBoard.hpp>
+#include <ChessLib/Board/BitBoard.hpp>
 
 namespace chesslib::utility::chess
 {
@@ -134,6 +136,9 @@ namespace chesslib::utility::chess
 			fen::SetFullMoveClock(brd, flattened_fields[12]);
 		}
 	}
+
+	template<>
+	void set_board(bitboard::BitBoard& brd, std::string_view fen);
 
 	// GetBoard()
 	// GetActiveColor()

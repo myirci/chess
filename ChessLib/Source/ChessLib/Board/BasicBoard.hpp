@@ -12,6 +12,8 @@
 
 namespace chesslib
 {
+	class BoardFactory;
+
 	// One dimensional array of 64 squares to represent 8x8 board board.
 	// Not optimal for move generation: off-board piece detection is expensive to compute.
 	class BasicBoard :
@@ -21,6 +23,11 @@ namespace chesslib
 	public:
 
 		using BoardArray = std::array<Square, BOARDSIZE>;
+
+		static constexpr bool IsInside(Square curr, Square next) noexcept
+		{
+			return next < BOARDSIZE&& next >= 0 && std::abs(GetFile(next) - GetFile(curr)) <= 2;
+		}
 
 		const BoardArray& GetBoard() const noexcept { return _board; }
 		BoardArray& GetBoard() noexcept				{ return _board; }
@@ -103,10 +110,6 @@ namespace chesslib
 		void GenerateEnPassantCaptureMoves(Square king_pos, MoveList& moves) const;
 		*/
 
-		friend std::unique_ptr<BasicBoard> make_unique_BasicBoard(std::string_view fen);
-		friend std::shared_ptr<BasicBoard> make_shared_BasicBoard(std::string_view fen);
+		friend BoardFactory;
 	};
-
-	std::unique_ptr<BasicBoard> make_unique_BasicBoard(std::string_view fen);
-	std::shared_ptr<BasicBoard> make_shared_BasicBoard(std::string_view fen);
 }

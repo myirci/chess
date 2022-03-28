@@ -39,7 +39,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BasicBoardTests.cpp" />
+    <ClCompile Include="BitBoardTests.cpp" />
     <ClCompile Include="FenTests.cpp" />
+    <ClCompile Include="MoveGeneratorTests.cpp" />
     <ClCompile Include="MoveTests.cpp" />
     <ClCompile Include="ObjectBoardTests.cpp" />
     <ClCompile Include="PerftTests.cpp" />
