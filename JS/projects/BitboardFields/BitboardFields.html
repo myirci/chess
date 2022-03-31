@@ -1,0 +1,364 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>Bitboard Fields</title>
+  <link rel="stylesheet" href="../../lib/chessboardjs/css/chessboard-1.0.0.min.css">
+  
+  <style>
+	table.layout-table, table.layout-table th, table.layout-table td
+	{
+		padding-top: 5px;
+		padding-bottom: 10px;
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+	
+	table.info-table
+	{
+		border: 2px solid brown;
+		border-collapse: separate;
+		border-spacing: 0px;
+	}
+	
+	table.info-table th  
+	{
+		padding-top: 5px;
+		padding-bottom: 5px;
+		border: 1px solid brown;
+	}
+	
+	table.info-table tr
+	{
+	    padding-top: 3px;
+		padding-bottom: 3px;
+		border: 1px solid teal;	
+	}
+	
+	
+	table.info-table td
+	{
+		border: 1px solid teal;
+		padding-left: 1em;
+		padding-right: 1em;
+	}
+  </style>
+
+</head>
+<body>
+
+<table class ="layout-table">
+	<tr>
+		<td>
+			<div id="myBoard" style="width: 500px"></div>
+			<br>
+			<button id="PrevBtn" style="margin-left: 0em">Prev Pos</button>
+			<button id="NextBtn" style="margin-left: 1em">Next Pos</button>
+			<button id="ClearIndexBtn" style="margin-left: 1em">Clear Index</button>
+			<button id="StartBtn" style="margin-left: 4em">Start Pos</button>
+			<button id="ClearBtn"style="margin-left: 1em">Clear Board</button>
+		</td>
+		
+		<td>
+			<table class="info-table">
+				<tr>
+					<th> <b>Bitboard </b> </th>
+					<th> <b>Hex Value </b> </th>
+					<th> <b>Binary Value </b> </th>
+				</tr>
+				<tr>
+					<td> White Pieces </td>
+					<td id="wPieces"> </td>
+					<td id="wPiecesB"> </td>
+				</tr>
+				<tr>
+					<td> White Pawns </td>
+					<td id="wPawns"> </td>
+					<td id="wPawnsB"> </td>
+				</tr>
+				<tr>
+					<td> White Rooks </td>
+					<td id="wRooks"> </td>
+					<td id="wRooksB"> </td>
+				</tr>
+				<tr>
+					<td> White Knights </td>
+					<td id="wKnights"> </td>
+					<td id="wKnightsB"> </td>
+				</tr>
+				<tr>
+					<td> White Bishops </td>
+					<td id="wBishops"> </td>
+					<td id="wBishopsB"> </td>
+				</tr>
+				<tr>
+					<td> White Queens </td>
+					<td id="wQueens"> </td>
+					<td id="wQueensB"> </td>
+				</tr>
+				<tr>
+					<td> White King </td>
+					<td id="wKing"> </td>
+					<td id="wKingB"> </td>
+				</tr>
+				<tr>
+					<td> Black Pieces </td>
+					<td id="bPieces"> </td>
+					<td id="bPiecesB"> </td>
+				</tr>
+				<tr>
+					<td> Black Pawns </td>
+					<td id="bPawns"> </td>
+					<td id="bPawnsB"> </td>
+				</tr>
+				<tr>
+					<td> Black Rooks </td>
+					<td id="bRooks"> </td>
+					<td id="bRooksB"> </td>
+				</tr>
+				<tr>
+					<td> Black Knights </td>
+					<td id="bKnights"> </td>
+					<td id="bKnightsB"> </td>
+				</tr>
+				<tr>
+					<td> Black Bishops </td>
+					<td id="bBishops"> </td>
+					<td id="bBishopsB"> </td>
+				</tr>
+				<tr>
+					<td> Black Queens </td>
+					<td id="bQueens"> </td>
+					<td id="bQueensB"> </td>
+				</tr>
+				<tr>
+					<td> Black King </td>
+					<td id="bKing"> </td>
+					<td id="bKingB"> </td>
+				</tr>
+			</table>
+			<p id="fenString"></p>
+		</td>
+	</tr>
+</table>
+
+<script src="../../lib/jquery/jquery-3.6.0.min.js"></script>
+<script src="../../lib/chessboardjs/js/chessboard-1.0.0.min.js"></script>
+
+<script>
+
+const bitboards = [
+		BigInt('0x0000000000000000'), // wp: 0
+		BigInt('0x0000000000000000'), // wR: 1
+		BigInt('0x0000000000000000'), // wN: 2
+		BigInt('0x0000000000000000'), // wB: 3	
+		BigInt('0x0000000000000000'), // wQ: 4
+		BigInt('0x0000000000000000'), // wK: 5
+		BigInt('0x0000000000000000'), // w : 6
+		BigInt('0x0000000000000000'), // bp: 7
+		BigInt('0x0000000000000000'), // bR: 8
+		BigInt('0x0000000000000000'), // bN: 9
+		BigInt('0x0000000000000000'), // bB: 10	
+		BigInt('0x0000000000000000'), // bQ: 11
+		BigInt('0x0000000000000000'), // bK: 12
+		BigInt('0x0000000000000000')  // b : 13
+	];
+
+const pieceToIndex = {
+	'P': 0, 'R': 1, 'N': 2, 'B': 3, 'Q': 4, 'K': 5,
+	'p': 7, 'r': 8, 'n': 9, 'b': 10, 'q': 11, 'k': 12
+};
+
+function clear_bitboards()
+{
+	for (let i = 0; i < bitboards.length; i++)
+	{
+		bitboards[i] = BigInt('0x0000000000000000');
+	}
+}
+
+function set_square(sq_idx, pieceChar)
+{	
+	let mask = BigInt('0x0000000000000001');
+	mask = mask << BigInt(sq_idx);
+	
+	let pIndex = pieceToIndex[pieceChar]; 
+	bitboards[pIndex] |= mask;	
+	if (pIndex < 6)
+	{
+		bitboards[6] |= mask;
+	}
+	else 
+	{
+		bitboards[13] |= mask;
+	}
+}
+
+function display_bitboards()
+{
+	document.getElementById("wPawns").innerHTML = to_hex_string(bitboards[0]);
+	document.getElementById("wRooks").innerHTML = to_hex_string(bitboards[1]);
+	document.getElementById("wKnights").innerHTML = to_hex_string(bitboards[2]);
+	document.getElementById("wBishops").innerHTML = to_hex_string(bitboards[3]);
+	document.getElementById("wQueens").innerHTML = to_hex_string(bitboards[4]);
+	document.getElementById("wKing").innerHTML = to_hex_string(bitboards[5]);
+	document.getElementById("wPieces").innerHTML = to_hex_string(bitboards[6]);
+  
+	document.getElementById("wPawnsB").innerHTML = to_binary_string(bitboards[0]);
+	document.getElementById("wRooksB").innerHTML = to_binary_string(bitboards[1]);
+	document.getElementById("wKnightsB").innerHTML = to_binary_string(bitboards[2]);
+	document.getElementById("wBishopsB").innerHTML = to_binary_string(bitboards[3]);
+	document.getElementById("wQueensB").innerHTML = to_binary_string(bitboards[4]);
+	document.getElementById("wKingB").innerHTML = to_binary_string(bitboards[5]);
+	document.getElementById("wPiecesB").innerHTML = to_binary_string(bitboards[6]);
+  
+	document.getElementById("bPawns").innerHTML = to_hex_string(bitboards[7]);
+	document.getElementById("bRooks").innerHTML = to_hex_string(bitboards[8]);
+	document.getElementById("bKnights").innerHTML = to_hex_string(bitboards[9]);
+	document.getElementById("bBishops").innerHTML = to_hex_string(bitboards[10]);
+	document.getElementById("bQueens").innerHTML = to_hex_string(bitboards[11]);
+	document.getElementById("bKing").innerHTML = to_hex_string(bitboards[12]);
+	document.getElementById("bPieces").innerHTML = to_hex_string(bitboards[13]);
+  
+	document.getElementById("bPawnsB").innerHTML = to_binary_string(bitboards[7]);
+	document.getElementById("bRooksB").innerHTML = to_binary_string(bitboards[8]);
+	document.getElementById("bKnightsB").innerHTML = to_binary_string(bitboards[9]);
+	document.getElementById("bBishopsB").innerHTML = to_binary_string(bitboards[10]);
+	document.getElementById("bQueensB").innerHTML = to_binary_string(bitboards[11]);
+	document.getElementById("bKingB").innerHTML = to_binary_string(bitboards[12]);
+	document.getElementById("bPiecesB").innerHTML = to_binary_string(bitboards[13]);
+}
+	
+// Array of fen positions to be displayed
+let fen_positions = [
+'r1n1k2r/p1p1qpb1/b4Np1/1B1p4/1p2P3/2N2Q1p/PPPB1PPP/R3K2R',
+'r3k2r/p1p1qpb1/b4Np1/1B1p4/1pn1P3/2N2Q1p/PPPB1PPP/R3K2R',
+'r3k2r/p1p1qpb1/b4Np1/1B1p4/np2P3/2N2Q1p/PPPB1PPP/R3K2R',
+'r3k2r/p1p1qpb1/bn3N2/1B1p2p1/1p2P3/2N2Q1p/PPPB1PPP/R3K2R',
+'r3k2r/p1p1qpb1/bn3Np1/1B1p4/4P3/1pN2Q1p/PPPB1PPP/R3K2R',
+'r3k2r/p1p1qpb1/bn3Np1/1B1p4/4P3/2p2Q1p/PPPB1PPP/R3K2R',
+'r3k2r/p3qpb1/bn3Np1/1Bpp4/1p2P3/2N2Q1p/PPPB1PPP/R3K2R',
+'r3k2r/p1p1qpb1/bn3Np1/1B6/1p1pP3/2N2Q1p/PPPB1PPP/R3K2R',
+'r3k2r/p1p1qpb1/bn3Np1/1B6/1p2p3/2N2Q1p/PPPB1PPP/R3K2R',
+'r3k2r/p1p1qpb1/bn3Np1/1B1p4/1p2P3/2N2Q2/PPPB1PpP/R3K2R'
+]
+
+function to_binary_string(bitboard)
+{
+	let binary_str = bitboard.toString(2);
+	if(binary_str.length < 64)
+	{
+		let num_zeros_needed = 64 - binary_str.length;
+		for(let i = 0; i < num_zeros_needed; i++)
+			binary_str = '0' + binary_str;
+	}
+	
+	return '0b' + binary_str;
+}
+
+function to_hex_string(bitboard)
+{
+	let hex_str = bitboard.toString(16);
+	if(hex_str.length < 16)
+	{
+		let num_zeros_needed = 16 - hex_str.length;
+		for(let i = 0; i < num_zeros_needed; i++)
+			hex_str = '0' + hex_str;
+	}
+	
+	return '0x' + hex_str.toUpperCase();
+}
+
+function update_bitboards(fen)
+{
+	clear_bitboards();
+	fen.trim();
+	
+	const rowStrings = fen.split("/").reverse();
+	if (rowStrings.length != 8)
+	{
+		document.getElementById("wPieces").innerHTML = "Parsing Error";
+	}
+	
+	let sq_idx = 0; 
+	for (let row = 0; row < rowStrings.length; row++)
+	{
+		let rowStr = rowStrings[row];	
+	
+		for (let i = 0; i < rowStr.length; i++)
+		{
+			if(isNaN(rowStr[i]))
+			{
+				// Not a number
+				set_square(sq_idx++, rowStr[i]);
+			}
+			else
+			{
+				// Number
+				sq_idx += Number(rowStr[i]);
+			}
+		}
+	} 
+}
+
+var index = 0;
+
+var config = {
+    draggable: true,
+	dropOffBoard: 'trash',
+	sparePieces: true,
+	pieceTheme: '../../lib/chessboardjs/img/chesspieces/merida/{piece}.svg',
+	showNotation: false,
+	position: fen_positions[index],
+	onChange: onChange
+}
+var board = Chessboard('myBoard', config)
+
+$(document).ready(function(){
+  document.getElementById("fenString").innerHTML = fen_positions[index];
+})
+
+function onChange(oldPos, newPos) 
+{  
+  document.getElementById("fenString").innerHTML = Chessboard.objToFen(newPos);
+  update_bitboards(Chessboard.objToFen(newPos));
+  display_bitboards();
+}
+
+$('#PrevBtn').on('click', function () 
+{
+	if(index >= 1)
+	{
+		index = index - 1;
+		board.position(fen_positions[index], false);
+	}
+})
+
+$('#NextBtn').on('click', function () 
+{
+	if(index < fen_positions.length - 1)
+	{
+		index = index + 1;
+		board.position(fen_positions[index], false);
+	}
+})
+
+$('#ClearIndexBtn').on('click', function () 
+{ 
+	index = 0;
+	board.position(fen_positions[index], false);
+})
+
+$('#StartBtn').on('click', function() 
+{
+	board.start(false);
+})
+
+$('#ClearBtn').on('click', function () 
+{ 
+	board.clear(); 
+})
+</script>
+</body>
+</html>

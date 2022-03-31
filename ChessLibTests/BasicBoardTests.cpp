@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "BasicAndObjectBoardTestBase.hpp"
+#include "ClassicBoardTestBase.hpp"
 
 #include <ChessLib/Chess/Fen.hpp>
 #include <ChessLib/Board/BasicBoard.hpp>
@@ -16,7 +16,7 @@ using namespace chesslib::utility::chess;
 
 class BasicBoardTests : 
     public ::testing::Test, 
-    public BasicAndObjectBoardTestBase
+    public ClassicBoardTestBase
 {
 
 };

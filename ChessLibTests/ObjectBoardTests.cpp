@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "BasicAndObjectBoardTestBase.hpp"
+#include "ClassicBoardTestBase.hpp"
 
 #include <ChessLib/Chess/Fen.hpp>
 #include <ChessLib/Board/ObjBoard.hpp>
@@ -16,7 +16,7 @@ using namespace chesslib::pieceset;
 
 class ObjectBoardTests : 
     public ::testing::Test, 
-    public BasicAndObjectBoardTestBase
+    public ClassicBoardTestBase
 {
 protected:
 

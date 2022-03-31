@@ -13,7 +13,7 @@ using namespace chesslib;
 using namespace chesslib::squareset;
 using namespace chesslib::pieceset;
 
-class BasicAndObjectBoardTestBase : public BoardTestBase
+class ClassicBoardTestBase : public BoardTestBase
 {
 protected:
 

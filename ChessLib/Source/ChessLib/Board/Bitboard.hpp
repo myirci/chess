@@ -55,6 +55,11 @@ namespace chesslib::bitboard
 
 	protected:
 
+		std::array<Bitset, 6> _white_pieces;
+		std::array<Bitset, 6> _black_pieces;
+		Bitset _white_all_pieces;
+		Bitset _black_all_pieces;
+
 		BitBoard() noexcept : 
 			_white_pieces{0, 0, 0, 0, 0, 0}, 
 			_black_pieces{0, 0, 0, 0, 0, 0},
@@ -62,10 +67,10 @@ namespace chesslib::bitboard
 			_black_all_pieces{0}
 		{ }
 
-		std::array<Bitset, 6> _white_pieces;
-		std::array<Bitset, 6> _black_pieces;
-		Bitset _white_all_pieces;
-		Bitset _black_all_pieces;
+		void ClearSquare(Square s) noexcept;
+		void ClearWhitePieces(Square s) noexcept;
+		void ClearBlackPieces(Square s) noexcept;
+		
 
 		friend BoardFactory;
 	};
