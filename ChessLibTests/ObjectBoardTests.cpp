@@ -7,7 +7,6 @@
 #include <ChessLib/Chess/ChessUtility.hpp>
 #include <ChessLib/Board/BoardFactory.hpp>
 
-
 #include <bitset>
 
 using namespace chesslib;

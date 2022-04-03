@@ -7,12 +7,20 @@
   <link rel="stylesheet" href="../../lib/chessboardjs/css/chessboard-1.0.0.min.css">
   
   <style>
-	table.layout-table, table.layout-table th, table.layout-table td
+	table.layout-table, table.layout-table th
 	{
 		padding-top: 5px;
 		padding-bottom: 10px;
 		padding-left: 20px;
 		padding-right: 20px;
+	}
+	
+	table.layout-table td
+	{
+		padding-top: 1px;
+		padding-bottom: 1px;
+		padding-left: 20px;
+		padding-right: 10px;
 	}
 	
 	table.info-table
@@ -36,7 +44,6 @@
 		border: 1px solid teal;	
 	}
 	
-	
 	table.info-table td
 	{
 		border: 1px solid teal;
@@ -51,13 +58,11 @@
 <table class ="layout-table">
 	<tr>
 		<td>
-			<div id="myBoard" style="width: 500px"></div>
-			<br>
-			<button id="PrevBtn" style="margin-left: 0em">Prev Pos</button>
-			<button id="NextBtn" style="margin-left: 1em">Next Pos</button>
-			<button id="ClearIndexBtn" style="margin-left: 1em">Clear Index</button>
-			<button id="StartBtn" style="margin-left: 4em">Start Pos</button>
-			<button id="ClearBtn"style="margin-left: 1em">Clear Board</button>
+			<div id="myBoard" style="width: 450px"></div>
+			<p id="fenString"></p>
+			<button id="StartBtn" style="margin-left: 3em">Starting Pos</button>
+			<button id="InsertBtn" style="margin-left: 3em">Insert</button>
+			<button id="ClearBtn"style="margin-left: 3em">Clear Board</button>	
 		</td>
 		
 		<td>
@@ -138,7 +143,16 @@
 					<td id="bKingB"> </td>
 				</tr>
 			</table>
-			<p id="fenString"></p>
+			<br>
+			<form>
+				<textarea id = "fenStrings", rows="7", cols="80", name="Fen strings", spellcheck="false">
+				</textarea>
+			</form>
+			<br>
+			<button id="FirstBtn" style="margin-left: 5em">First</button>
+			<button id="NextBtn" style="margin-left: 5em">Next</button>
+			<button id="RemoveCurrBtn" style="margin-left: 5em">Remove Current</button>
+			<button id="ClearAllBtn" style="margin-left: 5em">Clear</button>
 		</td>
 	</tr>
 </table>
@@ -147,6 +161,8 @@
 <script src="../../lib/chessboardjs/js/chessboard-1.0.0.min.js"></script>
 
 <script>
+
+var index = -1;
 
 const bitboards = [
 		BigInt('0x0000000000000000'), // wp: 0
@@ -230,20 +246,6 @@ function display_bitboards()
 	document.getElementById("bPiecesB").innerHTML = to_binary_string(bitboards[13]);
 }
 	
-// Array of fen positions to be displayed
-let fen_positions = [
-'r1n1k2r/p1p1qpb1/b4Np1/1B1p4/1p2P3/2N2Q1p/PPPB1PPP/R3K2R',
-'r3k2r/p1p1qpb1/b4Np1/1B1p4/1pn1P3/2N2Q1p/PPPB1PPP/R3K2R',
-'r3k2r/p1p1qpb1/b4Np1/1B1p4/np2P3/2N2Q1p/PPPB1PPP/R3K2R',
-'r3k2r/p1p1qpb1/bn3N2/1B1p2p1/1p2P3/2N2Q1p/PPPB1PPP/R3K2R',
-'r3k2r/p1p1qpb1/bn3Np1/1B1p4/4P3/1pN2Q1p/PPPB1PPP/R3K2R',
-'r3k2r/p1p1qpb1/bn3Np1/1B1p4/4P3/2p2Q1p/PPPB1PPP/R3K2R',
-'r3k2r/p3qpb1/bn3Np1/1Bpp4/1p2P3/2N2Q1p/PPPB1PPP/R3K2R',
-'r3k2r/p1p1qpb1/bn3Np1/1B6/1p1pP3/2N2Q1p/PPPB1PPP/R3K2R',
-'r3k2r/p1p1qpb1/bn3Np1/1B6/1p2p3/2N2Q1p/PPPB1PPP/R3K2R',
-'r3k2r/p1p1qpb1/bn3Np1/1B1p4/1p2P3/2N2Q2/PPPB1PpP/R3K2R'
-]
-
 function to_binary_string(bitboard)
 {
 	let binary_str = bitboard.toString(2);
@@ -302,21 +304,91 @@ function update_bitboards(fen)
 	} 
 }
 
-var index = 0;
-
 var config = {
     draggable: true,
 	dropOffBoard: 'trash',
 	sparePieces: true,
 	pieceTheme: '../../lib/chessboardjs/img/chesspieces/merida/{piece}.svg',
 	showNotation: false,
-	position: fen_positions[index],
 	onChange: onChange
 }
 var board = Chessboard('myBoard', config)
 
-$(document).ready(function(){
-  document.getElementById("fenString").innerHTML = fen_positions[index];
+function clear_text_area(tArea)
+{
+	tArea.value = "";
+	index = -1;
+}
+
+function get_cleaned_text_area_lines(tArea)
+{
+	var fenset = new Set();
+	var lines = tArea.value.split('\n');
+	for (var i = 0; i < lines.length; i++)
+	{
+		if(lines[i].length >= 15)
+		{
+			fenset.add(lines[i]);
+		}
+	}
+
+	if(fenset.length === 0)
+	{
+		clear_text_area(tArea);
+	}
+	
+	return fenset;
+}
+
+function select_text_area_line(tArea, lineNum) 
+{
+    lineNum--; // array starts at 0
+    var lines = tArea.value.split("\n");
+
+    // calculate start/end
+    var startPos = 0, endPos = tArea.value.length;
+    for(var x = 0; x < lines.length; x++) 
+	{
+        if(x == lineNum) 
+		{
+            break;
+        }
+        startPos += (lines[x].length+1);
+
+    }
+
+    var endPos = lines[lineNum].length+startPos;
+
+    // do selection
+    // Chrome / Firefox
+    if(typeof(tArea.selectionStart) != "undefined") 
+	{
+        tArea.focus();
+        tArea.selectionStart = startPos;
+        tArea.selectionEnd = endPos;
+        return true;
+    }
+
+    // IE
+    if (document.selection && document.selection.createRange) 
+	{
+        tArea.focus();
+        tArea.select();
+        var range = document.selection.createRange();
+        range.collapse(true);
+        range.moveEnd("character", endPos);
+        range.moveStart("character", startPos);
+        range.select();
+        return true;
+    }
+
+    return false;
+}
+
+$(document).ready(function()
+{
+	board.start(false);
+	document.getElementById("fenString").innerHTML = board.fen();
 })
 
 function onChange(oldPos, newPos) 
@@ -325,30 +397,6 @@ function onChange(oldPos, newPos)
   update_bitboards(Chessboard.objToFen(newPos));
   display_bitboards();
 }
-
-$('#PrevBtn').on('click', function () 
-{
-	if(index >= 1)
-	{
-		index = index - 1;
-		board.position(fen_positions[index], false);
-	}
-})
-
-$('#NextBtn').on('click', function () 
-{
-	if(index < fen_positions.length - 1)
-	{
-		index = index + 1;
-		board.position(fen_positions[index], false);
-	}
-})
-
-$('#ClearIndexBtn').on('click', function () 
-{ 
-	index = 0;
-	board.position(fen_positions[index], false);
-})
 
 $('#StartBtn').on('click', function() 
 {
@@ -359,6 +407,81 @@ $('#ClearBtn').on('click', function ()
 { 
 	board.clear(); 
 })
+
+$('#InsertBtn').on('click', function () 
+{ 
+	let current_fen = board.fen();
+	let tArea = document.getElementById('fenStrings');
+	let fenset = get_cleaned_text_area_lines(tArea);
+	fenset.add(current_fen);
+	
+	let fenArray = [];
+	for(const fen of fenset.values())
+	{
+		fenArray.push(fen);
+	}
+	tArea.value = fenArray.join("\n");
+})
+
+$('#FirstBtn').on('click', function () 
+{ 
+	let tArea = document.getElementById('fenStrings');
+	var lines = tArea.value.split('\n');
+	if (lines.length > 0)
+	{
+		index = 0;
+		board.position(lines[index], false);
+		select_text_area_line(tArea, index+1);
+	}
+})
+
+$('#NextBtn').on('click', function () 
+{
+	let tArea = document.getElementById('fenStrings');
+	var lines = tArea.value.split('\n');
+	if (lines.length > 0)
+	{
+		index++;
+		index = index % lines.length; 
+		board.position(lines[index], false);
+		select_text_area_line(tArea, index+1);
+	}
+})
+
+$('#RemoveCurrBtn').on('click', function () 
+{ 
+	let tArea = document.getElementById('fenStrings');
+	var lines = tArea.value.split('\n');
+	console.log(lines);
+	
+	if (lines.length === 0)
+	{
+		return;
+	}
+	
+	if (lines.length === 1)
+	{
+		clear_text_area(tArea);
+		return;
+	}
+	
+	lines.splice(index, 1);
+	if (index > 0)
+	{
+		index--;
+	}
+	
+	tArea.value = lines.join("\n");
+	select_text_area_line(tArea, index+1);
+	board.position(lines[index], false);
+})
+
+$('#ClearAllBtn').on('click', function ()
+{
+	var tArea = document.getElementById('fenStrings');
+	clear_text_area(tArea);
+})
+
 </script>
 </body>
 </html>

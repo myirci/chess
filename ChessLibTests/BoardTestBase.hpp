@@ -8,6 +8,7 @@
 class BoardTestBase
 {
 public:
+
     static bool IsSubset(const chesslib::MoveList& larger, const chesslib::MoveList& smaller)
     {
         if (smaller.size() > larger.size())

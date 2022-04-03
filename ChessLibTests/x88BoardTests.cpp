@@ -11,7 +11,6 @@ using namespace chesslib;
 using namespace chesslib::pieceset;
 using namespace chesslib::utility::chess;
 
-
 Square Empty = chesslib::squareset::Empty;
 
 class x88BoardTests : 
@@ -74,6 +73,39 @@ protected:
         {BlackKing, x88Board::g8}
     };
 };
+
+TEST_F(x88BoardTests, SquareFileRank)
+{
+    Square i{ 0 };
+    for (Rank rk = 0; rk < 8; rk++)
+    {
+        for (File fl = 0; fl < 16; fl++)
+        {
+            Square s = x88Board::GetSquare(fl, rk);
+            EXPECT_EQ(s, i);
+            auto [f, r] = x88Board::GetFileAndRank(i);
+            EXPECT_EQ(f, fl);
+            EXPECT_EQ(r, rk);
+            i++;
+        }
+    }
+}
+
+TEST_F(x88BoardTests, SquareFromChars)
+{
+    char f{ 'a' }, r{ '1' };
+    for (int i = 0; i < 8; i++)
+    {
+        for (int j = 0; j < 8; j++)
+        {
+            Square s = x88Board::GetSquareFromChars(f + j, r + i);
+            EXPECT_EQ(s, j + i * 16);
+            auto [fl, rk] = x88Board::GetCharPair(s);
+            EXPECT_EQ(fl, f + j);
+            EXPECT_EQ(rk, r + i);
+        }
+    }
+}
 
 TEST_F(x88BoardTests, constructor_starting_pos)
 {

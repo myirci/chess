@@ -12,12 +12,12 @@ namespace chesslib::bitboard
 
 		if (color::get_color(p) == color::White) 
 		{
-			_white_all_pieces  |= BitMask[s];
+			_white_pieces[All] |= BitMask[s];
 			_white_pieces[(size_t)(p - 1)] |= BitMask[s];
 		}
 		else 
 		{
-			_black_all_pieces |= BitMask[s];
+			_black_pieces[All] |= BitMask[s];
 			_black_pieces[(size_t)(- p - 1)] |= BitMask[s];
 		}
 	}
@@ -31,12 +31,10 @@ namespace chesslib::bitboard
 	void BitBoard::ClearWhitePieces(Square s) noexcept 
 	{
 		std::for_each(_white_pieces.begin(), _white_pieces.end(), [s](auto& bs) { bs &= ~BitMask[s]; });
-		_white_all_pieces &= ~BitMask[s];
 	}
 
 	void BitBoard::ClearBlackPieces(Square s) noexcept 
 	{
 		std::for_each(_black_pieces.begin(), _black_pieces.end(), [s](auto& bs) { bs &= ~BitMask[s]; });
-		_black_all_pieces &= ~BitMask[s];
 	}
 }

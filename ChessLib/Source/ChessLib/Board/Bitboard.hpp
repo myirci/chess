@@ -44,34 +44,24 @@ namespace chesslib::bitboard
 			GetMask(squareset::e8), GetMask(squareset::f8), GetMask(squareset::g8), GetMask(squareset::h8)
 		};
 
-		static constexpr Index Pawn{ 0 }, Rook{ 1 }, Knight{ 2 }, Bishop{ 3 }, Queen{ 4 }, King{ 5 };
+		static constexpr Index Pawn{ 0 }, Rook{ 1 }, Knight{ 2 }, Bishop{ 3 }, Queen{ 4 }, King{ 5 }, All { 6 };
 
-		const std::array<Bitset, 6>& GetWhitePieceSet() const noexcept { return _white_pieces; }
-		const std::array<Bitset, 6>& GetBlackPieceSet() const noexcept { return _black_pieces; }	
-		Bitset GetAllWhitePieces() const noexcept					   { return _white_all_pieces; }
-		Bitset GetAllBlackPieces() const noexcept					   { return _black_all_pieces; }
+		const std::array<Bitset, 7>& GetWhitePieceSet() const noexcept { return _white_pieces; }
+		const std::array<Bitset, 7>& GetBlackPieceSet() const noexcept { return _black_pieces; }	
 
 		void SetSquare(Square s, Piece p) noexcept;
 
 	protected:
 
-		std::array<Bitset, 6> _white_pieces;
-		std::array<Bitset, 6> _black_pieces;
-		Bitset _white_all_pieces;
-		Bitset _black_all_pieces;
+		std::array<Bitset, 7> _white_pieces;
+		std::array<Bitset, 7> _black_pieces;
 
-		BitBoard() noexcept : 
-			_white_pieces{0, 0, 0, 0, 0, 0}, 
-			_black_pieces{0, 0, 0, 0, 0, 0},
-			_white_all_pieces{0},
-			_black_all_pieces{0}
-		{ }
+		BitBoard() noexcept : _white_pieces{0, 0, 0, 0, 0, 0}, _black_pieces{0, 0, 0, 0, 0, 0} { }
 
 		void ClearSquare(Square s) noexcept;
 		void ClearWhitePieces(Square s) noexcept;
 		void ClearBlackPieces(Square s) noexcept;
 		
-
 		friend BoardFactory;
 	};
 }

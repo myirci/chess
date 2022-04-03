@@ -1,0 +1,11 @@
+- X88Board make/unmake move tests
+- X88Board move generation tests
+
+- object board make/unmake move
+- object board make/unmake move tests
+
+- bitboard board setup
+- bit board constructor tests
+- bit board square tests ?
+
+- Generic board set-up that works for all board types

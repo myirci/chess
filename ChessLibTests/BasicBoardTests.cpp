@@ -21,6 +21,39 @@ class BasicBoardTests :
 
 };
 
+TEST_F(BasicBoardTests, SquareFileRank)
+{
+    Square i{ 0 };
+    for (Rank rk = 0; rk < 8; rk++)
+    {
+        for (File fl = 0; fl < 8; fl++)
+        {
+            Square s = BasicBoard::GetSquare(fl, rk);
+            EXPECT_EQ(s, i);
+            auto [f, r] = BasicBoard::GetFileAndRank(i);
+            EXPECT_EQ(f, fl);
+            EXPECT_EQ(r, rk);
+            i++;
+        }
+    }
+}
+
+TEST_F(BasicBoardTests, SquareFromChars)
+{
+    char f{ 'a' }, r{ '1' };
+    for (int i = 0; i < 8; i++)
+    {
+        for (int j = 0; j < 8; j++)
+        {
+            Square s = BasicBoard::GetSquareFromChars(f + j, r + i);
+            EXPECT_EQ(s, j + i * 8);
+            auto [fl, rk] = BasicBoard::GetCharPair(s);
+            EXPECT_EQ(fl, f + j);
+            EXPECT_EQ(rk, r + i);
+        }
+    }
+}
+
 TEST_F(BasicBoardTests, constructor_starting_pos)
 {
     auto b = BoardFactory::make_unique_board<BasicBoard>(Fen::StartingPosition);
