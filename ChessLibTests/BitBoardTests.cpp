@@ -58,11 +58,11 @@ TEST_F(BitBoardTests, constructor_starting_pos)
     EXPECT_TRUE(b->QueryCastling(Castling::WHITE_QS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_KS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_QS));
-    EXPECT_EQ(b->GetEnPassantSquare(), None);
+    EXPECT_EQ(b->GetEnPassantSquare(), Empty);
     EXPECT_EQ(b->GetHalfMoveClock(), 0);
     EXPECT_EQ(b->GetFullMoveClock(), 1);
 
-    // EXPECT_EQ(Fen::StartingPosition, utility::chess::board_to_fen(*b));
+    EXPECT_EQ(Fen::StartingPosition, utility::chess::board_to_fen(*b));
 }
 
 TEST_F(BitBoardTests, constructor_fen1)
@@ -96,5 +96,5 @@ TEST_F(BitBoardTests, constructor_fen1)
     EXPECT_EQ(b->GetHalfMoveClock(), 1);
     EXPECT_EQ(b->GetFullMoveClock(), 2);
 
-    // EXPECT_EQ(fen_pos1, utility::chess::board_to_fen(*b));
+    EXPECT_EQ(fen_pos1, utility::chess::board_to_fen(*b));
 }

@@ -29,9 +29,13 @@ namespace chesslib
 			return next < BOARDSIZE&& next >= 0 && std::abs(GetFile(next) - GetFile(curr)) <= 2;
 		}
 
+		void SetPiece(Piece p, Square s);
+		Piece GetPiece(Square s) const { return _board[s]; }
+
 		const BoardArray& GetBoard() const noexcept { return _board; }
 		BoardArray& GetBoard() noexcept				{ return _board; }
 
+		
 		// void MakeMove(const Move& move);
 		// void UnMakeMove();
 
@@ -39,7 +43,7 @@ namespace chesslib
 
 		BoardArray _board;
 
-		BasicBoard() noexcept : PieceCentricBoardBase(), _board{} { }
+		BasicBoard() noexcept : PieceCentricBoardBase() { _board.fill(Empty); }
 
 		/*
 		template<Color Clr>

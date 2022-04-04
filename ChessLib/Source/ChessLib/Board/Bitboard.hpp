@@ -49,14 +49,15 @@ namespace chesslib::bitboard
 		const std::array<Bitset, 7>& GetWhitePieceSet() const noexcept { return _white_pieces; }
 		const std::array<Bitset, 7>& GetBlackPieceSet() const noexcept { return _black_pieces; }	
 
-		void SetSquare(Square s, Piece p) noexcept;
+		void SetPiece(Piece p, Square s);
+		Piece GetPiece(Square s) const;
 
 	protected:
 
 		std::array<Bitset, 7> _white_pieces;
 		std::array<Bitset, 7> _black_pieces;
 
-		BitBoard() noexcept : _white_pieces{0, 0, 0, 0, 0, 0}, _black_pieces{0, 0, 0, 0, 0, 0} { }
+		BitBoard() noexcept : _white_pieces{0, 0, 0, 0, 0, 0, 0}, _black_pieces{0, 0, 0, 0, 0, 0, 0} { }
 
 		void ClearSquare(Square s) noexcept;
 		void ClearWhitePieces(Square s) noexcept;

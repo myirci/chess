@@ -51,5 +51,5 @@ namespace chesslib::objboard
 		King(Piece code, Square loc) : PieceObj(code, loc, pieceset::KingValue) { }
 	};
 
-	std::shared_ptr<PieceObj> make_shared_piece(Piece code, Square loc);
+	std::unique_ptr<PieceObj> make_piece(Piece code, Square loc);
 }

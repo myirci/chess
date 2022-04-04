@@ -31,7 +31,7 @@ namespace chesslib
 		Direction GetPinDirection(Square piece_loc) const noexcept
 		{
 			auto it = _pins.find(piece_loc);
-			return it == _pins.end() ? direction::None : it->second.second;
+			return it == _pins.end() ? Empty : it->second.second;
 		}
 
 		template <Color Attacker>
@@ -61,7 +61,7 @@ namespace chesslib
 				}
 
 				if (_board[next] == ctraits::Knight)
-					_checks.emplace_back(next, direction::None, 0);
+					_checks.emplace_back(next, Empty, 0);
 			}	
 		}
 
@@ -96,7 +96,7 @@ namespace chesslib
 
 			for (Direction dir : attack_directions)
 			{
-				Square pin_loc{ squareset::None };
+				Square pin_loc{ Empty };
 				Distance dist{ 1 };
 
 				Square next{ king_pos + dir };
@@ -127,7 +127,7 @@ namespace chesslib
 
 					if (is_under_attack)
 					{
-						if (pin_loc != squareset::None)
+						if (pin_loc != Empty)
 							_pins.emplace(pin_loc, std::make_pair(next, dir));
 						else
 							_checks.emplace_back(next, dir, dist);
@@ -135,7 +135,7 @@ namespace chesslib
 					}
 					else
 					{
-						if (pin_loc == squareset::None)
+						if (pin_loc == Empty)
 							pin_loc = next;
 						else
 							break;

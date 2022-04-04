@@ -57,14 +57,7 @@ namespace chesslib::utility::chess
 		}
 	}
 
-	// GetBoard()
-	// GetWhitePieces()
-	// GetBlackPieces()
-	// SetActiveColor()
-	// SetEnPassantSquare()
-	// SetHalfMoveClock()
-	// SetFullMoveClock()
-	// GetSquareFromChars()
+	// Preconditions: brd is cleared or newly created. 
 	template<typename BoardType>
 	void set_board(BoardType& brd, std::string_view fen)
 	{
@@ -72,64 +65,30 @@ namespace chesslib::utility::chess
 		if (flattened_fields.size() != 13 && flattened_fields.size() != 11)
 			throw std::logic_error("Fen parse error - field error.");
 
-		auto& b = brd.GetBoard();
-		auto& wp = brd.GetWhitePieces();
-		auto& bp = brd.GetBlackPieces();
-
-		Index idx{ 0 }, mapped_idx{ 0 };
-		for (Rank r = 0; r < 8; r++) 
+		Square sq{ 0 };
+		for (Rank r = 0; r < 8; r++)
 		{
-			for (char c : flattened_fields[r]) 
+			for (char c : flattened_fields[r])
 			{
 				if (std::isdigit(c))
-				{
-					if constexpr (std::is_same_v<BoardType, objboard::ObjBoard>)
-						idx += (c - '0');
-					else 
-					{
-						for (Index i{ 0 }; i < c - '0'; i++)
-						{
-							mapped_idx = typename BoardType::BottomToTopOrder[idx];	
-							b[mapped_idx] = squareset::Empty;
-							idx++;
-						}
-					}
-				}
+					sq += (c - '0');
 				else
 				{
-					Piece p = char_to_piece.at(c);
-					if constexpr (std::is_same_v<BoardType, objboard::ObjBoard>)
-					{
-						auto pobj = objboard::make_shared_piece(p, idx);
-						b[idx]._piece = pobj;
-
-						if (color::get_color(p) == color::White) 
-							wp.emplace(p, std::move(pobj));
-						else                                     
-							bp.emplace(p, std::move(pobj));
-					}
+					if constexpr (std::is_same_v<BoardType, x88Board>)
+						brd.SetPiece(char_to_piece.at(c), x88Board::BottomToTopOrder[sq++]);
 					else 
-					{
-						mapped_idx = typename BoardType::BottomToTopOrder[idx];
-						if (color::get_color(p) == color::White) 
-							wp.emplace(p, mapped_idx);
-						else                                     
-							bp.emplace(p, mapped_idx);
-						b[mapped_idx] = p;
-					}
-
-					idx++;
+						brd.SetPiece(char_to_piece.at(c), sq++);
 				}
 			}
 		}
 
 		brd.SetActiveColor(fen::GetColorFromChar(flattened_fields[8][0]));
-		
+
 		fen::SetCastlingRights(brd, flattened_fields[9]);
 
-		if (flattened_fields[10] != "-") 
-			brd.SetEnPassantSquare(typename BoardType::GetSquareFromChars(flattened_fields[10][0], flattened_fields[10][1]));
-			
+		if (flattened_fields[10] != "-")
+			brd.SetEnPassantSquare(BoardType::GetSquareFromChars(flattened_fields[10][0], flattened_fields[10][1]));
+
 		if (flattened_fields.size() == 13)
 		{
 			fen::SetHalfMoveClock(brd, flattened_fields[11]);
@@ -137,49 +96,19 @@ namespace chesslib::utility::chess
 		}
 	}
 
-	template<>
-	void set_board(bitboard::BitBoard& brd, std::string_view fen);
-
-	// GetBoard()
-	// GetActiveColor()
-	// IsCastlingAvailable()
-	// QueryCastling(Castling)
-	// GetEnPassantSquare()
-	// GetHalfMoveClock()
-	// GetFullMoveClock()
 	template<typename BoardType>
 	std::string board_to_fen(BoardType const& brd)
 	{
-		const auto& b = brd.GetBoard();
-
 		int empty_count{ 0 };
 		std::stringstream ss;
 
-		Index i{ 0 };
+		Index idx{ 0 };
 		for (Rank r = 0; r < 8; r++)
 		{
 			for (File f = 0; f < 8; f++)
 			{
-				auto idx = typename BoardType::TopToBottomOrder[i++];
-				
-				bool is_empty{ false };
-				Piece p{ pieceset::None };
-				if constexpr (std::is_same_v<BoardType, objboard::ObjBoard>)
-				{
-					if (b[idx]._piece) 
-						p = b[idx]._piece->_code;
-					else
-						is_empty = true;
-				}
-				else 
-				{
-					if (b[idx] != squareset::Empty) 
-						p = b[idx];
-					else                     
-						is_empty = true;
-				}
-				
-				if (is_empty) 
+				auto p = brd.GetPiece(BoardType::TopToBottomOrder[idx++]);
+				if (p == Empty) 
 				{
 					empty_count++;
 				}
@@ -219,7 +148,7 @@ namespace chesslib::utility::chess
 
 		ss << ' ';
 		auto ep = brd.GetEnPassantSquare();
-		if (ep == squareset::None) ss << '-';
+		if (ep == Empty) ss << '-';
 		else
 		{
 			auto c = typename BoardType::GetCharPair(ep);

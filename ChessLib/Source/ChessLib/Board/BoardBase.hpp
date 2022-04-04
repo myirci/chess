@@ -57,21 +57,21 @@ namespace chesslib
 		BoardBase() noexcept :
 			_active_color{ 0 },
 			_castling_rights{ 0 },
-			_enpassant_target{ squareset::None },
+			_enpassant_target{ Empty },
 			_halfmove_clock{ 0 },
 			_fullmove_clock{ 1 }
 		{ }
 
-		void PushToMoveStack(const Move& mv, Piece captured = pieceset::None)
+		void PushToMoveStack(const Move& mv, Piece captured = Empty)
 		{
 			_move_stack.push({mv, _halfmove_clock, _castling_rights, _enpassant_target, captured});
 		}
 
-		Color	        	  _active_color;
-		int8_t			      _castling_rights;
-		Square			      _enpassant_target;
-		uint16_t		      _halfmove_clock;
-		uint16_t		      _fullmove_clock;
-		mutable MoveStack     _move_stack;
+		Color	          _active_color;
+		int8_t			  _castling_rights;
+		Square			  _enpassant_target;
+		uint16_t		  _halfmove_clock;
+		uint16_t		  _fullmove_clock;
+		mutable MoveStack _move_stack;
 	};
 }

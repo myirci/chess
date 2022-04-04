@@ -18,40 +18,6 @@ namespace chesslib::utility::chess
 		}
 	}
 
-	template<>
-	void set_board(bitboard::BitBoard& brd, std::string_view fen) 
-	{
-		auto flattened_fields = Fen::GetFlattenedFields(fen);
-		if (flattened_fields.size() != 13 && flattened_fields.size() != 11)
-			throw std::logic_error("Fen parse error - field error.");
-
-		Index idx{ 0 }, mapped_square{ 0 };
-		for (Rank r = 0; r < 8; r++)
-		{
-			for (char c : flattened_fields[r])
-			{
-				if (std::isdigit(c))
-					for (Index i{ 0 }; i < c - '0'; i++)
-						brd.SetSquare(bitboard::BitBoard::BottomToTopOrder[idx++], pieceset::None);
-				else
-					brd.SetSquare(bitboard::BitBoard::BottomToTopOrder[idx++], char_to_piece.at(c));
-			}
-		}
-
-		brd.SetActiveColor(fen::GetColorFromChar(flattened_fields[8][0]));
-
-		fen::SetCastlingRights(brd, flattened_fields[9]);
-
-		if (flattened_fields[10] != "-")
-			brd.SetEnPassantSquare(bitboard::BitBoard::GetSquareFromChars(flattened_fields[10][0], flattened_fields[10][1]));
-
-		if (flattened_fields.size() == 13)
-		{
-			fen::SetHalfMoveClock(brd, flattened_fields[11]);
-			fen::SetFullMoveClock(brd, flattened_fields[12]);
-		}
-	}
-
 	std::string_view to_string(MoveType mtype) 
 	{
 		const static std::unordered_map<MoveType, std::string_view> mt_str

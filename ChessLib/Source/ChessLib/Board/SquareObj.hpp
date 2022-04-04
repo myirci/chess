@@ -16,14 +16,16 @@ namespace chesslib::objboard
 			std::array<Square, 8>&& neighbors,
 			std::array<Square, 8>&& knight_jumps) :
 			_code{ code },
-			_neigbors{ std::move(neighbors) },
+			_neighbors{ std::move(neighbors) },
 			_knight_jumps{ std::move(knight_jumps) },
 			_piece{ nullptr }
 		{ }
 
-		const Square _code;
-		const std::array<Square, 8> _neigbors;
+		Square _code;
+		const std::array<Square, 8> _neighbors;
 		const std::array<Square, 8> _knight_jumps;
-		std::shared_ptr<PieceObj> _piece;
+		PieceObj* _piece;
 	};
+
+
 }

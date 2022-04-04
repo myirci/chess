@@ -65,7 +65,7 @@ TEST_F(BasicBoardTests, constructor_starting_pos)
     EXPECT_TRUE(b->QueryCastling(Castling::WHITE_QS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_KS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_QS));
-    EXPECT_EQ(b->GetEnPassantSquare(), squareset::None);
+    EXPECT_EQ(b->GetEnPassantSquare(), Empty);
     EXPECT_EQ(b->GetHalfMoveClock(), 0);
     EXPECT_EQ(b->GetFullMoveClock(), 1);
     EXPECT_EQ(b->GetWhitePieces(), white_pieces_starting_position);

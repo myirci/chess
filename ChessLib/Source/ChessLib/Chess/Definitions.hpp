@@ -16,6 +16,8 @@ namespace chesslib
     using Direction = int8_t;
     using Distance  = int8_t;
 
+    constexpr int8_t Empty{ -128 };
+
     enum class MoveType : int8_t
     {
         Quite = 0,                  // 0        0000
@@ -55,19 +57,8 @@ namespace chesslib
             KingValue{std::numeric_limits<double>::max()};
 
         constexpr Piece 
-            WhitePawn{ 1 },   // 0000 0001
-            WhiteRook{ 2 },   // 0000 0010
-            WhiteKnight{ 3 }, // 0000 0011 
-            WhiteBishop{ 4 }, // 0000 0100
-            WhiteQueen{ 5 },  // 0000 0101
-            WhiteKing{ 6 },   // 0000 0110  
-            BlackPawn{ -1 }, 
-            BlackRook{ -2 }, 
-            BlackKnight{ -3 }, 
-            BlackBishop{ -4 }, 
-            BlackQueen{ -5 }, 
-            BlackKing{ -6 },
-            None{ 0 };
+            WhitePawn{ 1 },  WhiteRook{ 2 },  WhiteKnight{ 3 },  WhiteBishop{ 4 },  WhiteQueen{ 5 },  WhiteKing{ 6 },  
+            BlackPawn{ -1 }, BlackRook{ -2 }, BlackKnight{ -3 }, BlackBishop{ -4 }, BlackQueen{ -5 }, BlackKing{ -6 };
 
         constexpr Piece Reverse(Piece p) noexcept { return -p; }
     }
@@ -95,8 +86,6 @@ namespace chesslib
 
     namespace squareset 
     {
-        constexpr Square Empty{ -128 }, None{ -127 };
-
         constexpr Square
             a1{ 0 }, a2{ 8 },  a3{ 16 }, a4{ 24 }, a5{ 32 }, a6{ 40 }, a7{ 48 }, a8{ 56 },
             b1{ 1 }, b2{ 9 },  b3{ 17 }, b4{ 25 }, b5{ 33 }, b6{ 41 }, b7{ 49 }, b8{ 57 },
@@ -110,8 +99,6 @@ namespace chesslib
 
     namespace direction 
     {
-        constexpr Direction None = 0;
-
         constexpr Direction Reverse(Direction dir) { return -dir; }
     }
 

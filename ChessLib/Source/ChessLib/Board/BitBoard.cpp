@@ -3,13 +3,8 @@
 
 namespace chesslib::bitboard
 {
-	void BitBoard::SetSquare(Square s, Piece p) noexcept 
+	void BitBoard::SetPiece(Piece p, Square s)
 	{
-		ClearSquare(s);
-
-		if (p == pieceset::None)
-			return;
-
 		if (color::get_color(p) == color::White) 
 		{
 			_white_pieces[All] |= BitMask[s];
@@ -20,6 +15,25 @@ namespace chesslib::bitboard
 			_black_pieces[All] |= BitMask[s];
 			_black_pieces[(size_t)(- p - 1)] |= BitMask[s];
 		}
+	}
+
+	Piece BitBoard::GetPiece(Square s) const 
+	{
+		if (_white_pieces[All] & BitMask[s]) 
+		{
+			for (int i = 0; i < 6; i++)
+				if (_white_pieces[i] & BitMask[s])
+					return i + 1;
+		}
+		
+		if (_black_pieces[All] & BitMask[s]) 
+		{
+			for (int i = 0; i < 6; i++)
+				if (_black_pieces[i] & BitMask[s])
+					return -i - 1;
+		}
+
+		return Empty;
 	}
 
 	void BitBoard::ClearSquare(Square s) noexcept 

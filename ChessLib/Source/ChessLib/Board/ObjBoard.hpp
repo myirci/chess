@@ -22,18 +22,19 @@ namespace chesslib::objboard
 	public:
 		
 		using SquareArray = std::array<SquareObj, BOARDSIZE>;
+		using PieceMap = std::unordered_multimap<Piece, std::unique_ptr<PieceObj>>;
 
-		using PiecePtr = std::shared_ptr<PieceObj>;
-		using PieceMap = std::unordered_multimap<Piece, PiecePtr>;
+		void SetPiece(Piece p, Square s);
+		Piece GetPiece(Square s) const { return _squares[s]._piece ? _squares[s]._piece->_code : Empty; }
 
-		const SquareArray& GetBoard() const	   { return _squares; }
-		SquareArray& GetBoard()				   { return _squares; }
-		const PieceMap& GetWhitePieces() const { return _white_pieces; }
-		PieceMap& GetWhitePieces()			   { return _white_pieces; }
-		const PieceMap& GetBlackPieces() const { return _black_pieces; }
-		PieceMap& GetBlackPieces()			   { return _black_pieces; }
+		const SquareArray& GetBoard() const noexcept    { return _squares; }
+		SquareArray& GetBoard() noexcept		        { return _squares; }
+		const PieceMap& GetWhitePieces() const noexcept { return _white_pieces; }
+		PieceMap& GetWhitePieces() noexcept			    { return _white_pieces; }
+		const PieceMap& GetBlackPieces() const noexcept { return _black_pieces; }
+		PieceMap& GetBlackPieces() noexcept	           	{ return _black_pieces; }
 
-		std::vector<Move> GenerateMoves() const;
+		// std::vector<Move> GenerateMoves() const;
 	
 	protected:
 

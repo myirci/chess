@@ -64,35 +64,17 @@ namespace chesslib
 
 		static constexpr std::array<Direction, 8> KnightJumps{ 33, 18, -14, -31, -33, -18, 14, 31 };
 
-		static constexpr Square Mirror(Square s) noexcept 
-		{ 
-			return s + 8; 
-		}
+		static constexpr Square Mirror(Square s) noexcept { return s + 8; }
 
-		static constexpr Square GetSquare(File f, Rank r) noexcept
-		{ 
-			return 16 * r + f; 
-		}
+		static constexpr Square GetSquare(File f, Rank r) noexcept { return 16 * r + f; }
 
-		static constexpr Rank GetRank(Square s) noexcept 
-		{ 
-			return s >> 4; 
-		}
+		static constexpr Rank GetRank(Square s) noexcept { return s >> 4; }
 
-		static constexpr File GetFile(Square s) noexcept 
-		{ 
-			return s & 0x0F; 
-		}
+		static constexpr File GetFile(Square s) noexcept { return s & 0x0F; }
 
-		static constexpr std::pair<File, Rank> GetFileAndRank(Square s) noexcept
-		{ 
-			return { GetFile(s), GetRank(s) }; 
-		}
+		static constexpr std::pair<File, Rank> GetFileAndRank(Square s) noexcept { return { GetFile(s), GetRank(s) }; }
 
-		static constexpr Square GetSquareFromChars(char f, char r) noexcept 
-		{ 
-			return GetSquare(f - 'a', r - '1'); 
-		}
+		static constexpr Square GetSquareFromChars(char f, char r) noexcept { return GetSquare(f - 'a', r - '1'); }
 
 		static constexpr std::pair<char, char> GetCharPair(Square s) noexcept
 		{
@@ -100,14 +82,14 @@ namespace chesslib
 			return { f + 'a', r + '1' };
 		}
 
-		static constexpr bool IsInside(Square sq) noexcept 
-		{ 
-			return !(0x88 & sq); 
-		}
+		static constexpr bool IsInside(Square sq) noexcept { return !(0x88 & sq); }
 
 #pragma endregion
 	
 		using BoardArray = std::array<Square, BOARDSIZE>;
+
+		void SetPiece(Piece p, Square s);
+		Piece GetPiece(Square s) const { return _board[s]; }
 
 		const BoardArray& GetBoard() const noexcept { return _board; }
 		BoardArray& GetBoard() noexcept             { return _board; }
@@ -119,7 +101,7 @@ namespace chesslib
 		
 		BoardArray _board;
 
-		x88Board() : PieceCentricBoardBase(), _board{} { }
+		x88Board() : PieceCentricBoardBase() { _board.fill(Empty); }
 		
 		/*
 		template<Color Clr>

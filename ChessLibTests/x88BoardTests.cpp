@@ -11,8 +11,6 @@ using namespace chesslib;
 using namespace chesslib::pieceset;
 using namespace chesslib::utility::chess;
 
-Square Empty = chesslib::squareset::Empty;
-
 class x88BoardTests : 
     public ::testing::Test, 
     public BoardTestBase
@@ -22,14 +20,14 @@ protected:
 
     std::array<Square, 128> board_array_starting_position
     {
-        WhiteRook, WhiteKnight, WhiteBishop, WhiteQueen, WhiteKing, WhiteBishop, WhiteKnight, WhiteRook, 0, 0, 0, 0, 0, 0, 0, 0,
-        WhitePawn, WhitePawn,   WhitePawn,   WhitePawn,  WhitePawn, WhitePawn,   WhitePawn,   WhitePawn, 0, 0, 0, 0, 0, 0, 0, 0,
-        Empty,     Empty,       Empty,       Empty,      Empty,     Empty,       Empty,       Empty,     0, 0, 0, 0, 0, 0, 0, 0,
-        Empty,     Empty,       Empty,       Empty,      Empty,     Empty,       Empty,       Empty,     0, 0, 0, 0, 0, 0, 0, 0,
-        Empty,     Empty,       Empty,       Empty,      Empty,     Empty,       Empty,       Empty,     0, 0, 0, 0, 0, 0, 0, 0,
-        Empty,     Empty,       Empty,       Empty,      Empty,     Empty,       Empty,       Empty,     0, 0, 0, 0, 0, 0, 0, 0,
-        BlackPawn, BlackPawn,   BlackPawn,   BlackPawn,  BlackPawn, BlackPawn,   BlackPawn,   BlackPawn, 0, 0, 0, 0, 0, 0, 0, 0,
-        BlackRook, BlackKnight, BlackBishop, BlackQueen, BlackKing, BlackBishop, BlackKnight, BlackRook, 0, 0, 0, 0, 0, 0, 0, 0
+        WhiteRook, WhiteKnight, WhiteBishop, WhiteQueen, WhiteKing, WhiteBishop, WhiteKnight, WhiteRook, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
+        WhitePawn, WhitePawn,   WhitePawn,   WhitePawn,  WhitePawn, WhitePawn,   WhitePawn,   WhitePawn, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
+        Empty,     Empty,       Empty,       Empty,      Empty,     Empty,       Empty,       Empty,     Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
+        Empty,     Empty,       Empty,       Empty,      Empty,     Empty,       Empty,       Empty,     Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
+        Empty,     Empty,       Empty,       Empty,      Empty,     Empty,       Empty,       Empty,     Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
+        Empty,     Empty,       Empty,       Empty,      Empty,     Empty,       Empty,       Empty,     Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
+        BlackPawn, BlackPawn,   BlackPawn,   BlackPawn,  BlackPawn, BlackPawn,   BlackPawn,   BlackPawn, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
+        BlackRook, BlackKnight, BlackBishop, BlackQueen, BlackKing, BlackBishop, BlackKnight, BlackRook, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty
     };
 
     PieceCentricBoardBase::PieceMap white_pieces_starting_position
@@ -50,14 +48,14 @@ protected:
 
     std::array<Square, 128> board_array_fen1
     {
-        Empty,     Empty,     Empty,     Empty,     Empty,     Empty,     WhiteKing, Empty, 0, 0, 0, 0, 0, 0, 0, 0,
-        Empty,     WhitePawn, Empty,     Empty,     Empty,     WhitePawn, WhitePawn, Empty, 0, 0, 0, 0, 0, 0, 0, 0,
-        Empty,     Empty,     Empty,     Empty,     Empty,     Empty,     Empty,     Empty, 0, 0, 0, 0, 0, 0, 0, 0,
-        Empty,     Empty,     Empty,     Empty,     WhitePawn, BlackPawn, Empty,     Empty, 0, 0, 0, 0, 0, 0, 0, 0,
-        Empty,     Empty,     BlackPawn, WhitePawn, Empty,     Empty,     BlackPawn, Empty, 0, 0, 0, 0, 0, 0, 0, 0,
-        Empty,     Empty,     Empty,     BlackPawn, Empty,     Empty,     Empty,     Empty, 0, 0, 0, 0, 0, 0, 0, 0,
-        BlackPawn, BlackPawn, Empty,     Empty,     Empty,     BlackPawn, BlackPawn, Empty, 0, 0, 0, 0, 0, 0, 0, 0,
-        Empty,     Empty,     Empty,     Empty,     Empty,     Empty,     BlackKing, Empty, 0, 0, 0, 0, 0, 0, 0, 0
+        Empty,     Empty,     Empty,     Empty,     Empty,     Empty,     WhiteKing, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
+        Empty,     WhitePawn, Empty,     Empty,     Empty,     WhitePawn, WhitePawn, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
+        Empty,     Empty,     Empty,     Empty,     Empty,     Empty,     Empty,     Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
+        Empty,     Empty,     Empty,     Empty,     WhitePawn, BlackPawn, Empty,     Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
+        Empty,     Empty,     BlackPawn, WhitePawn, Empty,     Empty,     BlackPawn, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
+        Empty,     Empty,     Empty,     BlackPawn, Empty,     Empty,     Empty,     Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
+        BlackPawn, BlackPawn, Empty,     Empty,     Empty,     BlackPawn, BlackPawn, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
+        Empty,     Empty,     Empty,     Empty,     Empty,     Empty,     BlackKing, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty
     };
 
     PieceCentricBoardBase::PieceMap white_pieces_fen1
@@ -118,7 +116,7 @@ TEST_F(x88BoardTests, constructor_starting_pos)
     EXPECT_TRUE(b->QueryCastling(Castling::WHITE_QS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_KS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_QS));
-    EXPECT_EQ(b->GetEnPassantSquare(), squareset::None);
+    EXPECT_EQ(b->GetEnPassantSquare(), Empty);
     EXPECT_EQ(b->GetHalfMoveClock(), 0);
     EXPECT_EQ(b->GetFullMoveClock(), 1);
     EXPECT_EQ(b->GetWhitePieces(), white_pieces_starting_position);
