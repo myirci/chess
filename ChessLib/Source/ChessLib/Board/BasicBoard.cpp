@@ -1,6 +1,4 @@
 #include <ChessLib/Board/BasicBoard.hpp>
-#include <ChessLib/Chess/ChessUtility.hpp>
-
 #include <stdexcept>
 
 namespace chesslib
@@ -152,14 +150,6 @@ namespace chesslib
 
 		// update side to move
 		_active_color = ctraits::Opposite;
-	}
-
-	template<Color Clr>
-	void BasicBoard::MakeQuiteMove(Square from, Square to) 
-	{
-		UpdatePiecePosition<Clr>(_board[from], from, to);
-		_board[to] = _board[from];
-		_board[from] = Empty;
 	}
 
 	template<Color Clr>

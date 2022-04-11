@@ -21,11 +21,9 @@ namespace chesslib::objboard
 			_piece{ nullptr }
 		{ }
 
-		Square _code;
-		const std::array<Square, 8> _neighbors;
-		const std::array<Square, 8> _knight_jumps;
+		Square _code;							// should be static constexpr
+		std::array<Square, 8> _neighbors;		// should be static constexpr
+		std::array<Square, 8> _knight_jumps;	// should be static constexpr
 		PieceObj* _piece;
 	};
-
-
 }

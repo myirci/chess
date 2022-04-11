@@ -1,12 +1,8 @@
 #include "ObjBoard.hpp"
 
-#include <ChessLib/Chess/ChessUtility.hpp>
-
-using namespace chesslib::squareset;
-
 namespace chesslib::objboard
 {
-	ObjBoard::ObjBoard() : _squares
+	ObjBoard::ObjBoard() : _board
 	{
 		SquareObj{ a1, { a2,   b2,   b1,   Empty, Empty, Empty, Empty, Empty }, { b3, c2, Empty, Empty, Empty, Empty, Empty, Empty } },
 		SquareObj{ b1, { b2,   c2,   c1,   Empty, Empty, Empty, a1,   a2   }, { c3, d2, a3,   Empty, Empty, Empty, Empty, Empty } },
@@ -85,7 +81,7 @@ namespace chesslib::objboard
 	void ObjBoard::SetPiece(Piece p, Square s) 
 	{
 		auto pobj = make_piece(p, s);
-		_squares[s]._piece = pobj.get();
+		_board[s]._piece = pobj.get();
 
 		if (color::get_color(p) == color::White)
 			_white_pieces.emplace(p, std::move(pobj));

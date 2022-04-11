@@ -2,8 +2,6 @@
 
 #include <ChessLib/Chess/Move.hpp>
 
-#include <ChessLib/Chess/ChessUtility.hpp>
-
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -157,8 +155,8 @@ namespace chesslib::perft
                     stat.num_double_checks[depth]++;
                     /*if (depth == 0) 
                     {
-                        auto fen_str = utility::chess::board_to_fen(board);
-                        std::cout << "\"" << fen_str << "\" " << utility::chess::to_string<Board>(move_stack) << std::endl;
+                        auto fen_str = board_to_fen(board);
+                        std::cout << "\"" << fen_str << "\" " << to_string<Board>(move_stack) << std::endl;
                     }*/
                 }
                     
@@ -181,8 +179,8 @@ namespace chesslib::perft
                     /*
                     if (depth == 0) 
                     {
-                        auto fen_str = utility::chess::board_to_fen(board);
-                        std::cout << "\"" << fen_str << "\" " << utility::chess::to_string<Board>(move_stack) << std::endl;
+                        auto fen_str = board_to_fen(board);
+                        std::cout << "\"" << fen_str << "\" " << to_string<Board>(move_stack) << std::endl;
                     }*/
                 }
                     

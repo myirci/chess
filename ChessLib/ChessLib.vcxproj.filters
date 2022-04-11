@@ -31,22 +31,19 @@
     <Filter Include="MoveGenerator">
       <UniqueIdentifier>{5ca2657c-c692-4f41-b056-c7599636fe45}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Chess\Traits">
+      <UniqueIdentifier>{0d64d77c-75ae-433a-8c25-cce121046617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chess\Move">
+      <UniqueIdentifier>{03afa927-45fe-4dc1-a303-6001a28bd593}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chess\Fen">
+      <UniqueIdentifier>{37cca887-b89f-4116-8df2-fc3f9af04a14}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\ChessLib\Chess\Fen.cpp">
-      <Filter>Chess</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ChessLib\Chess\Move.cpp">
-      <Filter>Chess</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ChessLib\Utility\Utility.cpp">
       <Filter>Utility</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ChessLib\Chess\ChessUtility.cpp">
-      <Filter>Chess</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ChessLib\Chess\LightMove.cpp">
-      <Filter>Chess</Filter>
     </ClCompile>
     <ClCompile Include="Source\ChessLib\MoveGenerator\MoveConnectivity.cpp">
       <Filter>MoveGenerator</Filter>
@@ -66,21 +63,18 @@
     <ClCompile Include="Source\ChessLib\Board\PieceObj.cpp">
       <Filter>Board\ObjBoard</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ChessLib\Chess\LightMove.cpp">
+      <Filter>Chess\Move</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ChessLib\Chess\Move.cpp">
+      <Filter>Chess\Move</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ChessLib\Chess\Fen.cpp">
+      <Filter>Chess\Fen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ChessLib\Chess\Definitions.hpp">
-      <Filter>Chess</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ChessLib\Chess\Fen.hpp">
-      <Filter>Chess</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ChessLib\Chess\Move.hpp">
-      <Filter>Chess</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ChessLib\Chess\ChessUtility.hpp">
-      <Filter>Chess</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ChessLib\Chess\TypeTraits.hpp">
       <Filter>Chess</Filter>
     </ClInclude>
     <ClInclude Include="Source\ChessLib\Perft\Perft.hpp">
@@ -100,9 +94,6 @@
     </ClInclude>
     <ClInclude Include="Source\ChessLib\MoveGenerator\PrecomputeMoves.hpp">
       <Filter>MoveGenerator</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ChessLib\Chess\LightMove.hpp">
-      <Filter>Chess</Filter>
     </ClInclude>
     <ClInclude Include="Source\ChessLib\MoveGenerator\MoveConnectivity.hpp">
       <Filter>MoveGenerator</Filter>
@@ -142,6 +133,24 @@
     </ClInclude>
     <ClInclude Include="Source\ChessLib\Board\BoardFactory.hpp">
       <Filter>Board</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Board\BoardFunctions.hpp">
+      <Filter>Board</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Chess\ColorTraits.hpp">
+      <Filter>Chess\Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Chess\BoardColorTraits.hpp">
+      <Filter>Chess\Traits</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Chess\LightMove.hpp">
+      <Filter>Chess\Move</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Chess\Move.hpp">
+      <Filter>Chess\Move</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Chess\Fen.hpp">
+      <Filter>Chess\Fen</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

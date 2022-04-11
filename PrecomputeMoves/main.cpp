@@ -104,7 +104,7 @@ bool export_moves(std::string_view fpath, LightMoveList& moves)
 		return false;
 
 	for (const auto& mv : moves)
-		ofile << utility::chess::to_string_long<basic_board::BasicBoard>(mv) << std::endl;
+		ofile << to_string_long<basic_board::BasicBoard>(mv) << std::endl;
 
 	ofile.close();
 	return true;

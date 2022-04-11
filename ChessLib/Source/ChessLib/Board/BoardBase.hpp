@@ -45,11 +45,19 @@ namespace chesslib
 		void SetActiveColor(Color side_to_move)	noexcept { _active_color = side_to_move; }
 		void SetEnPassantSquare(Square ep) noexcept      { _enpassant_target = ep; }
 		void SetHalfMoveClock(uint16_t hmc) noexcept     { _halfmove_clock = hmc; }
+		void IncrementHalfMoveClock() noexcept			 { _halfmove_clock++; }
+		void ClearHalfMoveClock() noexcept				 { _halfmove_clock = 0; }
 		void SetFullMoveClock(uint16_t fmc)	noexcept     { _fullmove_clock = fmc; }
+		void IncrementFullMoveClock() noexcept			 { _fullmove_clock++; }
 		void SetCastling(Castling c, bool flag) noexcept {
 			_castling_rights = flag 
 				? _castling_rights | static_cast<int8_t>(c) 
 				: _castling_rights & ~static_cast<int8_t>(c);
+		}
+
+		void PushToMoveStack(const Move& mv, Piece captured = Empty)
+		{
+			_move_stack.push({ mv, _halfmove_clock, _castling_rights, _enpassant_target, captured });
 		}
 
 	protected:
@@ -62,16 +70,11 @@ namespace chesslib
 			_fullmove_clock{ 1 }
 		{ }
 
-		void PushToMoveStack(const Move& mv, Piece captured = Empty)
-		{
-			_move_stack.push({mv, _halfmove_clock, _castling_rights, _enpassant_target, captured});
-		}
-
-		Color	          _active_color;
-		int8_t			  _castling_rights;
-		Square			  _enpassant_target;
-		uint16_t		  _halfmove_clock;
-		uint16_t		  _fullmove_clock;
-		mutable MoveStack _move_stack;
+		Color	  _active_color;
+		int8_t	  _castling_rights;
+		Square	  _enpassant_target;
+		uint16_t  _halfmove_clock;
+		uint16_t  _fullmove_clock;
+		MoveStack _move_stack;
 	};
 }

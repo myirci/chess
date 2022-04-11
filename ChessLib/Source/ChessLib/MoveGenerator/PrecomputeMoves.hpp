@@ -10,7 +10,7 @@ namespace chesslib::movegenerator
 	class PrecomputeMoves
 	{
 	public:
-		
+		/*
 		LightMoveList ComputeDiagonallySlidingPieceMoves()
 		{
 			return ComputeSlidingPieceMoves(basic_board::direction::Diagonal);
@@ -150,6 +150,7 @@ namespace chesslib::movegenerator
 			moves.emplace_back(from, next, MoveType::Quite);
 			moves.emplace_back(from, next, MoveType::Capture);
 		}
+		*/
 	};
 }
 

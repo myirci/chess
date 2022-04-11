@@ -203,4 +203,15 @@ namespace chesslib
         }
         return flattened_fields;
     }
+
+    Color get_color_from_char(char c)
+    {
+        if (c == charset::White)
+            return color::White;
+
+        if (c == charset::Black)
+            return color::Black;
+
+        throw std::logic_error("Color char error.");
+    }
 }

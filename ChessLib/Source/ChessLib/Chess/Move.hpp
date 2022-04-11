@@ -4,6 +4,7 @@
 #include <vector>
 
 #include <ChessLib/Chess/Definitions.hpp>
+#include <ChessLib/Chess/ColorTraits.hpp>
 
 namespace chesslib 
 {
@@ -37,4 +38,34 @@ namespace chesslib
     bool operator == (const Move m1, const Move m2);
 
     bool operator < (const Move m1, const Move m2);
-}
+
+    std::string_view to_string(MoveType mtype);
+
+    template <Color PieceColor>
+    Piece get_promoted_piece(MoveType mtype) 
+    {
+        using ctraits = traits::color_traits<PieceColor>;
+
+        switch (mtype)
+        {
+            case MoveType::Queen_Promotion_Capture:
+            case MoveType::Queen_Promotion:
+                return ctraits::Queen;
+
+            case MoveType::Knight_Promotion_Capture:
+            case MoveType::Knight_Promotion:
+                return ctraits::Knight;
+
+            case MoveType::Rook_Promotion_Capture:
+            case MoveType::Rook_Promotion:
+                return ctraits::Rook;
+
+            case MoveType::Bishop_Promotion_Capture:
+            case MoveType::Bishop_Promotion:
+                return ctraits::Bishop;
+
+            default: 
+                return Empty;
+        }
+    }
+} 

@@ -94,7 +94,7 @@ namespace chesslib
 				}
 			}
 
-			throw std::logic_error("Piece in the given position could not be found.");
+			throw std::logic_error("Piece could not be found in the given position.");
 		}
 
 		template <Color Clr>

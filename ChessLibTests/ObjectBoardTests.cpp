@@ -4,13 +4,11 @@
 
 #include <ChessLib/Chess/Fen.hpp>
 #include <ChessLib/Board/ObjBoard.hpp>
-#include <ChessLib/Chess/ChessUtility.hpp>
 #include <ChessLib/Board/BoardFactory.hpp>
 
 #include <bitset>
 
 using namespace chesslib;
-using namespace chesslib::squareset;
 using namespace chesslib::pieceset;
 
 class ObjectBoardTests : 
@@ -89,7 +87,7 @@ TEST_F(ObjectBoardTests, constructor_starting_pos)
     EXPECT_EQ(b->GetEnPassantSquare(), Empty);
     EXPECT_EQ(b->GetHalfMoveClock(), 0);
     EXPECT_EQ(b->GetFullMoveClock(), 1);
-    EXPECT_EQ(Fen::StartingPosition, utility::chess::board_to_fen(*b));
+    EXPECT_EQ(Fen::StartingPosition, board_to_fen(*b));
 }
 
 TEST_F(ObjectBoardTests, constructor_fen1)
@@ -111,16 +109,16 @@ TEST_F(ObjectBoardTests, constructor_fen1)
     EXPECT_FALSE(b->QueryCastling(Castling::WHITE_QS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_KS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_QS));
-    EXPECT_EQ(b->GetEnPassantSquare(), c3);
+    EXPECT_EQ(b->GetEnPassantSquare(), ChessBoard::c3);
     EXPECT_EQ(b->GetHalfMoveClock(), 1);
     EXPECT_EQ(b->GetFullMoveClock(), 2);
-    EXPECT_EQ(fen_pos1, utility::chess::board_to_fen(*b));
+    EXPECT_EQ(fen_pos1, board_to_fen(*b));
 }
 TEST_F(ObjectBoardTests, constructor_fen_compare)
 {
     for (auto f : board_setup_fens)
     {
         auto b = BoardFactory::make_unique_board<objboard::ObjBoard>(f);
-        EXPECT_EQ(f, utility::chess::board_to_fen(*b));
+        EXPECT_EQ(f, board_to_fen(*b));
     }
 }

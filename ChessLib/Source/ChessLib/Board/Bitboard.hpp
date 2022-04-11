@@ -24,44 +24,36 @@ namespace chesslib::bitboard
 	{
 	public:
 
-		static constexpr Bitset BitMask[BOARDSIZE]
-		{
-			GetMask(squareset::a1), GetMask(squareset::b1), GetMask(squareset::c1), GetMask(squareset::d1),
-			GetMask(squareset::e1), GetMask(squareset::f1), GetMask(squareset::g1), GetMask(squareset::h1),
-			GetMask(squareset::a2), GetMask(squareset::b2), GetMask(squareset::c2), GetMask(squareset::d2),
-			GetMask(squareset::e2), GetMask(squareset::f2), GetMask(squareset::g2), GetMask(squareset::h2),
-			GetMask(squareset::a3), GetMask(squareset::b3), GetMask(squareset::c3), GetMask(squareset::d3),
-			GetMask(squareset::e3), GetMask(squareset::f3), GetMask(squareset::g3), GetMask(squareset::h3),
-			GetMask(squareset::a4), GetMask(squareset::b4), GetMask(squareset::c4), GetMask(squareset::d4),
-			GetMask(squareset::e4), GetMask(squareset::f4), GetMask(squareset::g4), GetMask(squareset::h4),
-			GetMask(squareset::a5), GetMask(squareset::b5), GetMask(squareset::c5), GetMask(squareset::d5),
-			GetMask(squareset::e5), GetMask(squareset::f5), GetMask(squareset::g5), GetMask(squareset::h5),
-			GetMask(squareset::a6), GetMask(squareset::b6), GetMask(squareset::c6), GetMask(squareset::d6),
-			GetMask(squareset::e6), GetMask(squareset::f6), GetMask(squareset::g6), GetMask(squareset::h6),
-			GetMask(squareset::a7), GetMask(squareset::b7), GetMask(squareset::c7), GetMask(squareset::d7),
-			GetMask(squareset::e7), GetMask(squareset::f7), GetMask(squareset::g7), GetMask(squareset::h7),
-			GetMask(squareset::a8), GetMask(squareset::b8), GetMask(squareset::c8), GetMask(squareset::d8),
-			GetMask(squareset::e8), GetMask(squareset::f8), GetMask(squareset::g8), GetMask(squareset::h8)
-		};
-
 		static constexpr Index Pawn{ 0 }, Rook{ 1 }, Knight{ 2 }, Bishop{ 3 }, Queen{ 4 }, King{ 5 }, All { 6 };
-
-		const std::array<Bitset, 7>& GetWhitePieceSet() const noexcept { return _white_pieces; }
-		const std::array<Bitset, 7>& GetBlackPieceSet() const noexcept { return _black_pieces; }	
 
 		void SetPiece(Piece p, Square s);
 		Piece GetPiece(Square s) const;
 
+		const std::array<Bitset, 7>& GetWhitePieceSet() const noexcept { return _white_pieces; }
+		const std::array<Bitset, 7>& GetBlackPieceSet() const noexcept { return _black_pieces; }	
+
 	protected:
+
+		static constexpr Bitset BitMask[BOARDSIZE]
+		{
+			GetMask(a1), GetMask(b1), GetMask(c1), GetMask(d1), GetMask(e1), GetMask(f1), GetMask(g1), GetMask(h1),
+			GetMask(a2), GetMask(b2), GetMask(c2), GetMask(d2), GetMask(e2), GetMask(f2), GetMask(g2), GetMask(h2),
+			GetMask(a3), GetMask(b3), GetMask(c3), GetMask(d3), GetMask(e3), GetMask(f3), GetMask(g3), GetMask(h3),
+			GetMask(a4), GetMask(b4), GetMask(c4), GetMask(d4), GetMask(e4), GetMask(f4), GetMask(g4), GetMask(h4),
+			GetMask(a5), GetMask(b5), GetMask(c5), GetMask(d5), GetMask(e5), GetMask(f5), GetMask(g5), GetMask(h5),
+			GetMask(a6), GetMask(b6), GetMask(c6), GetMask(d6), GetMask(e6), GetMask(f6), GetMask(g6), GetMask(h6),
+			GetMask(a7), GetMask(b7), GetMask(c7), GetMask(d7), GetMask(e7), GetMask(f7), GetMask(g7), GetMask(h7),
+			GetMask(a8), GetMask(b8), GetMask(c8), GetMask(d8), GetMask(e8), GetMask(f8), GetMask(g8), GetMask(h8)
+		};
 
 		std::array<Bitset, 7> _white_pieces;
 		std::array<Bitset, 7> _black_pieces;
 
 		BitBoard() noexcept : _white_pieces{0, 0, 0, 0, 0, 0, 0}, _black_pieces{0, 0, 0, 0, 0, 0, 0} { }
 
-		void ClearSquare(Square s) noexcept;
-		void ClearWhitePieces(Square s) noexcept;
-		void ClearBlackPieces(Square s) noexcept;
+		void ClearSquare(Square s);
+		void ClearWhitePieces(Square s);
+		void ClearBlackPieces(Square s);
 		
 		friend BoardFactory;
 	};

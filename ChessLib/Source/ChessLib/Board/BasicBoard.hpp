@@ -4,6 +4,7 @@
 #include <ChessLib/Board/PieceCentricBoardBase.hpp>
 #include <ChessLib/Chess/Move.hpp>
 #include <ChessLib/Chess/Definitions.hpp>
+#include <ChessLib/Chess/ColorTraits.hpp>
 
 #include <array>
 #include <string_view>
@@ -28,14 +29,51 @@ namespace chesslib
 		{
 			return next < BOARDSIZE&& next >= 0 && std::abs(GetFile(next) - GetFile(curr)) <= 2;
 		}
+		const BoardArray& GetBoard() const noexcept { return _board; }
+		BoardArray& GetBoard() noexcept { return _board; }
 
 		void SetPiece(Piece p, Square s);
 		Piece GetPiece(Square s) const { return _board[s]; }
 
-		const BoardArray& GetBoard() const noexcept { return _board; }
-		BoardArray& GetBoard() noexcept				{ return _board; }
+		template<Color SideToMove>
+		void MakeQuiteMove(Square from, Square to)
+		{
+			UpdatePiecePosition<SideToMove>(_board[from], from, to);
+			_board[to] = _board[from];
+			_board[from] = Empty;
+		}
 
-		
+		template<Color SideToMove>
+		void MakeCaptureMove(Square from, Square to, Piece captured)
+		{
+			
+		}
+
+		template<Color SideToMove>
+		void MakeEnpassantCaptureMove(Square from, Square to, Piece captured)
+		{
+			// Square removed_pawn_pos{ _enpassant_target + bptraits::ReverseMoveDirection };
+			// brd.RemovePiece<ctraits::Opposite>(captured, removed_pawn_pos);
+			// _board[removed_pawn_pos] = Empty;
+			// brd.MakeQuiteMove<SideToMove>(from, to);
+		}
+
+		template<Color SideToMove>
+		void MakePromotionMove(Square from, Square to, Piece captured, Piece promoted)
+		{
+			using ctraits = traits::color_traits<SideToMove>;
+
+			// Remove the captured piece from the board
+			if (captured != Empty) 
+				RemovePiece<ctraits::Opposite>(captured, to);
+			
+			RemovePiece<SideToMove>(_board[from], from);
+			AddNewPiece<SideToMove>(promoted, to);
+
+			_board[to] = promoted;
+			_board[from] = Empty;
+		}
+
 		// void MakeMove(const Move& move);
 		// void UnMakeMove();
 

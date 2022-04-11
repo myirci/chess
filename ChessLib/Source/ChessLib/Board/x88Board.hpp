@@ -91,6 +91,10 @@ namespace chesslib
 		void SetPiece(Piece p, Square s);
 		Piece GetPiece(Square s) const { return _board[s]; }
 
+
+		
+		
+
 		const BoardArray& GetBoard() const noexcept { return _board; }
 		BoardArray& GetBoard() noexcept             { return _board; }
 

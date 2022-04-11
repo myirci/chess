@@ -1,8 +1,8 @@
 #pragma once
 
-#include <ChessLib/Chess/ChessUtility.hpp>
 #include <memory>
 #include <string_view>
+#include <ChessLib/Board/BoardFunctions.hpp>
 
 namespace chesslib 
 {
@@ -14,7 +14,7 @@ namespace chesslib
 		static std::unique_ptr<BoardType> make_unique_board(std::string_view fen)
 		{
 			auto brd = std::unique_ptr<BoardType>(new BoardType());
-			utility::chess::set_board(*brd, fen);
+			set_board(*brd, fen);
 			return brd;
 		}
 
@@ -22,7 +22,7 @@ namespace chesslib
 		static std::shared_ptr<BoardType> make_shared_board(std::string_view fen)
 		{
 			auto brd = std::shared_ptr<BoardType>(new BoardType());
-			utility::chess::set_board(*brd, fen);
+			set_board(*brd, fen);
 			return brd;
 		}
 

@@ -72,4 +72,44 @@ namespace chesslib
         std::string fen_str;
         std::vector<std::string_view> fields;
     };
+
+    template<typename BoardType>
+    void set_castling_rights(BoardType& brd, std::string_view castling_availability)
+    {
+        if (castling_availability != "-")
+        {
+            for (char c : castling_availability)
+            {
+                switch (c)
+                {
+                case charset::WhiteKing: brd.SetCastling(Castling::WHITE_KS, true); break;
+                case charset::WhiteQueen: brd.SetCastling(Castling::WHITE_QS, true); break;
+                case charset::BlackKing: brd.SetCastling(Castling::BLACK_KS, true); break;
+                case charset::BlackQueen: brd.SetCastling(Castling::BLACK_QS, true); break;
+                default:
+                    throw std::logic_error("Fen parse error - invalid castling rights.");
+                }
+            }
+        }
+    }
+
+    template<typename BoardType>
+    void set_half_move_clock(BoardType& brd, std::string_view hmc)
+    {
+        auto h = utility::numeric::to_int(hmc);
+        if (!h.has_value())
+            throw std::logic_error("Fen parse error - invalid half move clock.");
+        brd.SetHalfMoveClock(static_cast<uint16_t>(h.value()));
+    }
+
+    template<typename BoardType>
+    void set_full_move_clock(BoardType& brd, std::string_view fmc)
+    {
+        auto f = utility::numeric::to_int(fmc);
+        if (!f.has_value())
+            throw std::logic_error("Fen parse error - invalid full move clock.");
+        brd.SetFullMoveClock(static_cast<uint16_t>(f.value()));
+    }
+
+    Color get_color_from_char(char c);
 }

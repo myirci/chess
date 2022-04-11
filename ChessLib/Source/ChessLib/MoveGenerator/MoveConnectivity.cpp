@@ -1,5 +1,4 @@
 #include "MoveConnectivity.hpp"
-#include <ChessLib/Chess/ChessUtility.hpp>
 #include <iostream>
 
 namespace chesslib::movegenerator 
@@ -17,7 +16,7 @@ namespace chesslib::movegenerator
 				os << c1 << c2 << "\t" 
 				   << c3 << c4 << "\t" 
 				   << piece_to_char.at(p.first) << "\t" 
-				   << utility::chess::to_string(p.second) << "\n";
+				   << to_string(p.second) << "\n";
 		}
 		return os;
 	}

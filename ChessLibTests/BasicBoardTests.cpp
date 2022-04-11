@@ -4,15 +4,12 @@
 
 #include <ChessLib/Chess/Fen.hpp>
 #include <ChessLib/Board/BasicBoard.hpp>
-#include <ChessLib/Chess/ChessUtility.hpp>
 #include <ChessLib/Board/BoardFactory.hpp>
-
+#include <ChessLib/Board/BoardFunctions.hpp>
 #include <bitset>
 
 using namespace chesslib;
-using namespace chesslib::squareset;
 using namespace chesslib::pieceset;
-using namespace chesslib::utility::chess;
 
 class BasicBoardTests : 
     public ::testing::Test, 
@@ -70,7 +67,7 @@ TEST_F(BasicBoardTests, constructor_starting_pos)
     EXPECT_EQ(b->GetFullMoveClock(), 1);
     EXPECT_EQ(b->GetWhitePieces(), white_pieces_starting_position);
     EXPECT_EQ(b->GetBlackPieces(), black_pieces_starting_position);
-    EXPECT_EQ(Fen::StartingPosition, utility::chess::board_to_fen(*b));
+    EXPECT_EQ(Fen::StartingPosition, board_to_fen(*b));
 }
 
 TEST_F(BasicBoardTests, constructor_fen1)
@@ -84,12 +81,12 @@ TEST_F(BasicBoardTests, constructor_fen1)
     EXPECT_FALSE(b->QueryCastling(Castling::WHITE_QS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_KS));
     EXPECT_TRUE(b->QueryCastling(Castling::BLACK_QS));
-    EXPECT_EQ(b->GetEnPassantSquare(), c3);
+    EXPECT_EQ(b->GetEnPassantSquare(), ChessBoard::c3);
     EXPECT_EQ(b->GetHalfMoveClock(), 1);
     EXPECT_EQ(b->GetFullMoveClock(), 2);
     EXPECT_EQ(b->GetWhitePieces(), white_pieces_fen1);
     EXPECT_EQ(b->GetBlackPieces(), black_pieces_fen1);
-    EXPECT_EQ(fen_pos1, utility::chess::board_to_fen(*b));
+    EXPECT_EQ(fen_pos1, board_to_fen(*b));
 }
 
 TEST_F(BasicBoardTests, constructor_fen_compare)
@@ -97,7 +94,7 @@ TEST_F(BasicBoardTests, constructor_fen_compare)
     for (auto f : board_setup_fens) 
     {
         auto b = BoardFactory::make_unique_board<BasicBoard>(f);
-        EXPECT_EQ(f, utility::chess::board_to_fen(*b));
+        EXPECT_EQ(f, board_to_fen(*b));
     }
 }
 
@@ -109,9 +106,9 @@ TEST_F(BasicBoardTests, make_unmake_moves)
     {
         auto b = basic_board::make_unique_board(fen1);
         b->MakeMove(move);
-        EXPECT_EQ(fen2, utility::chess::board_to_fen(*b));
+        EXPECT_EQ(fen2, board_to_fen(*b));
         b->UnMakeMove();
-        EXPECT_EQ(fen1, utility::chess::board_to_fen(*b));
+        EXPECT_EQ(fen1, board_to_fen(*b));
     }
 }
 

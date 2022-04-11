@@ -309,7 +309,7 @@ uint64_t perft(std::string_view fen, int depth, bool divide, bool stats, bool me
 			{
 				if (p.first.has_value())
 				{
-					auto mv_str = chesslib::utility::chess::to_string<BoardType>(p.first.value());
+					auto mv_str = chesslib::to_string<BoardType>(p.first.value());
 					std::cout << mv_str << std::endl;
 					if (log.is_open())
 						log << mv_str << std::endl;
@@ -326,7 +326,7 @@ uint64_t perft(std::string_view fen, int depth, bool divide, bool stats, bool me
 			for (const auto& [move, num_nodes] : num_nodes_per_move)
 			{
 				total += num_nodes;
-				auto mv_str = chesslib::utility::chess::to_string<BoardType>(move);
+				auto mv_str = chesslib::to_string<BoardType>(move);
 
 				std::cout << "\t" << mv_str << "\t" << num_nodes << std::endl;
 				if (log.is_open())

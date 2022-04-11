@@ -1,5 +1,5 @@
 #include <ChessLib/Board/BitBoard.hpp>
-#include <ChessLib/Chess/ChessUtility.hpp>
+#include <algorithm>
 
 namespace chesslib::bitboard
 {
@@ -36,18 +36,18 @@ namespace chesslib::bitboard
 		return Empty;
 	}
 
-	void BitBoard::ClearSquare(Square s) noexcept 
+	void BitBoard::ClearSquare(Square s) 
 	{
 		ClearWhitePieces(s);
 		ClearBlackPieces(s);
 	}
 
-	void BitBoard::ClearWhitePieces(Square s) noexcept 
+	void BitBoard::ClearWhitePieces(Square s) 
 	{
 		std::for_each(_white_pieces.begin(), _white_pieces.end(), [s](auto& bs) { bs &= ~BitMask[s]; });
 	}
 
-	void BitBoard::ClearBlackPieces(Square s) noexcept 
+	void BitBoard::ClearBlackPieces(Square s) 
 	{
 		std::for_each(_black_pieces.begin(), _black_pieces.end(), [s](auto& bs) { bs &= ~BitMask[s]; });
 	}

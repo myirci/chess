@@ -4,12 +4,11 @@
 
 #include <ChessLib/Chess/Fen.hpp>
 #include <ChessLib/Board/x88Board.hpp>
-#include <ChessLib/Chess/ChessUtility.hpp>
 #include <ChessLib/Board/BoardFactory.hpp>
+#include <ChessLib/Board/BoardFunctions.hpp>
 
 using namespace chesslib;
 using namespace chesslib::pieceset;
-using namespace chesslib::utility::chess;
 
 class x88BoardTests : 
     public ::testing::Test, 
@@ -121,7 +120,7 @@ TEST_F(x88BoardTests, constructor_starting_pos)
     EXPECT_EQ(b->GetFullMoveClock(), 1);
     EXPECT_EQ(b->GetWhitePieces(), white_pieces_starting_position);
     EXPECT_EQ(b->GetBlackPieces(), black_pieces_starting_position);
-    EXPECT_EQ(Fen::StartingPosition, utility::chess::board_to_fen(*b));
+    EXPECT_EQ(Fen::StartingPosition, board_to_fen(*b));
 }
 
 TEST_F(x88BoardTests, constructor_fen1)
@@ -140,7 +139,7 @@ TEST_F(x88BoardTests, constructor_fen1)
     EXPECT_EQ(b->GetFullMoveClock(), 2);
     EXPECT_EQ(b->GetWhitePieces(), white_pieces_fen1);
     EXPECT_EQ(b->GetBlackPieces(), black_pieces_fen1);
-    EXPECT_EQ(fen_pos1, utility::chess::board_to_fen(*b));
+    EXPECT_EQ(fen_pos1, board_to_fen(*b));
 }
 
 TEST_F(x88BoardTests, constructor_fen_compare)
@@ -148,6 +147,6 @@ TEST_F(x88BoardTests, constructor_fen_compare)
     for (auto f : board_setup_fens)
     {
         auto b = BoardFactory::make_unique_board<x88Board>(f);
-        EXPECT_EQ(f, utility::chess::board_to_fen(*b));
+        EXPECT_EQ(f, board_to_fen(*b));
     }
 }
