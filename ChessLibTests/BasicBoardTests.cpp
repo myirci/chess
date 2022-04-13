@@ -1,23 +1,40 @@
 #include "pch.h"
 
-#include "ClassicBoardTestBase.hpp"
+#include "TestHelpers.hpp"
 
 #include <ChessLib/Chess/Fen.hpp>
 #include <ChessLib/Board/BasicBoard.hpp>
 #include <ChessLib/Board/BoardFactory.hpp>
 #include <ChessLib/Board/BoardFunctions.hpp>
-#include <bitset>
 
 using namespace chesslib;
 using namespace chesslib::pieceset;
 
-class BasicBoardTests : 
-    public ::testing::Test, 
-    public ClassicBoardTestBase
+class BasicBoardTests : public ::testing::Test
 {
+protected:
 
+    static void GetBoardArrayAndPieces(std::string& line, BasicBoard::BoardArray& bArray, BasicBoard::PieceMap& whitePieces, BasicBoard::PieceMap& blackPieces)
+    {
+        line.erase(std::remove_if(line.begin(), line.end(), [](char c) {return c == ','; }), line.end());
+        if (line.size() != ChessBoard::BOARDSIZE)
+            throw std::exception("Error in the number of squares");
+
+        for (auto i{ 0 }; i < ChessBoard::BOARDSIZE; i++)
+        {
+            if (line[i] == 'e')
+                bArray[i] = Empty;
+            else
+            {
+                bArray[i] = char_to_piece.at(line[i]);
+                if (bArray[i] > 0)
+                    whitePieces.emplace(bArray[i], i);
+                else
+                    blackPieces.emplace(bArray[i], i);
+            }
+        }
+    }
 };
-
 TEST_F(BasicBoardTests, SquareFileRank)
 {
     Square i{ 0 };
@@ -34,7 +51,6 @@ TEST_F(BasicBoardTests, SquareFileRank)
         }
     }
 }
-
 TEST_F(BasicBoardTests, SquareFromChars)
 {
     char f{ 'a' }, r{ '1' };
@@ -51,50 +67,63 @@ TEST_F(BasicBoardTests, SquareFromChars)
     }
 }
 
-TEST_F(BasicBoardTests, constructor_starting_pos)
+TEST_F(BasicBoardTests, setup_board)
 {
-    auto b = BoardFactory::make_unique_board<BasicBoard>(Fen::StartingPosition);
-    const auto& board_array = b->GetBoard();
-
-    EXPECT_TRUE(std::equal(board_array.begin(), board_array.end(), board_array_starting_position.begin()));
-    EXPECT_EQ(b->GetActiveColor(), color::White);
-    EXPECT_TRUE(b->QueryCastling(Castling::WHITE_KS));
-    EXPECT_TRUE(b->QueryCastling(Castling::WHITE_QS));
-    EXPECT_TRUE(b->QueryCastling(Castling::BLACK_KS));
-    EXPECT_TRUE(b->QueryCastling(Castling::BLACK_QS));
-    EXPECT_EQ(b->GetEnPassantSquare(), Empty);
-    EXPECT_EQ(b->GetHalfMoveClock(), 0);
-    EXPECT_EQ(b->GetFullMoveClock(), 1);
-    EXPECT_EQ(b->GetWhitePieces(), white_pieces_starting_position);
-    EXPECT_EQ(b->GetBlackPieces(), black_pieces_starting_position);
-    EXPECT_EQ(Fen::StartingPosition, board_to_fen(*b));
-}
-
-TEST_F(BasicBoardTests, constructor_fen1)
-{
-    auto b = BoardFactory::make_unique_board<BasicBoard>(fen_pos1);
-    const auto& board_array = b->GetBoard();
-
-    EXPECT_TRUE(std::equal(board_array.begin(), board_array.end(), board_array_fen1.begin()));
-    EXPECT_EQ(b->GetActiveColor(), color::Black);
-    EXPECT_TRUE(b->QueryCastling(Castling::WHITE_KS));
-    EXPECT_FALSE(b->QueryCastling(Castling::WHITE_QS));
-    EXPECT_TRUE(b->QueryCastling(Castling::BLACK_KS));
-    EXPECT_TRUE(b->QueryCastling(Castling::BLACK_QS));
-    EXPECT_EQ(b->GetEnPassantSquare(), ChessBoard::c3);
-    EXPECT_EQ(b->GetHalfMoveClock(), 1);
-    EXPECT_EQ(b->GetFullMoveClock(), 2);
-    EXPECT_EQ(b->GetWhitePieces(), white_pieces_fen1);
-    EXPECT_EQ(b->GetBlackPieces(), black_pieces_fen1);
-    EXPECT_EQ(fen_pos1, board_to_fen(*b));
-}
-
-TEST_F(BasicBoardTests, constructor_fen_compare)
-{  
-    for (auto f : board_setup_fens) 
+    auto scoped_open = ScopedOpen(TestHelpers::BoardSetupTestCases);
+    auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-1");
+    EXPECT_TRUE(lines.size() % 3 == 0);
+    
+    auto numTestCases = lines.size() / 3;
+    for (auto i{ 0 }; i < lines.size(); i+=3)
     {
-        auto b = BoardFactory::make_unique_board<BasicBoard>(f);
-        EXPECT_EQ(f, board_to_fen(*b));
+        auto b = BoardFactory::make_unique_board<BasicBoard>(lines[(size_t)(i+1)]);
+        const auto& bArray = b->GetBoard();
+
+        BasicBoard::BoardArray bArrayExpected;
+        BasicBoard::PieceMap wPiecesExpected, bPiecesExpected;
+        GetBoardArrayAndPieces(lines[(size_t)(i+2)], bArrayExpected, wPiecesExpected, bPiecesExpected);
+
+        EXPECT_TRUE(std::equal(bArray.begin(), bArray.end(), bArrayExpected.begin()));
+        EXPECT_EQ(b->GetWhitePieces(), wPiecesExpected);
+        EXPECT_EQ(b->GetBlackPieces(), bPiecesExpected);
+
+        Fen fenStr(lines[(size_t)(i + 1)]);
+        EXPECT_EQ(b->GetActiveColor(), get_color_from_char(fenStr.GetActiveColor()[0]));
+
+        auto castling = fenStr.GetCastlingAvailability();  
+        EXPECT_EQ(b->QueryCastling(Castling::WHITE_KS), castling.find(charset::WhiteKing) != std::string_view::npos);
+        EXPECT_EQ(b->QueryCastling(Castling::WHITE_QS), castling.find(charset::WhiteQueen) != std::string_view::npos);
+        EXPECT_EQ(b->QueryCastling(Castling::BLACK_KS), castling.find(charset::BlackKing) != std::string_view::npos);
+        EXPECT_EQ(b->QueryCastling(Castling::BLACK_QS), castling.find(charset::BlackQueen) != std::string_view::npos);
+        
+        auto ep = fenStr.GetEnPassantTargetSquare();
+        if (ep == "-")
+            EXPECT_EQ(b->GetEnPassantSquare(), Empty);
+        else
+            EXPECT_EQ(b->GetEnPassantSquare(), BasicBoard::GetSquareFromChars(ep[0], ep[1]));
+
+        auto hmc = fenStr.GetHalfMoveClock();
+        EXPECT_EQ(b->GetHalfMoveClock(), utility::numeric::to_int(hmc.value_or("0")));
+
+        auto fmc = fenStr.GetFullMoveClock();
+        EXPECT_EQ(b->GetFullMoveClock(), utility::numeric::to_int(fmc.value_or("0")));
+
+        EXPECT_EQ(lines[(size_t)(i + 1)], board_to_fen(*b));
+    }
+}
+
+TEST_F(BasicBoardTests, setup_board_and_board_to_fen)
+{
+    auto scoped_open = ScopedOpen(TestHelpers::BoardSetupTestCases);
+    auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-2");
+
+    EXPECT_TRUE(lines.size() % 3 == 0);
+
+    auto numTestCases = lines.size() / 3;
+    for (auto i{ 0 }; i < numTestCases; i += 3)
+    {
+        auto b = BoardFactory::make_unique_board<BasicBoard>(lines[(size_t)(i + 1)]);
+        EXPECT_EQ(lines[(size_t)(i + 1)], board_to_fen(*b));
     }
 }
 

@@ -21,6 +21,13 @@ namespace chesslib::objboard
 			_piece{ nullptr }
 		{ }
 
+		SquareObj() :
+			_code { Empty },
+			_piece { nullptr },
+			_neighbors{ {Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty} },
+			_knight_jumps{ {Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty} }
+		{ }
+
 		Square _code;							// should be static constexpr
 		std::array<Square, 8> _neighbors;		// should be static constexpr
 		std::array<Square, 8> _knight_jumps;	// should be static constexpr

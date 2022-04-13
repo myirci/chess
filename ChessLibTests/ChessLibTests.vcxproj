@@ -33,8 +33,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
-    <ClInclude Include="ClassicBoardTestBase.hpp" />
-    <ClInclude Include="BoardTestBase.hpp" />
+    <ClInclude Include="TestHelpers.hpp" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
