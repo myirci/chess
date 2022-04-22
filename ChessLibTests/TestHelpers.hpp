@@ -61,6 +61,50 @@ public:
         }
         return true;
     };
+
+    template<typename BoardType>
+    static chesslib::Move GetMove(std::string_view moveStr) 
+    {
+        chesslib::Square from    = BoardType::GetSquareFromChars(moveStr[0], moveStr[1]);
+        chesslib::Square to      = BoardType::GetSquareFromChars(moveStr[3], moveStr[4]);
+        chesslib::MoveType mType = chesslib::MoveType::Quite;
+        if (moveStr.size() > 5) 
+            mType = GetMoveType(moveStr.substr(6));
+
+        return chesslib::Move(from, to, mType);
+    }
+
+    static chesslib::MoveType GetMoveType(std::string_view mt) 
+    {
+        if (mt == "cm")
+            return chesslib::MoveType::Capture;
+        else if (mt == "ep")
+            return chesslib::MoveType::En_Passant_Capture;
+        else if (mt == "dp")
+            return chesslib::MoveType::Double_Pawn_Push;
+        else if (mt == "ksc")
+            return chesslib::MoveType::King_Side_Castle;
+        else if (mt == "qsc")
+            return chesslib::MoveType::Queen_Side_Castle;
+        else if (mt == "np")
+            return chesslib::MoveType::Knight_Promotion;
+        else if (mt == "bp")
+            return chesslib::MoveType::Bishop_Promotion;
+        else if (mt == "qp")
+            return chesslib::MoveType::Queen_Promotion;
+        else if (mt == "rp")
+            return chesslib::MoveType::Rook_Promotion;
+        else if (mt == "npc")
+            return chesslib::MoveType::Knight_Promotion_Capture;
+        else if (mt == "bpc")
+            return chesslib::MoveType::Bishop_Promotion_Capture;
+        else if (mt == "qpc")
+            return chesslib::MoveType::Queen_Promotion_Capture;
+        else if (mt == "rpc")
+            return chesslib::MoveType::Rook_Promotion_Capture;
+        
+        throw std::logic_error("Move type error");
+    }
 };
 
 class ScopedOpen 

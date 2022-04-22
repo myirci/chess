@@ -7,13 +7,11 @@
 #include <ChessLib/Chess/Move.hpp>
 #include <ChessLib/Chess/ColorTraits.hpp>
 #include <ChessLib/Chess/BoardColorTraits.hpp>
-#include <ChessLib/Board/BasicBoard.hpp>
-#include <ChessLib/Board/x88Board.hpp>
-#include <ChessLib/Board/ObjBoard.hpp>
-#include <ChessLib/Board/BitBoard.hpp>
 
 namespace chesslib
 {
+	class x88Board;
+
 	// Preconditions: brd is cleared or newly created. 
 	template<typename BoardType>
 	void set_board(BoardType& brd, std::string_view fen)
@@ -118,7 +116,7 @@ namespace chesslib
 	}	
 
 	template<typename BoardType, Color SideToMove>
-	void make_move(BoardType const& brd, const Move& move)
+	void make_move(BoardType& brd, const Move& move)
 	{
 		using ctraits   = traits::color_traits<SideToMove>;
 		using octraits  = traits::color_traits<ctraits::Opposite>;
@@ -164,9 +162,9 @@ namespace chesslib
 			if (captured == octraits::Rook)
 			{
 				if (to == boctraits::KingSideRookInitialPosition)
-					SetCastling(octraits::KingSideCastling, false);
+					brd.SetCastling(octraits::KingSideCastling, false);
 				else if (to == boctraits::QueenSideRookInitialPosition)
-					SetCastling(octraits::QueenSideCastling, false);
+					brd.SetCastling(octraits::QueenSideCastling, false);
 			}
 		}
 
@@ -180,22 +178,9 @@ namespace chesslib
 		else if (move.IsCapture())
 		{
 			if (mtype == MoveType::En_Passant_Capture)
-			{
-				
-			}
-
-			/*
-			if (mtype == MoveType::En_Passant_Capture)
-			{
-				Square removed_pawn_pos{ _enpassant_target + bptraits::ReverseMoveDirection };
-				brd.RemovePiece<ctraits::Opposite>(captured, removed_pawn_pos);
-				// _board[removed_pawn_pos] = Empty;
-			}
+				brd.MakeEnpassantCaptureMove<SideToMove>(from, to);
 			else
-				RemovePiece<ctraits::Opposite>(captured, to);
-
-			brd.MakeQuiteMove<SideToMove>(from, to);
-			*/
+				brd.MakeCaptureMove<SideToMove>(from, to, captured);
 		}
 		else 
 		{
@@ -209,11 +194,63 @@ namespace chesslib
 		}
 
 		// update enpassant target square
-		/*auto enpassant_target_square = mtype == MoveType::Double_Pawn_Push ? from + bptraits::MoveDirection : Empty;
-		brd.SetEnPassantSquare(enpassant_target_square);*/
+		auto enpassant_target_square = mtype == MoveType::Double_Pawn_Push ? from + bctraits::PawnMoveDirection : Empty;
+		brd.SetEnPassantSquare(enpassant_target_square);
 
 		// update side to move
 		brd.SetActiveColor(ctraits::Opposite);
+	}
+
+	template<typename BoardType, Color SideToMove>
+	void unmake_move(BoardType& brd)
+	{
+		using ctraits = traits::color_traits<SideToMove>;
+		using bctraits = traits::board_color_traits<BoardType, ctraits::Opposite>;
+
+		// Get the last move and board state before the move was made.
+		const auto& statePrev = brd.GetMoveStackTop();
+
+		// restore side to move
+		brd.SetActiveColor(ctraits::Opposite);
+
+		// restore castling rights, en-passant location and half move clock
+		brd.SetCastlingRights(statePrev.castling_rights);
+		brd.SetEnPassantSquare(statePrev.enpassant_target);
+		brd.SetHalfMoveClock(statePrev.halfmove_clock);
+		
+		// restore the full move clock
+		if constexpr (SideToMove == color::White)
+			brd.DecrementFullMoveClock();
+
+		// restore the board and piece positions
+
+		const Move& move = statePrev.move;
+		Square from{ move.GetFrom() }, to{ move.GetTo() };
+		MoveType mtype{ move.GetMoveType() };
+
+		if (move.IsPromotion()) 
+		{
+			brd.UnMakePromotionMove<SideToMove>(from, to, statePrev.captured_piece);
+		}
+		else if (move.IsCapture())
+		{
+			if (mtype == MoveType::En_Passant_Capture)
+				brd.UnMakeEnpassantCaptureMove<ctraits::Opposite>(from, to, statePrev.captured_piece);
+			else
+				brd.UnMakeCaptureMove<ctraits::Opposite>(from, to, statePrev.captured_piece);
+		}
+		else 
+		{
+			// Move types: quite, double pawn push, castling
+			brd.MakeQuiteMove<ctraits::Opposite>(to, from);
+
+			if (mtype == MoveType::King_Side_Castle)
+				brd.MakeQuiteMove<ctraits::Opposite>(bctraits::KingSideRookPositionAfterCastling, bctraits::KingSideRookInitialPosition);
+			else if (mtype == MoveType::Queen_Side_Castle)
+				brd.MakeQuiteMove<ctraits::Opposite>(bctraits::QueenSideRookPositionAfterCastling, bctraits::QueenSideRookInitialPosition);
+		}
+
+		brd.PopFromMoveStack();
 	}
 
 	// GetCharPair()

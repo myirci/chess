@@ -6,6 +6,7 @@
 #include <ChessLib/Board/x88Board.hpp>
 #include <ChessLib/Board/BoardFactory.hpp>
 #include <ChessLib/Board/BoardFunctions.hpp>
+#include <ChessLib/Board/ChessBoard.hpp>
 
 using namespace chesslib;
 using namespace chesslib::pieceset;
@@ -74,9 +75,9 @@ TEST_F(x88BoardTests, setup_board)
 {
     auto scoped_open = ScopedOpen(TestHelpers::BoardSetupTestCases);
     auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-1");
-    EXPECT_TRUE(lines.size() % 3 == 0);
 
-    auto numTestCases = lines.size() / 3;
+    EXPECT_TRUE(lines.size() != 0 && lines.size() % 3 == 0);
+
     for (auto i{ 0 }; i < lines.size(); i += 3)
     {
         auto b = BoardFactory::make_unique_board<x88Board>(lines[(size_t)(i + 1)]);
@@ -120,10 +121,9 @@ TEST_F(x88BoardTests, setup_board_and_board_to_fen)
     auto scoped_open = ScopedOpen(TestHelpers::BoardSetupTestCases);
     auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-2");
 
-    EXPECT_TRUE(lines.size() % 3 == 0);
+    EXPECT_TRUE(lines.size() != 0 && lines.size() % 3 == 0);
 
-    auto numTestCases = lines.size() / 3;
-    for (auto i{ 0 }; i < numTestCases; i += 3)
+    for (auto i{ 0 }; i < lines.size(); i += 3)
     {
         auto b = BoardFactory::make_unique_board<x88Board>(lines[(size_t)(i + 1)]);
         EXPECT_EQ(lines[(size_t)(i + 1)], board_to_fen(*b));

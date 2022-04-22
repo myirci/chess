@@ -1,167 +1,167 @@
-$Group-1
+Group-1
 {
 	Test1
 	h4-f2
-    	8/3k4/2r5/8/7B/8/1K4P1/8 w - - 0 1
-    	8/3k4/2r5/8/8/8/1K3BP1/8 b - - 1 1
+    8/3k4/2r5/8/7B/8/1K4P1/8 w - - 0 1
+    8/3k4/2r5/8/8/8/1K3BP1/8 b - - 1 1
 	
 	Test2
-	g2-g4dp
-    	8/3k1p2/2r5/8/7B/8/1K4P1/8 w - - 0 1
-    	8/3k1p2/2r5/8/6PB/8/1K6/8 b - g3 0 1
+	g2-g4-dp
+    8/3k1p2/2r5/8/7B/8/1K4P1/8 w - - 0 1
+    8/3k1p2/2r5/8/6PB/8/1K6/8 b - g3 0 1
 	
 	Test3
 	f7-f5-dp
-    	8/3k1p2/2r5/8/6PB/8/1K6/8 b - g3 0 1
-    	8/3k4/2r5/5p2/6PB/8/1K6/8 w - f6 0 2
+    8/3k1p2/2r5/8/6PB/8/1K6/8 b - g3 0 1
+    8/3k4/2r5/5p2/6PB/8/1K6/8 w - f6 0 2
 	
 	Test4
 	h7-h4-cm
-    	8/3k3q/2r5/8/6PB/8/1K2Q3/8 b - - 0 1
-    	8/3k4/2r5/8/6Pq/8/1K2Q3/8 w - - 0 2
+    8/3k3q/2r5/8/6PB/8/1K2Q3/8 b - - 0 1
+    8/3k4/2r5/8/6Pq/8/1K2Q3/8 w - - 0 2
 	
 	Test5
 	c5-d6-ep
-    	4k3/8/8/2PpP3/6p1/8/5P1P/4K3 w - d6 0 1
-    	4k3/8/3P4/4P3/6p1/8/5P1P/4K3 b - - 0 1
+    4k3/8/8/2PpP3/6p1/8/5P1P/4K3 w - d6 0 1
+    4k3/8/3P4/4P3/6p1/8/5P1P/4K3 b - - 0 1
 	
 	Test6
-    	e5-d6-ep
-    	4k3/8/8/2PpP3/6p1/8/5P1P/4K3 w - d6 0 1
-    	4k3/8/3P4/2P5/6p1/8/5P1P/4K3 b - - 0 1
+    e5-d6-ep
+    4k3/8/8/2PpP3/6p1/8/5P1P/4K3 w - d6 0 1
+    4k3/8/3P4/2P5/6p1/8/5P1P/4K3 b - - 0 1
 			
 	Test7
 	g4-h3-ep
-    	4k3/8/8/2PpP3/6pP/8/5P2/4K3 b - h3 0 1
-    	4k3/8/8/2PpP3/8/7p/5P2/4K3 w - - 0 2
+    4k3/8/8/2PpP3/6pP/8/5P2/4K3 b - h3 0 1
+    4k3/8/8/2PpP3/8/7p/5P2/4K3 w - - 0 2
 	
 	Test8
 	g4-f3-ep
-    	4k3/8/8/2PpP3/5PpP/8/8/4K3 b - f3 0 1
-    	4k3/8/8/2PpP3/7P/5p2/8/4K3 w - - 0 2
+    4k3/8/8/2PpP3/5PpP/8/8/4K3 b - f3 0 1
+    4k3/8/8/2PpP3/7P/5p2/8/4K3 w - - 0 2
 	
 	Test9
 	e1-g1-ksc
-    	r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1
-    	r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R4RK1 b kq - 1 1
+    r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1
+    r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R4RK1 b kq - 1 1
 	
 	Test10
 	e1-g1-ksc
-    	r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1
-    	r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R4RK1 b kq - 1 1
+    r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1
+    r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R4RK1 b kq - 1 1
 	
 	Test11
 	e8-g8-ksc
-    	r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R4RK1 b kq - 1 1
-    	r4rk1/pppppppp/8/8/8/8/PPPPPPPP/R4RK1 w - - 2 2
+    r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R4RK1 b kq - 1 1
+    r4rk1/pppppppp/8/8/8/8/PPPPPPPP/R4RK1 w - - 2 2
 	
 	Test12
 	e1-c1-qsc
-    	r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1
-    	r3k2r/pppppppp/8/8/8/8/PPPPPPPP/2KR3R b kq - 1 1
+    r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1
+    r3k2r/pppppppp/8/8/8/8/PPPPPPPP/2KR3R b kq - 1 1
 	
 	Test13
 	e8-c8-qsc
-    	r3k2r/pppppppp/8/8/8/8/PPPPPPPP/2KR3R b kq - 1 1
-    	2kr3r/pppppppp/8/8/8/8/PPPPPPPP/2KR3R w - - 2 2
+    r3k2r/pppppppp/8/8/8/8/PPPPPPPP/2KR3R b kq - 1 1
+    2kr3r/pppppppp/8/8/8/8/PPPPPPPP/2KR3R w - - 2 2
 			
 	Test 14
 	b7-b8-np
-    	8/1P4P1/8/4k3/8/2K5/p4p2/8 w - - 0 1
-    	1N6/6P1/8/4k3/8/2K5/p4p2/8 b - - 0 1
+    8/1P4P1/8/4k3/8/2K5/p4p2/8 w - - 0 1
+    1N6/6P1/8/4k3/8/2K5/p4p2/8 b - - 0 1
 	
 	Test 15
 	a2-a1-rp
-    	1N6/6P1/8/4k3/8/2K5/p4p2/8 b - - 0 1
-    	1N6/6P1/8/4k3/8/2K5/5p2/r7 w - - 0 2
+    1N6/6P1/8/4k3/8/2K5/p4p2/8 b - - 0 1
+    1N6/6P1/8/4k3/8/2K5/5p2/r7 w - - 0 2
 	
 	Test 16
 	g7-g8-qp
-    	1N6/6P1/8/4k3/8/2K5/5p2/r7 w - - 0 2
-    	1N4Q1/8/8/4k3/8/2K5/5p2/r7 b - - 0 2
+    1N6/6P1/8/4k3/8/2K5/5p2/r7 w - - 0 2
+    1N4Q1/8/8/4k3/8/2K5/5p2/r7 b - - 0 2
 	
 	Test 17
 	f2-f1-bp
-    	1N4Q1/8/8/4k3/8/2K5/5p2/r7 b - - 0 2
-    	1N4Q1/8/8/4k3/8/2K5/8/r4b2 w - - 0 3
+    1N4Q1/8/8/4k3/8/2K5/5p2/r7 b - - 0 2
+    1N4Q1/8/8/4k3/8/2K5/8/r4b2 w - - 0 3
 	
 	Test 18
 	e7-d8-qpc
-    	1n1b4/2P1P3/8/8/1K4k1/8/4p1p1/5N1B w - - 0 1
-    	1n1Q4/2P5/8/8/1K4k1/8/4p1p1/5N1B b - - 0 1
+    1n1b4/2P1P3/8/8/1K4k1/8/4p1p1/5N1B w - - 0 1
+    1n1Q4/2P5/8/8/1K4k1/8/4p1p1/5N1B b - - 0 1
 	
 	Test 19
 	g2-h1-rpc
-    	1n1Q4/2P5/8/8/1K4k1/8/4p1p1/5N1B b - - 0 1
-    	1n1Q4/2P5/8/8/1K4k1/8/4p3/5N1r w - - 0 2
+    1n1Q4/2P5/8/8/1K4k1/8/4p1p1/5N1B b - - 0 1
+    1n1Q4/2P5/8/8/1K4k1/8/4p3/5N1r w - - 0 2
 	
 	Test 20
 	c7-b8-npc
-    	1n1Q4/2P5/8/8/1K4k1/8/4p3/5N1r w - - 0 2
-    	1N1Q4/8/8/8/1K4k1/8/4p3/5N1r b - - 0 2
+    1n1Q4/2P5/8/8/1K4k1/8/4p3/5N1r w - - 0 2
+    1N1Q4/8/8/8/1K4k1/8/4p3/5N1r b - - 0 2
 			
 	Test 21
 	e2-f1-bpc
-    	1N1Q4/8/8/8/1K4k1/8/4p3/5N1r b - - 0 2
-    	1N1Q4/8/8/8/1K4k1/8/8/5b1r w - - 0 3
+    1N1Q4/8/8/8/1K4k1/8/4p3/5N1r b - - 0 2
+    1N1Q4/8/8/8/1K4k1/8/8/5b1r w - - 0 3
 	
 	Test 22
 	e1-d1
-    	r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1
-    	r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R2K3R b kq - 1 1
+    r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1
+    r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R2K3R b kq - 1 1
 	
 	Test 23
 	e8-f8
-    	r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R2K3R b kq - 1 1
-    	r4k1r/pppppppp/8/8/8/8/PPPPPPPP/R2K3R w - - 2 2
+    r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R2K3R b kq - 1 1
+    r4k1r/pppppppp/8/8/8/8/PPPPPPPP/R2K3R w - - 2 2
 	
 	Test 24
 	a1-b1
-    	r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1
-    	r3k2r/pppppppp/8/8/8/8/PPPPPPPP/1R2K2R b Kkq - 1 1
+    r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1
+    r3k2r/pppppppp/8/8/8/8/PPPPPPPP/1R2K2R b Kkq - 1 1
 	
 	Test 25
 	a8-c8
-    	r3k2r/pppppppp/8/8/8/8/PPPPPPPP/1R2K2R b Kkq - 1 1
-    	2r1k2r/pppppppp/8/8/8/8/PPPPPPPP/1R2K2R w Kk - 2 2
+    r3k2r/pppppppp/8/8/8/8/PPPPPPPP/1R2K2R b Kkq - 1 1
+    2r1k2r/pppppppp/8/8/8/8/PPPPPPPP/1R2K2R w Kk - 2 2
 	
 	Test 26
 	h1-f1
-    	2r1k2r/pppppppp/8/8/8/8/PPPPPPPP/1R2K2R w Kk - 2 2
-    	2r1k2r/pppppppp/8/8/8/8/PPPPPPPP/1R2KR2 b k - 3 2
+    2r1k2r/pppppppp/8/8/8/8/PPPPPPPP/1R2K2R w Kk - 2 2
+    2r1k2r/pppppppp/8/8/8/8/PPPPPPPP/1R2KR2 b k - 3 2
 	
 	Test 27
 	h8-g8
-    	2r1k2r/pppppppp/8/8/8/8/PPPPPPPP/1R2KR2 b k - 3 2
-    	2r1k1r1/pppppppp/8/8/8/8/PPPPPPPP/1R2KR2 w - - 4 3
+    2r1k2r/pppppppp/8/8/8/8/PPPPPPPP/1R2KR2 b k - 3 2
+    2r1k1r1/pppppppp/8/8/8/8/PPPPPPPP/1R2KR2 w - - 4 3
 	
 	Test 28
 	d5-a8-cm
-    	r3k2r/p1pppp1p/8/3BB3/3qb3/8/P1PPPP1P/R3K2R w KQkq - 0 1
-    	B3k2r/p1pppp1p/8/4B3/3qb3/8/P1PPPP1P/R3K2R b KQk - 0 1
+    r3k2r/p1pppp1p/8/3BB3/3qb3/8/P1PPPP1P/R3K2R w KQkq - 0 1
+    B3k2r/p1pppp1p/8/4B3/3qb3/8/P1PPPP1P/R3K2R b KQk - 0 1
 
 	Test 29
 	e4-h1-cm
-    	B3k2r/p1pppp1p/8/4B3/3qb3/8/P1PPPP1P/R3K2R b KQk - 0 1
-    	B3k2r/p1pppp1p/8/4B3/3q4/8/P1PPPP1P/R3K2b w Qk - 0 2
+    B3k2r/p1pppp1p/8/4B3/3qb3/8/P1PPPP1P/R3K2R b KQk - 0 1
+    B3k2r/p1pppp1p/8/4B3/3q4/8/P1PPPP1P/R3K2b w Qk - 0 2
 	
 	Test 30
 	e5-h8-cm
-    	B3k2r/p1pppp1p/8/4B3/3q4/8/P1PPPP1P/R3K2b w Qk - 0 2
-    	B3k2B/p1pppp1p/8/8/3q4/8/P1PPPP1P/R3K2b b Q - 0 2
+    B3k2r/p1pppp1p/8/4B3/3q4/8/P1PPPP1P/R3K2b w Qk - 0 2
+    B3k2B/p1pppp1p/8/8/3q4/8/P1PPPP1P/R3K2b b Q - 0 2
 	
 	Test 31
 	d4-a1-cm
-    	B3k2B/p1pppp1p/8/8/3q4/8/P1PPPP1P/R3K2b b Q - 0 2
-    	B3k2B/p1pppp1p/8/8/8/8/P1PPPP1P/q3K2b w - - 0 3
+    B3k2B/p1pppp1p/8/8/3q4/8/P1PPPP1P/R3K2b b Q - 0 2
+    B3k2B/p1pppp1p/8/8/8/8/P1PPPP1P/q3K2b w - - 0 3
 	
 	Test 32
 	b7-b5-dp
-    	r1bqkbnr/pppppppp/2n5/P7/8/8/1PPPPPPP/RNBQKBNR b KQkq - 0 1
-    	r1bqkbnr/p1pppppp/2n5/Pp6/8/8/1PPPPPPP/RNBQKBNR w KQkq b6 0 2
+    r1bqkbnr/pppppppp/2n5/P7/8/8/1PPPPPPP/RNBQKBNR b KQkq - 0 1
+    r1bqkbnr/p1pppppp/2n5/Pp6/8/8/1PPPPPPP/RNBQKBNR w KQkq b6 0 2
 	
 	Test 33
 	a5-b6-ep
-    	r1bqkbnr/p1pppppp/2n5/Pp6/8/8/1PPPPPPP/RNBQKBNR w KQkq b6 0 2
-    	r1bqkbnr/p1pppppp/1Pn5/8/8/8/1PPPPPPP/RNBQKBNR b KQkq - 0 2
+    r1bqkbnr/p1pppppp/2n5/Pp6/8/8/1PPPPPPP/RNBQKBNR w KQkq b6 0 2
+    r1bqkbnr/p1pppppp/1Pn5/8/8/8/1PPPPPPP/RNBQKBNR b KQkq - 0 2
 }

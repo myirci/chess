@@ -1,5 +1,6 @@
+
 #include <ChessLib/Board/BasicBoard.hpp>
-#include <stdexcept>
+#include <ChessLib/Board/BoardFunctions.hpp>
 
 namespace chesslib
 {
@@ -12,6 +13,24 @@ namespace chesslib
 			_black_pieces.emplace(p, s);
 	}
 
+	void BasicBoard::MakeMove(const Move& move)
+	{
+		auto side_to_move = GetActiveColor();
+		if (side_to_move == color::White)
+			make_move<BasicBoard, color::White>(*this, move);
+		else
+			make_move<BasicBoard, color::Black>(*this, move);
+	}
+
+	void BasicBoard::UnMakeMove()
+	{
+		auto side_to_move = GetActiveColor();
+		if (side_to_move == color::White)
+			unmake_move<BasicBoard, color::White>(*this);
+		else
+			unmake_move<BasicBoard, color::Black>(*this);
+	}
+
 	/*
 	void BasicBoard::MakeMove(const Move& move) 
 	{
@@ -21,6 +40,7 @@ namespace chesslib
 		else
 			MakeMoveImplementation<color::Black>(move);
 	}
+
 
 	void BasicBoard::UnMakeMove()
 	{

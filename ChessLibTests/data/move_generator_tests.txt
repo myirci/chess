@@ -1,4 +1,4 @@
-$Group-1
+Group-1
 # King moves
 {
 	Test-1
@@ -47,7 +47,7 @@ $Group-1
 	e4-f4-cm, e4-e3
 }
 
-$Group-2
+Group-2
 # Check eliminating moves
 {
 	Test-1
@@ -101,7 +101,7 @@ $Group-2
 	d2-c1, a2-c1, d2-e1, e2-e1-qp, e2-e1-rp, e2-e1-bp, e2-e1-np, g2-g1-qp, g2-g1-rp, g2-g1-bp, g2-g1-np, g2-h1-qpc, g2-h1-rpc, g2-h1-bpc, g2-h1-npc
 }
 
-$Group-3
+Group-3
 # Random positions - All moves
 {
 	Test-1
@@ -160,28 +160,28 @@ $Group-3
 	e8-f8
 }
 
-$Group-4
+Group-4
 # Random positions - Move Subset
 {
 	Test-1
 	Subset
 	r3k2r/p3p3/8/8/1q6/8/P2P3P/R3K2R w KQkq - 0 1
-      e1-e2, e1-f1, e1-d1, e1-f2, e1-g1-ksc, e1,c1-qsc
+    e1-e2, e1-f1, e1-d1, e1-f2, e1-g1-ksc, e1,c1-qsc
 
 	Test-2
 	Subset
   	r3k2r/1P6/8/8/8/8/3n4/R3K2R b KQkq - 0 1
-      e8-f8, e8-e7, e8-d8, e8-f7, e8-d7, e8-g8-ksc
+    e8-f8, e8-e7, e8-d8, e8-f7, e8-d7, e8-g8-ksc
   
 	Test-3
 	Subset
 	r3k2r/1P6/8/8/8/8/3n4/R3K2R w KQkq - 0 1
-      e1-e2, e1-d1, e1-f2, e1-d2-cm, e1-c1-qsc
+    e1-e2, e1-d1, e1-f2, e1-d2-cm, e1-c1-qsc
 
 	Test-4
 	Subset  
 	rnb1kbnr/ppp1qppp/2pP1p2/8/1P1P2P1/2N2P2/PPP4R/R1BQKBN1 w Qkq - 0 1
-      h2-e2, f1-e2, d1-e2, g1-e2, c3-e2
+    h2-e2, f1-e2, d1-e2, g1-e2, c3-e2
 
 	Test-5
 	Subset  
@@ -201,22 +201,22 @@ $Group-4
 	Test-8
 	Subset  
 	n3k2N/2R2R2/4p3/1n5P/5N2/1pp5/2p1K3/n6N w - - 0 1
-      h8-g6, f4-e6-cm, f4-g6, f4-h3, f4-g2, f4-d3, f4-d5, h1-g3, h1-f2
+    h8-g6, f4-e6-cm, f4-g6, f4-h3, f4-g2, f4-d3, f4-d5, h1-g3, h1-f2
   
 	Test-9
 	Subset
 	n3k2N/2R2R2/4p3/1n5P/5N2/1pp5/2p1K3/n6N b - - 0 1
-      a8-c7-cm, a8-b6, b5-a7, b5-a3, b5-c7-cm, b5-d6, b5-d4
+    a8-c7-cm, a8-b6, b5-a7, b5-a3, b5-c7-cm, b5-d6, b5-d4
 
 	Test-10
 	Subset  
 	6kB/1B3ppp/1n1P4/2qQ4/1Q3p2/PP2Pn2/R1PR1B2/nRK1N3 w - - 0 1
-      d5-e5, d5-f5, d5-g5, d5-h5, d5-d4, d5-d3, d5-c5-cm, d5-e6, d5-f7-cm, d5-e4, d5-f3-cm, d5-c4, d5-c6, b4-b5, b4-b6-cm, b4-c4, b4-d4, b4-e4, b4-f4-cm, b4-a4, b4-c5-cm, b4-c3, b4-a5, a2-b2, a2-a1-cm, d2-d3, d2-d4, d2-e2, d2-d1, b1-b2, b1-a1-cm, h8-g7-cm, b7-c8, b7-c6, b7-a6, b7-a8, f2-g3, f2-h4, f2-g1
+    d5-e5, d5-f5, d5-g5, d5-h5, d5-d4, d5-d3, d5-c5-cm, d5-e6, d5-f7-cm, d5-e4, d5-f3-cm, d5-c4, d5-c6, b4-b5, b4-b6-cm, b4-c4, b4-d4, b4-e4, b4-f4-cm, b4-a4, b4-c5-cm, b4-c3, b4-a5, a2-b2, a2-a1-cm, d2-d3, d2-d4, d2-e2, d2-d1, b1-b2, b1-a1-cm, h8-g7-cm, b7-c8, b7-c6, b7-a6, b7-a8, f2-g3, f2-h4, f2-g1
 
 	Test-11
 	Subset  
 	brbrbbbb/bbrbpppp/kN2p3/1ppp4/2p5/8/8/4K3 b - - 0 1
-      c7-c6, a7-b6-cm, b7-c6, d7-c6
+    c7-c6, a7-b6-cm, b7-c6, d7-c6
   
 	Test-12
 	Subset
@@ -231,12 +231,12 @@ $Group-4
 	Test-14
 	Subset  
 	4k3/8/8/8/4pP2/8/8/4K3 b - f3 0 1
-      e4-e3, e4-f3-ep
+    e4-e3, e4-f3-ep
   
 	Test-15
 	Subset
 	4k3/8/8/8/3Pp3/8/8/4K3 b - d3 0 1
-      e4-e3, e4-d3-ep
+    e4-e3, e4-d3-ep
   
 	Test-16
 	Subset
@@ -251,7 +251,7 @@ $Group-4
 	Test-18
 	Subset
 	1r1n1n2/P1P2P1P/4r3/2k4b/2b5/3PPP2/1P2K3/8 w - - 0 1
-      a7-a8-qp, a7-a8-np, a7-a8-bp, a7-a8-rp, a7-b8-qpc, a7-b8-kpc, a7-b8-bpc, a7-b8-rpc, c7-c8-qp, c7-c8-np, c7-c8-bp, c7-c8-rp, c7-d8-qpc, c7-d8-kpc, c7-d8-bpc, c7-d8-rpc, c7-b8-qpc, c7-b8-kpc, c7-b8-bpc, c7-b8-rpc, h7-h8-qp, h7-h8-np, h7-h8-bp, h7-h8-rp, d3-c4-cm, e3-e4, b2-b3, b2,b4-dp
+    a7-a8-qp, a7-a8-np, a7-a8-bp, a7-a8-rp, a7-b8-qpc, a7-b8-kpc, a7-b8-bpc, a7-b8-rpc, c7-c8-qp, c7-c8-np, c7-c8-bp, c7-c8-rp, c7-d8-qpc, c7-d8-kpc, c7-d8-bpc, c7-d8-rpc, c7-b8-qpc, c7-b8-kpc, c7-b8-bpc, c7-b8-rpc, h7-h8-qp, h7-h8-np, h7-h8-bp, h7-h8-rp, d3-c4-cm, e3-e4, b2-b3, b2,b4-dp
 
 	Test-19
 	Subset  
@@ -259,7 +259,7 @@ $Group-4
 	c7-c6, c7-c5-dp, e5-d4-cm, e5-f4-cm, a2-b1-qpc, a2-b1-kpc, a2-b1-bpc, a2-b1-rpc, d2-d1-qp, d2-d1-np, d2-d1-bp, d2-d1-rp, d2-c1-qpc, d2-c1-kpc, d2-c1-bpc, d2-c1-rpc, d2-e1-qpc, d2-e1-kpc, d2-e1-bpc, d2-e1-rpc
 }
 
-$Group-5
+Group-5
 # Number of moves
 {
 	Test-1

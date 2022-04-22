@@ -49,16 +49,21 @@ namespace chesslib
 		void ClearHalfMoveClock() noexcept				 { _halfmove_clock = 0; }
 		void SetFullMoveClock(uint16_t fmc)	noexcept     { _fullmove_clock = fmc; }
 		void IncrementFullMoveClock() noexcept			 { _fullmove_clock++; }
+		void DecrementFullMoveClock() noexcept           { _fullmove_clock--; }
+		void SetCastlingRights(int8_t castling_rights)   { _castling_rights = castling_rights; }
 		void SetCastling(Castling c, bool flag) noexcept {
 			_castling_rights = flag 
 				? _castling_rights | static_cast<int8_t>(c) 
 				: _castling_rights & ~static_cast<int8_t>(c);
 		}
-
+		
 		void PushToMoveStack(const Move& mv, Piece captured = Empty)
 		{
 			_move_stack.push({ mv, _halfmove_clock, _castling_rights, _enpassant_target, captured });
 		}
+
+		const BoardState& GetMoveStackTop() const { return _move_stack.top(); }
+		void PopFromMoveStack()					  { _move_stack.pop(); }
 
 	protected:
 

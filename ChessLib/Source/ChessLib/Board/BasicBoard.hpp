@@ -5,6 +5,7 @@
 #include <ChessLib/Chess/Move.hpp>
 #include <ChessLib/Chess/Definitions.hpp>
 #include <ChessLib/Chess/ColorTraits.hpp>
+#include <ChessLib/Chess/BoardColorTraits.hpp>
 
 #include <array>
 #include <string_view>
@@ -46,16 +47,23 @@ namespace chesslib
 		template<Color SideToMove>
 		void MakeCaptureMove(Square from, Square to, Piece captured)
 		{
-			
+			using ctraits = traits::color_traits<SideToMove>;
+
+			RemovePiece<ctraits::Opposite>(captured, to);
+			MakeQuiteMove<SideToMove>(from, to);
 		}
 
 		template<Color SideToMove>
-		void MakeEnpassantCaptureMove(Square from, Square to, Piece captured)
+		void MakeEnpassantCaptureMove(Square from, Square to)
 		{
-			// Square removed_pawn_pos{ _enpassant_target + bptraits::ReverseMoveDirection };
-			// brd.RemovePiece<ctraits::Opposite>(captured, removed_pawn_pos);
-			// _board[removed_pawn_pos] = Empty;
-			// brd.MakeQuiteMove<SideToMove>(from, to);
+			using ctraits = traits::color_traits<SideToMove>;
+			using octraits = traits::color_traits<ctraits::Opposite>;
+			using bctraits = traits::board_color_traits<BasicBoard, SideToMove>;
+
+			Square removed_pawn_pos{ _enpassant_target + bctraits::PawnReverseMoveDirection };
+			RemovePiece<ctraits::Opposite>(octraits::Pawn, removed_pawn_pos);
+			_board[removed_pawn_pos] = Empty;
+			MakeQuiteMove<SideToMove>(from, to);
 		}
 
 		template<Color SideToMove>
@@ -74,8 +82,51 @@ namespace chesslib
 			_board[from] = Empty;
 		}
 
-		// void MakeMove(const Move& move);
-		// void UnMakeMove();
+		template<Color SideToMove>
+		void UnMakePromotionMove(Square from, Square to, Piece captured)
+		{
+			using ctraits = traits::color_traits<SideToMove>;
+			using octraits = traits::color_traits<ctraits::Opposite>;
+
+			RemovePiece<ctraits::Opposite>(_board[to], to);
+			AddNewPiece<ctraits::Opposite>(octraits::Pawn, from);
+			_board[from] = octraits::Pawn;
+
+			if (captured != Empty)
+			{
+				_board[to] = captured;
+				AddNewPiece<SideToMove>(captured, to);
+			}
+			else
+				_board[to] = Empty;
+		}
+
+		template<Color SideToMove>
+		void UnMakeEnpassantCaptureMove(Square from, Square to, Piece captured) 
+		{
+			using ctraits = traits::color_traits<SideToMove>;
+			using bctraits = traits::board_color_traits<BasicBoard, SideToMove>;
+
+			MakeQuiteMove<SideToMove>(to, from);
+
+			Square removed_pawn_pos{ _enpassant_target + bctraits::PawnReverseMoveDirection };
+			AddNewPiece<ctraits::Opposite>(captured, removed_pawn_pos);
+			_board[removed_pawn_pos] = captured;
+		}
+
+		template<Color SideToMove>
+		void UnMakeCaptureMove(Square from, Square to, Piece captured) 
+		{
+			using ctraits = traits::color_traits<SideToMove>;
+
+			// Move types: capture, enpassant capture
+			MakeQuiteMove<SideToMove>(to, from);
+			_board[to] = captured;
+			AddNewPiece<ctraits::Opposite>(captured, to);
+		}
+
+		void MakeMove(const Move& move);
+		void UnMakeMove();
 
 	protected:
 

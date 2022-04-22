@@ -71,9 +71,9 @@ TEST_F(BasicBoardTests, setup_board)
 {
     auto scoped_open = ScopedOpen(TestHelpers::BoardSetupTestCases);
     auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-1");
-    EXPECT_TRUE(lines.size() % 3 == 0);
+
+    EXPECT_TRUE(lines.size() != 0 && lines.size() % 3 == 0);
     
-    auto numTestCases = lines.size() / 3;
     for (auto i{ 0 }; i < lines.size(); i+=3)
     {
         auto b = BoardFactory::make_unique_board<BasicBoard>(lines[(size_t)(i+1)]);
@@ -117,28 +117,34 @@ TEST_F(BasicBoardTests, setup_board_and_board_to_fen)
     auto scoped_open = ScopedOpen(TestHelpers::BoardSetupTestCases);
     auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-2");
 
-    EXPECT_TRUE(lines.size() % 3 == 0);
+    EXPECT_TRUE(lines.size() != 0 && lines.size() % 3 == 0);
 
-    auto numTestCases = lines.size() / 3;
-    for (auto i{ 0 }; i < numTestCases; i += 3)
+    for (auto i{ 0 }; i < lines.size(); i += 3)
     {
         auto b = BoardFactory::make_unique_board<BasicBoard>(lines[(size_t)(i + 1)]);
         EXPECT_EQ(lines[(size_t)(i + 1)], board_to_fen(*b));
     }
 }
 
-/*
-
 TEST_F(BasicBoardTests, make_unmake_moves)
 {
-    for (const auto& [move, fen1, fen2] : make_unmake_move_fens)
+    auto scoped_open = ScopedOpen(TestHelpers::MakeUnMakeMovesTestCases);
+    auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-1");
+
+    EXPECT_TRUE(lines.size() != 0 && lines.size() % 4 == 0);
+
+    for (auto i{ 0 }; i < lines.size(); i += 4)
     {
-        auto b = basic_board::make_unique_board(fen1);
-        b->MakeMove(move);
+        const auto& fen1 = lines[(size_t)(i + 2)];
+        const auto& fen2 = lines[(size_t)(i + 3)];
+
+        auto mv = TestHelpers::GetMove<BasicBoard>(lines[(size_t)(i + 1)]);
+        auto b = BoardFactory::make_unique_board<BasicBoard>(fen1);
+        
+        b->MakeMove(mv);
         EXPECT_EQ(fen2, board_to_fen(*b));
+        
         b->UnMakeMove();
         EXPECT_EQ(fen1, board_to_fen(*b));
     }
 }
-
-*/
