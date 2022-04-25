@@ -12,6 +12,157 @@ namespace chesslib
 {
 	class x88Board;
 
+	namespace impl
+	{
+		template<typename BoardType, Color SideToMove>
+		void make_move(BoardType& brd, const Move& move)
+		{
+			using ctraits = traits::color_traits<SideToMove>;
+			using octraits = traits::color_traits<ctraits::Opposite>;
+			using bctraits = traits::board_color_traits<BoardType, SideToMove>;
+			using boctraits = traits::board_color_traits<BoardType, ctraits::Opposite>;
+
+			// update full move clock 
+			if constexpr (SideToMove == color::Black)
+				brd.IncrementFullMoveClock();
+
+			Square from{ move.GetFrom() }, to{ move.GetTo() }, capturedPieceLoc{ Empty };
+			Piece captured{ Empty };
+
+			// captured piece, captured piece loc and removed captured piece from the board
+			if (move.IsCapture())
+			{
+				if (move.IsEnPassantCapture())
+				{
+					captured = octraits::Pawn;
+					capturedPieceLoc = brd.GetEnPassantSquare() + bctraits::PawnReverseMoveDirection;
+				}
+				else
+				{
+					captured = brd.GetPiece(to);
+					capturedPieceLoc = to;
+				}
+
+				brd.RemovePiece<ctraits::Opposite>(captured, capturedPieceLoc);
+			}
+
+			// push move to the stack		
+			brd.PushToMoveStack(move, captured);
+
+			// update half move clock
+			Piece movingPiece{ brd.GetPiece(from) };
+			if (movingPiece == ctraits::Pawn || captured != Empty)
+				brd.ClearHalfMoveClock();
+			else
+				brd.IncrementHalfMoveClock();
+
+			// update castling rights
+			if (brd.IsCastlingAvailable())
+			{
+				if (movingPiece == ctraits::King)
+				{
+					brd.SetCastling(ctraits::KingSideCastling, false);
+					brd.SetCastling(ctraits::QueenSideCastling, false);
+				}
+				else if (movingPiece == ctraits::Rook)
+				{
+					if (from == bctraits::KingSideRookInitialPosition)
+						brd.SetCastling(ctraits::KingSideCastling, false);
+					else if (from == bctraits::QueenSideRookInitialPosition)
+						brd.SetCastling(ctraits::QueenSideCastling, false);
+				}
+
+				if (captured == octraits::Rook)
+				{
+					if (to == boctraits::KingSideRookInitialPosition)
+						brd.SetCastling(octraits::KingSideCastling, false);
+					else if (to == boctraits::QueenSideRookInitialPosition)
+						brd.SetCastling(octraits::QueenSideCastling, false);
+				}
+			}
+
+			// update board
+			MoveType mtype{ move.GetMoveType() };
+			if (move.IsPromotion())
+			{
+				brd.RemovePiece<SideToMove>(movingPiece, from);
+				brd.PutPiece<SideToMove>(get_promoted_piece<SideToMove>(mtype), to);
+			}
+			else
+			{
+				brd.UpdatePiece<SideToMove>(movingPiece, from, to);
+
+				if (mtype == MoveType::King_Side_Castle)
+					brd.UpdatePiece<SideToMove>(ctraits::Rook, bctraits::KingSideRookInitialPosition, bctraits::KingSideRookPositionAfterCastling);
+				else if (mtype == MoveType::Queen_Side_Castle)
+					brd.UpdatePiece<SideToMove>(ctraits::Rook, bctraits::QueenSideRookInitialPosition, bctraits::QueenSideRookPositionAfterCastling);
+			}
+
+			// update enpassant target square
+			auto epts = mtype == MoveType::Double_Pawn_Push ? from + bctraits::PawnMoveDirection : Empty;
+			brd.SetEnPassantSquare(epts);
+
+			// update side to move
+			brd.SetActiveColor(ctraits::Opposite);
+		}
+
+		template<typename BoardType, Color SideToMove>
+		void unmake_move(BoardType& brd)
+		{
+			using ctraits = traits::color_traits<SideToMove>;
+			using octraits = traits::color_traits<ctraits::Opposite>;
+			using boctraits = traits::board_color_traits<BoardType, ctraits::Opposite>;
+
+			// Get the last move and board state before the move was made.
+			const auto& statePrev = brd.GetMoveStackTop();
+
+			// restore side to move
+			brd.SetActiveColor(ctraits::Opposite);
+
+			// restore castling rights, en-passant location and half move clock
+			brd.SetCastlingRights(statePrev.castling_rights);
+			brd.SetEnPassantSquare(statePrev.enpassant_target);
+			brd.SetHalfMoveClock(statePrev.halfmove_clock);
+
+			// restore the full move clock
+			if constexpr (SideToMove == color::White)
+				brd.DecrementFullMoveClock();
+
+			// restore the board and piece positions
+			Move const& move = statePrev.move;
+			Square from{ move.GetFrom() }, to{ move.GetTo() };
+			Piece movedPiece{ brd.GetPiece(to) };
+			MoveType mtype{ move.GetMoveType() };
+
+			if (move.IsPromotion())
+			{
+				brd.PutPiece<ctraits::Opposite>(octraits::Pawn, from);
+				brd.RemovePiece<ctraits::Opposite>(movedPiece, to);
+			}
+			else
+			{
+				brd.UpdatePiece<ctraits::Opposite>(movedPiece, to, from);
+
+				if (mtype == MoveType::King_Side_Castle)
+					brd.UpdatePiece<ctraits::Opposite>(octraits::Rook, boctraits::KingSideRookPositionAfterCastling, boctraits::KingSideRookInitialPosition);
+				else if (mtype == MoveType::Queen_Side_Castle)
+					brd.UpdatePiece<ctraits::Opposite>(octraits::Rook, boctraits::QueenSideRookPositionAfterCastling, boctraits::QueenSideRookInitialPosition);
+			}
+
+			if (statePrev.captured_piece != Empty)
+			{
+				Square capturedPieceLoc = mtype == MoveType::En_Passant_Capture
+					? statePrev.enpassant_target + boctraits::PawnReverseMoveDirection
+					: to;
+
+				brd.PutPiece<SideToMove>(statePrev.captured_piece, capturedPieceLoc);
+			}
+
+			brd.PopFromMoveStack();
+		}
+
+	}
+
 	// Preconditions: brd is cleared or newly created. 
 	template<typename BoardType>
 	void set_board(BoardType& brd, std::string_view fen)
@@ -29,10 +180,22 @@ namespace chesslib
 					sq += (c - '0');
 				else
 				{
-					if constexpr (std::is_same_v<BoardType, x88Board>)
-						brd.SetPiece(char_to_piece.at(c), x88Board::BottomToTopOrder[sq++]);
+					Piece p = char_to_piece.at(c);
+					Color pieceColor = color::get_color(p);
+					if (pieceColor == color::White) 
+					{
+						if constexpr (std::is_same_v<BoardType, x88Board>)
+							brd.PutPiece<color::White>(p, x88Board::BottomToTopOrder[sq++]);
+						else
+							brd.PutPiece<color::White>(p, sq++);
+					}
 					else 
-						brd.SetPiece(char_to_piece.at(c), sq++);
+					{
+						if constexpr (std::is_same_v<BoardType, x88Board>)
+							brd.PutPiece<color::Black>(p, x88Board::BottomToTopOrder[sq++]);
+						else
+							brd.PutPiece<color::Black>(p, sq++);
+					}
 				}
 			}
 		}
@@ -115,142 +278,24 @@ namespace chesslib
 		return ss.str();
 	}	
 
-	template<typename BoardType, Color SideToMove>
+	template<typename BoardType>
 	void make_move(BoardType& brd, const Move& move)
 	{
-		using ctraits   = traits::color_traits<SideToMove>;
-		using octraits  = traits::color_traits<ctraits::Opposite>;
-		using bctraits  = traits::board_color_traits<BoardType, SideToMove>;
-		using boctraits = traits::board_color_traits<BoardType, ctraits::Opposite>;
-		
-		Square from{ move.GetFrom() }, to{ move.GetTo() };
-		Piece movingPiece{ brd.GetPiece(from) };
-		
-		Piece captured{ Empty };
-		if (move.IsCapture())
-			captured = move.IsEnPassantCapture() ? octraits::Pawn : brd.GetPiece(to);
-
-		// push move to the stack		
-		brd.PushToMoveStack(move, captured);
-
-		// update half move clock
-		if (movingPiece == ctraits::Pawn || captured != Empty)
-			brd.ClearHalfMoveClock();
+		auto sideToMove = brd.GetActiveColor();
+		if (sideToMove == color::White)
+			impl::make_move<BoardType, color::White>(brd, move);
 		else
-			brd.IncrementHalfMoveClock();
-
-		// update full move clock 
-		if constexpr (SideToMove == color::Black)
-			brd.IncrementFullMoveClock();
-
-		// update castling rights
-		if (brd.IsCastlingAvailable())
-		{
-			if (movingPiece == ctraits::King)
-			{
-				brd.SetCastling(ctraits::KingSideCastling, false);
-				brd.SetCastling(ctraits::QueenSideCastling, false);
-			}
-			else if (movingPiece == ctraits::Rook)
-			{
-				if (from == bctraits::KingSideRookInitialPosition)
-					brd.SetCastling(ctraits::KingSideCastling, false);
-				else if (from == bctraits::QueenSideRookInitialPosition)
-					brd.SetCastling(ctraits::QueenSideCastling, false);
-			}
-
-			if (captured == octraits::Rook)
-			{
-				if (to == boctraits::KingSideRookInitialPosition)
-					brd.SetCastling(octraits::KingSideCastling, false);
-				else if (to == boctraits::QueenSideRookInitialPosition)
-					brd.SetCastling(octraits::QueenSideCastling, false);
-			}
-		}
-
-		// update piece locations
-		MoveType mtype{ move.GetMoveType() };
-
-		if (move.IsPromotion())
-		{
-			brd.MakePromotionMove<SideToMove>(from, to, captured, get_promoted_piece<SideToMove>(mtype));
-		}
-		else if (move.IsCapture())
-		{
-			if (mtype == MoveType::En_Passant_Capture)
-				brd.MakeEnpassantCaptureMove<SideToMove>(from, to);
-			else
-				brd.MakeCaptureMove<SideToMove>(from, to, captured);
-		}
-		else 
-		{
-			// Move types: quite, double pawn push, castling 
-			brd.MakeQuiteMove<SideToMove>(from, to);
-
-			if (mtype == MoveType::King_Side_Castle)
-				brd.MakeQuiteMove<SideToMove>(bctraits::KingSideRookInitialPosition, bctraits::KingSideRookPositionAfterCastling);
-			else if (mtype == MoveType::Queen_Side_Castle)
-				brd.MakeQuiteMove<SideToMove>(bctraits::QueenSideRookInitialPosition, bctraits::QueenSideRookPositionAfterCastling);
-		}
-
-		// update enpassant target square
-		auto enpassant_target_square = mtype == MoveType::Double_Pawn_Push ? from + bctraits::PawnMoveDirection : Empty;
-		brd.SetEnPassantSquare(enpassant_target_square);
-
-		// update side to move
-		brd.SetActiveColor(ctraits::Opposite);
+			impl::make_move<BoardType, color::Black>(brd, move);
 	}
 
-	template<typename BoardType, Color SideToMove>
+	template<typename BoardType>
 	void unmake_move(BoardType& brd)
 	{
-		using ctraits = traits::color_traits<SideToMove>;
-		using bctraits = traits::board_color_traits<BoardType, ctraits::Opposite>;
-
-		// Get the last move and board state before the move was made.
-		const auto& statePrev = brd.GetMoveStackTop();
-
-		// restore side to move
-		brd.SetActiveColor(ctraits::Opposite);
-
-		// restore castling rights, en-passant location and half move clock
-		brd.SetCastlingRights(statePrev.castling_rights);
-		brd.SetEnPassantSquare(statePrev.enpassant_target);
-		brd.SetHalfMoveClock(statePrev.halfmove_clock);
-		
-		// restore the full move clock
-		if constexpr (SideToMove == color::White)
-			brd.DecrementFullMoveClock();
-
-		// restore the board and piece positions
-
-		const Move& move = statePrev.move;
-		Square from{ move.GetFrom() }, to{ move.GetTo() };
-		MoveType mtype{ move.GetMoveType() };
-
-		if (move.IsPromotion()) 
-		{
-			brd.UnMakePromotionMove<SideToMove>(from, to, statePrev.captured_piece);
-		}
-		else if (move.IsCapture())
-		{
-			if (mtype == MoveType::En_Passant_Capture)
-				brd.UnMakeEnpassantCaptureMove<ctraits::Opposite>(from, to, statePrev.captured_piece);
-			else
-				brd.UnMakeCaptureMove<ctraits::Opposite>(from, to, statePrev.captured_piece);
-		}
-		else 
-		{
-			// Move types: quite, double pawn push, castling
-			brd.MakeQuiteMove<ctraits::Opposite>(to, from);
-
-			if (mtype == MoveType::King_Side_Castle)
-				brd.MakeQuiteMove<ctraits::Opposite>(bctraits::KingSideRookPositionAfterCastling, bctraits::KingSideRookInitialPosition);
-			else if (mtype == MoveType::Queen_Side_Castle)
-				brd.MakeQuiteMove<ctraits::Opposite>(bctraits::QueenSideRookPositionAfterCastling, bctraits::QueenSideRookInitialPosition);
-		}
-
-		brd.PopFromMoveStack();
+		auto sideToMove = brd.GetActiveColor();
+		if (sideToMove == color::White)
+			impl::unmake_move<BoardType, color::White>(brd);
+		else
+			impl::unmake_move<BoardType, color::Black>(brd);
 	}
 
 	// GetCharPair()

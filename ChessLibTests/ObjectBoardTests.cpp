@@ -149,3 +149,26 @@ TEST_F(ObjectBoardTests, setup_board_and_board_to_fen)
         EXPECT_EQ(lines[(size_t)(i + 1)], board_to_fen(*b));
     }
 }
+
+TEST_F(ObjectBoardTests, make_unmake_moves)
+{
+    auto scoped_open = ScopedOpen(TestHelpers::MakeUnMakeMovesTestCases);
+    auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-1");
+
+    EXPECT_TRUE(lines.size() != 0 && lines.size() % 4 == 0);
+
+    for (auto i{ 0 }; i < lines.size(); i += 4)
+    {
+        const auto& fen1 = lines[(size_t)(i + 2)];
+        const auto& fen2 = lines[(size_t)(i + 3)];
+
+        auto mv = TestHelpers::GetMove<objboard::ObjBoard>(lines[(size_t)(i + 1)]);
+        auto b = BoardFactory::make_unique_board<objboard::ObjBoard>(fen1);
+
+        make_move(*b, mv);
+        EXPECT_EQ(fen2, board_to_fen(*b));
+
+        unmake_move(*b);
+        EXPECT_EQ(fen1, board_to_fen(*b));
+    }
+}

@@ -141,10 +141,10 @@ TEST_F(BasicBoardTests, make_unmake_moves)
         auto mv = TestHelpers::GetMove<BasicBoard>(lines[(size_t)(i + 1)]);
         auto b = BoardFactory::make_unique_board<BasicBoard>(fen1);
         
-        b->MakeMove(mv);
+        make_move(*b, mv);
         EXPECT_EQ(fen2, board_to_fen(*b));
         
-        b->UnMakeMove();
+        unmake_move(*b);
         EXPECT_EQ(fen1, board_to_fen(*b));
     }
 }

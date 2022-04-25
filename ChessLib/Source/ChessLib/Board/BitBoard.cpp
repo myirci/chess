@@ -1,20 +1,13 @@
 #include <ChessLib/Board/BitBoard.hpp>
+
 #include <algorithm>
 
 namespace chesslib::bitboard
 {
-	void BitBoard::SetPiece(Piece p, Square s)
+	void BitBoard::Clear() 
 	{
-		if (color::get_color(p) == color::White) 
-		{
-			_white_pieces[All] |= BitMask[s];
-			_white_pieces[(size_t)(p - 1)] |= BitMask[s];
-		}
-		else 
-		{
-			_black_pieces[All] |= BitMask[s];
-			_black_pieces[(size_t)(- p - 1)] |= BitMask[s];
-		}
+		_white_pieces.fill(0);
+		_black_pieces.fill(0);
 	}
 
 	Piece BitBoard::GetPiece(Square s) const 

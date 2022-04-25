@@ -16,9 +16,9 @@ namespace chesslib
 	{
 	public:
 
-#pragma region Static Members
-
 		static constexpr int BOARDSIZE = 128;
+
+		using BoardArray = std::array<Square, BOARDSIZE>;
 
 		static constexpr Square
 			a1{ 0 }, a2{ 16 }, a3{ 32 }, a4{ 48 }, a5{ 64 }, a6{ 80 }, a7{ 96 }, a8{ 112 },
@@ -83,23 +83,33 @@ namespace chesslib
 		}
 
 		static constexpr bool IsInside(Square sq) noexcept { return !(0x88 & sq); }
-
-#pragma endregion
 	
-		using BoardArray = std::array<Square, BOARDSIZE>;
-
-		void SetPiece(Piece p, Square s);
-		Piece GetPiece(Square s) const { return _board[s]; }
-
-
-		
-		
-
 		const BoardArray& GetBoard() const noexcept { return _board; }
 		BoardArray& GetBoard() noexcept             { return _board; }
+		
+		Piece GetPiece(Square s) const              { return _board[s]; }
 
-		// void MakeMove(const Move& move);
-		// void UnMakeMove();
+		template <Color PieceColor>
+		void PutPiece(Piece p, Square s)
+		{
+			PieceCentricBoardBase::PutPiece<PieceColor>(p, s);
+			_board[s] = p;
+		}
+
+		template <Color PieceColor>
+		void RemovePiece(Piece p, Square s)
+		{
+			PieceCentricBoardBase::RemovePiece<PieceColor>(p, s);
+			_board[s] = Empty;
+		}
+
+		template <Color PieceColor>
+		void UpdatePiece(Piece p, Square from, Square to)
+		{
+			PieceCentricBoardBase::UpdatePiece<PieceColor>(p, from, to);
+			_board[to] = p;
+			_board[from] = Empty;
+		}
 
 	protected:
 		
@@ -108,14 +118,6 @@ namespace chesslib
 		x88Board() : PieceCentricBoardBase() { _board.fill(Empty); }
 		
 		/*
-		template<Color Clr>
-		void MakeMoveImplementation(const Move& move);
-
-		template<Color Clr>
-		inline void MakeQuiteMove(Square from, Square to);
-
-		template<Color Clr>
-		void UnMakeMove(const Move& move, Piece captured);
 
 		template<Color Clr>
 		void GenerateMovesImplementation(MoveList& moves) const;

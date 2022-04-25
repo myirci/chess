@@ -78,17 +78,6 @@ namespace chesslib::objboard
 	}
 	{ }
 
-	void ObjBoard::SetPiece(Piece p, Square s) 
-	{
-		auto pobj = make_piece(p, s);
-		_board[s]._piece = pobj.get();
-
-		if (color::get_color(p) == color::White)
-			_white_pieces.emplace(p, std::move(pobj));
-		else
-			_black_pieces.emplace(p, std::move(pobj));
-	}
-
 	/*MoveList ObjBoard::GenerateMoves() const 
 	{
 		MoveList moves;
