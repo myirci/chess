@@ -1,8 +1,6 @@
 #pragma once
 
 #include <ChessLib/Chess/Definitions.hpp>
-#include <ChessLib/Board/BasicBoard/BasicBoard.hpp>
-#include <ChessLib/Board/BasicBoard/Square.hpp>
 
 namespace chesslib::movegenerator 
 {
@@ -23,10 +21,10 @@ namespace chesslib::movegenerator
 
 	};
 
-	class Graph 
+	class Graph
 	{
-		
-	}
+
+	};
 
 	class BoardConnectivity 
 	{

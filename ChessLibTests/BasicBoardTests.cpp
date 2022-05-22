@@ -35,6 +35,7 @@ protected:
         }
     }
 };
+
 TEST_F(BasicBoardTests, SquareFileRank)
 {
     Square i{ 0 };
@@ -51,6 +52,7 @@ TEST_F(BasicBoardTests, SquareFileRank)
         }
     }
 }
+
 TEST_F(BasicBoardTests, SquareFromChars)
 {
     char f{ 'a' }, r{ '1' };
@@ -148,3 +150,69 @@ TEST_F(BasicBoardTests, make_unmake_moves)
         EXPECT_EQ(fen1, board_to_fen(*b));
     }
 }
+//TEST_F(BasicBoardTests, move_generator_king_moves)
+//{
+//    auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
+//    auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-1");
+//
+//    EXPECT_TRUE(lines.size() != 0 && lines.size() % 3 == 0);
+//
+//    for (auto i{ 0 }; i < lines.size(); i += 3)
+//    {
+//        auto b = BoardFactory::make_unique_board<BasicBoard>(lines[(size_t)(i + 1)]);
+//        auto expectedMoves = TestHelpers::GetMoves<BasicBoard>(lines[(size_t)(i + 2)]);
+//    }
+//}
+
+/*
+TEST_F(BasicBoardTests, move_generation_king_only_moves)
+{
+    for (auto i{0}; i < move_generator_king_move_fens.size(); i++)
+    {
+        auto b = basic_board::make_unique_board(move_generator_king_move_fens[i]);
+        auto moves = b->GenerateMoves();
+        EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expected_king_moves[i].begin()));
+    }
+}
+
+TEST_F(BasicBoardTests, move_generation_check_eliminating_moves)
+{
+    for (auto i{ 0 }; i < move_generator_check_eliminating_move_fens.size(); i++)
+    {
+        auto b = basic_board::make_unique_board(move_generator_check_eliminating_move_fens[i]);
+        auto moves = b->GenerateMoves();
+        EXPECT_TRUE(IsSubset(moves, expected_check_eliminating_moves[i]));
+    }
+}
+
+TEST_F(BasicBoardTests, move_generation_compare_all_moves)
+{
+    for (auto i{ 0 }; i < move_generation_all_moves_fens.size(); i++)
+    {
+        auto b = basic_board::make_unique_board(move_generation_all_moves_fens[i]);
+        auto moves = b->GenerateMoves();
+        EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expected_moves_all_moves[i].begin()));
+    }
+}
+
+TEST_F(BasicBoardTests, move_generation_compare_move_subset)
+{
+    for (auto i{ 0 }; i < move_generation_subset.size(); i++)
+    {
+        auto b = basic_board::make_unique_board(move_generation_subset[i]);
+        auto moves = b->GenerateMoves();
+        EXPECT_TRUE(IsSubset(moves, expected_moves_subset[i]));
+    }
+}
+
+TEST_F(BasicBoardTests, move_generation_number_of_moves)
+{
+    for (const auto& p : move_generation_number_of_moves)
+    {
+        auto b = basic_board::make_unique_board(p.first);
+        auto moves = b->GenerateMoves();
+        EXPECT_EQ(p.second, moves.size());
+    }
+}
+
+*/

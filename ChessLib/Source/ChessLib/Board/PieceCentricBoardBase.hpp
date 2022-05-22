@@ -78,10 +78,10 @@ namespace chesslib
 			throw std::logic_error("Piece could not be found in the given position.");
 		}
 
-		template <Color Clr>
+		template <Color PieceColor>
 		Square GetKingPosition() const
 		{
-			if constexpr (Clr == color::White)
+			if constexpr (PieceColor == color::White)
 			{
 				auto it = _white_pieces.find(pieceset::WhiteKing);
 				if (it == _white_pieces.end())
@@ -97,10 +97,10 @@ namespace chesslib
 			}
 		}
 
-		template <Color Clr>
+		template <Color PieceColor>
 		EqualPieceRange GetPiecePositions(Piece p) const
 		{
-			if constexpr (Clr == color::White)
+			if constexpr (PieceColor == color::White)
 				return _white_pieces.equal_range(p);
 			else
 				return _black_pieces.equal_range(p);

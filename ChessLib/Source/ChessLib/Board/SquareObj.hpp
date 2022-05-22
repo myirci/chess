@@ -28,9 +28,9 @@ namespace chesslib::objboard
 			_knight_jumps{ {Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty} }
 		{ }
 
-		Square _code;							// should be static constexpr
-		std::array<Square, 8> _neighbors;		// should be static constexpr
-		std::array<Square, 8> _knight_jumps;	// should be static constexpr
+		Square _code;							
+		std::array<Square, 8> _neighbors;		
+		std::array<Square, 8> _knight_jumps;
 		PieceObj* _piece;
 	};
 }

@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestApp", "TestApp\TestApp.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChessLibTests", "ChessLibTests\ChessLibTests.vcxproj", "{64C0CEDE-8500-4699-9F9A-134B403D5629}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Benchmark", "Benchmark\Benchmark.vcxproj", "{48404B56-F07B-4B8D-8A66-2B3A4D157F2A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -71,6 +73,14 @@ Global
 		{64C0CEDE-8500-4699-9F9A-134B403D5629}.Release|x64.Build.0 = Release|x64
 		{64C0CEDE-8500-4699-9F9A-134B403D5629}.Release|x86.ActiveCfg = Release|Win32
 		{64C0CEDE-8500-4699-9F9A-134B403D5629}.Release|x86.Build.0 = Release|Win32
+		{48404B56-F07B-4B8D-8A66-2B3A4D157F2A}.Debug|x64.ActiveCfg = Debug|x64
+		{48404B56-F07B-4B8D-8A66-2B3A4D157F2A}.Debug|x64.Build.0 = Debug|x64
+		{48404B56-F07B-4B8D-8A66-2B3A4D157F2A}.Debug|x86.ActiveCfg = Debug|Win32
+		{48404B56-F07B-4B8D-8A66-2B3A4D157F2A}.Debug|x86.Build.0 = Debug|Win32
+		{48404B56-F07B-4B8D-8A66-2B3A4D157F2A}.Release|x64.ActiveCfg = Release|x64
+		{48404B56-F07B-4B8D-8A66-2B3A4D157F2A}.Release|x64.Build.0 = Release|x64
+		{48404B56-F07B-4B8D-8A66-2B3A4D157F2A}.Release|x86.ActiveCfg = Release|Win32
+		{48404B56-F07B-4B8D-8A66-2B3A4D157F2A}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

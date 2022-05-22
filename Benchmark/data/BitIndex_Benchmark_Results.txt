@@ -1,0 +1,109 @@
+Debug Mode - No optimization - Visual Studio 2022 - C++20 - iteration 1000
+
+get_bit_index_std_log2:
+Min   : 2900 nanoseconds
+Max   : 31399 nanoseconds
+Mean  : 3829.2 nanoseconds
+Median: 3200 nanoseconds
+********************************************
+get_bit_index_shift_left:
+Min   : 1900 nanoseconds
+Max   : 72600 nanoseconds
+Mean  : 4088 nanoseconds
+Median: 4400 nanoseconds
+********************************************
+get_bit_index_unordered_map:
+Min   : 6900 nanoseconds
+Max   : 142500 nanoseconds
+Mean  : 9496 nanoseconds
+Median: 7000 nanoseconds
+********************************************
+get_bit_index_debrujin:
+Min   : 300 nanoseconds
+Max   : 7500 nanoseconds
+Mean  : 464.5 nanoseconds
+Median: 400 nanoseconds
+********************************************
+
+Release Mode - No optimization - Visual Studio 2022 - C++20 - iteration 1000
+
+get_bit_index_std_log2:
+Min   : 2000 nanoseconds
+Max   : 66600 nanoseconds
+Mean  : 2581.8 nanoseconds
+Median: 17700 nanoseconds
+********************************************
+get_bit_index_shift_left:
+Min   : 1800 nanoseconds
+Max   : 336400 nanoseconds
+Mean  : 4243.9 nanoseconds
+Median: 3800 nanoseconds
+********************************************
+get_bit_index_unordered_map:
+Min   : 3500 nanoseconds
+Max   : 76000 nanoseconds
+Mean  : 5869.1 nanoseconds
+Median: 6200 nanoseconds
+********************************************
+get_bit_index_debrujin:
+Min   : 200 nanoseconds
+Max   : 16900 nanoseconds
+Mean  : 359.1 nanoseconds
+Median: 300 nanoseconds
+********************************************
+
+Debug Mode - O2 (Favor speed) - Visual Studio 2022 - C++20 - iteration 1000
+
+get_bit_index_std_log2:
+Min   : 700 nanoseconds
+Max   : 27500 nanoseconds
+Mean  : 916.4 nanoseconds
+Median: 800 nanoseconds
+********************************************
+get_bit_index_shift_left:
+Min   : 1400 nanoseconds
+Max   : 48200 nanoseconds
+Mean  : 2003 nanoseconds
+Median: 2300 nanoseconds
+********************************************
+get_bit_index_unordered_map:
+Min   : 1600 nanoseconds
+Max   : 43900 nanoseconds
+Mean  : 2396.2 nanoseconds
+Median: 2200 nanoseconds
+********************************************
+get_bit_index_debrujin:
+Min   : 100 nanoseconds
+Max   : 32199 nanoseconds
+Mean  : 268.099 nanoseconds
+Median: 200 nanoseconds
+********************************************
+
+Debug Mode - O1 (Favor size) - Visual Studio 2022 - C++20 - iteration 1000
+
+get_bit_index_std_log2:
+Min   : 700 nanoseconds
+Max   : 27300 nanoseconds
+Mean  : 924.1 nanoseconds
+Median: 800 nanoseconds
+********************************************
+get_bit_index_shift_left:
+Min   : 1300 nanoseconds
+Max   : 58000 nanoseconds
+Mean  : 2002 nanoseconds
+Median: 1600 nanoseconds
+********************************************
+get_bit_index_unordered_map:
+Min   : 1500 nanoseconds
+Max   : 8300 nanoseconds
+Mean  : 1804.5 nanoseconds
+Median: 1600 nanoseconds
+********************************************
+get_bit_index_debrujin:
+Min   : 100 nanoseconds
+Max   : 3400 nanoseconds
+Mean  : 191.4 nanoseconds
+Median: 200 nanoseconds
+********************************************
+
+

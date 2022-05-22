@@ -99,8 +99,8 @@ namespace chesslib::objboard
 
 		ObjBoard();
 
-		PieceMap _white_pieces;
-		PieceMap _black_pieces;
+		PieceMap   _white_pieces;
+		PieceMap   _black_pieces;
 		BoardArray _board;
 
 		friend BoardFactory;

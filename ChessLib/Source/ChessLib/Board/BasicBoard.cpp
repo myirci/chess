@@ -5,7 +5,6 @@ namespace chesslib
 {
 
 	/*
-
 	template<Color Clr>
 	void BasicBoard::GenerateMovesImplementation(MoveList& moves) const
 	{

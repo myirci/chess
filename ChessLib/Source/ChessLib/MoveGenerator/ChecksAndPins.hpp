@@ -1,8 +1,6 @@
 #pragma once
 
 #include <ChessLib/Chess/Definitions.hpp>
-#include <ChessLib/Chess/TypeTraits.hpp>
-#include <ChessLib/Chess/ChessUtility.hpp>
 
 #include <unordered_map>
 
@@ -23,10 +21,7 @@ namespace chesslib
 		// 2: distance from king location to attacker (dist >= 1, number of moves for king to reach the attacker)
 		using Checks = std::vector<std::tuple<Square, Direction, Distance>>;
 
-		bool IsPinned(Square piece_loc) const noexcept
-		{
-			return _pins.find(piece_loc) != _pins.end();
-		}
+		bool IsPinned(Square piece_loc) const noexcept { return _pins.contains(piece_loc); }
 
 		Direction GetPinDirection(Square piece_loc) const noexcept
 		{

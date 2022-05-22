@@ -8,7 +8,6 @@
 #include <ChessLib/Chess/Definitions.hpp>
 #include <ChessLib/MoveGenerator/PrecomputeMoves.hpp>
 #include <ChessLib/Chess/LightMove.hpp>
-#include <ChessLib/Chess/ChessUtility.hpp>
 
 #include <ChessLib/MoveGenerator/MoveConnectivity.hpp>
 

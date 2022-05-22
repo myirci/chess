@@ -1,260 +1,211 @@
 Group-1
-# King moves
+# King moves, all moves are listed
 {
 	Test-1
-	All
 	8/8/4k3/8/4K3/8/8/8 w - - 0 1
 	e4-d4, e4-f4, e4-d3, e4-e3, e4-f3
 	
 	Test-2
-	All
 	8/8/4k3/8/4K3/8/8/8 b - - 0 1
 	e6-d6, e6-f6, e6-d7, e6-e7, e6-f7
 
 	Test-3
-	All
 	7k/8/8/8/8/8/8/K7 w - - 0 1
 	a1-a2, a1-b1, a1-b2
 
 	Test-4
-	All
 	7k/8/8/8/8/8/8/K7 b - - 0 1
 	h8-h7, h8-g8, h8-g7
 
 	Test-5
-	All
 	3rk3/8/8/4q3/7b/4K3/8/8 w - - 0 1
 	e3-f3
 
 	Test-6
-	All
 	4R3/8/3k4/R7/8/6B1/8/3K4 b - - 0 1
 	d6-c6, d6-d7
 
 	Test-7
-	All
 	8/8/8/8/2p1n3/6n1/8/2k1K3 w - - 0 1
 	-
 
 	Test-8
-	All
 	7Q/3k4/1P5R/8/1B2B3/8/8/4K3 b - - 0 1
 	-
 
 	Test-9
-	All
 	8/b7/4k3/8/3nKn2/8/8/8 w - - 0 1
 	e4-f4-cm, e4-e3
 }
 
 Group-2
-# Check eliminating moves
+# Check eliminating moves, only subset of all moves are listed
 {
 	Test-1
-	Subset
 	k7/8/q7/8/1N6/8/1P6/KR6 w - - 0 1
 	b4-a2, b4-a6-cm
 
 	Test-2
-	Subset
 	K7/8/Q7/8/1n6/8/1p6/kr6 b - - 0 1
 	b4-a2, b4-a6-cm
 
 	Test-3
-	Subset
 	k7/3r2Q1/2P5/5B2/8/8/3K4/8 w - - 0 1
 	c6-d7-cm, f5-d7-cm, g7-d7-cm, f5-d3, g7-d4
 
 	Test-4
-	Subset
 	K7/3R2q1/8/5b2/8/8/3k4/8 b - - 0 1
 	f5-d7-cm, g7-d7-cm, f5-d3, g7-d4
 
 	Test-5
-	Subset
 	7k/RR6/8/2n5/r5K1/1P6/5P2/8 w - - 0 1
 	b3-a4-cm, a7-a4-cm, b3-b4, b7-b4, f2-f4-dp
 
 	Test-6
-	Subset
 	4r3/8/3k1n2/3p1p2/4N2q/8/8/Kb6 b - - 0 1
 	b1-e4-cm, h4-e4-cm, f6-e4-cm, e8-e4-cm, f5-e4-cm, d5-e4-cm
 
 	Test-7
-	Subset
 	k7/8/8/3PpP2/3K4/8/8/8 w - e6 0 1
 	d5-e6-ep, f5-e6-ep, d4-e5-cm
 
 	Test-8
-	Subset
 	8/8/8/5k2/5pPp/8/8/K7 b - g3 0 1
 	f4-g3-ep, h4-g3-ep, f5-g4-cm
 
 	Test-9
-	Subset
 	k3B3/8/p7/1q3B2/P6R/N7/2PPK3/1R6 w - - 0 1
 	f5-d3, d2-d3, h4-c4, a3-c4, c2-c4-dp, b1-b5-cm, e8-b5-cm, a3-b5-cm, a4-b5-cm
 
 	Test-10
-	Subset
 	3K4/8/8/8/8/8/n2bp1p1/1k5R b - - 0 1
 	d2-c1, a2-c1, d2-e1, e2-e1-qp, e2-e1-rp, e2-e1-bp, e2-e1-np, g2-g1-qp, g2-g1-rp, g2-g1-bp, g2-g1-np, g2-h1-qpc, g2-h1-rpc, g2-h1-bpc, g2-h1-npc
 }
 
 Group-3
-# Random positions - All moves
+# Random positions - All moves are listed
 {
 	Test-1
-	All
 	3qk3/pp2pppb/b6n/2n2P2/2N5/r1PKB2r/P1PRN1PP/1q1r1b1R w - - 0 1
 	-
 	
 	Test-2
-	All
 	Q2R2Q1/1p1N1b2/2Ppp3/RPnk1pqR/2Pn4/1q1r1p2/B2R4/K6B b - - 0 1
 	d5-e4, d5-c4-cm, b3-c4-cm
 	
 	Test-3
-	All
 	4r3/q1k5/7b/8/3PPP2/r2NKN1r/3QRN2/2b1q1b1 w - - 0 1
 	d2-c1-cm, e2-e1-cm, e4-e5
 	
 	Test-4
-	All
 	1B1R4/3n4/2rkn3/2p1p3/3pN3/Q7/6K1/3R4 b - - 0 1
 	d6-d5, d6-e7
 	
 	Test-5
-	All
 	7k/q7/8/2Pp4/3K4/8/8/8 w - d6 0 1
 	d4-c3, d4-d3, d4-e3, d4-e5, d4-d5-cm
 	
 	Test-6
-	All
 	k7/8/8/8/3Pp3/8/8/4K2B b - d3 0 1
 	a8-a7, a8-b8, a8-b7
 	
 	Test-7
-	All
 	rnbqkb1r/pppppppp/8/8/4n3/3P4/PPPKPPPP/RNBQ1BNR w kq - 0 1
 	d2-e3, d2-e1, d3-e4-cm
 	
 	Test-8
-	All
 	1rrr1nk1/5ppb/8/2R5/4Q3/r7/2K1Q1r1/1r6 w - - 0 1
 	c5-c6, c5-c7, c5-c8-cm, c5-c4, c5-c3, e4-f5, e4-g6, e4-h7-cm, e4-d3, e2-f2, e2-g2-cm, e2-d2
 	
 	Test-9
-	All
 	rnb1kbnr/pp1ppppp/2p5/q7/8/3P4/PPPKPPPP/RNBQ1BNR w kq - 0 1
 	d2-e3, b1-c3, c2-c3, b2-b4-dp
 	
 	Test-10
-	All
 	rnbqkb1r/ppp1ppp1/3N1n1p/3p4/Q7/2P5/PP1PPPPP/R1B1KBNR b KQkq - 0 1
 	-
 	
 	Test-11
-	All
 	rnbqk2r/ppp1ppp1/3N1n1p/3p4/Q7/2P5/PP1PPPPP/R1B1KBNR b KQkq - 0 1
 	e8-f8
 }
 
 Group-4
-# Random positions - Move Subset
+# Random positions - Only subset of all moves are listed.
 {
 	Test-1
-	Subset
 	r3k2r/p3p3/8/8/1q6/8/P2P3P/R3K2R w KQkq - 0 1
-    e1-e2, e1-f1, e1-d1, e1-f2, e1-g1-ksc, e1,c1-qsc
+	e1-e2, e1-f1, e1-d1, e1-f2, e1-g1-ksc, e1,c1-qsc
 
 	Test-2
-	Subset
   	r3k2r/1P6/8/8/8/8/3n4/R3K2R b KQkq - 0 1
-    e8-f8, e8-e7, e8-d8, e8-f7, e8-d7, e8-g8-ksc
+	e8-f8, e8-e7, e8-d8, e8-f7, e8-d7, e8-g8-ksc
   
 	Test-3
-	Subset
 	r3k2r/1P6/8/8/8/8/3n4/R3K2R w KQkq - 0 1
-    e1-e2, e1-d1, e1-f2, e1-d2-cm, e1-c1-qsc
+	e1-e2, e1-d1, e1-f2, e1-d2-cm, e1-c1-qsc
 
-	Test-4
-	Subset  
+	Test-4  
 	rnb1kbnr/ppp1qppp/2pP1p2/8/1P1P2P1/2N2P2/PPP4R/R1BQKBN1 w Qkq - 0 1
-    h2-e2, f1-e2, d1-e2, g1-e2, c3-e2
+	h2-e2, f1-e2, d1-e2, g1-e2, c3-e2
 
-	Test-5
-	Subset  
+	Test-5  
 	3q4/4pk2/2p2n2/7r/8/8/B7/KN1r1R1b b - - 0 1
 	d8-d5, h5-d5, d1-d5, h1-d5
         
 	Test-6
-	Subset
 	2q3K1/1P6/1N6/8/2R5/7B/8/k7 w - - 0 1
 	c4-c8-cm, h3-c8-cm, b6-c8-cm, b7-c8-qpc, b7-c8-rpc, b7-c8-bpc, b7-c8-kpc
         
 	Test-7
-	Subset
 	2R4K/8/8/q7/7b/2bn4/4p3/2k4R b - - 0 1
 	h4-e1, d3-e1, e2-e1-qp, e2-e1-rp, e2-e1-bp, e2-e1-np
       
-	Test-8
-	Subset  
+	Test-8  
 	n3k2N/2R2R2/4p3/1n5P/5N2/1pp5/2p1K3/n6N w - - 0 1
-    h8-g6, f4-e6-cm, f4-g6, f4-h3, f4-g2, f4-d3, f4-d5, h1-g3, h1-f2
+    	h8-g6, f4-e6-cm, f4-g6, f4-h3, f4-g2, f4-d3, f4-d5, h1-g3, h1-f2
   
 	Test-9
-	Subset
 	n3k2N/2R2R2/4p3/1n5P/5N2/1pp5/2p1K3/n6N b - - 0 1
-    a8-c7-cm, a8-b6, b5-a7, b5-a3, b5-c7-cm, b5-d6, b5-d4
+    	a8-c7-cm, a8-b6, b5-a7, b5-a3, b5-c7-cm, b5-d6, b5-d4
 
-	Test-10
-	Subset  
+	Test-10  
 	6kB/1B3ppp/1n1P4/2qQ4/1Q3p2/PP2Pn2/R1PR1B2/nRK1N3 w - - 0 1
-    d5-e5, d5-f5, d5-g5, d5-h5, d5-d4, d5-d3, d5-c5-cm, d5-e6, d5-f7-cm, d5-e4, d5-f3-cm, d5-c4, d5-c6, b4-b5, b4-b6-cm, b4-c4, b4-d4, b4-e4, b4-f4-cm, b4-a4, b4-c5-cm, b4-c3, b4-a5, a2-b2, a2-a1-cm, d2-d3, d2-d4, d2-e2, d2-d1, b1-b2, b1-a1-cm, h8-g7-cm, b7-c8, b7-c6, b7-a6, b7-a8, f2-g3, f2-h4, f2-g1
+    	d5-e5, d5-f5, d5-g5, d5-h5, d5-d4, d5-d3, d5-c5-cm, d5-e6, d5-f7-cm, d5-e4, d5-f3-cm, d5-c4, d5-c6, b4-b5, b4-b6-cm, b4-c4, b4-d4, b4-e4, b4-f4-cm, b4-a4, b4-c5-cm, b4-c3, b4-a5, a2-b2, a2-a1-cm, d2-d3, d2-d4, d2-e2, d2-d1, b1-b2, b1-a1-cm, h8-g7-cm, b7-c8, b7-c6, b7-a6, b7-a8, f2-g3, f2-h4, f2-g1
 
-	Test-11
-	Subset  
+	Test-11  
 	brbrbbbb/bbrbpppp/kN2p3/1ppp4/2p5/8/8/4K3 b - - 0 1
-    c7-c6, a7-b6-cm, b7-c6, d7-c6
+    	c7-c6, a7-b6-cm, b7-c6, d7-c6
   
 	Test-12
-	Subset
 	4k3/8/8/1pP5/8/8/8/4K3 w - b6 0 1
 	c5-c6, c5-b6-ep
       
-	Test-13
-	Subset  
+	Test-13 
 	4k3/8/8/2Pp4/8/8/8/4K3 w - d6 0 1
 	c5-c6, c5-d6-ep
       
-	Test-14
-	Subset  
+	Test-14 
 	4k3/8/8/8/4pP2/8/8/4K3 b - f3 0 1
-    e4-e3, e4-f3-ep
+    	e4-e3, e4-f3-ep
   
 	Test-15
-	Subset
 	4k3/8/8/8/3Pp3/8/8/4K3 b - d3 0 1
-    e4-e3, e4-d3-ep
+    	e4-e3, e4-d3-ep
   
 	Test-16
-	Subset
 	7k/q7/8/1pP5/3K4/8/8/8 w - b6 0 1
 	c5-b6-ep
         
 	Test-17
-	Subset
 	8/7k/8/8/3Pp3/8/8/1B2K3 b - d3 0 1
 	e4-d3-ep
         
 	Test-18
-	Subset
 	1r1n1n2/P1P2P1P/4r3/2k4b/2b5/3PPP2/1P2K3/8 w - - 0 1
-    a7-a8-qp, a7-a8-np, a7-a8-bp, a7-a8-rp, a7-b8-qpc, a7-b8-kpc, a7-b8-bpc, a7-b8-rpc, c7-c8-qp, c7-c8-np, c7-c8-bp, c7-c8-rp, c7-d8-qpc, c7-d8-kpc, c7-d8-bpc, c7-d8-rpc, c7-b8-qpc, c7-b8-kpc, c7-b8-bpc, c7-b8-rpc, h7-h8-qp, h7-h8-np, h7-h8-bp, h7-h8-rp, d3-c4-cm, e3-e4, b2-b3, b2,b4-dp
+    	a7-a8-qp, a7-a8-np, a7-a8-bp, a7-a8-rp, a7-b8-qpc, a7-b8-kpc, a7-b8-bpc, a7-b8-rpc, c7-c8-qp, c7-c8-np, c7-c8-bp, c7-c8-rp, c7-d8-qpc, c7-d8-kpc, c7-d8-bpc, c7-d8-rpc, c7-b8-qpc, c7-b8-kpc, c7-b8-bpc, c7-b8-rpc, h7-h8-qp, h7-h8-np, h7-h8-bp, h7-h8-rp, d3-c4-cm, e3-e4, b2-b3, b2,b4-dp
 
-	Test-19
-	Subset  
+	Test-19  
 	2k5/2p5/8/4p3/3PPP2/8/pK1p4/NNQ1B1R1 b - - 0 1
 	c7-c6, c7-c5-dp, e5-d4-cm, e5-f4-cm, a2-b1-qpc, a2-b1-kpc, a2-b1-bpc, a2-b1-rpc, d2-d1-qp, d2-d1-np, d2-d1-bp, d2-d1-rp, d2-c1-qpc, d2-c1-kpc, d2-c1-bpc, d2-c1-rpc, d2-e1-qpc, d2-e1-kpc, d2-e1-bpc, d2-e1-rpc
 }
@@ -263,57 +214,46 @@ Group-5
 # Number of moves
 {
 	Test-1
-	NumMoves
 	8/8/1p6/p6q/PP6/2Qp4/6P1/k5K1 b - - 0 1
 	2
 
 	Test-2
-	NumMoves
 	3k4/8/2r5/2Pp4/2K5/8/8/8 w - d3 0 1
 	7
 
 	Test-3
-	NumMoves
 	8/2p5/3p4/KP5r/1R3pPk/8/4P3/8 b - g3 0 1
 	17
 
 	Test-4
-	NumMoves
 	8/2p5/3p4/KP4r1/5pPk/8/4P3/1R6 b - g3 0 1
 	18
 
 	Test-5
-	NumMoves
 	8/8/3p4/1Pp4r/1KR2pk1/8/4P1P1/8 w - c6 0 1
 	7
 
 	Test-6
-	NumMoves
 	8/2p5/3p4/KP3R1r/5p2/8/4PkP1/8 b - - 0 1
 	20
 
 	Test-7
-	NumMoves
 	8/2p5/3p4/KP4kr/5pP1/8/4P3/6R1 b - g3 0 1
 	16
 
 	Test-8
-	NumMoves
 	K7/8/8/8/1R2pP1k/8/8/8 b - f3 0 1
 	5
 
 	Test-9
-	NumMoves
 	K7/8/8/8/1R1pPp1k/8/8/8 b - e3 0 1
 	9
 
 	Test-10
-	NumMoves
 	n1r1r1b1/1P1P1P1P/1Q6/3NBNK1/R7/4p1p1/3PBPkP/2R5 w - - 0 1
 	144
 
 	Test-11
-	NumMoves
 	3Q4/1Q4Q1/4Q3/2Q4R/Q4Q2/3Q4/1Q4Rp/1KbBBNNk w - - 0 1
 	218
 }

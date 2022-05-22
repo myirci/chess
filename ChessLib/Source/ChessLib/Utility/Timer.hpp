@@ -6,8 +6,7 @@
 namespace chesslib::utility::time 
 {
 	using TimePoint		= std::chrono::time_point<std::chrono::steady_clock>;
-	using TimeDuration  = std::chrono::duration<double>;
-
+	
 	enum class CommandType { StartTimer, EndTimer, TagTimePoint };
 
 	struct TimerCommand

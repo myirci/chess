@@ -12,10 +12,22 @@ namespace chesslib::bitboard
 {
 	using Bitset = uint64_t;
 
-	constexpr Bitset GetMask(int i)
+	constexpr Bitset GetSquareMask(Square s)
 	{
 		uint64_t mask{ 1 };
-		return mask << i;
+		return mask << s;
+	}
+	
+	constexpr Bitset GetRankMask(Rank r) 
+	{
+		uint64_t mask{ 255 };
+		return mask << (r * 8);
+	}
+
+	constexpr Bitset GetFileMask(File f) 
+	{
+		uint64_t mask{ 0x0101010101010101 };
+		return mask << f;
 	}
 
 	class BitBoard : 
@@ -26,12 +38,38 @@ namespace chesslib::bitboard
 
 		static constexpr Index Pawn{ 0 }, Rook{ 1 }, Knight{ 2 }, Bishop{ 3 }, Queen{ 4 }, King{ 5 }, All { 6 };
 		
+		static constexpr Bitset SquareMask[BOARDSIZE]
+		{
+			GetSquareMask(a1), GetSquareMask(b1), GetSquareMask(c1), GetSquareMask(d1), GetSquareMask(e1), GetSquareMask(f1), GetSquareMask(g1), GetSquareMask(h1),
+			GetSquareMask(a2), GetSquareMask(b2), GetSquareMask(c2), GetSquareMask(d2), GetSquareMask(e2), GetSquareMask(f2), GetSquareMask(g2), GetSquareMask(h2),
+			GetSquareMask(a3), GetSquareMask(b3), GetSquareMask(c3), GetSquareMask(d3), GetSquareMask(e3), GetSquareMask(f3), GetSquareMask(g3), GetSquareMask(h3),
+			GetSquareMask(a4), GetSquareMask(b4), GetSquareMask(c4), GetSquareMask(d4), GetSquareMask(e4), GetSquareMask(f4), GetSquareMask(g4), GetSquareMask(h4),
+			GetSquareMask(a5), GetSquareMask(b5), GetSquareMask(c5), GetSquareMask(d5), GetSquareMask(e5), GetSquareMask(f5), GetSquareMask(g5), GetSquareMask(h5),
+			GetSquareMask(a6), GetSquareMask(b6), GetSquareMask(c6), GetSquareMask(d6), GetSquareMask(e6), GetSquareMask(f6), GetSquareMask(g6), GetSquareMask(h6),
+			GetSquareMask(a7), GetSquareMask(b7), GetSquareMask(c7), GetSquareMask(d7), GetSquareMask(e7), GetSquareMask(f7), GetSquareMask(g7), GetSquareMask(h7),
+			GetSquareMask(a8), GetSquareMask(b8), GetSquareMask(c8), GetSquareMask(d8), GetSquareMask(e8), GetSquareMask(f8), GetSquareMask(g8), GetSquareMask(h8)
+		};
+
+		static constexpr Bitset RankMask[8]
+		{
+			GetRankMask(Rank1), GetRankMask(Rank2), GetRankMask(Rank3), GetRankMask(Rank4),
+			GetRankMask(Rank5), GetRankMask(Rank6), GetRankMask(Rank7), GetRankMask(Rank8)
+		};
+
+		static constexpr Bitset FileMask[8]
+		{
+			GetFileMask(FileA), GetFileMask(FileB), GetFileMask(FileC), GetFileMask(FileD),
+			GetFileMask(FileE), GetFileMask(FileF), GetFileMask(FileG), GetFileMask(FileH)
+		};
+
 		const std::array<Bitset, 7>& GetWhitePieceSet() const noexcept { return _white_pieces; }
 		const std::array<Bitset, 7>& GetBlackPieceSet() const noexcept { return _black_pieces; }
 
 		void Clear();
 
 		Piece GetPiece(Square s) const;
+
+		static Square GetSquareFromMask(Bitset mask) { return BottomToTopOrder[(std::size_t)std::log2(mask)]; }
 
 		template <Color PieceColor>
 		void PutPiece(Piece p, Square s)
@@ -40,13 +78,13 @@ namespace chesslib::bitboard
 
 			if constexpr (PieceColor == color::White)
 			{
-				_white_pieces[All] |= BitMask[s];
-				_white_pieces[idx] |= BitMask[s];
+				_white_pieces[All] |= SquareMask[s];
+				_white_pieces[idx] |= SquareMask[s];
 			}
 			else
 			{
-				_black_pieces[All] |= BitMask[s];
-				_black_pieces[idx] |= BitMask[s];
+				_black_pieces[All] |= SquareMask[s];
+				_black_pieces[idx] |= SquareMask[s];
 			}
 		}
 
@@ -57,13 +95,13 @@ namespace chesslib::bitboard
 
 			if constexpr (PieceColor == color::White)
 			{
-				_white_pieces[All] &= ~BitMask[s];
-				_white_pieces[idx] &= ~BitMask[s];
+				_white_pieces[All] &= ~SquareMask[s];
+				_white_pieces[idx] &= ~SquareMask[s];
 			}
 			else 
 			{
-				_black_pieces[All] &= ~BitMask[s];
-				_black_pieces[idx] &= ~BitMask[s];
+				_black_pieces[All] &= ~SquareMask[s];
+				_black_pieces[idx] &= ~SquareMask[s];
 			}
 		}
 
@@ -74,20 +112,18 @@ namespace chesslib::bitboard
 			PutPiece<PieceColor>(p, to);
 		}
 
+		template <Color PieceColor>
+		Square GetKingPosition() const
+		{
+			if constexpr (PieceColor == color::White)
+				return GetSquareFromMask(_white_pieces[King]);
+			else
+				return GetSquareFromMask(_black_pieces[King]);
+		}
+
 	protected:
 
-		static constexpr Bitset BitMask[BOARDSIZE]
-		{
-			GetMask(a1), GetMask(b1), GetMask(c1), GetMask(d1), GetMask(e1), GetMask(f1), GetMask(g1), GetMask(h1),
-			GetMask(a2), GetMask(b2), GetMask(c2), GetMask(d2), GetMask(e2), GetMask(f2), GetMask(g2), GetMask(h2),
-			GetMask(a3), GetMask(b3), GetMask(c3), GetMask(d3), GetMask(e3), GetMask(f3), GetMask(g3), GetMask(h3),
-			GetMask(a4), GetMask(b4), GetMask(c4), GetMask(d4), GetMask(e4), GetMask(f4), GetMask(g4), GetMask(h4),
-			GetMask(a5), GetMask(b5), GetMask(c5), GetMask(d5), GetMask(e5), GetMask(f5), GetMask(g5), GetMask(h5),
-			GetMask(a6), GetMask(b6), GetMask(c6), GetMask(d6), GetMask(e6), GetMask(f6), GetMask(g6), GetMask(h6),
-			GetMask(a7), GetMask(b7), GetMask(c7), GetMask(d7), GetMask(e7), GetMask(f7), GetMask(g7), GetMask(h7),
-			GetMask(a8), GetMask(b8), GetMask(c8), GetMask(d8), GetMask(e8), GetMask(f8), GetMask(g8), GetMask(h8)
-		};
-
+		
 		std::array<Bitset, 7> _white_pieces;
 		std::array<Bitset, 7> _black_pieces;
 

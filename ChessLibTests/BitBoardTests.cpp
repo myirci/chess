@@ -30,6 +30,16 @@ protected:
     };
 };
 
+TEST_F(BitBoardTests, square_from_bitmask) 
+{
+    for (int i = 0; i < BitBoard::BOARDSIZE; i++) 
+    {
+        Bitset mask = BitBoard::SquareMask[BitBoard::BottomToTopOrder[i]];
+        auto hash = (std::size_t)std::log2(mask);
+        EXPECT_EQ(BitBoard::BottomToTopOrder[hash], BitBoard::BottomToTopOrder[i]);
+    }
+}
+
 TEST_F(BitBoardTests, set_board_starting_pos)
 {
     auto b = BoardFactory::make_unique_board<BitBoard>(Fen::StartingPosition);

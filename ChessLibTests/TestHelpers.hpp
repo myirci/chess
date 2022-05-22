@@ -74,6 +74,22 @@ public:
         return chesslib::Move(from, to, mType);
     }
 
+    template<typename BoardType>
+    static std::vector<chesslib::Move> GetMoves(std::string_view moveStr) 
+    {
+        std::vector<chesslib::Move> moves;
+
+        std::string str{ moveStr };
+        str.erase(std::remove_if(str.begin(), str.end(), [](char x) { return std::isspace(x); }), str.end());
+
+        std::stringstream ss(str);
+        std::string mv;
+        while (std::getline(ss, mv, ','))
+            moves.push_back(GetMove<BoardType>(mv));
+
+        return moves;
+    }
+
     static chesslib::MoveType GetMoveType(std::string_view mt) 
     {
         if (mt == "cm")

@@ -45,6 +45,9 @@ namespace chesslib
 			a8, b8, c8, d8, e8, f8, g8, h8
 		};
 
+		static constexpr Rank Rank1{ 0 }, Rank2{ 1 }, Rank3{ 2 }, Rank4{ 3 }, Rank5{ 4 }, Rank6{ 5 }, Rank7{ 6 }, Rank8{ 7 };
+		static constexpr File FileA{ 0 }, FileB{ 1 }, FileC{ 2 }, FileD{ 3 }, FileE{ 4 }, FileF{ 5 }, FileG{ 6 }, FileH{ 7 };
+
 		static constexpr Direction N{ 8 }, S{ -8 }, E{ 1 }, W{ -1 }, NE{ 9 }, SW{ -9 }, NW{ 7 }, SE{ -7 };
 
 		static constexpr std::array<Direction, 8> AllDirections{ N, NE, E, SE, S, SW, W, NW };
