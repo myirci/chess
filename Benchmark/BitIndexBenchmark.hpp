@@ -15,8 +15,7 @@ namespace bit_index_benchmark
     inline int get_bit_index_std_log2(uint64_t);
     inline int get_bit_index_shift_left(uint64_t);
     inline int get_bit_index_unordered_map(uint64_t);
-    inline int get_bit_index_debruijn_msb(uint64_t);
-    inline int get_bit_index_debruijn_lsb(uint64_t);
+    inline int get_bit_index_debruijn(uint64_t);
  
     bool test();
     double single_pass(int (*func)(uint64_t), BenchmarkTimer&);

@@ -1,0 +1,8 @@
+// Hint files help the Visual Studio IDE interpret Visual C++ identifiers
+// such as names of functions and macros.
+// For more information see https://go.microsoft.com/fwlink/?linkid=865984
+#define A(n) {exp2(n), n}
+#define A(n) GetSquareMask(n)
+#define B(n) GetNum(n)
+#define B(n) GetRankMask(n)
+#define C(n) GetFileMask(n)

@@ -27,29 +27,14 @@ namespace bit_index_benchmark
         B(48), B(49), B(50), B(51), B(52), B(53), B(54), B(55), B(56), B(57), B(58), B(59), B(60), B(61), B(62), B(63)
     };
 
-    static constexpr uint64_t debruijn_seq = 0x03f6eaf2cd271461;
+    static constexpr uint64_t debruijn_seq = 0x218A392CD3D5DBF;
 
-    static constexpr int debruijn_table_msb[64] =
+    // for bitpos 0 : 63
+    // debruijn_table [(debrujinSeq << bitpos) >> 58] = bitpos;
+    static constexpr int debruijn_table[64] = 
     {
-        0, 58, 1, 59, 47, 53, 2, 60, 39, 48, 27, 54, 33, 42, 3, 61,
-        51, 37, 40, 49, 18, 28, 20, 55, 30, 34, 11, 43, 14, 22, 4, 62,
-        57, 46, 52, 38, 26, 32, 41, 50, 36, 17, 19, 29, 10, 13, 21, 56,
-        45, 25, 31, 35, 16, 9, 12, 44, 24, 15, 8, 23, 7, 6, 5, 63
-    };
-
-    static constexpr int GetDebruijnIndex(uint64_t debrujinSeq, int bitpos)
-    {
-        // index of the table for value i, i.e. debruijn_table_lsb[(debrujinSeq << bitpos) >> 58] = bitpos;
-        return static_cast<int>((debrujinSeq << bitpos) >> 58);
-    }
-
-    #define C(n) GetDebruijnIndex(debruijn_seq, n)
-    static constexpr int debruijn_table_lsb[64] = 
-    {
-        C(0), C(1), C(2), C(3), C(4), C(5), C(6), C(7), C(8), C(9), C(10), C(11), C(12), C(13), C(14), C(15),
-        C(16), C(17), C(18), C(19), C(20), C(21), C(22), C(23), C(24), C(25), C(26), C(27), C(28), C(29), C(30), C(31),
-        C(32), C(33), C(34), C(35), C(36), C(37), C(38), C(39), C(40), C(41), C(42), C(43), C(44), C(45), C(46), C(47),
-        C(48), C(49), C(50), C(51), C(52), C(53), C(54), C(55), C(56), C(57), C(58), C(59), C(60), C(61),  C(62), C(63)
+        0, 1, 2, 7, 3, 13, 8, 19, 4, 25, 14, 28, 9, 34, 20, 40, 5, 17, 26, 38, 15, 46, 29, 48, 10, 31, 35, 54, 21, 50, 41, 57,
+        63, 6, 12, 18, 24, 27, 33, 39, 16, 37, 45, 47, 30, 53, 49, 56, 62, 11, 23, 32, 36, 44, 52, 55, 61, 22, 43, 51, 60, 42, 59, 58
     };
 
     #define A(n) {exp2(n), n} 
@@ -79,24 +64,9 @@ namespace bit_index_benchmark
         return idxMap.at(num);
     }
 
-    int get_bit_index_debruijn_msb(uint64_t num)
+    int get_bit_index_debruijn(uint64_t num)
     {
-        num |= num >> 1;
-        num |= num >> 2;
-        num |= num >> 4;
-        num |= num >> 8;
-        num |= num >> 16;
-        num |= num >> 32;
-        
-        return debruijn_table_msb[(num * debruijn_seq) >> 58];
-    }
-
-    int get_bit_index_debruijn_lsb(uint64_t num)
-    {
-        auto x = num * debruijn_seq;
-        x >>= 58;
-
-        return debruijn_table_lsb[x];
+        return debruijn_table[(debruijn_seq * num) >> 58];
     }
 
     bool test() 
@@ -114,11 +84,8 @@ namespace bit_index_benchmark
             auto idx3 = get_bit_index_unordered_map(test_input[i]);
             pass = pass && (idx3 == i);
 
-            auto idx4 = get_bit_index_debruijn_msb(test_input[i]);
+            auto idx4 = get_bit_index_debruijn(test_input[i]);
             pass = pass && (idx4 == i);
-
-            auto idx5 = get_bit_index_debruijn_lsb(test_input[i]);
-            pass = pass && (idx5 == i);
 
             if (!pass)
                 return false;
@@ -168,14 +135,8 @@ namespace bit_index_benchmark
         std::fill(times.begin(), times.end(), 0.0);
 
         for (int i = 0; i < repeat; i++)
-            times[i] = single_pass(&get_bit_index_debruijn_msb, timer);
-        print_stats(times, "get_bit_index_debruijn_msb", unit);
-        std::cout << "********************************************" << std::endl;
-        std::fill(times.begin(), times.end(), 0.0);
-
-        for (int i = 0; i < repeat; i++)
-            times[i] = single_pass(&get_bit_index_debruijn_lsb, timer);
-        print_stats(times, "get_bit_index_debruijn_lsb", unit);
+            times[i] = single_pass(&get_bit_index_debruijn, timer);
+        print_stats(times, "get_bit_index_debruijn", unit);
         std::cout << "********************************************" << std::endl;
         std::fill(times.begin(), times.end(), 0.0);
     }

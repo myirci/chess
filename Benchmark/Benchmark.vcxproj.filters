@@ -21,7 +21,7 @@
     <ClCompile Include="BitIndexBenchmark.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BenchmarkTimer.cpp">
+    <ClCompile Include="PinnedPieceLookupBenchmark.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -33,6 +33,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Statistics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PinnedPieceLookupBenchmark.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

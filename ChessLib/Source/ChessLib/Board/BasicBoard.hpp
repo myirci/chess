@@ -22,13 +22,13 @@ namespace chesslib
 		public ChessBoard,
 		public PieceCentricBoardBase
 	{
-	public:
+	public: 
 
 		using BoardArray = std::array<Square, BOARDSIZE>;
 
 		static constexpr bool IsInside(Square curr, Square next) noexcept
 		{
-			return next < BOARDSIZE&& next >= 0 && std::abs(GetFile(next) - GetFile(curr)) <= 2;
+			return next < BOARDSIZE && next >= 0 && std::abs(GetFile(next) - GetFile(curr)) <= 2;
 		}
 
 		const BoardArray& GetBoard() const noexcept { return _board; }

@@ -84,9 +84,9 @@ public:
 
         std::stringstream ss(str);
         std::string mv;
-        while (std::getline(ss, mv, ','))
-            moves.push_back(GetMove<BoardType>(mv));
-
+        while (std::getline(ss, mv, ',')) 
+            if(mv != "-")
+                moves.push_back(GetMove<BoardType>(mv));
         return moves;
     }
 

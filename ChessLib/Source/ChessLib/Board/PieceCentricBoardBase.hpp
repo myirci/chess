@@ -17,6 +17,34 @@ namespace chesslib
 		const PieceMap& GetBlackPieces() const noexcept { return _black_pieces; }
 		PieceMap&		GetBlackPieces() noexcept	    { return _black_pieces; }
 
+		template <Color PieceColor>
+		Square GetKingPosition() const
+		{
+			if constexpr (PieceColor == color::White)
+			{
+				auto it = _white_pieces.find(pieceset::WhiteKing);
+				if (it == _white_pieces.end())
+					throw std::logic_error("White king could not be found");
+				return it->second;
+			}
+			else
+			{
+				auto it = _black_pieces.find(pieceset::BlackKing);
+				if (it == _black_pieces.end())
+					throw std::logic_error("Black king could not be found");
+				return it->second;
+			}
+		}
+
+		template <Color PieceColor>
+		EqualPieceRange GetPiecePositions(Piece p) const
+		{
+			if constexpr (PieceColor == color::White)
+				return _white_pieces.equal_range(p);
+			else
+				return _black_pieces.equal_range(p);
+		}
+
 	protected:
 
 		PieceCentricBoardBase() noexcept : BoardBase() { }
@@ -76,34 +104,6 @@ namespace chesslib
 			}
 
 			throw std::logic_error("Piece could not be found in the given position.");
-		}
-
-		template <Color PieceColor>
-		Square GetKingPosition() const
-		{
-			if constexpr (PieceColor == color::White)
-			{
-				auto it = _white_pieces.find(pieceset::WhiteKing);
-				if (it == _white_pieces.end())
-					throw std::logic_error("White king could not be found");
-				return it->second;
-			}
-			else
-			{
-				auto it = _black_pieces.find(pieceset::BlackKing);
-				if (it == _black_pieces.end())
-					throw std::logic_error("Black king could not be found");
-				return it->second;
-			}
-		}
-
-		template <Color PieceColor>
-		EqualPieceRange GetPiecePositions(Piece p) const
-		{
-			if constexpr (PieceColor == color::White)
-				return _white_pieces.equal_range(p);
-			else
-				return _black_pieces.equal_range(p);
 		}
 	};
 }

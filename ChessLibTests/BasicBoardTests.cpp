@@ -36,7 +36,7 @@ protected:
     }
 };
 
-TEST_F(BasicBoardTests, SquareFileRank)
+TEST_F(BasicBoardTests, square_file_rank)
 {
     Square i{ 0 };
     for (Rank rk = 0; rk < 8; rk++)
@@ -53,7 +53,7 @@ TEST_F(BasicBoardTests, SquareFileRank)
     }
 }
 
-TEST_F(BasicBoardTests, SquareFromChars)
+TEST_F(BasicBoardTests, square_from_char)
 {
     char f{ 'a' }, r{ '1' };
     for (int i = 0; i < 8; i++)
@@ -150,30 +150,8 @@ TEST_F(BasicBoardTests, make_unmake_moves)
         EXPECT_EQ(fen1, board_to_fen(*b));
     }
 }
-//TEST_F(BasicBoardTests, move_generator_king_moves)
-//{
-//    auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
-//    auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-1");
-//
-//    EXPECT_TRUE(lines.size() != 0 && lines.size() % 3 == 0);
-//
-//    for (auto i{ 0 }; i < lines.size(); i += 3)
-//    {
-//        auto b = BoardFactory::make_unique_board<BasicBoard>(lines[(size_t)(i + 1)]);
-//        auto expectedMoves = TestHelpers::GetMoves<BasicBoard>(lines[(size_t)(i + 2)]);
-//    }
-//}
 
 /*
-TEST_F(BasicBoardTests, move_generation_king_only_moves)
-{
-    for (auto i{0}; i < move_generator_king_move_fens.size(); i++)
-    {
-        auto b = basic_board::make_unique_board(move_generator_king_move_fens[i]);
-        auto moves = b->GenerateMoves();
-        EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expected_king_moves[i].begin()));
-    }
-}
 
 TEST_F(BasicBoardTests, move_generation_check_eliminating_moves)
 {

@@ -2,11 +2,13 @@
 
 #include <string>
 #include <sstream>
+#include <type_traits>
 
 #include <ChessLib/Chess/Fen.hpp>
 #include <ChessLib/Chess/Move.hpp>
 #include <ChessLib/Chess/ColorTraits.hpp>
 #include <ChessLib/Chess/BoardColorTraits.hpp>
+#include <ChessLib/Board/BasicBoard.hpp>
 
 namespace chesslib
 {
@@ -329,5 +331,14 @@ namespace chesslib
 		for (first++; first != last; first++) 
 			ss << ", " << to_string<BoardType>(first->move);
 		return ss.str();
+	}
+
+	template<typename BoardType>
+	inline bool IsInside(Square to, Square from = Empty)
+	{
+		if constexpr (std::is_same_v<BoardType, BasicBoard>)
+			return BasicBoard::IsInside(from, to);
+		else
+			return typename BoardType::IsInside(to);
 	}
 }

@@ -12,6 +12,20 @@ namespace chesslib::bitboard
 {
 	using Bitset = uint64_t;
 
+	inline constexpr uint64_t debruijn_seq = 0x218A392CD3D5DBF;
+
+	// for bitpos 0 : 63
+	// debruijn_index_table [(debrujin_seq << bitpos) >> 58] = bitpos;
+	inline constexpr Index debruijn_index_table[64] =
+	{
+		0,  1,   2,  7,  3, 13,  8, 19,  4, 25, 14, 28,  9, 34, 20, 40,
+		5,  17, 26, 38, 15, 46, 29, 48, 10, 31, 35, 54, 21, 50, 41, 57,
+		63, 6,  12, 18, 24, 27, 33, 39, 16, 37, 45, 47, 30, 53, 49, 56,
+		62, 11, 23, 32, 36, 44, 52, 55, 61, 22, 43, 51, 60, 42, 59, 58
+	};
+
+	constexpr Square GetSquareFromBitSet(Bitset b) { return debruijn_index_table[(b * debruijn_seq) >> 58]; }
+
 	constexpr Bitset GetSquareMask(Square s)
 	{
 		uint64_t mask{ 1 };
@@ -38,29 +52,14 @@ namespace chesslib::bitboard
 
 		static constexpr Index Pawn{ 0 }, Rook{ 1 }, Knight{ 2 }, Bishop{ 3 }, Queen{ 4 }, King{ 5 }, All { 6 };
 		
-		static constexpr Bitset SquareMask[BOARDSIZE]
-		{
-			GetSquareMask(a1), GetSquareMask(b1), GetSquareMask(c1), GetSquareMask(d1), GetSquareMask(e1), GetSquareMask(f1), GetSquareMask(g1), GetSquareMask(h1),
-			GetSquareMask(a2), GetSquareMask(b2), GetSquareMask(c2), GetSquareMask(d2), GetSquareMask(e2), GetSquareMask(f2), GetSquareMask(g2), GetSquareMask(h2),
-			GetSquareMask(a3), GetSquareMask(b3), GetSquareMask(c3), GetSquareMask(d3), GetSquareMask(e3), GetSquareMask(f3), GetSquareMask(g3), GetSquareMask(h3),
-			GetSquareMask(a4), GetSquareMask(b4), GetSquareMask(c4), GetSquareMask(d4), GetSquareMask(e4), GetSquareMask(f4), GetSquareMask(g4), GetSquareMask(h4),
-			GetSquareMask(a5), GetSquareMask(b5), GetSquareMask(c5), GetSquareMask(d5), GetSquareMask(e5), GetSquareMask(f5), GetSquareMask(g5), GetSquareMask(h5),
-			GetSquareMask(a6), GetSquareMask(b6), GetSquareMask(c6), GetSquareMask(d6), GetSquareMask(e6), GetSquareMask(f6), GetSquareMask(g6), GetSquareMask(h6),
-			GetSquareMask(a7), GetSquareMask(b7), GetSquareMask(c7), GetSquareMask(d7), GetSquareMask(e7), GetSquareMask(f7), GetSquareMask(g7), GetSquareMask(h7),
-			GetSquareMask(a8), GetSquareMask(b8), GetSquareMask(c8), GetSquareMask(d8), GetSquareMask(e8), GetSquareMask(f8), GetSquareMask(g8), GetSquareMask(h8)
-		};
+		#define	A(n) GetSquareMask(n), GetSquareMask(n+1), GetSquareMask(n+2), GetSquareMask(n+3), GetSquareMask(n+4), GetSquareMask(n+5), GetSquareMask(n+6), GetSquareMask(n+7)
+		static constexpr Bitset SquareMask[BOARDSIZE] { A(a1), A(a2), A(a3), A(a4), A(a5), A(a6), A(a7), A(a8) };
 
-		static constexpr Bitset RankMask[8]
-		{
-			GetRankMask(Rank1), GetRankMask(Rank2), GetRankMask(Rank3), GetRankMask(Rank4),
-			GetRankMask(Rank5), GetRankMask(Rank6), GetRankMask(Rank7), GetRankMask(Rank8)
-		};
+		#define B(n) GetRankMask(n)
+		static constexpr Bitset RankMask[8] { B(Rank1), B(Rank2), B(Rank3), B(Rank4), B(Rank5), B(Rank6), B(Rank7), B(Rank8) };
 
-		static constexpr Bitset FileMask[8]
-		{
-			GetFileMask(FileA), GetFileMask(FileB), GetFileMask(FileC), GetFileMask(FileD),
-			GetFileMask(FileE), GetFileMask(FileF), GetFileMask(FileG), GetFileMask(FileH)
-		};
+		#define C(n) GetFileMask(n)
+		static constexpr Bitset FileMask[8] { C(FileA), C(FileB), C(FileC), C(FileD), C(FileE), C(FileF), C(FileG), C(FileH) };
 
 		const std::array<Bitset, 7>& GetWhitePieceSet() const noexcept { return _white_pieces; }
 		const std::array<Bitset, 7>& GetBlackPieceSet() const noexcept { return _black_pieces; }
@@ -68,8 +67,6 @@ namespace chesslib::bitboard
 		void Clear();
 
 		Piece GetPiece(Square s) const;
-
-		static Square GetSquareFromMask(Bitset mask) { return BottomToTopOrder[(std::size_t)std::log2(mask)]; }
 
 		template <Color PieceColor>
 		void PutPiece(Piece p, Square s)
@@ -116,14 +113,13 @@ namespace chesslib::bitboard
 		Square GetKingPosition() const
 		{
 			if constexpr (PieceColor == color::White)
-				return GetSquareFromMask(_white_pieces[King]);
+				return GetSquareFromBitSet(_white_pieces[King]);
 			else
-				return GetSquareFromMask(_black_pieces[King]);
+				return GetSquareFromBitSet(_black_pieces[King]);
 		}
 
 	protected:
 
-		
 		std::array<Bitset, 7> _white_pieces;
 		std::array<Bitset, 7> _black_pieces;
 

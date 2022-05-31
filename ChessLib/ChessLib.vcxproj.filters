@@ -48,12 +48,6 @@
     <ClCompile Include="Source\ChessLib\MoveGenerator\MoveConnectivity.cpp">
       <Filter>MoveGenerator</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ChessLib\Board\BasicBoard.cpp">
-      <Filter>Board\BasicBoard</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ChessLib\Board\x88Board.cpp">
-      <Filter>Board\X88Board</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ChessLib\Board\BitBoard.cpp">
       <Filter>Board\BitBoard</Filter>
     </ClCompile>
@@ -71,6 +65,9 @@
     </ClCompile>
     <ClCompile Include="Source\ChessLib\Chess\Fen.cpp">
       <Filter>Chess\Fen</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ChessLib\Utility\CommandLineExecutor.cpp">
+      <Filter>Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -101,7 +98,7 @@
     <ClInclude Include="Source\ChessLib\MoveGenerator\BoardConnecivity.hpp">
       <Filter>MoveGenerator</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ChessLib\MoveGenerator\ChecksAndPins.hpp">
+    <ClInclude Include="Source\ChessLib\MoveGenerator\AttackDetector.hpp">
       <Filter>MoveGenerator</Filter>
     </ClInclude>
     <ClInclude Include="Source\ChessLib\MoveGenerator\MoveGenerator.hpp">
@@ -152,5 +149,11 @@
     <ClInclude Include="Source\ChessLib\Chess\Fen.hpp">
       <Filter>Chess\Fen</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ChessLib\Utility\CommandLineExecutor.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>
