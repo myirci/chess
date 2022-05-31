@@ -22,12 +22,6 @@
     <Filter Include="Board\BitBoard">
       <UniqueIdentifier>{617835eb-ccac-4261-9ae4-c0b496f0f126}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Board\BasicBoard">
-      <UniqueIdentifier>{b5acf601-0f88-4711-b41e-bbd6b9e3a145}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Board\X88Board">
-      <UniqueIdentifier>{ed4dd18e-b3c8-4e65-af2b-aa184db79eef}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MoveGenerator">
       <UniqueIdentifier>{5ca2657c-c692-4f41-b056-c7599636fe45}</UniqueIdentifier>
     </Filter>
@@ -104,14 +98,8 @@
     <ClInclude Include="Source\ChessLib\MoveGenerator\MoveGenerator.hpp">
       <Filter>MoveGenerator</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ChessLib\Board\BasicBoard.hpp">
-      <Filter>Board\BasicBoard</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ChessLib\Board\BoardBase.hpp">
       <Filter>Board</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ChessLib\Board\x88Board.hpp">
-      <Filter>Board\X88Board</Filter>
     </ClInclude>
     <ClInclude Include="Source\ChessLib\Board\BitBoard.hpp">
       <Filter>Board\BitBoard</Filter>
@@ -151,6 +139,12 @@
     </ClInclude>
     <ClInclude Include="Source\ChessLib\Utility\CommandLineExecutor.h">
       <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Board\x88Board.hpp">
+      <Filter>Board</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\Board\BasicBoard.hpp">
+      <Filter>Board</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
