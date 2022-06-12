@@ -6,6 +6,7 @@
 #include <ChessLib/Chess/Definitions.hpp>
 #include <ChessLib/Chess/ColorTraits.hpp>
 #include <ChessLib/Chess/BoardColorTraits.hpp>
+#include <ChessLib/Utility/Utility.hpp>
 
 #include <array>
 #include <string_view>
@@ -28,13 +29,13 @@ namespace chesslib
 
 		static constexpr bool IsInside(Square curr, Square next) noexcept
 		{
-			return next < BOARDSIZE && next >= 0 && std::abs(GetFile(next) - GetFile(curr)) <= 2;
+			return next < BOARDSIZE && next >= 0 && utility::numeric::abs(GetFile(next) - GetFile(curr)) <= 2;
 		}
 
 		const BoardArray& GetBoard() const noexcept { return _board; }
 		BoardArray&		  GetBoard() noexcept	    { return _board; }
 		
-		Piece GetPiece(Square s) const              { return _board[s]; }
+		inline Piece GetPiece(Square s) const              { return _board[s]; }
 
 		template <Color PieceColor>
 		void PutPiece(Piece p, Square s)

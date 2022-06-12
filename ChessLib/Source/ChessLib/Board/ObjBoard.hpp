@@ -34,7 +34,7 @@ namespace chesslib::objboard
 		const PieceMap& GetBlackPieces() const noexcept		{ return _black_pieces; }
 		PieceMap& GetBlackPieces() noexcept					{ return _black_pieces; }
 
-		Piece GetPiece(Square s) const { return _board[s]._piece ? _board[s]._piece->_code : Empty; }
+		inline Piece GetPiece(Square s) const { return _board[s]._piece ? _board[s]._piece->_code : Empty; }
 
 		template <Color PieceColor>
 		void PutPiece(Piece p, Square s)

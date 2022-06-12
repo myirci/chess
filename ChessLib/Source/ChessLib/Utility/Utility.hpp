@@ -26,6 +26,9 @@ namespace chesslib::utility
 		std::optional<int> to_int(std::string_view sv);
 
 		int get_random(int lower_limit, int upper_limit);
+
+		template <typename T>
+		constexpr T abs(T value) { return value >= 0 ? value : -value; }
 	}
 
 	namespace string_processing 

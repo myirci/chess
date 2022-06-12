@@ -1,16 +1,22 @@
 #include "BitIndexBenchmark.hpp"
 #include "PinnedPieceLookupBenchmark.h"
+#include <ChessLib/MoveGenerator/Connectivity.hpp>
 
 #include <iostream>
 #include <string_view>
 
+// Benchmarks
 void bit_index_find_benchmark();
 void do_pinned_piece_lookup_benchmark();
+
+// Computations
+void compute_connectivities();
 
 int main() 
 {
 	// bit_index_find_benchmark();
-	do_pinned_piece_lookup_benchmark();
+	// do_pinned_piece_lookup_benchmark();
+	compute_connectivities();
 }
 
 void bit_index_find_benchmark() 
@@ -31,4 +37,10 @@ void do_pinned_piece_lookup_benchmark()
 		return;
 	}
 	pinned_piece_lookup_benchmark::benchmark(10000);
+}
+
+void compute_connectivities() 
+{
+	chesslib::Connectivity con;
+	con.Export("../Benchmark/data/connections.txt");
 }

@@ -87,7 +87,7 @@ namespace chesslib
 		const BoardArray& GetBoard() const noexcept { return _board; }
 		BoardArray& GetBoard() noexcept             { return _board; }
 		
-		Piece GetPiece(Square s) const              { return _board[s]; }
+		inline Piece GetPiece(Square s) const              { return _board[s]; }
 
 		template <Color PieceColor>
 		void PutPiece(Piece p, Square s)

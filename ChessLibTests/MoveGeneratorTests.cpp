@@ -8,6 +8,8 @@
 #include <ChessLib/Board/BasicBoard.hpp>
 #include <ChessLib/Board/x88Board.hpp>
 #include <ChessLib/MoveGenerator/MoveGenerator.hpp>
+#include <ChessLib/MoveGenerator/Connectivity.hpp>
+#include <ChessLib/MoveGenerator/Connections.hpp>
 
 using namespace chesslib;
 
@@ -21,7 +23,60 @@ protected:
         MoveGenerator<BoardType> mgen;
         return mgen.GenerateMoves(board);
     }
+
+    template <int N>
+    bool IsEqual(const std::array<Square, N>& arr, const std::vector<Square>& vec) 
+    {
+        if (arr.size() != vec.size())
+            return false;
+
+        for (int i = 0; i < arr.size(); i++) 
+            if (arr[i] != vec[i])
+                return false;
+        
+        return true;
+    }
 };
+
+TEST_F(MoveGeneratorTests, knight_connectivity_test) 
+{
+    Connectivity dynamic_con(false);
+    dynamic_con.ComputeKnightConnections();
+    auto& knight_indexes = dynamic_con.GetKnightIndexes();
+    auto& knight_connections = dynamic_con.GetKnightConnections();
+    EXPECT_EQ(Connections::KnightSquareIndexes, knight_indexes);
+    EXPECT_TRUE(IsEqual<Connections::KnightConnections.size()>(Connections::KnightConnections, knight_connections));
+}
+
+TEST_F(MoveGeneratorTests, king_connectivity_test)
+{
+    Connectivity dynamic_con(false);
+    dynamic_con.ComputeKingConnections();
+    auto& king_indexes = dynamic_con.GetKingIndexes();
+    auto& king_connections = dynamic_con.GetKingConnections();
+    EXPECT_EQ(Connections::KingSquareIndexes, king_indexes);
+    EXPECT_TRUE(IsEqual<Connections::KingConnections.size()>(Connections::KingConnections, king_connections));
+}
+
+TEST_F(MoveGeneratorTests, staright_connectivity_test)
+{
+    Connectivity dynamic_con(false);
+    dynamic_con.ComputeStraightConnections();
+    auto& straight_indexes = dynamic_con.GetStraightIndexes();
+    auto& straight_connections = dynamic_con.GetStraightConnections();
+    EXPECT_EQ(Connections::StraightSquareIndexes, straight_indexes);
+    EXPECT_TRUE(IsEqual<Connections::StraightConnections.size()>(Connections::StraightConnections, straight_connections));
+}
+
+TEST_F(MoveGeneratorTests, diagonal_connectivity_test)
+{
+    Connectivity dynamic_con(false);
+    dynamic_con.ComputeDiagonalConnections();
+    auto& diagonal_indexes = dynamic_con.GetDiagonalIndexes();
+    auto& diagonal_connections = dynamic_con.GetDiagonalConnections();
+    EXPECT_EQ(Connections::DiagonalSquareIndexes, diagonal_indexes);
+    EXPECT_TRUE(IsEqual<Connections::DiagonalConnections.size()>(Connections::DiagonalConnections, diagonal_connections));
+}
 
 TEST_F(MoveGeneratorTests, basic_board_king_moves)
 {

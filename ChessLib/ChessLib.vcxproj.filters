@@ -39,9 +39,6 @@
     <ClCompile Include="Source\ChessLib\Utility\Utility.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ChessLib\MoveGenerator\MoveConnectivity.cpp">
-      <Filter>MoveGenerator</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ChessLib\Board\BitBoard.cpp">
       <Filter>Board\BitBoard</Filter>
     </ClCompile>
@@ -63,6 +60,9 @@
     <ClCompile Include="Source\ChessLib\Utility\CommandLineExecutor.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ChessLib\MoveGenerator\Connectivity.cpp">
+      <Filter>MoveGenerator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ChessLib\Chess\Definitions.hpp">
@@ -83,19 +83,7 @@
     <ClInclude Include="Source\ChessLib\Utility\Timer.hpp">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ChessLib\MoveGenerator\PrecomputeMoves.hpp">
-      <Filter>MoveGenerator</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ChessLib\MoveGenerator\MoveConnectivity.hpp">
-      <Filter>MoveGenerator</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ChessLib\MoveGenerator\BoardConnecivity.hpp">
-      <Filter>MoveGenerator</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ChessLib\MoveGenerator\AttackDetector.hpp">
-      <Filter>MoveGenerator</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ChessLib\MoveGenerator\MoveGenerator.hpp">
       <Filter>MoveGenerator</Filter>
     </ClInclude>
     <ClInclude Include="Source\ChessLib\Board\BoardBase.hpp">
@@ -145,6 +133,15 @@
     </ClInclude>
     <ClInclude Include="Source\ChessLib\Board\BasicBoard.hpp">
       <Filter>Board</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\MoveGenerator\MoveGenerator.hpp">
+      <Filter>MoveGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\MoveGenerator\Connectivity.hpp">
+      <Filter>MoveGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\MoveGenerator\Connections.hpp">
+      <Filter>MoveGenerator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
