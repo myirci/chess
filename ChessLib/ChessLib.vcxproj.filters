@@ -143,6 +143,10 @@
     <ClInclude Include="Source\ChessLib\MoveGenerator\Connections.hpp">
       <Filter>MoveGenerator</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ChessLib\Chess\BoardTraits.hpp" />
+    <ClInclude Include="Source\ChessLib\Board\SimpleBoard.hpp">
+      <Filter>Board</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />

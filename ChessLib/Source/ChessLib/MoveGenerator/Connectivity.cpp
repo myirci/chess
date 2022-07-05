@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include <ChessLib/Board/BasicBoard.hpp>
+#include <ChessLib/Chess/BoardColorTraits.hpp>
 
 namespace chesslib 
 {
@@ -19,6 +20,7 @@ namespace chesslib
 			ComputeStraightConnections();
 			ComputeDiagonalConnections();
 			ComputeKingConnections();
+			ComputePawnConnections();
 		}
 	}
 
@@ -113,6 +115,105 @@ namespace chesslib
 		}
 	}
 
+	void Connectivity::ComputePawnConnections()
+	{
+		using wbct = traits::board_color_traits<BasicBoard, color::White>;
+		using bbct = traits::board_color_traits<BasicBoard, color::Black>;
+
+		std::int8_t white_double_push_mask = 0x01;
+		std::int8_t white_promote_mask = 0x02;
+		std::int8_t white_left_capture_mask = 0x04;
+		std::int8_t white_right_capture_mask = 0x08;
+
+		std::int8_t black_double_push_mask = 0x10;
+		std::int8_t black_promote_mask = 0x20;
+		std::int8_t black_left_capture_mask = 0x40;
+		std::int8_t black_right_capture_mask = 0x80;
+
+		int16_t idx{ -1 };
+		for (Square s = 0; s < 64; s++)
+		{
+			// bit-field
+			_pawn_connections.push_back(0);
+			int8_t mask{ 0 };
+
+			idx = _pawn_connections.size() - 1;
+			_pawn_indexes[s] = idx;
+			
+			Rank r = ChessBoard::GetRank(s);
+			if (r < 7) 
+			{
+				// white pawn promotion flag
+				if (r == wbct::PawnPromotionRank - 1)
+					mask |= white_promote_mask;
+
+				// white pawn single push
+				if(r == 0)
+					_pawn_connections.push_back(Empty);
+				else
+					_pawn_connections.push_back(s + wbct::PawnMoveDirection);
+
+				// white pawn double push
+				if (r == wbct::PawnDoublePushRank)
+				{
+					mask |= white_double_push_mask;
+					_pawn_connections.push_back(s + 2 * wbct::PawnMoveDirection);
+				}
+
+				// white pawn captures
+				auto next = s + wbct::PawnAttackDirections[0];
+				if (BasicBoard::IsInside(s, next))
+				{
+					_pawn_connections.push_back(next);
+					mask |= white_right_capture_mask;
+				}
+
+				next = s + wbct::PawnAttackDirections[1];
+				if (BasicBoard::IsInside(s, next))
+				{
+					_pawn_connections.push_back(next);
+					mask |= white_left_capture_mask;
+				}
+			}
+
+			if (r > 0) 
+			{
+				// black pawn promotion flag
+				if (r == bbct::PawnPromotionRank + 1)
+					mask |= black_promote_mask;
+
+				// black pawn single push
+				if (r == 7)
+					_pawn_connections.push_back(Empty);
+				else
+					_pawn_connections.push_back(s + bbct::PawnMoveDirection);
+
+				// black pawn double push
+				if (r == bbct::PawnDoublePushRank)
+				{
+					mask |= black_double_push_mask;
+					_pawn_connections.push_back(s + 2 * bbct::PawnMoveDirection);
+				}
+
+				// black pawn captures
+				auto next = s + bbct::PawnAttackDirections[0];
+				if (BasicBoard::IsInside(s, next))
+				{
+					_pawn_connections.push_back(next);
+					mask |= black_left_capture_mask;
+				}
+
+				next = s + bbct::PawnAttackDirections[1];
+				if (BasicBoard::IsInside(s, next))
+				{
+					_pawn_connections.push_back(next);
+					mask |= black_right_capture_mask;
+				}
+			} 
+			_pawn_connections[idx] = mask;
+		}
+	}
+
 	void Connectivity::Export(std::string_view file_path)
 	{
 		std::ofstream of(file_path.data(), std::ios::out);
@@ -160,6 +261,16 @@ namespace chesslib
 		of << "Values: " << _diagonal_connections.size() << std::endl;
 		for (int i = 0; i < _diagonal_connections.size(); i++)
 			of << (int)(_diagonal_connections[i]) << " ";
+		of << std::endl;
+
+		of << "Pawn indexes\n";
+		for (int i = 0; i < 64; i++)
+			of << _pawn_indexes[i] << " ";
+		of << std::endl;
+
+		of << "Values: " << _pawn_connections.size() << std::endl;
+		for (int i = 0; i < _pawn_connections.size(); i++)
+			of << (int)(_pawn_connections[i]) << " ";
 		of << std::endl;
 
 		of.close();

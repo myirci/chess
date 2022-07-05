@@ -142,10 +142,12 @@ namespace chesslib
 
 		const auto& check = _attackDetector.GetFirstCheck();
 
-		Direction check_dir = direction::Reverse(check.checker_dir);
+		Direction check_dir = direction::Reverse(check.checker_dir); // checker to king direction
 
 		for (Direction dir : BoardType::StraightDirections)
 		{
+			// checker cannot be captured in check - direction, this can be done by the checked king - only which is
+		    // covered when generating the king-moves.
 			if (dir == check_dir)
 				continue;
 
@@ -519,8 +521,181 @@ namespace chesslib
 		}
 	}
 
+#pragma MoveGenerator_ObjBoardSpecialization
 
-#pragma MoveGeneratorObjectBrdSpecialization
+	template <>
+	template <Color SideToMove>
+	void MoveGenerator<objboard::ObjBoard>::GenerateKingMoves(const objboard::ObjBoard& board, Square king_pos, MoveList& moves)
+	{
+		using ctraits = traits::color_traits<SideToMove>;
+		using bctraits = traits::board_color_traits<objboard::ObjBoard, SideToMove>;
+
+		auto idx = Connections::KingSquareIndexes[king_pos];
+		auto bitfield = Connections::KingConnections[idx++];
+		std::uint8_t mask = 1;
+
+		Square next{ Empty };
+		for (Direction dir : objboard::ObjBoard::AllDirections)
+		{
+			if (bitfield & mask) 
+			{
+				next = Connections::KingConnections[idx++];
+
+				if (_attackDetector.CanKingMoveInThisDirection<ctraits::Opposite>(board, dir) &&
+					!_attackDetector.IsUnderAttack<ctraits::Opposite>(board, next))
+				{
+					auto p = board.GetPiece(next);
+					if (p == Empty)
+						moves.emplace_back(king_pos, next);
+					else if (color::get_color(p) != SideToMove)
+						moves.emplace_back(king_pos, next, MoveType::Capture);
+				}
+			}
+			mask <<= 1;
+		}
+
+		if (_attackDetector.GetNumberOfChecks() > 0)
+			return;
+
+		if (board.QueryCastling(ctraits::KingSideCastling) &&
+			board.GetPiece(bctraits::KingSideCastleCheckSquares[0]) == Empty &&
+			board.GetPiece(bctraits::KingSideCastleCheckSquares[1]) == Empty &&
+			!_attackDetector.IsUnderAttack<ctraits::Opposite>(board, bctraits::KingSideCastleCheckSquares[0]) &&
+			!_attackDetector.IsUnderAttack<ctraits::Opposite>(board, bctraits::KingSideCastleCheckSquares[1]))
+			moves.emplace_back(king_pos, bctraits::KingSideCastleCheckSquares[1], MoveType::King_Side_Castle);
+
+		if (board.QueryCastling(ctraits::QueenSideCastling) &&
+			board.GetPiece(bctraits::QueenSideCastleCheckSquares[0]) == Empty &&
+			board.GetPiece(bctraits::QueenSideCastleCheckSquares[1]) == Empty &&
+			board.GetPiece(bctraits::QueenSideCastleCheckSquares[2]) == Empty &&
+			!_attackDetector.IsUnderAttack<ctraits::Opposite>(board, bctraits::QueenSideCastleCheckSquares[0]) &&
+			!_attackDetector.IsUnderAttack<ctraits::Opposite>(board, bctraits::QueenSideCastleCheckSquares[1]))
+			moves.emplace_back(king_pos, bctraits::QueenSideCastleCheckSquares[1], MoveType::Queen_Side_Castle);
+	}
+	
+	template <>
+	template <Color SideToMove>
+	void MoveGenerator<objboard::ObjBoard>::GenerateCheckerCapturingMoves(const objboard::ObjBoard& board, MoveList& moves)
+	{
+		using ctraits = traits::color_traits<SideToMove>;
+		using octraits = traits::color_traits<ctraits::Opposite>;
+		using bctraits = traits::board_color_traits<objboard::ObjBoard, SideToMove>;
+
+		const auto& check = _attackDetector.GetFirstCheck();
+		Direction check_dir = direction::Reverse(check.checker_dir); // checker to king direction
+		
+		auto dir_idx = Connections::StraightSquareIndexes[check.checker];
+		auto idx = dir_idx + 4;
+		for (Direction dir : objboard::ObjBoard::StraightDirections)
+		{
+			// checker cannot be captured in check-direction, this can be done by the checked king-only which is 
+			// covered when generating the king-moves.
+			if (dir == check_dir)
+			{
+				idx += Connections::StraightConnections[dir_idx];
+				dir_idx++;
+				continue;
+			}
+
+			for (int i = 0; i < Connections::StraightConnections[dir_idx]; i++, idx++)
+			{
+				const auto& next = Connections::StraightConnections[idx];
+				auto p = board.GetPiece(next);
+				if (p == Empty)
+					continue;
+
+				if ((p == ctraits::Rook || p == ctraits::Queen) && !_attackDetector.IsPinned(next))
+					moves.emplace_back(next, check.checker, MoveType::Capture);
+
+				break;
+			}
+		}
+
+		dir_idx = Connections::DiagonalSquareIndexes[check.checker];
+		idx = dir_idx + 4;
+		for (Direction dir : objboard::ObjBoard::DiagonalDirections)
+		{
+			// checker cannot be captured in check-direction, this can be done by the checked king-only which is 
+			// covered when generating the king-moves.
+			if (dir == check_dir)
+			{
+				idx += Connections::DiagonalConnections[dir_idx];
+				dir_idx++;
+				continue;
+			}
+
+			for (int i = 0; i < Connections::DiagonalConnections[dir_idx]; i++, idx++)
+			{
+				const auto& next = Connections::DiagonalConnections[idx];
+				auto p = board.GetPiece(next);
+				if (p == Empty)
+					continue;
+
+				if ((p == ctraits::Bishop || p == ctraits::Queen) && !_attackDetector.IsPinned(next))
+					moves.emplace_back(next, check.checker, MoveType::Capture);
+
+				break;
+			}
+		}
+
+		idx = Connections::KnightSquareIndexes[check.checker];
+		auto num_knight_jumps = Connections::KnightConnections[idx];
+		for (int i = 0; i < num_knight_jumps; i++)
+		{
+			const auto& next = Connections::KnightConnections[++idx];
+			if (board.GetPiece(next) == ctraits::Knight && !_attackDetector.IsPinned(next))
+				moves.emplace_back(next, check.checker, MoveType::Capture);
+		}
+
+		if (check.checker >= bctraits::ValidPawnMoveSquares[0] && check.checker <= bctraits::ValidPawnMoveSquares[1]) 
+		{
+			using stm_pc = conn::PawnConnectionMasks<SideToMove>;
+			using opp_pc = conn::PawnConnectionMasks<ctraits::Opposite>;
+			idx = Connections::PawnSquareIndexes[check.checker];
+			if (Connections::PawnConnections[idx] & opp_pc::right_capture_mask)
+			{
+				// Connections::PawnConnections[idx]
+			}
+		}
+
+		/*
+		if (check.checker >= bctraits::ValidPawnMoveSquares[0] && check.checker <= bctraits::ValidPawnMoveSquares[1])
+		{
+			for (Direction dir : bctraits::PawnReverseAttackDirections)
+			{
+				if (Square next{ check.checker + dir }; IsInside<BoardType>(next, check.checker) && board.GetPiece(next) == ctraits::Pawn && !_attackDetector.IsPinned(next))
+				{
+					if (BoardType::GetRank(check.checker) == bctraits::PawnPromotionRank)
+					{
+						moves.emplace_back(next, check.checker, MoveType::Queen_Promotion_Capture);
+						moves.emplace_back(next, check.checker, MoveType::Rook_Promotion_Capture);
+						moves.emplace_back(next, check.checker, MoveType::Bishop_Promotion_Capture);
+						moves.emplace_back(next, check.checker, MoveType::Knight_Promotion_Capture);
+					}
+					else
+					{
+						moves.emplace_back(next, check.checker, MoveType::Capture);
+					}
+				}
+			}
+
+			Square enpassant_sq = board.GetEnPassantSquare();
+			if (enpassant_sq != Empty && board.GetPiece(check.checker) == octraits::Pawn)
+			{
+				Square next{ check.checker - 1 };
+				for (int i = 0; i < 2; i++)
+				{
+					if (IsInside<BoardType>(enpassant_sq, next) && board.GetPiece(next) == ctraits::Pawn && !_attackDetector.IsPinned(next))
+						moves.emplace_back(next, enpassant_sq, MoveType::En_Passant_Capture);
+					next += 2;
+				}
+			}
+		}
+		*/
+	}
+	
+
+
 
 #pragma endregion
 }

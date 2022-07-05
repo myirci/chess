@@ -9,7 +9,6 @@ namespace chesslib::objboard
 	struct SquareObj
 	{
 		SquareObj(Square code = Empty) : _code{ code }, _piece{ nullptr } { }
-
 		Square    _code;							
 		PieceObj* _piece;
 	};

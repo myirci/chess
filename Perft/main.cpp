@@ -58,6 +58,7 @@ uint64_t perft(std::string_view fen, int depth, bool divide, bool stats, bool me
 
 int main(int argc, char* argv[]) 
 {
+	/*
 	std::string_view fen{chesslib::Fen::StartingPosition};
 	int depth{ 1 };
 	bool divide{ false };
@@ -222,7 +223,7 @@ int main(int argc, char* argv[])
 
 	if (log.is_open())
 		log.close();
-
+	*/
 	return 0;
 }
 
@@ -236,6 +237,7 @@ void execute_perft(
 	std::ofstream& log, 
 	std::optional<uint64_t> expected_result /* = std::nullopt*/)
 {
+	/*
 	static uint64_t count{ 0 };
 	count++;
 
@@ -277,11 +279,14 @@ void execute_perft(
 				log << "FAIL\tEXPECTED: " << expected_result.value() << std::endl;
 		}
 	}
+	*/
 }
 
 template<typename BoardType>
 uint64_t perft(std::string_view fen, int depth, bool divide, bool stats, bool measure_time, std::ofstream& log) 
 {
+	return 0;
+	/*
 	uint64_t total{ 0 };
 	
 	std::unique_ptr<BoardType> board{ nullptr };
@@ -371,10 +376,12 @@ uint64_t perft(std::string_view fen, int depth, bool divide, bool stats, bool me
 	}
 
 	return total;
+	*/
 }
 
 void print_usage()
 {
+	/*
 	std::cout
 		<< "Usage:\nPerft "
 		<< "[-" << arguments::fen_string_argument_specifier << " fen_string{\"Starting Position\"}]" << "\n"
@@ -395,6 +402,7 @@ void print_usage()
 		<< "[-" << arguments::help_argument_specifier << "]" << "\n"
 		<< "[-" << arguments::about_argument_specifier << "]" 
 		<< std::endl;
+		*/
 }
 
 void print_help(int exit_code) 

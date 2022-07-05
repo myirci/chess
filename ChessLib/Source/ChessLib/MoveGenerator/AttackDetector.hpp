@@ -279,7 +279,7 @@ namespace chesslib
 	}
 #pragma endregion
 
-#pragma region AttackDetectorObjBoardSpecializations
+#pragma region AttackDetector_ObjBoardSpecializations
 
 	template <>
 	template<Color Attacker>
