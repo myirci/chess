@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ChessLib/Chess/Definitions.hpp>
+#include <ChessLib/MoveGenerator/Connections.hpp>
 
 namespace chesslib::objboard
 {
@@ -8,8 +9,15 @@ namespace chesslib::objboard
 
 	struct SquareObj
 	{
-		SquareObj(Square code = Empty) : _code{ code }, _piece{ nullptr } { }
-		Square    _code;							
-		PieceObj* _piece;
+		SquareObj(Square code = Empty) : 
+			_code{ code }, 
+			_piece{ nullptr },
+			_neighbors { conn::details::GetDirectNeighbors(code) }
+		{ }
+
+		Square				  _code;							
+		PieceObj*			  _piece;
+		conn::NeighborSquares _neighbors;
+
 	};
 }

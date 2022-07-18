@@ -37,7 +37,7 @@ namespace bit_index_benchmark
         63, 6, 12, 18, 24, 27, 33, 39, 16, 37, 45, 47, 30, 53, 49, 56, 62, 11, 23, 32, 36, 44, 52, 55, 61, 22, 43, 51, 60, 42, 59, 58
     };
 
-    #define A(n) {exp2(n), n} 
+    #define A(n) {(uint64_t)exp2(n), n} 
     static const std::unordered_map<uint64_t, int> idxMap
     {
         A(0), A(1), A(2), A(3), A(4), A(5), A(6), A(7), A(8), A(9), A(10), A(11), A(12), A(13), A(14), A(15),
@@ -48,7 +48,7 @@ namespace bit_index_benchmark
 
     int get_bit_index_std_log2(uint64_t num) 
     { 
-        return std::log2(num);
+        return (int)std::log2(num);
     }
 
     int get_bit_index_shift_left(uint64_t num)

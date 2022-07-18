@@ -98,7 +98,7 @@ namespace pinned_piece_lookup_benchmark
 			for (int j = 0; j < 3; j++)
 				pins[i][j] = data[i][j];
 
-		num_pins = data.size();
+		num_pins = (int)data.size();
 	}
 
 	bool array_impl::look_up(std::int8_t sq) 
@@ -122,7 +122,7 @@ namespace pinned_piece_lookup_benchmark
 			for (int j = 0; j < 3; j++)
 				pins[i][j] = data[i][j];
 
-		num_pins = data.size();
+		num_pins = (int)data.size();
 	}
 	
 	bool carray_impl::look_up(std::int8_t sq) 
@@ -149,7 +149,7 @@ namespace pinned_piece_lookup_benchmark
 			pins[i].direction = data[i][2];
 		}
 
-		num_pins = data.size();
+		num_pins = (int)data.size();
 	}
 	
 	bool carray_struct_impl::look_up(std::int8_t sq)

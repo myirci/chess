@@ -25,6 +25,7 @@
     <ClCompile Include="Source\ChessLib\Chess\Fen.cpp" />
     <ClCompile Include="Source\ChessLib\Chess\LightMove.cpp" />
     <ClCompile Include="Source\ChessLib\Chess\Move.cpp" />
+    <ClCompile Include="Source\ChessLib\MoveGenerator\Connections.cpp" />
     <ClCompile Include="Source\ChessLib\MoveGenerator\Connectivity.cpp" />
     <ClCompile Include="Source\ChessLib\Utility\CommandLineExecutor.cpp" />
     <ClCompile Include="Source\ChessLib\Utility\Utility.cpp" />
@@ -42,7 +43,6 @@
     <ClInclude Include="Source\ChessLib\Board\SimpleBoard.hpp" />
     <ClInclude Include="Source\ChessLib\Board\SquareObj.hpp" />
     <ClInclude Include="Source\ChessLib\Board\x88Board.hpp" />
-    <ClInclude Include="Source\ChessLib\Chess\BoardTraits.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\ColorTraits.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\Definitions.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\Fen.hpp" />

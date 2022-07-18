@@ -38,54 +38,25 @@ protected:
     }
 };
 
-TEST_F(MoveGeneratorTests, knight_connections_test) 
+TEST_F(MoveGeneratorTests, connections_test) 
 {
-    Connectivity dynamic_con(false);
-    dynamic_con.ComputeKnightConnections();
-    auto& knight_indexes = dynamic_con.GetKnightIndexes();
-    auto& knight_connections = dynamic_con.GetKnightConnections();
-    EXPECT_EQ(Connections::KnightSquareIndexes, knight_indexes);
-    EXPECT_TRUE(IsEqual<Connections::KnightConnections.size()>(Connections::KnightConnections, knight_connections));
-}
+    Connectivity con{};
+    const auto& conVec = con.GetConnections();
+    const auto& idxVec = con.GetIndexes();
+    EXPECT_TRUE(IsEqual<conn::ConnectionsAndIndices.first.size()>(conn::ConnectionsAndIndices.first, conVec));
 
-TEST_F(MoveGeneratorTests, king_connections_test)
-{
-    Connectivity dynamic_con(false);
-    dynamic_con.ComputeKingConnections();
-    auto& king_indexes = dynamic_con.GetKingIndexes();
-    auto& king_connections = dynamic_con.GetKingConnections();
-    EXPECT_EQ(Connections::KingSquareIndexes, king_indexes);
-    EXPECT_TRUE(IsEqual<Connections::KingConnections.size()>(Connections::KingConnections, king_connections));
-}
-
-TEST_F(MoveGeneratorTests, straight_connections_test)
-{
-    Connectivity dynamic_con(false);
-    dynamic_con.ComputeStraightConnections();
-    auto& straight_indexes = dynamic_con.GetStraightIndexes();
-    auto& straight_connections = dynamic_con.GetStraightConnections();
-    EXPECT_EQ(Connections::StraightSquareIndexes, straight_indexes);
-    EXPECT_TRUE(IsEqual<Connections::StraightConnections.size()>(Connections::StraightConnections, straight_connections));
-}
-
-TEST_F(MoveGeneratorTests, diagonal_connections_test)
-{
-    Connectivity dynamic_con(false);
-    dynamic_con.ComputeDiagonalConnections();
-    auto& diagonal_indexes = dynamic_con.GetDiagonalIndexes();
-    auto& diagonal_connections = dynamic_con.GetDiagonalConnections();
-    EXPECT_EQ(Connections::DiagonalSquareIndexes, diagonal_indexes);
-    EXPECT_TRUE(IsEqual<Connections::DiagonalConnections.size()>(Connections::DiagonalConnections, diagonal_connections));
-}
-
-TEST_F(MoveGeneratorTests, pawn_connections_test)
-{
-    Connectivity dynamic_con(false);
-    dynamic_con.ComputePawnConnections();
-    auto& pawn_indexes = dynamic_con.GetPawnIndexes();
-    auto& pawn_connections = dynamic_con.GetPawnConnections();
-    EXPECT_EQ(Connections::PawnSquareIndexes, pawn_indexes);
-    EXPECT_TRUE(IsEqual<Connections::PawnConnections.size()>(Connections::PawnConnections, pawn_connections));
+    int idx1{ 0 }, idx2{ 1 };
+    for (int i = 0; i < 9; i++) 
+    {
+        EXPECT_EQ(conn::ConnectionsAndIndices.second[idx1], idxVec[i]._indexes_start);
+        EXPECT_EQ(conn::ConnectionsAndIndices.second[idx2], idxVec[i]._indexes_end);
+        idx1 += 2;
+        idx2 = idx1 + 1;
+    }
+    
+    EXPECT_EQ(conn::ConnectionsAndIndices.second[18], idxVec[9]._indexes_start);
+    EXPECT_EQ(conn::ConnectionsAndIndices.second[19], idxVec[10]._indexes_start);
+    EXPECT_EQ(conn::ConnectionsAndIndices.second[20], idxVec[11]._indexes_start);
 }
 
 TEST_F(MoveGeneratorTests, basic_board_king_moves)

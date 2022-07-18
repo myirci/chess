@@ -10,7 +10,7 @@
 
 namespace chesslib 
 {
-
+	
 #pragma region AttackDetector
 	template <typename BoardType>
 	class AttackDetector
@@ -32,8 +32,11 @@ namespace chesslib
 		};
 
 		const check& GetFirstCheck() const;
+
 		std::uint8_t GetNumberOfChecks() const noexcept;
+
 		bool IsPinned(Square piece_loc) const noexcept;
+
 		Direction GetPinDirection(Square piece_loc) const noexcept;
 
 		template<Color Attacker>
@@ -55,19 +58,31 @@ namespace chesslib
 		inline void Clear() noexcept;
 
 		template<Color Attacker>
-		Square IsUnderKnightAttack(const BoardType& board, Square sq) const;
+		bool IsUnderStraightSlidingPieceAttack(const BoardType& board, Square sq) const;
 
 		template<Color Attacker>
-		bool IsUnderStraightAttack(const BoardType& board, Square sq) const;
+		bool IsUnderDiagonallySlidingPieceAttack(const BoardType& board, Square sq) const;
 
 		template<Color Attacker>
-		bool IsUnderDiagonalAttack(const BoardType& board, Square sq) const;
+		bool InUnderKingAttack(const BoardType& board, Square sq) const;
 
 		template<Color Attacker>
-		void ComputeStraightChecksAndPins(const BoardType& board, Square king_pos);
+		bool IsUnderKnightAttack(const BoardType& board, Square sq) const;
 
 		template<Color Attacker>
-		void ComputeDiagonalChecksAndPins(const BoardType& board, Square king_pos);
+		bool IsUnderPawnAttack(const BoardType& board, Square sq) const;
+
+		template<Color Attacker>
+		void ComputeStraightSlidingPieceChecksAndPins(const BoardType& board, Square king_pos);
+
+		template<Color Attacker>
+		void ComputeDiagonallySlidingPieceChecksAndPins(const BoardType& board, Square king_pos);
+
+		template<Color Attacker>
+		void ComputeKnightChecks(const BoardType& board, Square king_pos);
+
+		template<Color Attacker>
+		void ComputePawnChecks(const BoardType& board, Square king_pos);
 	};
 
 	template <typename BoardType>
@@ -121,316 +136,258 @@ namespace chesslib
 	{
 		this->Clear();
 
-		if (Square knight_pos = IsUnderKnightAttack<Attacker>(board, king_pos); knight_pos != Empty)
-			this->_checks[this->_numChecks++] = { knight_pos, Empty, Empty };
+		ComputeStraightSlidingPieceChecksAndPins<Attacker>(board, king_pos);
+		ComputeDiagonallySlidingPieceChecksAndPins<Attacker>(board, king_pos);
+		ComputeKnightChecks<Attacker>(board, king_pos);
+		ComputePawnChecks<Attacker>(board, king_pos);
+	}
 
-		ComputeStraightChecksAndPins<Attacker>(board, king_pos);
-		ComputeDiagonalChecksAndPins<Attacker>(board, king_pos);
+	template <typename BoardType>
+	template<Color Attacker>
+	void AttackDetector<BoardType>::ComputeStraightSlidingPieceChecksAndPins(const BoardType& board, Square king_pos)
+	{
+		using ctraits = traits::color_traits<Attacker>;
+		for (Direction dir : BoardType::StraightDirections)
+		{
+			Square pin_loc{ Empty };
+			for (Square next{ king_pos + dir }; IsInside<BoardType>(next, next - dir); next += dir)
+			{
+				auto p = board.GetPiece(next);
+				if (p == Empty)
+					continue;
+
+				if (p == ctraits::Rook || p == ctraits::Queen)
+				{
+					if (pin_loc != Empty)
+						this->_pins[this->_numPins++] = { pin_loc, next, dir };
+					else
+						this->_checks[this->_numChecks++] = { next, dir, (next - king_pos) / dir};
+					break;
+				}
+				else
+				{
+					if (pin_loc == Empty)
+						pin_loc = next;
+					else
+						break;
+				}
+			}
+		}
+	}
+
+	template <typename BoardType>
+	template<Color Attacker>
+	void AttackDetector<BoardType>::ComputeDiagonallySlidingPieceChecksAndPins(const BoardType& board, Square king_pos)
+	{
+		using ctraits = traits::color_traits<Attacker>;
+		for (Direction dir : BoardType::DiagonalDirections)
+		{
+			Square pin_loc{ Empty };
+			for (Square next{ king_pos + dir }; IsInside<BoardType>(next, next - dir); next += dir)
+			{
+				auto p = board.GetPiece(next);
+				if (p == Empty)
+					continue;
+
+				if (p == ctraits::Bishop || p == ctraits::Queen)
+				{
+					if (pin_loc != Empty)
+						this->_pins[this->_numPins++] = { pin_loc, next, dir };
+					else
+						this->_checks[this->_numChecks++] = { next, dir, (next - king_pos) / dir };
+					break;
+				}
+				else
+				{
+					if (pin_loc == Empty)
+						pin_loc = next;
+					else
+						break;
+				}
+			}
+		}
+	}
+
+	template <typename BoardType>
+	template<Color Attacker>
+	void AttackDetector<BoardType>::ComputeKnightChecks(const BoardType& board, Square king_pos)
+	{
+		using ctraits = traits::color_traits<Attacker>;
+		Square next{ Empty };
+		for (Direction dir : BoardType::KnightJumps) 
+		{
+			if (next = king_pos + dir; IsInside<BoardType>(next, king_pos) && board.GetPiece(next) == ctraits::Knight)
+			{
+				this->_checks[this->_numChecks++] = { next, Empty, Empty };
+				return;
+			}
+		}
+	}
+
+	template <typename BoardType>
+	template<Color Attacker>
+	void AttackDetector<BoardType>::ComputePawnChecks(const BoardType& board, Square king_pos)
+	{
+		using ctraits = traits::color_traits<Attacker>;
+		using bctraits = traits::board_color_traits<BoardType, Attacker>;
+		for (int i = 0; i < 2; i++)
+		{
+			Square next = king_pos + bctraits::PawnReverseAttackDirections[i];
+			if (IsInside<BoardType>(next, king_pos) && board.GetPiece(next) == ctraits::Pawn) 
+			{
+				this->_checks[this->_numChecks++] = { next, bctraits::PawnReverseAttackDirections[i], (Distance)1 };
+				return;
+			}
+		}
 	}
 
 	template <typename BoardType>
 	template<Color Attacker>
 	bool AttackDetector<BoardType>::IsUnderAttack(const BoardType& board, Square sq) const
-	{
+	{ 
 		return
-			IsUnderStraightAttack<Attacker>(board, sq) ||
-			IsUnderDiagonalAttack<Attacker>(board, sq) ||
-			IsUnderKnightAttack<Attacker>(board, sq) != Empty;
+			IsUnderStraightSlidingPieceAttack<Attacker>(board, sq) ||
+			IsUnderDiagonallySlidingPieceAttack<Attacker>(board, sq) ||
+			IsUnderKnightAttack<Attacker>(board, sq) ||
+			IsUnderPawnAttack<Attacker>(board, sq) ||
+			InUnderKingAttack<Attacker>(board, sq);
 	}
 
 	template <typename BoardType>
 	template<Color Attacker>
-	Square AttackDetector<BoardType>::IsUnderKnightAttack(const BoardType& board, Square sq) const
+	bool AttackDetector<BoardType>::IsUnderStraightSlidingPieceAttack(const BoardType& board, Square sq) const
 	{
+		using ctraits = traits::color_traits<Attacker>;
+		for (Direction dir : BoardType::StraightDirections)
+		{
+			for (Square next{ sq + dir }; IsInside<BoardType>(next, next - dir); next += dir)
+			{
+				auto p = board.GetPiece(next);
+				if (p == Empty)
+					continue;
+
+				if (p == ctraits::Rook || p == ctraits::Queen)
+					return true;
+
+				break;
+			}
+		}
+		return false;
+	}
+
+	template <typename BoardType>
+	template<Color Attacker>
+	bool AttackDetector<BoardType>::IsUnderDiagonallySlidingPieceAttack(const BoardType& board, Square sq) const
+	{
+		using ctraits = traits::color_traits<Attacker>;
+		for (Direction dir : BoardType::DiagonalDirections)
+		{
+			for (Square next{ sq + dir }; IsInside<BoardType>(next, next - dir); next += dir)
+			{
+				auto p = board.GetPiece(next);
+				if (p == Empty)
+					continue;
+
+				if (p == ctraits::Bishop || p == ctraits::Queen)
+					return true;
+
+				break;
+			}
+		}
+		return false;
+	}
+
+	template <typename BoardType>
+	template<Color Attacker>
+	bool AttackDetector<BoardType>::InUnderKingAttack(const BoardType& board, Square sq) const 
+	{
+		using ctraits = traits::color_traits<Attacker>;
+		Square next{ Empty };
+		for (Direction dir : BoardType::AllDirections) 
+			if (next = sq + dir; IsInside<BoardType>(next, sq) && board.GetPiece(next) == ctraits::King)
+				return true;
+		return false;
+	}
+
+	template <typename BoardType>
+	template<Color Attacker>
+	bool AttackDetector<BoardType>::IsUnderKnightAttack(const BoardType& board, Square sq) const
+	{
+		using ctraits = traits::color_traits<Attacker>;
 		Square next{ Empty };
 		for (Direction dir : BoardType::KnightJumps)
-		{
-			next = sq + dir;
-			if (IsInside<BoardType>(next, sq) && 
-				board.GetPiece(next) == traits::color_traits<Attacker>::Knight)
-				return next;
-		}
-
-		return Empty;
-	}
-
-	template <typename BoardType>
-	template<Color Attacker>
-	bool AttackDetector<BoardType>::IsUnderStraightAttack(const BoardType& board, Square sq) const
-	{
-		using ctraits = traits::color_traits<Attacker>;
-
-		for (Direction dir : BoardType::StraightDirections)
-		{
-			Distance dist{ 1 };
-			for (Square next{ sq + dir }; IsInside<BoardType>(next, next - dir); next += dir, dist++) 
-			{
-				auto p = board.GetPiece(next);
-				if (p == Empty)
-					continue;
-
-				if (p == ctraits::Rook || p == ctraits::Queen || p == ctraits::King && dist == 1)
-					return true;
-
-				break;
-			}	
-		}
-
+			if (next = sq + dir; IsInside<BoardType>(next, sq) && board.GetPiece(next) == ctraits::Knight)
+				return true;
 		return false;
 	}
 
 	template <typename BoardType>
 	template<Color Attacker>
-	bool AttackDetector<BoardType>::IsUnderDiagonalAttack(const BoardType& board, Square sq) const
+	bool AttackDetector<BoardType>::IsUnderPawnAttack(const BoardType& board, Square sq) const 
+	{
+		using ctraits = traits::color_traits<Attacker>;
+		using bctraits = traits::board_color_traits<BoardType, Attacker>;
+		for (int i = 0; i < 2; i++)
+		{
+			Square next = sq + bctraits::PawnReverseAttackDirections[i];
+			if (IsInside<BoardType>(next, sq) && board.GetPiece(next) == ctraits::Pawn)
+				return true;
+		}
+		return false;
+	}
+
+	
+	/*
+	template <typename BoardType>
+	template <Color Attacker, Direction Dir>
+	void AttackDetector<BoardType>::ComputeChecksAndPinsImpl(const BoardType& board, Square king_pos)
 	{
 		using ctraits = traits::color_traits<Attacker>;
 		using bctraits = traits::board_color_traits<BoardType, Attacker>;
 
-		for (Direction dir : BoardType::DiagonalDirections)
+		Square pin_loc{ Empty }, next{ Empty };
+		Distance dist{ 1 };
+		conn::View<Dir> view{ king_pnos };
+		for (int8_t i = 0; i < view.GetSize(); i++, dist++) 
 		{
-			Distance dist{ 1 };
-			for (Square next{ sq + dir }; IsInside<BoardType>(next, next - dir); next += dir, dist++)
-			{
-				auto p = board.GetPiece(next);
-				if (p == Empty)
-					continue;
+			next = view.Next();
+			auto p = board.GetPiece(next);
+			if (p == Empty)
+				continue;
 
-				if (p == ctraits::Bishop || p == ctraits::Queen || dist == 1 && 
-					(p == ctraits::King || (p == ctraits::Pawn && (dir == bctraits::PawnReverseAttackDirections[0] || dir == bctraits::PawnReverseAttackDirections[1]))))
-					return true;
-				
-				break;
+			bool cond{ false };
+			if constexpr (Dir == ChessBoard::N || Dir == ChessBoard::E || Dir == ChessBoard::S || Dir == ChessBoard::W) 
+			{
+				cond = (p == ctraits::Rook || p == ctraits::Queen);
 			}
-		}
-
-		return false;
-	}
-
-	template <typename BoardType>
-	template<Color Attacker>
-	void AttackDetector<BoardType>::ComputeStraightChecksAndPins(const BoardType& board, Square king_pos)
-	{
-		using ctraits = traits::color_traits<Attacker>;
-		
-		for (Direction dir : BoardType::StraightDirections)
-		{
-			Square pin_loc{ Empty };
-			Distance dist{ 1 };
-			for (Square next{ king_pos + dir }; IsInside<BoardType>(next, next - dir); next += dir, dist++)
+			else if constexpr (Dir == ChessBoard::NE || Dir == ChessBoard::SE || Dir == ChessBoard::SW || Dir == ChessBoard::NW)
 			{
-				auto p = board.GetPiece(next);
-				if (p == Empty)
-					continue;
+				cond = (p == ctraits::Bishop || p == ctraits::Queen;
+				if constexpr (Dir == bctraits::PawnReverseAttackDirections[0] || bctraits::PawnReverseAttackDirections[1])
+					cond = cond || (dist == 1 && p == ctraits::Pawn);
+			}
+			else if constexpr (Dir == conn::KnightJumps)
+			{
+				cond = (p == ctraits::Knight);
+			}
 
-				if (p == ctraits::Rook || p == ctraits::Queen)
-				{
-					if (pin_loc != Empty)
-						this->_pins[this->_numPins++] = { pin_loc, next, dir };
-					else
-						this->_checks[this->_numChecks++] = { next, dir, dist };
-					break;
-				}
+			if (cond) 
+			{
+				if (pin_loc == Empty)
+					this->_checks[this->_numChecks++] = { next, Dir, dist };
 				else
-				{
-					if (pin_loc == Empty)
-						pin_loc = next;
-					else
-						break;
-				}
+					this->_pins[this->_numPins++] = { pin_loc, next, Dir };
+				return;
 			}
-		}
-	}
-
-	template <typename BoardType>
-	template<Color Attacker>
-	void AttackDetector<BoardType>::ComputeDiagonalChecksAndPins(const BoardType& board, Square king_pos)
-	{
-		using ctraits = traits::color_traits<Attacker>;
-		using bctraits = traits::board_color_traits<BoardType, Attacker>;
-
-		for (Direction dir : BoardType::DiagonalDirections)
-		{
-			Square pin_loc{ Empty };
-			Distance dist{ 1 };
-			for (Square next{ king_pos + dir }; IsInside<BoardType>(next, next - dir); next += dir, dist++)
+			else 
 			{
-				auto p = board.GetPiece(next);
-				if (p == Empty)
-					continue;
-
-				if (p == ctraits::Bishop || p == ctraits::Queen ||
-					dist == 1 && p == ctraits::Pawn && (dir == bctraits::PawnReverseAttackDirections[0] || dir == bctraits::PawnReverseAttackDirections[1]))
-				{
-					if (pin_loc != Empty)
-						this->_pins[this->_numPins++] = { pin_loc, next, dir };
-					else
-						this->_checks[this->_numChecks++] = { next, dir, dist };
-					break;
-				}
+				if (pin_loc == Empty)
+					pin_loc = next;
 				else
-				{
-					if (pin_loc == Empty)
-						pin_loc = next;
-					else
-						break;
-				}
+					return;
 			}
 		}
 	}
-#pragma endregion
-
-#pragma region AttackDetector_ObjBoardSpecializations
-
-	template <>
-	template<Color Attacker>
-	Square AttackDetector<objboard::ObjBoard>::IsUnderKnightAttack(const objboard::ObjBoard& board, Square sq) const
-	{
-		auto idx = Connections::KnightSquareIndexes[sq];
-		auto num = Connections::KnightConnections[idx];
-		for (int i = 0; i < num; i++) 
-			if (board.GetPiece(Connections::KnightConnections[++idx]) == traits::color_traits<Attacker>::Knight)
-				return Connections::KnightConnections[idx];
-		return Empty;
-	}
-
-	template <>
-	template<Color Attacker>
-	bool AttackDetector<objboard::ObjBoard>::IsUnderStraightAttack(const objboard::ObjBoard& board, Square sq) const
-	{
-		using ctraits = traits::color_traits<Attacker>;
-
-		auto dir_idx = Connections::StraightSquareIndexes[sq];
-		auto idx = dir_idx + 4;
-		for (Direction dir : ChessBoard::StraightDirections)
-		{
-			Distance dist{ 1 };
-			for (int i = 0; i < Connections::StraightConnections[dir_idx]; i++, dist++)
-			{
-				auto p = board.GetPiece(Connections::StraightConnections[idx++]);
-				if (p == Empty)
-					continue;
-
-				if (p == ctraits::Rook || p == ctraits::Queen || p == ctraits::King && dist == 1)
-					return true;
-
-				break;
-			}
-			dir_idx++;
-		}
-
-		return false;
-	}
-
-	template <>
-	template<Color Attacker>
-	bool AttackDetector<objboard::ObjBoard>::IsUnderDiagonalAttack(const objboard::ObjBoard& board, Square sq) const
-	{
-		using ctraits = traits::color_traits<Attacker>;
-		using bctraits = traits::board_color_traits<objboard::ObjBoard, Attacker>;
-
-		auto dir_idx = Connections::DiagonalSquareIndexes[sq];
-		auto idx = dir_idx + 4;
-
-		for (Direction dir : objboard::ObjBoard::DiagonalDirections)
-		{
-			Distance dist{ 1 };
-			for (int i = 0; i < Connections::DiagonalConnections[dir_idx]; i++, dist++)
-			{
-				auto p = board.GetPiece(Connections::DiagonalConnections[idx++]);
-				if (p == Empty)
-					continue;
-
-				if (p == ctraits::Bishop || p == ctraits::Queen || dist == 1 &&
-				   (p == ctraits::King || (p == ctraits::Pawn && (dir == bctraits::PawnReverseAttackDirections[0] || dir == bctraits::PawnReverseAttackDirections[1]))))
-					return true;
-
-				break;
-			}
-			dir_idx++;
-		}
-
-		return false;
-	}
-
-	template <>
-	template<Color Attacker>
-	void AttackDetector<objboard::ObjBoard>::ComputeStraightChecksAndPins(const objboard::ObjBoard& board, Square king_pos)
-	{
-		using ctraits = traits::color_traits<Attacker>;
-
-		auto dir_idx = Connections::StraightSquareIndexes[king_pos];
-		auto idx = dir_idx + 4;
-
-		for (Direction dir : objboard::ObjBoard::StraightDirections)
-		{
-			Square pin_loc{ Empty };
-			Distance dist{ 1 };
-
-			for (int i = 0; i < Connections::StraightConnections[dir_idx]; i++, dist++)
-			{
-				auto next = Connections::StraightConnections[idx++];
-				auto p = board.GetPiece(next);
-				if (p == Empty)
-					continue;
-
-				if (p == ctraits::Rook || p == ctraits::Queen)
-				{
-					if (pin_loc != Empty)
-						this->_pins[this->_numPins++] = { pin_loc, next, dir };
-					else
-						this->_checks[this->_numChecks++] = { next, dir, dist };
-					break;
-				}
-				else
-				{
-					if (pin_loc == Empty)
-						pin_loc = next;
-					else
-						break;
-				}
-			}
-		}
-	}
-
-	template <>
-	template<Color Attacker>
-	void AttackDetector<objboard::ObjBoard>::ComputeDiagonalChecksAndPins(const objboard::ObjBoard& board, Square king_pos)
-	{
-		using ctraits = traits::color_traits<Attacker>;
-		using bctraits = traits::board_color_traits<objboard::ObjBoard, Attacker>;
-
-		auto dir_idx = Connections::StraightSquareIndexes[king_pos];
-		auto idx = dir_idx + 4;
-
-		for (Direction dir : objboard::ObjBoard::DiagonalDirections)
-		{
-			Square pin_loc{ Empty };
-			Distance dist{ 1 };
-			for (int i = 0; i < Connections::DiagonalConnections[dir_idx]; i++, dist++)
-			{
-				auto next = Connections::DiagonalConnections[idx++];
-				auto p = board.GetPiece(next);
-				if (p == Empty)
-					continue;
-
-				if (p == ctraits::Bishop || p == ctraits::Queen ||
-					dist == 1 && p == ctraits::Pawn && (dir == bctraits::PawnReverseAttackDirections[0] || dir == bctraits::PawnReverseAttackDirections[1]))
-				{
-					if (pin_loc != Empty)
-						this->_pins[this->_numPins++] = { pin_loc, next, dir };
-					else
-						this->_checks[this->_numChecks++] = { next, dir, dist };
-					break;
-				}
-				else
-				{
-					if (pin_loc == Empty)
-						pin_loc = next;
-					else
-						break;
-				}
-			}
-		}
-	}
+	*/
 #pragma endregion
 }

@@ -8,209 +8,173 @@
 
 namespace chesslib 
 {
-	Connectivity::Connectivity(bool compute /* = true */) :
-		_king_indexes{ }, 
-		_knight_indexes{ }, 
-		_straight_indexes{ }, 
-		_diagonal_indexes{ }
+	Connectivity::Connectivity(bool compute /* = true */)
 	{
-		if (compute) 
-		{
-			ComputeKnightConnections();
-			ComputeStraightConnections();
-			ComputeDiagonalConnections();
-			ComputeKingConnections();
-			ComputePawnConnections();
-		}
+		if (compute)
+			Compute();
 	}
-
-	void Connectivity::ComputeKnightConnections()
+	
+	void Connectivity::Compute() 
 	{
-		for (Square s = 0; s < 64; s++)
+		// per direction - rays
 		{
-			ConnectionsType connections;
-			for (Direction dir : KnightJumps)
-				if (BasicBoard::IsInside(s, s + dir))
-					connections.push_back(s + dir);
-
-			_knight_connections.push_back((Square)connections.size());
-			_knight_indexes[s] = (int16_t)(_knight_connections.size() - 1);
-			_knight_connections.insert(_knight_connections.end(), connections.begin(), connections.end());
-		}
-	}
-
-	void Connectivity::ComputeStraightConnections()
-	{
-		for (Square s = 0; s < 64; s++)
-		{
-			std::vector<ConnectionsType> connections(4);
-			int i = 0;
-			for (Direction dir : StraightDirections)
-			{
-				Square next = s + dir;
-				while (BasicBoard::IsInside(next - dir, next))
-				{
-					connections[i].push_back(next);
-					next += dir;
-				}
-				i++;
-			}
-
-			_straight_indexes[s] = (int16_t)_straight_connections.size();
-			for (int j = 0; j < 4; j++)
-				_straight_connections.push_back((Square)connections[j].size()); // Number of squares in each direction N, E, S, W
-
-			for (int j = 0; j < 4; j++)
-				_straight_connections.insert(_straight_connections.end(), connections[j].begin(), connections[j].end());
-		}
-	}
-
-	void Connectivity::ComputeDiagonalConnections()
-	{
-		for (Square s = 0; s < 64; s++)
-		{
-			std::vector<ConnectionsType> connections(4);
-			int i = 0;
-			for (Direction dir : DiagonalDirections) // NE, SE, SW, NW
-			{
-				Square next = s + dir;
-				while (BasicBoard::IsInside(next - dir, next))
-				{
-					connections[i].push_back(next);
-					next += dir;
-				}
-			}
-
-			_diagonal_indexes[s] = (int16_t)_diagonal_connections.size();
-			for (int j = 0; j < 4; j++)
-				_diagonal_connections.push_back((Square)connections[j].size()); // Number of squares in each direction NE, SE, SW, NW
-
-			for (int j = 0; j < 4; j++)
-				_diagonal_connections.insert(_diagonal_connections.end(), connections[j].begin(), connections[j].end());
-		}
-	}
-
-	void Connectivity::ComputeKingConnections()
-	{
-		std::uint8_t masks[8] = { 1, 2, 4, 8, 16, 32, 64, 128 };
-
-		for (Square s = 0; s < 64; s++)
-		{
-			ConnectionsType connections;
-			std::uint8_t mask = 0;
-			int i = 0;
 			for (Direction dir : AllDirections)  // N, NE, E, SE, S, SW, W, NW
 			{
-				if (BasicBoard::IsInside(s, s + dir))
-				{
-					mask |= masks[i];
-					connections.push_back(s + dir);
-				}
-				i++;
-			}
+				auto indexes = ConnectionIndexes(dir);
 
-			_king_connections.push_back(mask);
-			_king_indexes[s] = (int16_t)(_king_connections.size() - 1);
-			_king_connections.insert(_king_connections.end(), connections.begin(), connections.end());
+				for (Square s = 0; s < 64; s++)
+				{
+					indexes._indexes_start[s] = Empty;
+					indexes._indexes_end[s] = Empty;
+
+					std::vector<Square> connections;
+					Square next = s + dir;
+					while (BasicBoard::IsInside(next - dir, next))
+					{
+						connections.push_back(next);
+						next += dir;
+					}
+
+					if (!connections.empty())
+					{
+						indexes._indexes_start[s] = (int16_t)_connections.size();
+						_connections.insert(_connections.end(), connections.begin(), connections.end());
+						indexes._indexes_end[s] = (int16_t)_connections.size();
+					}
+				}
+
+				_indexes.push_back(indexes);
+			}
 		}
-	}
-
-	void Connectivity::ComputePawnConnections()
-	{
-		using wbct = traits::board_color_traits<BasicBoard, color::White>;
-		using bbct = traits::board_color_traits<BasicBoard, color::Black>;
-
-		std::int8_t white_double_push_mask = 0x01;
-		std::int8_t white_promote_mask = 0x02;
-		std::int8_t white_left_capture_mask = 0x04;
-		std::int8_t white_right_capture_mask = 0x08;
-
-		std::int8_t black_double_push_mask = 0x10;
-		std::int8_t black_promote_mask = 0x20;
-		std::int8_t black_left_capture_mask = 0x40;
-		std::int8_t black_right_capture_mask = 0x80;
-
-		int16_t idx{ -1 };
-		for (Square s = 0; s < 64; s++)
+		
+		// knight_connections, per-square
 		{
-			// bit-field
-			_pawn_connections.push_back(0);
-			int8_t mask{ 0 };
-
-			idx = _pawn_connections.size() - 1;
-			_pawn_indexes[s] = idx;
-			
-			Rank r = ChessBoard::GetRank(s);
-			if (r < 7) 
+			auto indexes = ConnectionIndexes(Empty);
+			for (Square s = 0; s < 64; s++)
 			{
-				// white pawn promotion flag
-				if (r == wbct::PawnPromotionRank - 1)
-					mask |= white_promote_mask;
-
-				// white pawn single push
-				if(r == 0)
-					_pawn_connections.push_back(Empty);
-				else
-					_pawn_connections.push_back(s + wbct::PawnMoveDirection);
-
-				// white pawn double push
-				if (r == wbct::PawnDoublePushRank)
+				std::vector<Square> connections;
+				for (Direction dir : KnightJumps) 
 				{
-					mask |= white_double_push_mask;
-					_pawn_connections.push_back(s + 2 * wbct::PawnMoveDirection);
+					if (BasicBoard::IsInside(s, s + dir))
+						connections.push_back(s + dir);
 				}
 
-				// white pawn captures
-				auto next = s + wbct::PawnAttackDirections[0];
-				if (BasicBoard::IsInside(s, next))
+				indexes._indexes_start[s] = (int16_t)_connections.size();
+				_connections.insert(_connections.end(), connections.begin(), connections.end());
+				indexes._indexes_end[s] = (int16_t)_connections.size();
+			}
+			_indexes.push_back(indexes);
+		}
+
+		// per direction single-square
+		{
+			auto indexes = ConnectionIndexes(Empty);
+			for (Square s = 0; s < 64; s++)
+			{
+				std::vector<Square> connections;
+				for (Direction dir : AllDirections)  // N, NE, E, SE, S, SW, W, NW
 				{
-					_pawn_connections.push_back(next);
-					mask |= white_right_capture_mask;
+					if (BasicBoard::IsInside(s, s + dir)) 
+						connections.push_back(s + dir);
+					else
+						connections.push_back(Empty);
 				}
 
-				next = s + wbct::PawnAttackDirections[1];
-				if (BasicBoard::IsInside(s, next))
+				indexes._indexes_start[s] = (int16_t)_connections.size();
+				_connections.insert(_connections.end(), connections.begin(), connections.end());
+				// No need to store the end_index as we store 8 neighbors for each square.
+			}
+			_indexes.push_back(indexes);
+		}
+
+		// Pawn connections
+		{
+			static constexpr Square promotion_flag = -99;
+
+			// white pawn-connections
+			{
+				using wbct = traits::board_color_traits<BasicBoard, color::White>;
+				auto indexes = ConnectionIndexes(Empty);
+				for (Square s = 0; s < 64; s++)
 				{
-					_pawn_connections.push_back(next);
-					mask |= white_left_capture_mask;
+					std::vector<Square> connections;
+					indexes._indexes_start[s] = Empty;
+					Rank r = ChessBoard::GetRank(s);
+
+					Square next = s + wbct::PawnMoveDirection;
+					if (BasicBoard::IsInside(s, next))
+					{
+						// white pawn single push
+						connections.push_back(next);
+
+						// white pawn double push / white pawn promotion flag
+						if (r == wbct::PawnDoublePushRank)
+							connections.push_back(next + wbct::PawnMoveDirection);
+						else if (r == wbct::PawnPromotionRank - 1)
+							connections.push_back(promotion_flag);
+						else
+							connections.push_back(Empty);
+
+						// white pawn captures
+						for (int i = 0; i < 2; i++)
+						{
+							next = s + wbct::PawnAttackDirections[i];
+							if (BasicBoard::IsInside(s, next))
+								connections.push_back(next);
+							else
+								connections.push_back(Empty);
+						}
+
+						indexes._indexes_start[s] = (int16_t)_connections.size();
+						_connections.insert(_connections.end(), connections.begin(), connections.end());
+						// No need to store the end_index as we store 4 squares for each square.
+					}
 				}
+				_indexes.push_back(indexes);
 			}
 
-			if (r > 0) 
+			// black pawn-connections
 			{
-				// black pawn promotion flag
-				if (r == bbct::PawnPromotionRank + 1)
-					mask |= black_promote_mask;
+				using bbct = traits::board_color_traits<BasicBoard, color::Black>;
 
-				// black pawn single push
-				if (r == 7)
-					_pawn_connections.push_back(Empty);
-				else
-					_pawn_connections.push_back(s + bbct::PawnMoveDirection);
-
-				// black pawn double push
-				if (r == bbct::PawnDoublePushRank)
+				auto indexes = ConnectionIndexes(Empty);
+				for (Square s = 0; s < 64; s++)
 				{
-					mask |= black_double_push_mask;
-					_pawn_connections.push_back(s + 2 * bbct::PawnMoveDirection);
-				}
+					std::vector<Square> connections;
 
-				// black pawn captures
-				auto next = s + bbct::PawnAttackDirections[0];
-				if (BasicBoard::IsInside(s, next))
-				{
-					_pawn_connections.push_back(next);
-					mask |= black_left_capture_mask;
-				}
+					Rank r = ChessBoard::GetRank(s);
+					indexes._indexes_start[s] = Empty;
+					Square next = s + bbct::PawnMoveDirection;
+					if (BasicBoard::IsInside(s, next))
+					{
+						// black pawn single push
+						connections.push_back(next);
 
-				next = s + bbct::PawnAttackDirections[1];
-				if (BasicBoard::IsInside(s, next))
-				{
-					_pawn_connections.push_back(next);
-					mask |= black_right_capture_mask;
+						// black pawn double push / black pawn promotion flag
+						if (r == bbct::PawnDoublePushRank)
+							connections.push_back(next + bbct::PawnMoveDirection);
+						else if (r == bbct::PawnPromotionRank + 1)
+							connections.push_back(promotion_flag);
+						else
+							connections.push_back(Empty);
+
+						// black pawn captures
+						for (int i = 0; i < 2; i++)
+						{
+							next = s + bbct::PawnAttackDirections[i];
+							if (BasicBoard::IsInside(s, next))
+								connections.push_back(next);
+							else
+								connections.push_back(Empty);
+						}
+
+						indexes._indexes_start[s] = (int16_t)_connections.size();
+						_connections.insert(_connections.end(), connections.begin(), connections.end());
+						// No need to store the end_index as we store 4 squares for each square.
+					}
 				}
-			} 
-			_pawn_connections[idx] = mask;
+				_indexes.push_back(indexes);
+			}
 		}
 	}
 
@@ -223,56 +187,33 @@ namespace chesslib
 			return;
 		}
 
-		of << "King indexes\n";
-		for (int i = 0; i < 64; i++)
-			of << _king_indexes[i] << " ";
+		of << "Connections: " << _connections.size() << std::endl;
+		for (Square s : _connections)
+			of << (int)s << " ";
+		of << std::endl;
 		of << std::endl;
 
-		of << "Values: " << _king_connections.size() << std::endl;
-		for (int i = 0; i < _king_connections.size(); i++)
-			of << (int)(_king_connections[i]) << " ";
-		of << std::endl;
+		of << "Indexes: " << std::endl;
 
-		of << "Knight indexes\n";
-		for (int i = 0; i < 64; i++)
-			of << _knight_indexes[i] << " ";
-		of << std::endl;
+		std::vector<std::string> dirNames
+		{
+			"North", "North-East", "East", "South-East", "South", "South-West", "West", "North-West",
+			"Knight-Connections", "Single-square", "White-pawns", "Black-pawns"
+		};
 
-		of << "Values: " << _knight_connections.size() << std::endl;
-		for (int i = 0; i < _knight_connections.size(); i++)
-			of << (int)(_knight_connections[i]) << " ";
-		of << std::endl;
+		for (int i = 0; i < dirNames.size(); i++) 
+		{
+			of << "\t" << dirNames[i] << ": " << (int)_indexes[i].dir << std::endl;
+			of << "\t\tStart: " << std::endl;
+			for (int16_t idx : _indexes[i]._indexes_start)
+				of << idx << " ";
+			of << std::endl;
 
-		of << "Straigt indexes\n";
-		for (int i = 0; i < 64; i++)
-			of << _straight_indexes[i] << " ";
-		of << std::endl;
-
-		of << "Values: " << _straight_connections.size() << std::endl;
-		for (int i = 0; i < _straight_connections.size(); i++)
-			of << (int)(_straight_connections[i]) << " ";
-		of << std::endl;
-
-		of << "Diagonal indexes\n";
-		for (int i = 0; i < 64; i++)
-			of << _diagonal_indexes[i] << " ";
-		of << std::endl;
-
-		of << "Values: " << _diagonal_connections.size() << std::endl;
-		for (int i = 0; i < _diagonal_connections.size(); i++)
-			of << (int)(_diagonal_connections[i]) << " ";
-		of << std::endl;
-
-		of << "Pawn indexes\n";
-		for (int i = 0; i < 64; i++)
-			of << _pawn_indexes[i] << " ";
-		of << std::endl;
-
-		of << "Values: " << _pawn_connections.size() << std::endl;
-		for (int i = 0; i < _pawn_connections.size(); i++)
-			of << (int)(_pawn_connections[i]) << " ";
-		of << std::endl;
-
+			of << "\t\tEnd: " << std::endl;
+			for (int16_t idx : _indexes[i]._indexes_end)
+				of << idx << " ";
+			of << std::endl;
+		}
 		of.close();
 	}
 }

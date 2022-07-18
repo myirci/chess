@@ -162,7 +162,6 @@ namespace chesslib
 
 			brd.PopFromMoveStack();
 		}
-
 	}
 
 	// Preconditions: brd is cleared or newly created. 

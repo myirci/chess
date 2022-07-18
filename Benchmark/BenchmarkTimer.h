@@ -43,19 +43,19 @@ public:
 		switch (_unit) 
 		{
 		case TimeUnit::nanoseconds:
-			return std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count();
+			return (double)std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count();
 		case TimeUnit::microseconds:
-			return std::chrono::duration_cast<std::chrono::microseconds>(duration).count();
+			return (double)std::chrono::duration_cast<std::chrono::microseconds>(duration).count();
 		case TimeUnit::milliseconds:
-			return std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+			return (double)std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
 		case TimeUnit::seconds:
-			return std::chrono::duration_cast<std::chrono::seconds>(duration).count();
+			return (double)std::chrono::duration_cast<std::chrono::seconds>(duration).count();
 		case TimeUnit::minutes:
-			return std::chrono::duration_cast<std::chrono::minutes>(duration).count();
+			return (double)std::chrono::duration_cast<std::chrono::minutes>(duration).count();
 		case TimeUnit::hours:
-			return std::chrono::duration_cast<std::chrono::hours>(duration).count();
+			return (double)std::chrono::duration_cast<std::chrono::hours>(duration).count();
 		case TimeUnit::days:
-			return std::chrono::duration_cast<std::chrono::days>(duration).count();
+			return (double)std::chrono::duration_cast<std::chrono::days>(duration).count();
 		default:
 			return -1.0;
 		}
