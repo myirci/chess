@@ -20,7 +20,7 @@ namespace chesslib
 		template<Color SideToMove>
 		void GenerateMoves(const BoardType& board, MoveList& moves);
 	
-		template<Color SideToMove>
+		template<Color SideToMove, bool Check>
 		void GenerateKingMoves(const BoardType& board, Square king_pos, MoveList& moves);
 	
 		template<Color SideToMove>
@@ -70,41 +70,47 @@ namespace chesslib
 		auto king_pos = board.GetKingPosition<SideToMove>();
 		_attackDetector.ComputeChecksAndPins<ctraits::Opposite>(board, king_pos);
 
-		GenerateKingMoves<SideToMove>(board, king_pos, moves);
-
 		auto num_checks = _attackDetector.GetNumberOfChecks();
 		if (num_checks == 0)
 		{
+			GenerateKingMoves<SideToMove, false>(board, king_pos, moves);
 			GenerateStraightMoves<SideToMove>(board, moves);
 			GenerateDiagonalMoves<SideToMove>(board, moves);
 			GenerateKnightMoves<SideToMove>(board, moves);
 			GeneratePawnMoves<SideToMove>(board, moves);
 		}
-		else if (num_checks == 1)
+		else 
 		{
-			GenerateCheckerCapturingMoves<SideToMove>(board, moves);
-			GenerateCheckBlockingMoves<SideToMove>(board, moves);
-		}
-		else if (num_checks != 2)
-			throw std::logic_error("Number of checks can not be different than 0, 1, 2.");
+			GenerateKingMoves<SideToMove, true>(board, king_pos, moves);
+			
+			if (num_checks == 1) 
+			{
+				GenerateCheckerCapturingMoves<SideToMove>(board, moves);
+				GenerateCheckBlockingMoves<SideToMove>(board, moves);
+			}
+		}	
 	}
 
 	template <typename BoardType>
-	template <Color SideToMove>
+	template <Color SideToMove, bool Check>
 	void MoveGenerator<BoardType>::GenerateKingMoves(const BoardType& board, Square king_pos, MoveList& moves)
 	{
 		using ctraits = traits::color_traits<SideToMove>;
 		using bctraits = traits::board_color_traits<BoardType, SideToMove>;
 
 		Square next{ Empty };
-
 		for (Direction dir : BoardType::AllDirections)
 		{
 			next = king_pos + dir;
-			if (IsInside<BoardType>(next, king_pos) &&
-				_attackDetector.CanKingMoveInThisDirection<ctraits::Opposite>(board, dir) &&
+			if (IsInside<BoardType>(next, king_pos) && 
 				!_attackDetector.IsUnderAttack<ctraits::Opposite>(board, next))
 			{
+				if constexpr (Check) 
+				{
+					if (!_attackDetector.VerifyDirectionForCheckedKing<ctraits::Opposite>(board, dir))
+						continue;
+				}
+
 				auto p = board.GetPiece(next);
 				if (p == Empty)
 					moves.emplace_back(king_pos, next);
@@ -113,23 +119,25 @@ namespace chesslib
 			}
 		}
 
-		if (_attackDetector.GetNumberOfChecks() > 0)
+		if constexpr (Check)
 			return;
+		else 
+		{
+			if (board.QueryCastling(ctraits::KingSideCastling) &&
+				board.GetPiece(bctraits::KingSideCastleCheckSquares[0]) == Empty &&
+				board.GetPiece(bctraits::KingSideCastleCheckSquares[1]) == Empty &&
+				!_attackDetector.IsUnderAttack<ctraits::Opposite>(board, bctraits::KingSideCastleCheckSquares[0]) &&
+				!_attackDetector.IsUnderAttack<ctraits::Opposite>(board, bctraits::KingSideCastleCheckSquares[1]))
+				moves.emplace_back(king_pos, bctraits::KingSideCastleCheckSquares[1], MoveType::King_Side_Castle);
 
-		if (board.QueryCastling(ctraits::KingSideCastling) &&
-			board.GetPiece(bctraits::KingSideCastleCheckSquares[0]) == Empty &&
-			board.GetPiece(bctraits::KingSideCastleCheckSquares[1]) == Empty &&
-			!_attackDetector.IsUnderAttack<ctraits::Opposite>(board, bctraits::KingSideCastleCheckSquares[0]) &&
-			!_attackDetector.IsUnderAttack<ctraits::Opposite>(board, bctraits::KingSideCastleCheckSquares[1]))
-			moves.emplace_back(king_pos, bctraits::KingSideCastleCheckSquares[1], MoveType::King_Side_Castle);
-
-		if (board.QueryCastling(ctraits::QueenSideCastling) &&
-			board.GetPiece(bctraits::QueenSideCastleCheckSquares[0]) == Empty &&
-			board.GetPiece(bctraits::QueenSideCastleCheckSquares[1]) == Empty &&
-			board.GetPiece(bctraits::QueenSideCastleCheckSquares[2]) == Empty &&
-			!_attackDetector.IsUnderAttack<ctraits::Opposite>(board, bctraits::QueenSideCastleCheckSquares[0]) &&
-			!_attackDetector.IsUnderAttack<ctraits::Opposite>(board, bctraits::QueenSideCastleCheckSquares[1]))
-			moves.emplace_back(king_pos, bctraits::QueenSideCastleCheckSquares[1], MoveType::Queen_Side_Castle);
+			if (board.QueryCastling(ctraits::QueenSideCastling) &&
+				board.GetPiece(bctraits::QueenSideCastleCheckSquares[0]) == Empty &&
+				board.GetPiece(bctraits::QueenSideCastleCheckSquares[1]) == Empty &&
+				board.GetPiece(bctraits::QueenSideCastleCheckSquares[2]) == Empty &&
+				!_attackDetector.IsUnderAttack<ctraits::Opposite>(board, bctraits::QueenSideCastleCheckSquares[0]) &&
+				!_attackDetector.IsUnderAttack<ctraits::Opposite>(board, bctraits::QueenSideCastleCheckSquares[1]))
+				moves.emplace_back(king_pos, bctraits::QueenSideCastleCheckSquares[1], MoveType::Queen_Side_Castle);
+		}
 	}
 
 	template <typename BoardType>
@@ -142,23 +150,21 @@ namespace chesslib
 
 		const auto& check = _attackDetector.GetFirstCheck();
 
-		Direction check_dir = direction::Reverse(check.checker_dir); // checker to king direction
-
 		for (Direction dir : BoardType::StraightDirections)
 		{
-			// checker cannot be captured in check - direction, this can be done by the checked king - only which is
-		    // covered when generating the king-moves.
-			if (dir == check_dir)
+			// Checker cannot be captured in check - direction, this can be done only by the checked king. 
+			// This case is covered when generating the king-moves.
+			if (dir == check.attack_dir)
 				continue;
 
-			for (Square next{ check.checker + dir }; IsInside<BoardType>(next, next - dir); next += dir)
+			for (Square next{ check.attacker + dir }; IsInside<BoardType>(next, next - dir); next += dir)
 			{
 				auto p = board.GetPiece(next);
 				if (p == Empty)
 					continue;
 
 				if ((p == ctraits::Rook || p == ctraits::Queen) && !_attackDetector.IsPinned(next))
-					moves.emplace_back(next, check.checker, MoveType::Capture);
+					moves.emplace_back(next, check.attacker, MoveType::Capture);
 
 				break;
 			}
@@ -166,17 +172,19 @@ namespace chesslib
 
 		for (Direction dir : BoardType::DiagonalDirections)
 		{
-			if (dir == check_dir)
+			// Checker cannot be captured in check - direction, this can be done only by the checked king. 
+			// This case is covered when generating the king-moves.
+			if (dir == check.attack_dir)
 				continue;
 
-			for (Square next{ check.checker + dir }; IsInside<BoardType>(next, next - dir); next += dir)
+			for (Square next{ check.attacker + dir }; IsInside<BoardType>(next, next - dir); next += dir)
 			{
 				auto p = board.GetPiece(next);
 				if (p == Empty)
 					continue;
 
 				if ((p == ctraits::Bishop || p == ctraits::Queen) && !_attackDetector.IsPinned(next))
-					moves.emplace_back(next, check.checker, MoveType::Capture);
+					moves.emplace_back(next, check.attacker, MoveType::Capture);
 
 				break;
 			}
@@ -184,34 +192,34 @@ namespace chesslib
 
 		for (Direction dir : BoardType::KnightJumps)
 		{
-			if (Square next{ check.checker + dir }; IsInside<BoardType>(next, check.checker) && board.GetPiece(next) == ctraits::Knight && !_attackDetector.IsPinned(next))
-				moves.emplace_back(next, check.checker, MoveType::Capture);
+			if (Square next{ check.attacker + dir }; IsInside<BoardType>(next, check.attacker) && board.GetPiece(next) == ctraits::Knight && !_attackDetector.IsPinned(next))
+				moves.emplace_back(next, check.attacker, MoveType::Capture);
 		}
 
-		if (check.checker >= bctraits::ValidPawnMoveSquares[0] && check.checker <= bctraits::ValidPawnMoveSquares[1])
+		if (check.attacker >= bctraits::ValidPawnMoveSquares[0] && check.attacker <= bctraits::ValidPawnMoveSquares[1])
 		{
 			for (Direction dir : bctraits::PawnReverseAttackDirections)
 			{
-				if (Square next{ check.checker + dir }; IsInside<BoardType>(next, check.checker) && board.GetPiece(next) == ctraits::Pawn && !_attackDetector.IsPinned(next))
+				if (Square next{ check.attacker + dir }; IsInside<BoardType>(next, check.attacker) && board.GetPiece(next) == ctraits::Pawn && !_attackDetector.IsPinned(next))
 				{
-					if (BoardType::GetRank(check.checker) == bctraits::PawnPromotionRank)
+					if (BoardType::GetRank(check.attacker) == bctraits::PawnPromotionRank)
 					{
-						moves.emplace_back(next, check.checker, MoveType::Queen_Promotion_Capture);
-						moves.emplace_back(next, check.checker, MoveType::Rook_Promotion_Capture);
-						moves.emplace_back(next, check.checker, MoveType::Bishop_Promotion_Capture);
-						moves.emplace_back(next, check.checker, MoveType::Knight_Promotion_Capture);
+						moves.emplace_back(next, check.attacker, MoveType::Queen_Promotion_Capture);
+						moves.emplace_back(next, check.attacker, MoveType::Rook_Promotion_Capture);
+						moves.emplace_back(next, check.attacker, MoveType::Bishop_Promotion_Capture);
+						moves.emplace_back(next, check.attacker, MoveType::Knight_Promotion_Capture);
 					}
 					else
 					{
-						moves.emplace_back(next, check.checker, MoveType::Capture);
+						moves.emplace_back(next, check.attacker, MoveType::Capture);
 					}
 				}
 			}
 
-			if (Square enpassant_sq{ board.GetEnPassantSquare() }; enpassant_sq != Empty && board.GetPiece(check.checker) == octraits::Pawn)
+			if (Square enpassant_sq{ board.GetEnPassantSquare() }; enpassant_sq != Empty && board.GetPiece(check.attacker) == octraits::Pawn)
 			{
 				for (Direction dir : bctraits::PawnReverseAttackDirections)
-					if (Square next{ enpassant_sq + dir }; IsInside<BoardType>(check.checker, enpassant_sq) && board.GetPiece(next) == ctraits::Pawn && !_attackDetector.IsPinned(next))
+					if (Square next{ enpassant_sq + dir }; IsInside<BoardType>(check.attacker, enpassant_sq) && board.GetPiece(next) == ctraits::Pawn && !_attackDetector.IsPinned(next))
 						moves.emplace_back(next, enpassant_sq, MoveType::En_Passant_Capture);
 			}
 		}
@@ -222,20 +230,21 @@ namespace chesslib
 	void MoveGenerator<BoardType>::GenerateCheckBlockingMoves(const BoardType& board, MoveList& moves) const
 	{
 		using ctraits = traits::color_traits<SideToMove>;
+		using octraits = traits::color_traits<ctraits::Opposite>;
 		using bctraits = traits::board_color_traits<BoardType, SideToMove>;
 
+		// A check with a knight cannot be blocked.
 		const auto& check = _attackDetector.GetFirstCheck();
-		if (check.checker_dist < 2)
+		if (board.GetPiece(check.attacker) == octraits::Knight)
 			return;
 
-		Direction check_dir = direction::Reverse(check.checker_dir);
-
-		Square sq{ check.checker + check_dir };
-		for (Distance i{ 1 }; i < check.checker_dist; i++, sq += check_dir)
+		Square sq{ check.attacker + check.attack_dir };
+		while (sq != check.attacked) 
 		{
 			for (Direction dir : BoardType::StraightDirections)
 			{
-				if (dir == check_dir)
+				// Checking piece cannot be blocked by moving a piece in the check direction.
+				if (dir == check.attack_dir)
 					continue;
 
 				for (Square next{ sq + dir }; IsInside<BoardType>(next, next - dir); next += dir)
@@ -253,7 +262,8 @@ namespace chesslib
 
 			for (Direction dir : BoardType::DiagonalDirections)
 			{
-				if (dir == check_dir)
+				// Checking piece cannot be blocked by moving a piece in the check direction.
+				if (dir == check.attack_dir)
 					continue;
 
 				for (Square next{ sq + dir }; IsInside<BoardType>(next, next - dir); next += dir)
@@ -300,6 +310,8 @@ namespace chesslib
 						moves.emplace_back(next, sq, MoveType::Double_Pawn_Push);
 				}
 			}
+
+			sq += check.attack_dir;
 		}
 	}
 
@@ -465,7 +477,7 @@ namespace chesslib
 					IsInside<BoardType>(next, first->second) &&
 					board.GetPiece(next) != Empty &&
 					color::get_color(board.GetPiece(next)) != SideToMove &&
-					(pin_dir == Empty || pin_dir == bctraits::PawnAttackDirections[i]))
+					(pin_dir == Empty || pin_dir == bctraits::PawnReverseAttackDirections[i]))
 				{
 					if (BoardType::GetRank(next) == bctraits::PawnPromotionRank)
 					{
@@ -490,7 +502,7 @@ namespace chesslib
 			if (!IsInside<BoardType>(en_passant, pos) || board.GetPiece(pos) != ctraits::Pawn)
 				continue;
 
-			if (Direction pin_dir = _attackDetector.GetPinDirection(pos); pin_dir != Empty && pin_dir != bctraits::PawnAttackDirections[i])
+			if (Direction pin_dir = _attackDetector.GetPinDirection(pos); pin_dir != Empty && pin_dir != bctraits::PawnReverseAttackDirections[i])
 				continue;
 
 			Square king_pos = board.GetKingPosition<SideToMove>();

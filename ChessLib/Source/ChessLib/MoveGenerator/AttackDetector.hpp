@@ -17,30 +17,48 @@ namespace chesslib
 	{
 	public:
 
-		struct check
+		struct AttackInfo
 		{
-			Square    checker;		// checker location
-			Direction checker_dir;  // direction from king to checker
-			Distance  checker_dist; // distance from king to checker
+			Square    attacker;	  // attacker location (pinner or checker)
+			Square    attacked;	  // attacked piece (pinned piece or checked king) location 
+			Direction attack_dir; // direction from attacker to attacked (pinned piece or checked king)
 		};
 
-		struct pin
+		const AttackInfo& GetFirstCheck() const  { return _checks[0]; }
+		
+		std::uint8_t GetNumberOfChecks() const noexcept { return _numChecks; }
+
+		Direction GetPinDirection(Square piece_loc) const noexcept
 		{
-			Square    pinned;	  // pinned piece location
-			Square    pinner;	  // attacker location
-			Direction pinner_dir; // direction from pinned piece to the attacker
-		};
+			for (int i = 0; i < _numPins; i++)
+				if (_pins[i].attacked == piece_loc)
+					return _pins[i].attack_dir;
+			return Empty;
+		}
 
-		const check& GetFirstCheck() const;
-
-		std::uint8_t GetNumberOfChecks() const noexcept;
-
-		bool IsPinned(Square piece_loc) const noexcept;
-
-		Direction GetPinDirection(Square piece_loc) const noexcept;
-
+		bool IsPinned(Square piece_loc) const noexcept { return GetPinDirection(piece_loc) != Empty; }
+		
 		template<Color Attacker>
-		bool CanKingMoveInThisDirection(const BoardType& board, Direction dir) const;
+		bool VerifyDirectionForCheckedKing(const BoardType& board, Direction dir) const 
+		{
+			using ctraits = traits::color_traits<Attacker>;
+			for (int i = 0; i < this->_numChecks; i++)
+			{
+				if (this->_checks[i].attack_dir == dir)
+				{
+					// Away from checker, possible only if the checker is a pawn
+					if (board.GetPiece(this->_checks[i].attacker) != ctraits::Pawn)
+						return false;
+				}
+				else if (this->_checks[i].attack_dir == direction::Reverse(dir))
+				{
+					// Towards checker, possible only if the checker is one square away from the king
+					if (this->_checks[i].attacked != (this->_checks[i].attacker + this->_checks[i].attack_dir))
+						return false;
+				}
+			}
+			return true;
+		}
 
 		template <Color Attacker>
 		void ComputeChecksAndPins(const BoardType& board, Square king_pos);
@@ -52,8 +70,8 @@ namespace chesslib
 
 		std::uint8_t _numPins;
 		std::uint8_t _numChecks;
-		pin		     _pins[8];
-		check	     _checks[2];
+		AttackInfo	 _pins[8];
+		AttackInfo	 _checks[2];
 
 		inline void Clear() noexcept;
 
@@ -84,44 +102,6 @@ namespace chesslib
 		template<Color Attacker>
 		void ComputePawnChecks(const BoardType& board, Square king_pos);
 	};
-
-	template <typename BoardType>
-	const typename AttackDetector<BoardType>::check& AttackDetector<BoardType>::GetFirstCheck() const { return _checks[0]; }
-
-	template <typename BoardType>
-	std::uint8_t AttackDetector<BoardType>::GetNumberOfChecks() const noexcept { return _numChecks; }
-
-	template <typename BoardType>
-	bool AttackDetector<BoardType>::IsPinned(Square piece_loc) const noexcept
-	{
-		for (int i = 0; i < _numPins; i++)
-			if (_pins[i].pinned == piece_loc)
-				return true;
-		return false;
-	}
-
-	template <typename BoardType>
-	Direction AttackDetector<BoardType>::GetPinDirection(Square piece_loc) const noexcept
-	{
-		for (int i = 0; i < _numPins; i++)
-			if (_pins[i].pinned == piece_loc)
-				return _pins[i].pinner_dir;
-		return Empty;
-	}
-
-	template <typename BoardType>
-	template<Color Attacker>
-	bool AttackDetector<BoardType>::CanKingMoveInThisDirection(const BoardType& board, Direction dir) const
-	{
-		for (int i = 0; i < this->_numChecks; i++)
-		{
-			if (this->_checks[i].checker_dir == dir && this->_checks[i].checker_dist != 1 ||
-				this->_checks[i].checker_dir == direction::Reverse(dir) &&
-				board.GetPiece(this->_checks[i].checker) != traits::color_traits<Attacker>::Pawn)
-				return false;
-		}
-		return true;
-	}
 
 	template <typename BoardType>
 	void AttackDetector<BoardType>::Clear() noexcept
@@ -159,9 +139,9 @@ namespace chesslib
 				if (p == ctraits::Rook || p == ctraits::Queen)
 				{
 					if (pin_loc != Empty)
-						this->_pins[this->_numPins++] = { pin_loc, next, dir };
+						this->_pins[this->_numPins++] = { next, pin_loc, direction::Reverse(dir) };
 					else
-						this->_checks[this->_numChecks++] = { next, dir, (next - king_pos) / dir};
+						this->_checks[this->_numChecks++] = { next, king_pos, direction::Reverse(dir) };
 					break;
 				}
 				else
@@ -192,9 +172,9 @@ namespace chesslib
 				if (p == ctraits::Bishop || p == ctraits::Queen)
 				{
 					if (pin_loc != Empty)
-						this->_pins[this->_numPins++] = { pin_loc, next, dir };
+						this->_pins[this->_numPins++] = { next, pin_loc, direction::Reverse(dir) };
 					else
-						this->_checks[this->_numChecks++] = { next, dir, (next - king_pos) / dir };
+						this->_checks[this->_numChecks++] = { next, king_pos, direction::Reverse(dir) };
 					break;
 				}
 				else
@@ -218,7 +198,7 @@ namespace chesslib
 		{
 			if (next = king_pos + dir; IsInside<BoardType>(next, king_pos) && board.GetPiece(next) == ctraits::Knight)
 			{
-				this->_checks[this->_numChecks++] = { next, Empty, Empty };
+				this->_checks[this->_numChecks++] = { next, king_pos, Empty };
 				return;
 			}
 		}
@@ -235,7 +215,7 @@ namespace chesslib
 			Square next = king_pos + bctraits::PawnReverseAttackDirections[i];
 			if (IsInside<BoardType>(next, king_pos) && board.GetPiece(next) == ctraits::Pawn) 
 			{
-				this->_checks[this->_numChecks++] = { next, bctraits::PawnReverseAttackDirections[i], (Distance)1 };
+				this->_checks[this->_numChecks++] = { next, king_pos, direction::Reverse(bctraits::PawnReverseAttackDirections[i]) };
 				return;
 			}
 		}
