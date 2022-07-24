@@ -18,8 +18,10 @@ namespace chesslib::traits
 		static constexpr Square    QueenSideCastleCheckSquares[3]     = { BoardType::d1, BoardType::c1, BoardType::b1 };
 		static constexpr Square    ValidPawnMoveSquares[2]            = { BoardType::a3, BoardType::h8 };
 
-		static constexpr Rank	   PawnPromotionRank		          = 7;
+		static constexpr Rank	   PawnPromotionRank		          = 6;
+		static constexpr Rank	   PromotedPawnRank					  = 7;
 		static constexpr Rank	   PawnDoublePushRank		          = 1;
+		static constexpr Rank	   DoublePushedPawnRank				  = 3;
 		static constexpr Direction PawnMoveDirection		          = BoardType::N;
 		static constexpr Direction PawnReverseMoveDirection           = BoardType::S;
 		static constexpr Direction PawnAttackDirections[2]            = { BoardType::NE, BoardType::NW };
@@ -37,8 +39,10 @@ namespace chesslib::traits
 		static constexpr Square    QueenSideCastleCheckSquares[3]     = { BoardType::d8, BoardType::c8, BoardType::b8 };
 		static constexpr Square    ValidPawnMoveSquares[2]            = { BoardType::a1, BoardType::h6 };
 
-		static constexpr Rank	   PawnPromotionRank			      = 0;
+		static constexpr Rank	   PawnPromotionRank			      = 1;
+		static constexpr Rank	   PromotedPawnRank					  = 0;
 		static constexpr Rank	   PawnDoublePushRank			      = 6;
+		static constexpr Rank	   DoublePushedPawnRank				  = 4;
 		static constexpr Direction PawnMoveDirection			      = BoardType::S;
 		static constexpr Direction PawnReverseMoveDirection		      = BoardType::N;
 		static constexpr Direction PawnAttackDirections[2]		      = { BoardType::SE, BoardType::SW };

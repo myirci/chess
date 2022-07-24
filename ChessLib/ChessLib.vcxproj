@@ -50,9 +50,12 @@
     <ClInclude Include="Source\ChessLib\Chess\Move.hpp" />
     <ClInclude Include="Source\ChessLib\Chess\BoardColorTraits.hpp" />
     <ClInclude Include="Source\ChessLib\MoveGenerator\AttackDetector.hpp" />
+    <ClInclude Include="Source\ChessLib\MoveGenerator\AttackDetectorBase.hpp" />
+    <ClInclude Include="Source\ChessLib\MoveGenerator\AttackDetectorConn.hpp" />
     <ClInclude Include="Source\ChessLib\MoveGenerator\Connections.hpp" />
     <ClInclude Include="Source\ChessLib\MoveGenerator\Connectivity.hpp" />
     <ClInclude Include="Source\ChessLib\MoveGenerator\MoveGenerator.hpp" />
+    <ClInclude Include="Source\ChessLib\MoveGenerator\MoveGeneratorConn.hpp" />
     <ClInclude Include="Source\ChessLib\Perft\Perft.hpp" />
     <ClInclude Include="Source\ChessLib\Utility\CommandLineExecutor.h" />
     <ClInclude Include="Source\ChessLib\Utility\IterableStack.hpp" />

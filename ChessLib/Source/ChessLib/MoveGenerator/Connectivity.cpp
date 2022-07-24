@@ -76,21 +76,17 @@ namespace chesslib
 				{
 					if (BasicBoard::IsInside(s, s + dir)) 
 						connections.push_back(s + dir);
-					else
-						connections.push_back(Empty);
 				}
 
 				indexes._indexes_start[s] = (int16_t)_connections.size();
 				_connections.insert(_connections.end(), connections.begin(), connections.end());
-				// No need to store the end_index as we store 8 neighbors for each square.
+				indexes._indexes_end[s] = (int16_t)_connections.size();
 			}
 			_indexes.push_back(indexes);
 		}
 
 		// Pawn connections
 		{
-			static constexpr Square promotion_flag = -99;
-
 			// white pawn-connections
 			{
 				using wbct = traits::board_color_traits<BasicBoard, color::White>;
@@ -104,15 +100,17 @@ namespace chesslib
 					Square next = s + wbct::PawnMoveDirection;
 					if (BasicBoard::IsInside(s, next))
 					{
+						// push the rank
+						connections.push_back(r);
+
 						// white pawn single push
 						connections.push_back(next);
 
-						// white pawn double push / white pawn promotion flag
-						if (r == wbct::PawnDoublePushRank)
-							connections.push_back(next + wbct::PawnMoveDirection);
-						else if (r == wbct::PawnPromotionRank - 1)
-							connections.push_back(promotion_flag);
-						else
+						// white pawn double push
+						next += wbct::PawnMoveDirection;
+						if (BasicBoard::IsInside(s, next)) 
+							connections.push_back(next);
+						else 
 							connections.push_back(Empty);
 
 						// white pawn captures
@@ -127,7 +125,7 @@ namespace chesslib
 
 						indexes._indexes_start[s] = (int16_t)_connections.size();
 						_connections.insert(_connections.end(), connections.begin(), connections.end());
-						// No need to store the end_index as we store 4 squares for each square.
+						// No need to store the end_index as we store 5 bytes for each square.
 					}
 				}
 				_indexes.push_back(indexes);
@@ -147,14 +145,16 @@ namespace chesslib
 					Square next = s + bbct::PawnMoveDirection;
 					if (BasicBoard::IsInside(s, next))
 					{
+						// push the rank
+						connections.push_back(r);
+
 						// black pawn single push
 						connections.push_back(next);
 
-						// black pawn double push / black pawn promotion flag
-						if (r == bbct::PawnDoublePushRank)
-							connections.push_back(next + bbct::PawnMoveDirection);
-						else if (r == bbct::PawnPromotionRank + 1)
-							connections.push_back(promotion_flag);
+						// black pawn double push 
+						next += bbct::PawnMoveDirection;
+						if (BasicBoard::IsInside(s, next))
+							connections.push_back(next);
 						else
 							connections.push_back(Empty);
 
@@ -170,7 +170,7 @@ namespace chesslib
 
 						indexes._indexes_start[s] = (int16_t)_connections.size();
 						_connections.insert(_connections.end(), connections.begin(), connections.end());
-						// No need to store the end_index as we store 4 squares for each square.
+						// No need to store the end_index as we store 5 squares for each square.
 					}
 				}
 				_indexes.push_back(indexes);

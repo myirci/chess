@@ -2,26 +2,27 @@
 
 #include <ChessLib/Chess/Move.hpp>
 #include <ChessLib/Chess/Definitions.hpp>
-#include <ChessLib/MoveGenerator/AttackDetector.hpp>
+#include <ChessLib/MoveGenerator/AttackDetectorConn.hpp>
+#include <ChessLib/MoveGenerator/Connections.hpp>
 
 namespace chesslib
 {
 	template <typename BoardType>
-	class MoveGenerator 
+	class MoveGeneratorConn
 	{
 	public:
 		MoveList GenerateMoves(const BoardType& board);
 
 	private:
 
-		AttackDetector<BoardType> _attackDetector;
+		AttackDetectorConn<BoardType> _attackDetector;
 
 		template<Color SideToMove>
 		void GenerateMoves(const BoardType& board, MoveList& moves);
-	
+
 		template<Color SideToMove, bool Check>
 		void GenerateKingMoves(const BoardType& board, Square king_pos, MoveList& moves);
-	
+
 		template<Color SideToMove>
 		void GenerateCheckEliminatingMoves(const BoardType& board, MoveList& moves);
 
@@ -34,21 +35,21 @@ namespace chesslib
 		template<Color SideToMove, bool IsCapture>
 		void GenerateToSquarePawnMoves(const BoardType& board, Square sq, MoveList& moves) const;
 
-		template<Color SideToMove, typename DirectionArray>
-		void GenerateSlidingPieceMoves(const BoardType& board, Piece moving_piece, const DirectionArray& dir_array, MoveList& moves) const;
+		template<Color SideToMove, Piece MovingPiece>
+		void GenerateSlidingPieceMoves(const BoardType& board, MoveList& moves) const;
 
-		template<Color SideToMove>
-		void GenerateSlidingPieceMoves(const BoardType& board, Square pos, Direction dir, MoveList& moves) const;
+		template<Color SideToMove, Direction Dir>
+		void GenerateSlidingPieceMoves(const BoardType& board, Square pos, MoveList& moves) const;
 
 		template<Color SideToMove>
 		void GenerateKnightMoves(const BoardType& board, MoveList& moves) const;
-		
+
 		template<Color SideToMove>
 		void GeneratePawnMoves(const BoardType& board, MoveList& moves) const;
 	};
 
 	template <typename BoardType>
-	MoveList MoveGenerator<BoardType>::GenerateMoves(const BoardType& board)
+	MoveList MoveGeneratorConn<BoardType>::GenerateMoves(const BoardType& board)
 	{
 		MoveList moves;
 
@@ -62,7 +63,7 @@ namespace chesslib
 
 	template <typename BoardType>
 	template <Color SideToMove>
-	void MoveGenerator<BoardType>::GenerateMoves(const BoardType& board, MoveList& moves)
+	void MoveGeneratorConn<BoardType>::GenerateMoves(const BoardType& board, MoveList& moves)
 	{
 		using ctraits = traits::color_traits<SideToMove>;
 
@@ -73,38 +74,39 @@ namespace chesslib
 		if (num_checks == 0)
 		{
 			GenerateKingMoves<SideToMove, false>(board, king_pos, moves);
-			GenerateSlidingPieceMoves<SideToMove>(board, ctraits::Rook, BoardType::StraightDirections, moves);
-			GenerateSlidingPieceMoves<SideToMove>(board, ctraits::Queen, BoardType::AllDirections, moves);
-			GenerateSlidingPieceMoves<SideToMove>(board, ctraits::Bishop, BoardType::DiagonalDirections, moves);
+			GenerateSlidingPieceMoves<SideToMove, ctraits::Rook>(board, moves);
+			GenerateSlidingPieceMoves<SideToMove, ctraits::Queen>(board, moves);
+			GenerateSlidingPieceMoves<SideToMove, ctraits::Bishop>(board, moves);
 			GenerateKnightMoves<SideToMove>(board, moves);
 			GeneratePawnMoves<SideToMove>(board, moves);
 		}
-		else 
+		else
 		{
 			GenerateKingMoves<SideToMove, true>(board, king_pos, moves);
-			if (num_checks == 1) 
+			if (num_checks == 1)
 				GenerateCheckEliminatingMoves<SideToMove>(board, moves);
-		}	
+		}
 	}
 
 	template <typename BoardType>
 	template <Color SideToMove, bool Check>
-	void MoveGenerator<BoardType>::GenerateKingMoves(const BoardType& board, Square king_pos, MoveList& moves)
+	void MoveGeneratorConn<BoardType>::GenerateKingMoves(const BoardType& board, Square king_pos, MoveList& moves)
 	{
 		using ctraits = traits::color_traits<SideToMove>;
 		using bctraits = traits::board_color_traits<BoardType, SideToMove>;
 
 		Square next{ Empty };
-		for (Direction dir : BoardType::AllDirections)
+		conn::View<conn::AllDir> view{ king_pos };
+		for (int8_t i = 0; i < view.GetSize(); i++)
 		{
+			next = view.Next();
 			if constexpr (Check)
 			{
-				if (!_attackDetector.VerifyKingMovingDirection<ctraits::Opposite>(board, dir))
+				if (!_attackDetector.VerifyKingMovingDirection<ctraits::Opposite>(board, king_pos - next))
 					continue;
 			}
 
-			next = king_pos + dir;
-			if (IsInside<BoardType>(next, king_pos) && !_attackDetector.IsUnderAttack<ctraits::Opposite>(board, next))
+			if (!_attackDetector.IsUnderAttack<ctraits::Opposite>(board, next))
 			{
 				auto p = board.GetPiece(next);
 				if (p == Empty)
@@ -116,7 +118,7 @@ namespace chesslib
 
 		if constexpr (Check)
 			return;
-		else 
+		else
 		{
 			if (board.QueryCastling(ctraits::KingSideCastling) &&
 				board.GetPiece(bctraits::KingSideCastleCheckSquares[0]) == Empty &&
@@ -137,7 +139,7 @@ namespace chesslib
 
 	template <typename BoardType>
 	template<Color SideToMove>
-	void MoveGenerator<BoardType>::GenerateCheckEliminatingMoves(const BoardType& board, MoveList& moves)
+	void MoveGeneratorConn<BoardType>::GenerateCheckEliminatingMoves(const BoardType& board, MoveList& moves)
 	{
 		// Checker cannot be captured/blocked in check - direction. 
 		// In the check direction, only checked king can capture the checking piece. This is covered in king moves.
@@ -147,7 +149,7 @@ namespace chesslib
 
 		#define Block(Dir, s, mt) \
 		if (Dir != check.attack_dir && Dir != direction::Reverse(check.attack_dir)) \
-			GenerateToSquareSlidingPieceMoves<SideToMove, Dir>(board, s, mt, moves) 
+			GenerateToSquareSlidingPieceMoves<SideToMove, Dir>(board, s, mt, moves)
 
 		// Caputure the checking piece
 		const auto& check = _attackDetector.GetFirstCheck();
@@ -189,13 +191,16 @@ namespace chesslib
 
 	template <typename BoardType>
 	template <Color SideToMove, Direction Dir>
-	void MoveGenerator<BoardType>::GenerateToSquareSlidingPieceMoves(const BoardType& board, Square sq, MoveType mt, MoveList& moves) const
+	void MoveGeneratorConn<BoardType>::GenerateToSquareSlidingPieceMoves(const BoardType& board, Square sq, MoveType mt, MoveList& moves) const
 	{
 		using ctraits = traits::color_traits<SideToMove>;
 
+		Square next{ Empty };
 		Piece p{ Empty };
-		for (Square next{ sq + Dir }; IsInside<BoardType>(next, next - Dir); next += Dir)
+		conn::View<Dir> view{ sq };
+		for (int8_t i = 0; i < view.GetSize(); i++)
 		{
+			next = view.Next();
 			p = board.GetPiece(next);
 			if (p == Empty)
 				continue;
@@ -217,58 +222,72 @@ namespace chesslib
 
 	template <typename BoardType>
 	template<Color SideToMove>
-	void MoveGenerator<BoardType>::GenerateToSquareKnightMoves(const BoardType& board, Square sq, MoveType mt, MoveList& moves) const
+	void MoveGeneratorConn<BoardType>::GenerateToSquareKnightMoves(const BoardType& board, Square sq, MoveType mt, MoveList& moves) const
 	{
 		using ctraits = traits::color_traits<SideToMove>;
-		for (Direction dir : BoardType::KnightJumps)
-			if (Square next{ sq + dir }; IsInside<BoardType>(next, sq) && board.GetPiece(next) == ctraits::Knight && !_attackDetector.IsPinned(next))
+
+		Square next{ Empty };
+		conn::View<conn::KnightJumps> view{ sq };
+		for (int8_t i = 0; i < view.GetSize(); i++)
+		{
+			next = view.Next();
+			if (board.GetPiece(next) == ctraits::Knight && !_attackDetector.IsPinned(next))
 				moves.emplace_back(next, sq, mt);
+		}
 	}
 
 	template <typename BoardType>
 	template<Color SideToMove, bool IsCapture>
-	void MoveGenerator<BoardType>::GenerateToSquarePawnMoves(const BoardType& board, Square sq, MoveList& moves) const
+	void MoveGeneratorConn<BoardType>::GenerateToSquarePawnMoves(const BoardType& board, Square sq, MoveList& moves) const
 	{
 		using bctraits = traits::board_color_traits<BoardType, SideToMove>;
 		if (sq < bctraits::ValidPawnMoveSquares[0] || sq > bctraits::ValidPawnMoveSquares[1])
 			return;
 
 		using ctraits = traits::color_traits<SideToMove>;
-		if constexpr (IsCapture) 
+
+		conn::View<conn::PawnDirectionTrait<ctraits::Opposite>::Dir> view{ sq };
+		Rank r = view.Next();
+		if constexpr (IsCapture)
 		{
-			for (Direction dir : bctraits::PawnReverseAttackDirections)
+			Square next[2]{ view.Next(2), view.Next(1) };
+			for (int i = 0; i < 2; i++) 
 			{
-				if (Square next{ sq + dir }; IsInside<BoardType>(next, sq) && board.GetPiece(next) == ctraits::Pawn && !_attackDetector.IsPinned(next))
+				if (next[i] != Empty && board.GetPiece(next[i]) == ctraits::Pawn && !_attackDetector.IsPinned(next[i]))
 				{
-					if (BoardType::GetRank(sq) == bctraits::PromotedPawnRank)
+					if (r == bctraits::PromotedPawnRank)
 					{
-						moves.emplace_back(next, sq, MoveType::Queen_Promotion_Capture);
-						moves.emplace_back(next, sq, MoveType::Rook_Promotion_Capture);
-						moves.emplace_back(next, sq, MoveType::Bishop_Promotion_Capture);
-						moves.emplace_back(next, sq, MoveType::Knight_Promotion_Capture);
+						moves.emplace_back(next[i], sq, MoveType::Queen_Promotion_Capture);
+						moves.emplace_back(next[i], sq, MoveType::Rook_Promotion_Capture);
+						moves.emplace_back(next[i], sq, MoveType::Bishop_Promotion_Capture);
+						moves.emplace_back(next[i], sq, MoveType::Knight_Promotion_Capture);
 					}
 					else
 					{
-						moves.emplace_back(next, sq, MoveType::Capture);
+						moves.emplace_back(next[i], sq, MoveType::Capture);
 					}
 				}
 			}
 
 			using octraits = traits::color_traits<ctraits::Opposite>;
-			if (Square enpassant_sq{ board.GetEnPassantSquare() }; enpassant_sq != Empty && board.GetPiece(sq) == octraits::Pawn)
+			Square enpassant_sq{ board.GetEnPassantSquare() };
+			if (enpassant_sq != Empty && board.GetPiece(sq) == octraits::Pawn)
 			{
-				for (Direction dir : bctraits::PawnReverseAttackDirections)
-					if (Square next{ enpassant_sq + dir }; IsInside<BoardType>(enpassant_sq, next) && board.GetPiece(next) == ctraits::Pawn && !_attackDetector.IsPinned(next))
-						moves.emplace_back(next, enpassant_sq, MoveType::En_Passant_Capture);
+				conn::View<conn::PawnDirectionTrait<ctraits::Opposite>::Dir> ep_view{ enpassant_sq };
+				next[0] = ep_view.Next(3);
+				next[1] = ep_view.Next(1);
+				for (int i = 0; i < 2; i++)
+					if (next[i] != Empty && board.GetPiece(next[i]) == ctraits::Pawn && !_attackDetector.IsPinned(next[i]))
+						moves.emplace_back(next[i], enpassant_sq, MoveType::En_Passant_Capture);
 			}
 		}
-		else 
+		else
 		{
-			Square next{ sq + bctraits::PawnReverseMoveDirection };
-
-			if (board.GetPiece(next) == ctraits::Pawn && !_attackDetector.IsPinned(next))
+			Square next = view.Next();
+			Piece p = board.GetPiece(next);
+			if (p == ctraits::Pawn && !_attackDetector.IsPinned(next))
 			{
-				if (BoardType::GetRank(sq) == bctraits::PromotedPawnRank)
+				if (r == bctraits::PromotedPawnRank)
 				{
 					moves.emplace_back(next, sq, MoveType::Queen_Promotion);
 					moves.emplace_back(next, sq, MoveType::Rook_Promotion);
@@ -280,45 +299,85 @@ namespace chesslib
 					moves.emplace_back(next, sq, MoveType::Quite);
 				}
 			}
-			else if (board.GetPiece(next) == Empty)
+			else if (p == Empty && r == bctraits::DoublePushedPawnRank)
 			{
-				next += bctraits::PawnReverseMoveDirection;
-				if (BoardType::GetRank(next) == bctraits::PawnDoublePushRank && board.GetPiece(next) == ctraits::Pawn && !_attackDetector.IsPinned(next))
+				next = view.Next();
+				if (board.GetPiece(next) == ctraits::Pawn && !_attackDetector.IsPinned(next))
 					moves.emplace_back(next, sq, MoveType::Double_Pawn_Push);
 			}
 		}
 	}
 
 	template <typename BoardType>
-	template<Color SideToMove, typename DirectionArray>
-	void MoveGenerator<BoardType>::GenerateSlidingPieceMoves(const BoardType& board, Piece moving_piece, const DirectionArray& dir_array, MoveList& moves) const
+	template<Color SideToMove, Piece MovingPiece>
+	void MoveGeneratorConn<BoardType>::GenerateSlidingPieceMoves(const BoardType& board, MoveList& moves) const
 	{
-		auto [first, last] = board.GetPiecePositions<SideToMove>(moving_piece);
+		using ctraits = traits::color_traits<SideToMove>;
+
+		// Piece is pinned. Piece can only move in the pinned direction or opposite of the pinned direction.
+		#define G1(Dir1, Dir2)\
+		if (Dir1 == pin_dir || Dir2 == pin_dir) \
+		{\
+			GenerateSlidingPieceMoves<SideToMove, Dir1>(board, first->second, moves);\
+			GenerateSlidingPieceMoves<SideToMove, Dir2>(board, first->second, moves);\
+		}\
+
+		#define H(Dir) GenerateSlidingPieceMoves<SideToMove, Dir>(board, first->second, moves)
+
+		auto [first, last] = board.GetPiecePositions<SideToMove>(MovingPiece);
 		for (; first != last; first++)
 		{
 			if (Direction pin_dir = _attackDetector.GetPinDirection(first->second); pin_dir != Empty)
 			{
-				// Piece is pinned. Piece can only move in the pinned direction or opposite of the pinned direction.
-				for (Direction dir : dir_array)
-					if (dir == pin_dir || dir == direction::Reverse(pin_dir))
-						GenerateSlidingPieceMoves<SideToMove>(board, first->second, dir, moves);
+				if constexpr (MovingPiece == ctraits::Rook) 
+				{
+					G1(BoardType::N, BoardType::S)
+					G1(BoardType::E, BoardType::W)
+				}
+				else if constexpr (MovingPiece == ctraits::Bishop)
+				{
+					G1(BoardType::NE, BoardType::SW)
+					G1(BoardType::SE, BoardType::NW)
+				}
+				else 
+				{
+					G1(BoardType::N, BoardType::S)
+					G1(BoardType::E, BoardType::W)
+					G1(BoardType::NE, BoardType::SW)
+					G1(BoardType::SE, BoardType::NW)
+				}
 			}
 			else
 			{
 				// Piece is not pinned. Piece is free to move in any direction.
-				for (Direction dir : dir_array)
-					GenerateSlidingPieceMoves<SideToMove>(board, first->second, dir, moves);
+				if constexpr (MovingPiece == ctraits::Rook) 
+				{
+					H(BoardType::N); H(BoardType::E); H(BoardType::S); H(BoardType::W);
+				}
+				else if constexpr (MovingPiece == ctraits::Bishop)
+				{
+					H(BoardType::NE); H(BoardType::SE); H(BoardType::SW); H(BoardType::NW);
+				}
+				else 
+				{
+					H(BoardType::N); H(BoardType::E); H(BoardType::S); H(BoardType::W);
+					H(BoardType::NE); H(BoardType::SE); H(BoardType::SW); H(BoardType::NW);
+				}
 			}
 		}
 	}
 
 	template <typename BoardType>
-	template<Color SideToMove>
-	void MoveGenerator<BoardType>::GenerateSlidingPieceMoves(const BoardType& board, Square pos, Direction dir, MoveList& moves) const
+	template<Color SideToMove, Direction Dir>
+	void MoveGeneratorConn<BoardType>::GenerateSlidingPieceMoves(const BoardType& board, Square pos, MoveList& moves) const
 	{
+		Square next{ Empty };
 		Piece p{ Empty };
-		for (Square next{ pos + dir }; IsInside<BoardType>(next, next - dir); next += dir)
+
+		conn::View<Dir> view{ pos };
+		for (int8_t i = 0; i < view.GetSize(); i++)
 		{
+			next = view.Next();
 			p = board.GetPiece(next);
 			if (p == Empty)
 				moves.emplace_back(pos, next);
@@ -333,7 +392,7 @@ namespace chesslib
 
 	template <typename BoardType>
 	template <Color SideToMove>
-	void MoveGenerator<BoardType>::GenerateKnightMoves(const BoardType& board, MoveList& moves) const
+	void MoveGeneratorConn<BoardType>::GenerateKnightMoves(const BoardType& board, MoveList& moves) const
 	{
 		using ctraits = traits::color_traits<SideToMove>;
 		auto [first, last] = board.GetPiecePositions<SideToMove>(ctraits::Knight);
@@ -346,64 +405,76 @@ namespace chesslib
 			if (_attackDetector.IsPinned(first->second))
 				continue;
 
-			for (Direction dir : BoardType::KnightJumps)
+			conn::View<conn::KnightJumps> view{ first->second };
+			for (int8_t i = 0; i < view.GetSize(); i++) 
 			{
-				next = first->second + dir;
-				if (IsInside<BoardType>(next, first->second))
-				{
-					p = board.GetPiece(next);
-					if (p == Empty)
-						moves.emplace_back(first->second, next);
-					else if (color::get_color(p) != SideToMove)
-						moves.emplace_back(first->second, next, MoveType::Capture);
-				}
+				next = view.Next();
+				p = board.GetPiece(next);
+				if (p == Empty)
+					moves.emplace_back(first->second, next);
+				else if (color::get_color(p) != SideToMove)
+					moves.emplace_back(first->second, next, MoveType::Capture);
 			}
 		}
 	}
 
 	template <typename BoardType>
 	template <Color SideToMove>
-	void MoveGenerator<BoardType>::GeneratePawnMoves(const BoardType& board, MoveList& moves) const
+	void MoveGeneratorConn<BoardType>::GeneratePawnMoves(const BoardType& board, MoveList& moves) const
 	{
 		using ctraits = traits::color_traits<SideToMove>;
 		using octraits = traits::color_traits<ctraits::Opposite>;
 		using bctraits = traits::board_color_traits<BoardType, SideToMove>;
+
+		Rank r{ Empty };
+		Square next{ Empty };
+		Piece p{ Empty };
 
 		auto [first, last] = board.GetPiecePositions<SideToMove>(ctraits::Pawn);
 		for (; first != last; first++)
 		{
 			auto pin_dir = _attackDetector.GetPinDirection(first->second);
 
-			// One square forward, two square forward moves
-			if (Square next{ first->second + bctraits::PawnMoveDirection };
-				board.GetPiece(next) == Empty &&
+			conn::View<conn::PawnDirectionTrait<SideToMove>::Dir> view{ first->second };
+			
+			r = view.Next();
+			next = view.Next();
+
+		    // One square forward, two square forward
+			if (board.GetPiece(next) == Empty &&
 				(pin_dir == Empty || pin_dir == bctraits::PawnMoveDirection || pin_dir == bctraits::PawnReverseMoveDirection))
 			{
-				if (Rank r = BoardType::GetRank(next); r == bctraits::PromotedPawnRank)
+				if (r == bctraits::PawnPromotionRank)
 				{
 					moves.emplace_back(first->second, next, MoveType::Queen_Promotion);
 					moves.emplace_back(first->second, next, MoveType::Rook_Promotion);
 					moves.emplace_back(first->second, next, MoveType::Knight_Promotion);
 					moves.emplace_back(first->second, next, MoveType::Bishop_Promotion);
 				}
-				else
+				else 
+				{
 					moves.emplace_back(first->second, next);
-
-				if (Square pos{ next + bctraits::PawnMoveDirection };
-					BoardType::GetRank(first->second) == bctraits::PawnDoublePushRank && board.GetPiece(pos) == Empty)
-					moves.emplace_back(first->second, pos, MoveType::Double_Pawn_Push);
+				}
+				
+				next = view.Next();
+				if (r == bctraits::PawnDoublePushRank && board.GetPiece(next) == Empty)
+					moves.emplace_back(first->second, next, MoveType::Double_Pawn_Push);
 			}
+			else
+				next = view.Next();
 
 			// Captures
-			for (int i{ 0 }; i < 2; i++)
+			for (int i = 0; i < 2; i++) 
 			{
-				if (Square next{ first->second + bctraits::PawnAttackDirections[i] };
-					IsInside<BoardType>(next, first->second) &&
-					board.GetPiece(next) != Empty &&
-					color::get_color(board.GetPiece(next)) != SideToMove &&
+				next = view.Next();
+				if (next == Empty)
+					continue;
+
+				p = board.GetPiece(next);
+				if (p != Empty && color::get_color(p) != SideToMove &&
 					(pin_dir == Empty || pin_dir == bctraits::PawnReverseAttackDirections[i]))
 				{
-					if (BoardType::GetRank(next) == bctraits::PromotedPawnRank)
+					if (r == bctraits::PawnPromotionRank)
 					{
 						moves.emplace_back(first->second, next, MoveType::Queen_Promotion_Capture);
 						moves.emplace_back(first->second, next, MoveType::Rook_Promotion_Capture);
@@ -411,7 +482,9 @@ namespace chesslib
 						moves.emplace_back(first->second, next, MoveType::Bishop_Promotion_Capture);
 					}
 					else
+					{
 						moves.emplace_back(first->second, next, MoveType::Capture);
+					}
 				}
 			}
 		}
@@ -420,22 +493,30 @@ namespace chesslib
 		if (en_passant == Empty)
 			return;
 
-		for (int i{ 0 }; i < 2; i++)
+		conn::View<conn::PawnDirectionTrait<ctraits::Opposite>::Dir> ep_view{ en_passant };
+		r = ep_view.Next();
+		Square next_arr[2] = { ep_view.Next(2), ep_view.Next(1) };
+
+		for (int i = 0; i < 2; i++)
 		{
-			Square pos{ en_passant + bctraits::PawnReverseAttackDirections[i] };
-			if (!IsInside<BoardType>(en_passant, pos) || board.GetPiece(pos) != ctraits::Pawn)
+			if (next_arr[i] == Empty)
 				continue;
 
-			if (Direction pin_dir = _attackDetector.GetPinDirection(pos); pin_dir != Empty && pin_dir != bctraits::PawnReverseAttackDirections[i])
+			p = board.GetPiece(next_arr[i]);
+			if (p != ctraits::Pawn)
+				continue;
+
+			Direction pin_dir = _attackDetector.GetPinDirection(next_arr[i]);
+			if (pin_dir != Empty && pin_dir != bctraits::PawnReverseAttackDirections[i])
 				continue;
 
 			Square king_pos = board.GetKingPosition<SideToMove>();
-			if (BoardType::GetRank(king_pos) != BoardType::GetRank(pos))
-				moves.emplace_back(pos, en_passant, MoveType::En_Passant_Capture);
+			if (BoardType::GetRank(king_pos) != BoardType::GetRank(next_arr[i]))
+				moves.emplace_back(next_arr[i], en_passant, MoveType::En_Passant_Capture);
 			else
 			{
-				Square ppos{ en_passant + bctraits::PawnReverseMoveDirection };
-				Direction dir = king_pos > pos ? BoardType::W : BoardType::E;
+				/*Square ppos{ en_passant + bctraits::PawnReverseMoveDirection };
+				Direction dir = king_pos > next_arr[i] ? BoardType::W : BoardType::E;
 				bool make_move{ true };
 				for (Square next{ king_pos + dir }; IsInside<BoardType>(next, next - dir); next += dir)
 				{
@@ -449,7 +530,7 @@ namespace chesslib
 				}
 
 				if (make_move)
-					moves.emplace_back(pos, en_passant, MoveType::En_Passant_Capture);
+					moves.emplace_back(pos, en_passant, MoveType::En_Passant_Capture);*/
 			}
 		}
 	}

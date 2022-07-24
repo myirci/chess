@@ -149,6 +149,15 @@
     <ClInclude Include="Source\ChessLib\Board\SimpleBoard.hpp">
       <Filter>Board</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ChessLib\MoveGenerator\AttackDetectorBase.hpp">
+      <Filter>MoveGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\MoveGenerator\AttackDetectorConn.hpp">
+      <Filter>MoveGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\MoveGenerator\MoveGeneratorConn.hpp">
+      <Filter>MoveGenerator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />

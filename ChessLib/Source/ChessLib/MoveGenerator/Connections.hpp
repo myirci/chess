@@ -9,19 +9,17 @@ namespace chesslib
 {
 	namespace conn 
 	{
-		using ConnectionsType		    = std::array<Square, 2752>;
+		using ConnectionsType		    = std::array<Square, 2772>;
 		using IndexArrayType		    = std::array<int16_t, 64>;
-		using IndicesArray			    = std::array<IndexArrayType, 21>;
+		using IndicesArray			    = std::array<IndexArrayType, 22>;
 		using ConnectionsAndIndicesPair = std::pair<conn::ConnectionsType, conn::IndicesArray>;
 
 		using NeighborSquares		    = std::array<Square, 16>; 
 
-		inline constexpr Square PromotionFlag = -99;
-
-		inline constexpr Direction KnightJumps = -100;
-		inline constexpr Direction AllDir      = -101;
-		inline constexpr Direction WPDir       = -102;
-		inline constexpr Direction BPDir       = -103;
+		inline constexpr Direction KnightJumps = -101;
+		inline constexpr Direction AllDir      = -102;
+		inline constexpr Direction WPDir       = -103;
+		inline constexpr Direction BPDir       = -104;
 
 		inline constexpr int NSI  = 0;  // North Start Index
 		inline constexpr int NEI  = 1;  // North End Index
@@ -42,8 +40,14 @@ namespace chesslib
 		inline constexpr int KCSI = 16; // Knight Connections Start Index
 		inline constexpr int KCEI = 17; // Knight Connections End Index
 		inline constexpr int ADSI = 18; // All Directions Start Index
-		inline constexpr int WPSI = 19; // White Pawn Connections Start Index
-		inline constexpr int BPSI = 20; // Black Pawn Connections Start Index
+		inline constexpr int ADEI = 19; // All Directions Start Index
+		inline constexpr int WPSI = 20; // White Pawn Connections Start Index
+		inline constexpr int BPSI = 21; // Black Pawn Connections Start Index
+
+		// Traits for selecting pawn connections based on color
+		template <Color Clr> struct PawnDirectionTrait{};
+		template <> struct PawnDirectionTrait<color::White> { static constexpr Direction Dir = WPDir; };
+		template <> struct PawnDirectionTrait<color::Black> { static constexpr Direction Dir = BPDir; };
 
 		namespace details
 		{
@@ -117,6 +121,7 @@ namespace chesslib
 					cp.second[idx2][s] = (int16_t)i;
 				}
 				idx1 += 2;
+				idx2 = idx1 + 1;
 
 				// per direction single-square
 				for (Square s = 0; s < ChessBoard::BOARDSIZE; s++)
@@ -125,36 +130,39 @@ namespace chesslib
 
 					for (Direction dir : ChessBoard::AllDirections)  // N, NE, E, SE, S, SW, W, NW
 					{
-						cp.first[i] = Empty;
 						if (BasicBoard::IsInside(s, s + dir))
-							cp.first[i] = s + dir;
-						i++;
+							cp.first[i++] = s + dir;
 					}
+
+					cp.second[idx2][s] = (int16_t)i;
 				}
-				idx1++;
+				idx1 += 2;
 
 				// white pawn-connections
 				using wbct = traits::board_color_traits<BasicBoard, color::White>;
 				for (Square s = 0; s < 64; s++)
 				{
-					Rank r = ChessBoard::GetRank(s);
-
 					cp.second[idx1][s] = (int16_t)Empty;
+
+					Rank r = ChessBoard::GetRank(s);
 
 					Square next = s + wbct::PawnMoveDirection;
 					if (BasicBoard::IsInside(s, next))
 					{
 						cp.second[idx1][s] = (int16_t)i;
 
+						// rank
+						cp.first[i++] = r;
+
 						// white pawn single push
 						cp.first[i++] = next;
 
-						// white pawn double push / white pawn promotion flag
-						cp.first[i] = Empty;
-						if (r == wbct::PawnDoublePushRank)
-							cp.first[i] = next + wbct::PawnMoveDirection;
-						else if (r == wbct::PawnPromotionRank - 1)
-							cp.first[i] = PromotionFlag;
+						// white pawn double push
+						next += wbct::PawnMoveDirection;
+						if (BasicBoard::IsInside(s, next))
+							cp.first[i] = next;
+						else 
+							cp.first[i] = Empty;
 						i++;
 
 						// white pawn captures
@@ -174,26 +182,28 @@ namespace chesslib
 				using bbct = traits::board_color_traits<BasicBoard, color::Black>;
 				for (Square s = 0; s < ChessBoard::BOARDSIZE; s++)
 				{
-					Rank r = ChessBoard::GetRank(s);
-
 					cp.second[idx1][s] = (int16_t)Empty;
+
+					Rank r = ChessBoard::GetRank(s);
 
 					Square next = s + bbct::PawnMoveDirection;
 					if (BasicBoard::IsInside(s, next))
 					{
 						cp.second[idx1][s] = (int16_t)i;
 
+						// rank
+						cp.first[i++] = r;
+						
 						// black pawn single push
 						cp.first[i++] = next;
 
-						// black pawn double push / black pawn promotion flag
-						cp.first[i] = Empty;
-						if (r == bbct::PawnDoublePushRank)
-							cp.first[i] = next + bbct::PawnMoveDirection;
-						else if (r == bbct::PawnPromotionRank + 1)
-							cp.first[i] = PromotionFlag;
+						// black pawn double push
+						next += bbct::PawnMoveDirection;
+						if (BasicBoard::IsInside(s, next))
+							cp.first[i] = next;
+						else
+							cp.first[i] = Empty;
 						i++;
-
 
 						// black pawn captures
 						for (int j = 0; j < 2; j++)
@@ -219,6 +229,12 @@ namespace chesslib
 			View(Square s);
 			inline int8_t GetSize() const { return size; }
 			inline Square Next() { return ConnectionsAndIndices.first[currIdx++]; }
+			inline Square Next(int8_t advance) 
+			{
+				currIdx += advance;
+				return ConnectionsAndIndices.first[currIdx]; 
+			}
+
 		private:
 			int8_t size;
 			int16_t currIdx;
@@ -277,19 +293,19 @@ namespace chesslib
 			{
 				// All Directions
 				currIdx = ConnectionsAndIndices.second[ADSI][s];
-				size = 8;
+				size = static_cast<int8_t>(ConnectionsAndIndices.second[ADEI][s] - currIdx);
 			}
 			else if constexpr (Dir == WPDir)
 			{
 				// White Pawn Connections
 				currIdx = ConnectionsAndIndices.second[WPSI][s];
-				size = 4;
+				size = currIdx != Empty ? 5 : 0;
 			}
 			else if constexpr (Dir == BPDir)
 			{
 				// Black Pawn Connections
 				currIdx = ConnectionsAndIndices.second[BPSI][s];
-				size = 4;
+				size = currIdx != Empty ? 5 : 0;
 			}
 		}
     }
