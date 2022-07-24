@@ -39,27 +39,9 @@ protected:
     }
 };
 
-TEST_F(MoveGeneratorTests, connections_test) 
-{
-    Connectivity con{};
-    const auto& conVec = con.GetConnections();
-    const auto& idxVec = con.GetIndexes();
-    EXPECT_TRUE(IsEqual<conn::ConnectionsAndIndices.first.size()>(conn::ConnectionsAndIndices.first, conVec));
+#pragma region BasicBoardTests
 
-    int idx1{ 0 }, idx2{ 1 };
-    for (int i = 0; i < 10; i++) 
-    {
-        EXPECT_EQ(conn::ConnectionsAndIndices.second[idx1], idxVec[i]._indexes_start);
-        EXPECT_EQ(conn::ConnectionsAndIndices.second[idx2], idxVec[i]._indexes_end);
-        idx1 += 2;
-        idx2 = idx1 + 1;
-    }
-    
-    EXPECT_EQ(conn::ConnectionsAndIndices.second[20], idxVec[10]._indexes_start);
-    EXPECT_EQ(conn::ConnectionsAndIndices.second[21], idxVec[11]._indexes_start);
-}
-
-TEST_F(MoveGeneratorTests, basic_board_king_moves)
+TEST_F(MoveGeneratorTests, basic_board_test_1_king_moves)
 {
     auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
     auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-1");
@@ -75,8 +57,7 @@ TEST_F(MoveGeneratorTests, basic_board_king_moves)
         EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expectedMoves.begin()));
     }
 }
-
-TEST_F(MoveGeneratorTests, basic_board_check_eliminating_moves)
+TEST_F(MoveGeneratorTests, basic_board_test_2_check_eliminating_moves)
 {
     auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
     auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-2");
@@ -92,7 +73,55 @@ TEST_F(MoveGeneratorTests, basic_board_check_eliminating_moves)
     }
 }
 
-TEST_F(MoveGeneratorTests, basic_board_generate_single_piece_moves)
+TEST_F(MoveGeneratorTests, basic_board_test_3_random_positions_1)
+{
+    auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
+    auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-3");
+
+    EXPECT_TRUE(lines.size() != 0 && lines.size() % 3 == 0);
+
+    for (auto i{ 0 }; i < lines.size(); i += 3)
+    {
+        auto b = BoardFactory::make_unique_board<BasicBoard>(lines[(size_t)(i + 1)]);
+        auto expectedMoves = TestHelpers::GetMoves<BasicBoard>(lines[(size_t)(i + 2)]);
+        auto moves = GenerateMoves<BasicBoard>(*b);
+        EXPECT_EQ(expectedMoves.size(), moves.size());
+        EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expectedMoves.begin()));
+    }
+}
+
+TEST_F(MoveGeneratorTests, basic_board_test_4_random_positions_2)
+{
+    auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
+    auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-4");
+
+    EXPECT_TRUE(lines.size() != 0 && lines.size() % 3 == 0);
+
+    for (auto i{ 0 }; i < lines.size(); i += 3)
+    {
+        auto b = BoardFactory::make_unique_board<BasicBoard>(lines[(size_t)(i + 1)]);
+        auto expectedMoves = TestHelpers::GetMoves<BasicBoard>(lines[(size_t)(i + 2)]);
+        auto moves = GenerateMoves<BasicBoard>(*b);
+        EXPECT_TRUE(TestHelpers::IsSubset(moves, expectedMoves));
+    }
+}
+
+TEST_F(MoveGeneratorTests, basic_board_test_5_number_of_moves)
+{
+    auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
+    auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-5");
+
+    EXPECT_TRUE(lines.size() != 0 && lines.size() % 3 == 0);
+
+    for (auto i{ 0 }; i < lines.size(); i += 3)
+    {
+        auto b = BoardFactory::make_unique_board<BasicBoard>(lines[(size_t)(i + 1)]);
+        auto moves = GenerateMoves<BasicBoard>(*b);
+        EXPECT_EQ(moves.size(), (size_t)std::stoi(lines[(size_t)(i + 2)]));
+    }
+}
+
+TEST_F(MoveGeneratorTests, basic_board_test_6_single_piece_moves)
 {
     auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
     auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-6");
@@ -108,55 +137,11 @@ TEST_F(MoveGeneratorTests, basic_board_generate_single_piece_moves)
         EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expectedMoves.begin()));
     }
 }
-TEST_F(MoveGeneratorTests, basic_board_generate_moves_1)
-{
-    auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
-    auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-3");
 
-    EXPECT_TRUE(lines.size() != 0 && lines.size() % 3 == 0);
+#pragma endregion
 
-    for (auto i{ 0 }; i < lines.size(); i += 3)
-    {
-        auto b = BoardFactory::make_unique_board<BasicBoard>(lines[(size_t)(i + 1)]);
-        auto expectedMoves = TestHelpers::GetMoves<BasicBoard>(lines[(size_t)(i + 2)]);
-        auto moves = GenerateMoves<BasicBoard>(*b);
-        EXPECT_EQ(expectedMoves.size(), moves.size());
-        EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expectedMoves.begin()));
-    }
-}
-
-TEST_F(MoveGeneratorTests, basic_board_generate_moves_2)
-{
-    auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
-    auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-4");
-
-    EXPECT_TRUE(lines.size() != 0 && lines.size() % 3 == 0);
-
-    for (auto i{ 0 }; i < lines.size(); i += 3)
-    {
-        auto b = BoardFactory::make_unique_board<BasicBoard>(lines[(size_t)(i + 1)]);
-        auto expectedMoves = TestHelpers::GetMoves<BasicBoard>(lines[(size_t)(i + 2)]);
-        auto moves = GenerateMoves<BasicBoard>(*b);
-        EXPECT_TRUE(TestHelpers::IsSubset(moves, expectedMoves));
-    }
-}
-
-TEST_F(MoveGeneratorTests, basic_board_generate_moves_3)
-{
-    auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
-    auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-5");
-
-    EXPECT_TRUE(lines.size() != 0 && lines.size() % 3 == 0);
-
-    for (auto i{ 0 }; i < lines.size(); i += 3)
-    {
-        auto b = BoardFactory::make_unique_board<BasicBoard>(lines[(size_t)(i + 1)]);
-        auto moves = GenerateMoves<BasicBoard>(*b);
-        EXPECT_EQ(moves.size(), (size_t)std::stoi(lines[(size_t)(i + 2)]));
-    }
-}
-
-TEST_F(MoveGeneratorTests, x88_board_king_moves)
+#pragma region x88BoardTests
+TEST_F(MoveGeneratorTests, x88_board_test_1_king_moves)
 {
     auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
     auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-1");
@@ -172,8 +157,7 @@ TEST_F(MoveGeneratorTests, x88_board_king_moves)
         EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expectedMoves.begin()));
     }
 }
-
-TEST_F(MoveGeneratorTests, x88_board_check_eliminating_moves)
+TEST_F(MoveGeneratorTests, x88_board_test_2_check_eliminating_moves)
 {
     auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
     auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-2");
@@ -189,7 +173,7 @@ TEST_F(MoveGeneratorTests, x88_board_check_eliminating_moves)
     }
 }
 
-TEST_F(MoveGeneratorTests, x88_board_generate_moves_1)
+TEST_F(MoveGeneratorTests, x88_board_test_3_random_positions_1)
 {
     auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
     auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-3");
@@ -206,7 +190,7 @@ TEST_F(MoveGeneratorTests, x88_board_generate_moves_1)
     }
 }
 
-TEST_F(MoveGeneratorTests, x88_board_generate_moves_2)
+TEST_F(MoveGeneratorTests, x88_board_test_4_random_positions_2)
 {
     auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
     auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-4");
@@ -222,7 +206,7 @@ TEST_F(MoveGeneratorTests, x88_board_generate_moves_2)
     }
 }
 
-TEST_F(MoveGeneratorTests, x88_board_generate_moves_3)
+TEST_F(MoveGeneratorTests, x88_board_test_5_number_of_moves)
 {
     auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
     auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-5");
@@ -237,7 +221,100 @@ TEST_F(MoveGeneratorTests, x88_board_generate_moves_3)
     }
 }
 
-TEST_F(MoveGeneratorTests, simple_board_precomputed_connections_generate_single_piece_moves)
+#pragma endregion
+
+#pragma region SimpleBoard_PrecomputedConnectionsTests
+
+TEST_F(MoveGeneratorTests, precomputed_connections_test)
+{
+    Connectivity con{};
+    const auto& conVec = con.GetConnections();
+    const auto& idxVec = con.GetIndexes();
+    EXPECT_TRUE(IsEqual<conn::ConnectionsAndIndices.first.size()>(conn::ConnectionsAndIndices.first, conVec));
+
+    int idx1{ 0 }, idx2{ 1 };
+    for (int i = 0; i < 10; i++)
+    {
+        EXPECT_EQ(conn::ConnectionsAndIndices.second[idx1], idxVec[i]._indexes_start);
+        EXPECT_EQ(conn::ConnectionsAndIndices.second[idx2], idxVec[i]._indexes_end);
+        idx1 += 2;
+        idx2 = idx1 + 1;
+    }
+
+    EXPECT_EQ(conn::ConnectionsAndIndices.second[20], idxVec[10]._indexes_start);
+    EXPECT_EQ(conn::ConnectionsAndIndices.second[21], idxVec[11]._indexes_start);
+}
+TEST_F(MoveGeneratorTests, simple_board_precomputed_connections_test_1_king_moves)
+{
+    auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
+    auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-1");
+
+    EXPECT_TRUE(lines.size() != 0 && lines.size() % 3 == 0);
+
+    for (auto i{ 0 }; i < lines.size(); i += 3)
+    {
+        auto b = BoardFactory::make_unique_board<BasicBoard>(lines[(size_t)(i + 1)]);
+        auto expectedMoves = TestHelpers::GetMoves<BasicBoard>(lines[(size_t)(i + 2)]);
+        MoveGeneratorConn<SimpleBoard> mgen{};
+        auto moves = mgen.GenerateMoves(*b);
+        EXPECT_EQ(expectedMoves.size(), moves.size());
+        EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expectedMoves.begin()));
+    }
+}
+TEST_F(MoveGeneratorTests, simple_board_precomputed_connections_test_2_check_eliminating_moves)
+{
+    auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
+    auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-2");
+
+    EXPECT_TRUE(lines.size() != 0 && lines.size() % 3 == 0);
+
+    for (auto i{ 0 }; i < lines.size(); i += 3)
+    {
+        auto b = BoardFactory::make_unique_board<BasicBoard>(lines[(size_t)(i + 1)]);
+        auto expectedMoves = TestHelpers::GetMoves<BasicBoard>(lines[(size_t)(i + 2)]);
+        MoveGeneratorConn<SimpleBoard> mgen{};
+        auto moves = mgen.GenerateMoves(*b);
+        EXPECT_TRUE(TestHelpers::IsSubset(moves, expectedMoves));
+    }
+}
+
+TEST_F(MoveGeneratorTests, simple_board_precomputed_connections_test_3_random_positions_1)
+{
+    auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
+    auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-3");
+
+    EXPECT_TRUE(lines.size() != 0 && lines.size() % 3 == 0);
+
+    for (auto i{ 0 }; i < lines.size(); i += 3)
+    {
+        auto b = BoardFactory::make_unique_board<BasicBoard>(lines[(size_t)(i + 1)]);
+        auto expectedMoves = TestHelpers::GetMoves<BasicBoard>(lines[(size_t)(i + 2)]);
+        MoveGeneratorConn<SimpleBoard> mgen{};
+        auto moves = mgen.GenerateMoves(*b);
+        EXPECT_EQ(expectedMoves.size(), moves.size());
+        EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expectedMoves.begin()));
+    }
+}
+
+TEST_F(MoveGeneratorTests, simple_board_precomputed_connections_test_4_random_positions_2)
+{
+    auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
+    auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-4");
+
+    EXPECT_TRUE(lines.size() != 0 && lines.size() % 3 == 0);
+
+    for (auto i{ 0 }; i < lines.size(); i += 3)
+    {
+        std::cout << lines[(size_t)(i)] << std::endl;
+        auto b = BoardFactory::make_unique_board<BasicBoard>(lines[(size_t)(i + 1)]);
+        auto expectedMoves = TestHelpers::GetMoves<BasicBoard>(lines[(size_t)(i + 2)]);
+        MoveGeneratorConn<SimpleBoard> mgen{};
+        auto moves = mgen.GenerateMoves(*b);
+        EXPECT_TRUE(TestHelpers::IsSubset(moves, expectedMoves));
+    }
+}
+
+TEST_F(MoveGeneratorTests, simple_board_precomputed_connections_test_5_single_piece_moves)
 {
     auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
     auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-6");
@@ -254,35 +331,4 @@ TEST_F(MoveGeneratorTests, simple_board_precomputed_connections_generate_single_
         EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expectedMoves.begin()));
     }
 }
-
-TEST_F(MoveGeneratorTests, simple_board_precomputed_connections_check_eliminating_moves)
-{
-    auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
-    auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-2");
-
-    EXPECT_TRUE(lines.size() != 0 && lines.size() % 3 == 0);
-
-    int test_no{ 2 };
-    if (test_no == 0)
-    {
-        for (auto i{ 0 }; i < lines.size(); i += 3)
-        {
-            auto b = BoardFactory::make_unique_board<BasicBoard>(lines[(size_t)(i + 1)]);
-            auto expectedMoves = TestHelpers::GetMoves<BasicBoard>(lines[(size_t)(i + 2)]);
-            MoveGeneratorConn<SimpleBoard> mgen{};
-            auto moves = mgen.GenerateMoves(*b);
-            EXPECT_TRUE(TestHelpers::IsSubset(moves, expectedMoves));
-        }
-    }
-    else
-    {
-        int i = (test_no - 1) * 3;
-        auto b = BoardFactory::make_unique_board<BasicBoard>(lines[(size_t)(i + 1)]);
-        auto expectedMoves = TestHelpers::GetMoves<BasicBoard>(lines[(size_t)(i + 2)]);
-        MoveGeneratorConn<SimpleBoard> mgen{};
-        auto moves = mgen.GenerateMoves(*b);
-        EXPECT_TRUE(TestHelpers::IsSubset(moves, expectedMoves));
-    }
-
-    
-}
+#pragma endregion

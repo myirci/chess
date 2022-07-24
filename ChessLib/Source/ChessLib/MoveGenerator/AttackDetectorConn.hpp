@@ -128,13 +128,13 @@ namespace chesslib
 		Square next = view.Next(3);
 		if (next != Empty && board.GetPiece(next) == ctraits::Pawn)
 		{
-			this->_checks[this->_numChecks++] = { next, king_pos, next - king_pos };
+			this->_checks[this->_numChecks++] = { next, king_pos, king_pos - next };
 			return;
 		}
 
 		next = view.Next(1);
 		if (next != Empty && board.GetPiece(next) == ctraits::Pawn)
-			this->_checks[this->_numChecks++] = { next, king_pos, next - king_pos };
+			this->_checks[this->_numChecks++] = { next, king_pos, king_pos - next };
 	}
 
 	template <typename BoardType>

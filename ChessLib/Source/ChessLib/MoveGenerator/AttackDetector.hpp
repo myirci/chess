@@ -116,7 +116,7 @@ namespace chesslib
 			Square next = king_pos + bctraits::PawnReverseAttackDirections[i];
 			if (IsInside<BoardType>(next, king_pos) && board.GetPiece(next) == ctraits::Pawn) 
 			{
-				this->_checks[this->_numChecks++] = { next, king_pos, direction::Reverse(bctraits::PawnReverseAttackDirections[i]) };
+				this->_checks[this->_numChecks++] = { next, king_pos, king_pos - next };
 				return;
 			}
 		}

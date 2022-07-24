@@ -139,12 +139,14 @@ namespace chesslib
 	template<Color SideToMove>
 	void MoveGenerator<BoardType>::GenerateCheckEliminatingMoves(const BoardType& board, MoveList& moves)
 	{
-		// Checker cannot be captured/blocked in check - direction. 
-		// In the check direction, only checked king can capture the checking piece. This is covered in king moves.
+		// Checker can only be captured in the reverse check direction by the king itself. 
+		// Check direction is from the checking piece to the king.
+		// Note that we are reversing the direction here because the direction is also inverted in the ToSquare methods.
 		#define Capture(Dir, s, mt) \
 		if (Dir != check.attack_dir) \
 			GenerateToSquareSlidingPieceMoves<SideToMove, Dir>(board, s, mt, moves) 
 
+		// Check cannot be blocked by a piece that comes from the checking or reverse checking direction.
 		#define Block(Dir, s, mt) \
 		if (Dir != check.attack_dir && Dir != direction::Reverse(check.attack_dir)) \
 			GenerateToSquareSlidingPieceMoves<SideToMove, Dir>(board, s, mt, moves) 
@@ -422,11 +424,14 @@ namespace chesslib
 
 		for (int i{ 0 }; i < 2; i++)
 		{
+			// Check if there is a pawn to do en-passant capture.
 			Square pos{ en_passant + bctraits::PawnReverseAttackDirections[i] };
 			if (!IsInside<BoardType>(en_passant, pos) || board.GetPiece(pos) != ctraits::Pawn)
 				continue;
 
-			if (Direction pin_dir = _attackDetector.GetPinDirection(pos); pin_dir != Empty && pin_dir != bctraits::PawnReverseAttackDirections[i])
+			// Check that the pawn is not pinned or it is moving in the pin direction.
+			Direction pin_dir = _attackDetector.GetPinDirection(pos);
+			if (pin_dir != Empty && pin_dir != bctraits::PawnReverseAttackDirections[i])
 				continue;
 
 			Square king_pos = board.GetKingPosition<SideToMove>();
