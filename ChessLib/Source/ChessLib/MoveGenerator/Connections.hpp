@@ -241,7 +241,7 @@ namespace chesslib
 		};
 
 		template <Direction Dir>
-		View<Dir>::View(Square s)
+		View<Dir>::View(Square s) : size{ 0 }, currIdx{ 0 }
 		{
 			if constexpr (Dir == ChessBoard::N)
 			{

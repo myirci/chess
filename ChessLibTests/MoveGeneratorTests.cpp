@@ -57,6 +57,7 @@ TEST_F(MoveGeneratorTests, basic_board_test_1_king_moves)
         EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expectedMoves.begin()));
     }
 }
+
 TEST_F(MoveGeneratorTests, basic_board_test_2_check_eliminating_moves)
 {
     auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
@@ -138,6 +139,24 @@ TEST_F(MoveGeneratorTests, basic_board_test_6_single_piece_moves)
     }
 }
 
+
+TEST_F(MoveGeneratorTests, basic_board_test_7_en_passant_capture)
+{
+    auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
+    auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-7");
+
+    EXPECT_TRUE(lines.size() != 0 && lines.size() % 3 == 0);
+
+    for (auto i{ 0 }; i < lines.size(); i += 3)
+    {
+        std::cout << lines[i] << std::endl;
+        auto b = BoardFactory::make_unique_board<BasicBoard>(lines[(size_t)(i + 1)]);
+        auto expectedMoves = TestHelpers::GetMoves<BasicBoard>(lines[(size_t)(i + 2)]);
+        auto moves = GenerateMoves<BasicBoard>(*b);
+        EXPECT_EQ(expectedMoves.size(), moves.size());
+        EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expectedMoves.begin()));
+    }
+}
 #pragma endregion
 
 #pragma region x88BoardTests
@@ -157,6 +176,7 @@ TEST_F(MoveGeneratorTests, x88_board_test_1_king_moves)
         EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expectedMoves.begin()));
     }
 }
+
 TEST_F(MoveGeneratorTests, x88_board_test_2_check_eliminating_moves)
 {
     auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
@@ -221,10 +241,42 @@ TEST_F(MoveGeneratorTests, x88_board_test_5_number_of_moves)
     }
 }
 
+TEST_F(MoveGeneratorTests, x88_board_test_6_single_piece_moves)
+{
+    auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
+    auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-6");
+
+    EXPECT_TRUE(lines.size() != 0 && lines.size() % 3 == 0);
+
+    for (auto i{ 0 }; i < lines.size(); i += 3)
+    {
+        auto b = BoardFactory::make_unique_board<x88Board>(lines[(size_t)(i + 1)]);
+        auto expectedMoves = TestHelpers::GetMoves<x88Board>(lines[(size_t)(i + 2)]);
+        auto moves = GenerateMoves<x88Board>(*b);
+        EXPECT_EQ(expectedMoves.size(), moves.size());
+        EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expectedMoves.begin()));
+    }
+}
+
+TEST_F(MoveGeneratorTests, x88_board_test_7_en_passant_capture)
+{
+    auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
+    auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-7");
+
+    EXPECT_TRUE(lines.size() != 0 && lines.size() % 3 == 0);
+
+    for (auto i{ 0 }; i < lines.size(); i += 3)
+    {
+        auto b = BoardFactory::make_unique_board<x88Board>(lines[(size_t)(i + 1)]);
+        auto expectedMoves = TestHelpers::GetMoves<x88Board>(lines[(size_t)(i + 2)]);
+        auto moves = GenerateMoves<x88Board>(*b);
+        EXPECT_EQ(expectedMoves.size(), moves.size());
+        EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expectedMoves.begin()));
+    }
+}
 #pragma endregion
 
 #pragma region SimpleBoard_PrecomputedConnectionsTests
-
 TEST_F(MoveGeneratorTests, precomputed_connections_test)
 {
     Connectivity con{};
@@ -244,6 +296,7 @@ TEST_F(MoveGeneratorTests, precomputed_connections_test)
     EXPECT_EQ(conn::ConnectionsAndIndices.second[20], idxVec[10]._indexes_start);
     EXPECT_EQ(conn::ConnectionsAndIndices.second[21], idxVec[11]._indexes_start);
 }
+
 TEST_F(MoveGeneratorTests, simple_board_precomputed_connections_test_1_king_moves)
 {
     auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
@@ -261,6 +314,7 @@ TEST_F(MoveGeneratorTests, simple_board_precomputed_connections_test_1_king_move
         EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expectedMoves.begin()));
     }
 }
+
 TEST_F(MoveGeneratorTests, simple_board_precomputed_connections_test_2_check_eliminating_moves)
 {
     auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
@@ -314,7 +368,23 @@ TEST_F(MoveGeneratorTests, simple_board_precomputed_connections_test_4_random_po
     }
 }
 
-TEST_F(MoveGeneratorTests, simple_board_precomputed_connections_test_5_single_piece_moves)
+TEST_F(MoveGeneratorTests, simple_board_precomputed_connections_test_5_number_of_moves)
+{
+    auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
+    auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-5");
+
+    EXPECT_TRUE(lines.size() != 0 && lines.size() % 3 == 0);
+
+    for (auto i{ 0 }; i < lines.size(); i += 3)
+    {
+        auto b = BoardFactory::make_unique_board<SimpleBoard>(lines[(size_t)(i + 1)]);
+        MoveGeneratorConn<SimpleBoard> mgen{};
+        auto moves = mgen.GenerateMoves(*b);
+        EXPECT_EQ(moves.size(), (size_t)std::stoi(lines[(size_t)(i + 2)]));
+    }
+}
+
+TEST_F(MoveGeneratorTests, simple_board_precomputed_connections_test_6_single_piece_moves)
 {
     auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
     auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-6");
@@ -330,5 +400,23 @@ TEST_F(MoveGeneratorTests, simple_board_precomputed_connections_test_5_single_pi
         EXPECT_EQ(expectedMoves.size(), moves.size());
         EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expectedMoves.begin()));
     }
+}
+
+TEST_F(MoveGeneratorTests, simple_board_precomputed_connections_test_7_en_passant_capture)
+{
+    auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
+    auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-7");
+
+    EXPECT_TRUE(lines.size() != 0 && lines.size() % 3 == 0);
+
+    for (auto i{ 0 }; i < lines.size(); i += 3)
+    {
+        auto b = BoardFactory::make_unique_board<SimpleBoard>(lines[(size_t)(i + 1)]);
+        auto expectedMoves = TestHelpers::GetMoves<SimpleBoard>(lines[(size_t)(i + 2)]);
+        MoveGeneratorConn<SimpleBoard> mgen{};
+        auto moves = mgen.GenerateMoves(*b);
+        EXPECT_EQ(expectedMoves.size(), moves.size());
+        EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expectedMoves.begin()));
+    } 
 }
 #pragma endregion

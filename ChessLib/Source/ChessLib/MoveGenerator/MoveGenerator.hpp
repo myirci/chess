@@ -444,12 +444,16 @@ namespace chesslib
 				bool make_move{ true };
 				for (Square next{ king_pos + dir }; IsInside<BoardType>(next, next - dir); next += dir)
 				{
-					auto p = board.GetPiece(next);
-					if (next == pos || next == ppos || p == Empty)
+					if (next == pos || next == ppos)
 						continue;
 
+					auto p = board.GetPiece(next);
+					if (p == Empty)
+						continue;
+					
 					if (p == octraits::Rook || p == octraits::Queen)
 						make_move = false;
+					
 					break;
 				}
 

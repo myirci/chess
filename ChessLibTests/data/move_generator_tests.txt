@@ -68,8 +68,16 @@ Group-2
 	Test-7
 	k3B3/8/p7/1q3B2/P6R/N7/2PPK3/1R6 w - - 0 1
 	f5-d3, d2-d3, h4-c4, a3-c4, c2-c4-dp, b1-b5-cm, e8-b5-cm, a3-b5-cm, a4-b5-cm
-
+	
 	Test-8
+	4k3/8/8/2NPpP2/R1RKN3/R1BRB3/R7/Q7 w - e6 0 1
+	d5-e6-ep, f5-e6-ep, d4-e5-cm
+	
+	Test-9
+	8/8/1qq5/qkbn4/rpPp4/8/8/7K b - c3 0 1
+	b4-c3-ep, d4-c3-ep, b5-c4-cm, b5-a6
+
+	Test-10
 	3K4/8/8/8/8/8/n2bp1p1/1k5R b - - 0 1
 	d2-c1, a2-c1, d2-e1, e2-e1-qp, e2-e1-rp, e2-e1-bp, e2-e1-np, g2-g1-qp, g2-g1-rp, g2-g1-bp, g2-g1-np, g2-h1-qpc, g2-h1-rpc, g2-h1-bpc, g2-h1-npc
 }
@@ -187,50 +195,34 @@ Group-5
 	2
 
 	Test-2
-	3k4/8/2r5/2Pp4/2K5/8/8/8 w - d3 0 1
-	7
-
-	Test-3
-	8/2p5/3p4/KP5r/1R3pPk/8/4P3/8 b - g3 0 1
-	17
-
-	Test-4
 	8/2p5/3p4/KP4r1/5pPk/8/4P3/1R6 b - g3 0 1
 	18
 
-	Test-5
+	Test-3
 	8/8/3p4/1Pp4r/1KR2pk1/8/4P1P1/8 w - c6 0 1
 	7
 
-	Test-6
+	Test-4
 	8/2p5/3p4/KP3R1r/5p2/8/4PkP1/8 b - - 0 1
 	20
 
-	Test-7
+	Test-5
 	8/2p5/3p4/KP4kr/5pP1/8/4P3/6R1 b - g3 0 1
 	16
 
-	Test-8
-	K7/8/8/8/1R2pP1k/8/8/8 b - f3 0 1
-	5
-
-	Test-9
-	K7/8/8/8/1R1pPp1k/8/8/8 b - e3 0 1
-	9
-
-	Test-10
+	Test-6
 	n1r1r1b1/1P1P1P1P/1Q6/3NBNK1/R7/4p1p1/3PBPkP/2R5 w - - 0 1
 	144
 
-	Test-11
+	Test-7
 	3Q4/1Q4Q1/4Q3/2Q4R/Q4Q2/3Q4/1Q4Rp/1KbBBNNk w - - 0 1
 	218
 	
-	Test-12
+	Test-8
 	3kr3/8/8/8/4R3/8/4K3/8 w - - 0 1
 	13
 	
-	Test-13
+	Test-9
 	k7/8/8/8/8/8/6b1/4K2B b - - 0 1
 	9
 }
@@ -327,49 +319,153 @@ Group-6
 Group-7
 # En-passant capture tests
 {
+	# White en-passant capture to the left
 	Test-1
-	4k3/8/8/1pP5/8/8/8/4K3 w - b6 0 1
+	4k3/8/8/1pP5/8/3r1r2/7r/4K3 w - b6 0 1
 	c5-c6, c5-b6-ep
       
+	# White en-passant capture to the right
 	Test-2 
-	4k3/8/8/2Pp4/8/8/8/4K3 w - d6 0 1
+	4k3/8/8/2Pp4/8/3r1r2/q7/4K3 w - d6 0 1
 	c5-c6, c5-d6-ep
-      
-	Test-3 
-	4k3/8/8/8/4pP2/8/8/4K3 b - f3 0 1
-    e4-e3, e4-f3-ep
-  
+	
+	# White en-passant capture both left and write
+	Test-3
+	k7/8/8/3PpP2/8/q7/8/1K6 w - e6 0 1
+	b1-c2, d5-d6, f5-f6, d5-e6-ep, f5-e6-ep
+	
+	# White en-passant capture both left and write under check
 	Test-4
-	4k3/8/8/8/3Pp3/8/8/4K3 b - d3 0 1
-    e4-e3, e4-d3-ep
-  
-	# Tricky position
+	k1q5/8/8/3PpP2/3K4/q7/8/8 w - e6 0 1
+	d5-e6-ep, f5-e6-ep, d4-e5-cm, d4-e4
+	
+	# White en-passant capture to the left in the pin direction
 	Test-5
-	7k/q7/8/1pP5/3K4/8/8/8 w - b6 0 1
+	7k/q7/8/1pP4r/3K4/7q/8/4r3 w - b6 0 1
 	c5-b6-ep
-    
-	# Tricky position
+	
+	# White en-passant capture to the right in the pin direction
 	Test-6
-	8/7k/8/8/3Pp3/8/8/1B2K3 b - d3 0 1
-	e4-d3-ep
+	k1r3b1/8/8/q2Pp3/7r/1K6/7r/8 w - e6 0 1
+	d5-e6-ep
 	
+	# White cannot capture with en-passant, white king is under check
 	Test-7
-	k7/8/8/3PpP2/3K4/8/8/8 w - e6 0 1
-	d5-e6-ep, f5-e6-ep, d4-e5-cm
-
-	Test-8
-	8/8/8/5k2/5pPp/8/8/K7 b - g3 0 1
-	f4-g3-ep, h4-g3-ep, f5-g4-cm
-	
-	Test-9
-	4k3/8/8/2NPpP2/R1RKN3/R1BRB3/R7/Q7 w - e6 0 1
-	d5-e6-ep, f5-e6-ep, d4-e5-cm
-	
-	Test-10
-	8/8/1qq5/qkbn4/rpPp4/8/8/7K b - c3 0 1
-	b4-c3-ep, d4-c3-ep, b5-c4-cm, b5-a6
-	
-	Test-11
 	4kb2/8/8/3PpP2/B7/KB6/RR6/8 w - e6 0 1
 	d5-d6
+	
+	# White cannot capture with en-passant, pawn is pinned
+	Test-8
+	3k4/2r5/8/2Pp4/8/7r/2K5/q7 w - d6 0 1
+	c2-d2, c5-c6
+	
+	# White cannot capture with en-passant, pawn is pinned
+	Test-9
+	3kr3/q7/8/2Pp4/3K4/7r/8/8 w - d6 0 1
+	d4-d5-cm
+	
+	# White cannot left capture with en-passant because it will leave the king under check, king is on the left
+	Test-10
+	8/8/7q/2K1pP1r/7q/2n5/8/8 w - e6 0 1
+	f5-f6
+	
+	# White cannot right capture with en-passant because it will leave the king under check, king is on the left
+	Test-11
+	8/8/7q/2K1Pp1r/7q/2n5/8/8 w - f6 0 1
+	e5-e6
+	
+	# White cannot left capture with en-passant because it will leave the king under check, king is on the right
+	Test-12
+	8/8/q7/r1pP3K/q7/7n/8/8 w - c6 0 1
+	d5-d6
+	
+	# White cannot right capture with en-passant because it will leave the king under check, king is on the right
+	Test-13
+	8/8/q7/r2Pp2K/q7/7n/8/8 w - e6 0 1
+	d5-d6
+	
+	# White cannot capture with en-passant because it will leave the king under check
+	Test-14
+	8/8/7q/3KpP1r/7q/3n4/8/8 w - e6 0 1
+	f5-f6
+	
+	# White can en-passant capture with both pawns, the second pawn prevent the check 
+	Test-15
+	8/8/7q/K2PpP1r/7q/8/8/8 w - e6 0 1
+	d5-d6, f5-f6, a5-b5, d5-e6-ep, f5-e6-ep
+	
+	# white can en-passant capture, white king is on the same rank with the capturing pawn
+	Test-16
+	8/8/q7/2pP3K/q7/7n/8/8 w - c6 0 1
+	d5-d6, d5-c6-ep 
+	
+	# white can en-passant capture, white king is on the same rank with the capturing pawn
+	Test-17
+	8/8/1n3q2/rRpP3K/1pq5/8/8/8 w - c6 0 1
+	d5-d6, d5-c6-ep, b5-b6-cm, b5-b4-cm, b5-a5-cm, b5-c5-cm 
+	
+	# white can en-passant capture, white king is on the same rank with the capturing pawn
+	Test-18
+	8/6q1/5p2/r1pP1R1K/5P2/6q1/8/8 w - c6 0 1
+	d5-d6, d5-c6-ep, f5-e5, f5-g5, f5-f6-cm
+	
+	# Black en-passant capture to the left
+	Test-19 
+	4k3/R7/3R1R2/8/4pP2/8/8/4K3 b - f3 0 1
+    e4-e3, e4-f3-ep
+
+	# Black en-passant capture to the right
+	Test-20
+	4k3/2Q3Q1/8/8/3Pp3/8/8/4K3 b - d3 0 1
+    e4-e3, e4-d3-ep
+	
+	# Black en-passant capture both left and write
+	Test-21
+	3k4/1Q3Q2/8/8/1pPp4/8/8/K7 b - c3 0 1
+	b4-b3, d4-d3, b4-c3-ep, d4-c3-ep
+	
+	# Black en-passant capture both left and write under check
+	Test-22
+	8/8/3Q4/5k2/5pPp/8/3N4/K7 b - g3 0 1
+	f4-g3-ep, h4-g3-ep, f5-g4-cm, f5-g5
+  
+	# Black en-passant capture to the left in the pin direction
+	Test-23
+	2B5/8/2k1N3/8/2N1pP2/2N5/6Q1/7K b - f3 0 1
+	e4-f3-ep
+	
+	# Black en-passant capture to the right in the pin direction
+	Test-24
+	R7/7k/R7/8/3Pp3/8/8/1B2K1R1 b - d3 0 1
+	e4-d3-ep
+  
+    # Black cannot capture with en-passant, black king is under check
+	Test-25
+	8/ppn5/rk6/nb6/4pP2/8/8/6Q1 b - f3 0 1
+    b6-c6, e4-e3
+  
+	# Black cannot capture with en-passant, pawn is pinned
+	Test-26
+	7R/1k6/3Q4/8/3Pp3/8/6Q1/R6K b - d3 0 1
+	-
+	
+	# Black cannot capture with en-passant, pawn is pinned
+	Test-27
+	4k3/2Q3Q1/8/8/3Pp3/8/8/K3R3 b - d3 0 1
+	e4-e3
+	
+	# Black cannot capture with en-passant because it will leave the king under check
+	Test-28
+	8/8/8/KP6/1R3pPk/R7/4P3/8 b - g3 0 1
+	h4-g5, h4-g4-cm, f4-f3
+	
+	# Black cannot capture with en-passant because it will leave the king under check
+	Test-29
+	K5R1/8/8/8/1R2pP1k/8/8/8 b - f3 0 1
+	h4-h3, h4-h5, e4-e3
+	
+	# Black can en-passant capture with both pawns, the second pawn prevent the check 
+	Test-30
+	K5R1/8/8/R7/1R1pPp1k/R7/8/8 b - e3 0 1
+	d4-d3, f4-f3, d4-e3-ep, f4-e3-ep
 }

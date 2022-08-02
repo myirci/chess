@@ -46,6 +46,9 @@ namespace chesslib
 
 		template<Color SideToMove>
 		void GeneratePawnMoves(const BoardType& board, MoveList& moves) const;
+
+		template<Color Attacker, Direction Dir>
+		bool IsKingUnderAttackAfterEnPassantCapture(const BoardType& board, Square king_pos, Square capturing_pawn_pos, Square captured_pawn_pos) const;
 	};
 
 	template <typename BoardType>
@@ -496,47 +499,63 @@ namespace chesslib
 			return;
 
 		conn::View<conn::PawnDirectionTrait<ctraits::Opposite>::Dir> ep_view{ en_passant };
-		r = ep_view.Next();
-		Square next_arr[2] = { ep_view.Next(2), ep_view.Next(1) };
-
-		for (int i = 0; i < 2; i++)
+		Square captured_pawn_pos = ep_view.Next(1);
+		
+		for (int i = 2; i >= 1; i--)
 		{
+			// get the capturing pawn pos
+			next = ep_view.Next(i);
+
 			// Is the next square inside the board.
-			if (next_arr[i] == Empty)
+			if (next == Empty)
 				continue;
 
 			// Is there a pawn to do the en-passant capture.
-			p = board.GetPiece(next_arr[i]);
+			p = board.GetPiece(next);
 			if (p != ctraits::Pawn)
 				continue;
 
 			// Check that the pawn is not pinned or it is moving in the pin direction.
-			Direction pin_dir = _attackDetector.GetPinDirection(next_arr[i]);
-			if (pin_dir != Empty && pin_dir != (en_passant - next_arr[i]))
+			Direction pin_dir = _attackDetector.GetPinDirection(next);
+			if (pin_dir != Empty && pin_dir != (next - en_passant))
 				continue;
 
 			Square king_pos = board.GetKingPosition<SideToMove>();
-			if (BoardType::GetRank(king_pos) != BoardType::GetRank(next_arr[i]))
-				moves.emplace_back(next_arr[i], en_passant, MoveType::En_Passant_Capture);
+			if (BoardType::GetRank(king_pos) != BoardType::GetRank(next))
+				moves.emplace_back(next, en_passant, MoveType::En_Passant_Capture);
 			else
 			{
-				/*Square ppos{ en_passant + bctraits::PawnReverseMoveDirection };
-				Direction dir = king_pos > next_arr[i] ? BoardType::W : BoardType::E;
-				bool make_move{ true };
-				for (Square next{ king_pos + dir }; IsInside<BoardType>(next, next - dir); next += dir)
-				{
-					auto p = board.GetPiece(next);
-					if (next == pos || next == ppos || p == Empty)
-						continue;
-
-					if (p == octraits::Rook || p == octraits::Queen)
-						make_move = false;
-					break;
-				}
-
+				bool make_move = king_pos > captured_pawn_pos
+					? IsKingUnderAttackAfterEnPassantCapture<ctraits::Opposite, BoardType::W>(board, king_pos, next, captured_pawn_pos)
+					: IsKingUnderAttackAfterEnPassantCapture<ctraits::Opposite, BoardType::E>(board, king_pos, next, captured_pawn_pos);
 				if (make_move)
-					moves.emplace_back(pos, en_passant, MoveType::En_Passant_Capture);*/
+					moves.emplace_back(next, en_passant, MoveType::En_Passant_Capture);
 			}
 		}
+	}
+
+	template <typename BoardType>
+	template<Color Attacker, Direction Dir>
+	bool MoveGeneratorConn<BoardType>::IsKingUnderAttackAfterEnPassantCapture(const BoardType& board, Square king_pos, Square capturing_pawn_pos, Square captured_pawn_pos) const
+	{
+		using ctraits = traits::color_traits<Attacker>;
+
+		Square next{ Empty };
+		Piece p{ Empty };
+		conn::View<Dir> view{ king_pos };
+		for (int8_t j = 0; j < view.GetSize(); j++)
+		{
+			next = view.Next();
+			if (next == capturing_pawn_pos || next == captured_pawn_pos)
+				continue;
+
+			p = board.GetPiece(next);
+			if (p == Empty)
+				continue;
+
+			return !(p == ctraits::Rook || p == ctraits::Queen);
+		}
+
+		return true;
 	}
 }
