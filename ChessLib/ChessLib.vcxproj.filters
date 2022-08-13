@@ -63,9 +63,6 @@
     <ClCompile Include="Source\ChessLib\MoveGenerator\Connectivity.cpp">
       <Filter>MoveGenerator</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ChessLib\MoveGenerator\Connections.cpp">
-      <Filter>MoveGenerator</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ChessLib\Chess\Definitions.hpp">
@@ -156,6 +153,9 @@
       <Filter>MoveGenerator</Filter>
     </ClInclude>
     <ClInclude Include="Source\ChessLib\MoveGenerator\MoveGeneratorConn.hpp">
+      <Filter>MoveGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ChessLib\MoveGenerator\PrecomputedMoves.hpp">
       <Filter>MoveGenerator</Filter>
     </ClInclude>
   </ItemGroup>

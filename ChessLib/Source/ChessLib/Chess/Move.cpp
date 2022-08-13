@@ -2,19 +2,6 @@
 
 namespace chesslib 
 {
-	bool operator == (const Move m1, const Move m2) 
-	{
-		return
-			m1.from == m2.from &&
-			m1.to == m2.to &&
-			m1.mtype == m2.mtype;
-	}
-
-	bool operator < (const Move m1, const Move m2) 
-	{
-		return m1.from < m2.from || m1.from == m2.from && m1.to < m2.to;
-	}
-
 	std::string_view to_string(MoveType mtype)
 	{
 		const static std::unordered_map<MoveType, std::string_view> mt_str

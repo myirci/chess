@@ -54,7 +54,7 @@ namespace chesslib
 	template <typename BoardType>
 	MoveList MoveGeneratorConn<BoardType>::GenerateMoves(const BoardType& board)
 	{
-		MoveList moves;
+		MoveList moves{};
 
 		if (board.GetActiveColor() == color::White)
 			GenerateMoves<color::White>(board, moves);

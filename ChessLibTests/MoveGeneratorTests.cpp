@@ -11,6 +11,7 @@
 #include <ChessLib/MoveGenerator/MoveGeneratorConn.hpp>
 #include <ChessLib/MoveGenerator/Connectivity.hpp>
 #include <ChessLib/MoveGenerator/Connections.hpp>
+#include <ChessLib/MoveGenerator/PrecomputedMoves.hpp>
 
 using namespace chesslib;
 
@@ -25,8 +26,8 @@ protected:
         return mgen.GenerateMoves(board);
     }
 
-    template <int N>
-    bool IsEqual(const std::array<Square, N>& arr, const std::vector<Square>& vec) 
+    template <typename T, size_t N>
+    bool IsEqual(const std::array<T, N>& arr, const std::vector<T>& vec) 
     {
         if (arr.size() != vec.size())
             return false;
@@ -138,7 +139,6 @@ TEST_F(MoveGeneratorTests, basic_board_test_6_single_piece_moves)
         EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expectedMoves.begin()));
     }
 }
-
 
 TEST_F(MoveGeneratorTests, basic_board_test_7_en_passant_capture)
 {
@@ -279,10 +279,13 @@ TEST_F(MoveGeneratorTests, x88_board_test_7_en_passant_capture)
 #pragma region SimpleBoard_PrecomputedConnectionsTests
 TEST_F(MoveGeneratorTests, precomputed_connections_test)
 {
-    Connectivity con{};
-    const auto& conVec = con.GetConnections();
+    precompute::Connectivity con{};
+    const auto& conVec = con.GetConnections(); 
     const auto& idxVec = con.GetIndexes();
-    EXPECT_TRUE(IsEqual<conn::ConnectionsAndIndices.first.size()>(conn::ConnectionsAndIndices.first, conVec));
+
+    constexpr std::size_t size = conn::ConnectionsAndIndices.first.size();
+    auto isequal = IsEqual<Square, size>(conn::ConnectionsAndIndices.first, conVec);
+    EXPECT_TRUE(isequal);
 
     int idx1{ 0 }, idx2{ 1 };
     for (int i = 0; i < 10; i++)
@@ -295,6 +298,31 @@ TEST_F(MoveGeneratorTests, precomputed_connections_test)
 
     EXPECT_EQ(conn::ConnectionsAndIndices.second[20], idxVec[10]._indexes_start);
     EXPECT_EQ(conn::ConnectionsAndIndices.second[21], idxVec[11]._indexes_start);
+}
+
+TEST_F(MoveGeneratorTests, precomputed_moves_test) 
+{
+    // Runtime moves and indexes
+    precompute::PrecomputeMoves runtimeComputer;
+    runtimeComputer.Compute();
+    const auto& expected_moves = runtimeComputer.GetMoves();
+    const auto& expected_indexes = runtimeComputer.GetIndexes();
+
+    // Compile-time moves and indexes
+    const auto& moves = precomputed_moves::MovesAndIndices.first;
+    constexpr std::size_t size = precomputed_moves::MovesAndIndices.first.size();
+    const auto& indexes = precomputed_moves::MovesAndIndices.second;
+
+    // Check the equality of run-time and compile-time moves
+    bool isequal = IsEqual<Move, size>(moves, expected_moves);
+    EXPECT_TRUE(isequal);
+
+    // Check the equility of indexes
+    for (int i = 0, j = 0; i < 6; i++, j+=2) 
+    {
+        EXPECT_EQ(expected_indexes[i]._indexes_start, indexes[j]);
+        EXPECT_EQ(expected_indexes[i]._indexes_end, indexes[j+1]);
+    }
 }
 
 TEST_F(MoveGeneratorTests, simple_board_precomputed_connections_test_1_king_moves)

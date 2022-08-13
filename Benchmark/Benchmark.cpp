@@ -11,12 +11,15 @@ void do_pinned_piece_lookup_benchmark();
 
 // Computations
 void compute_connectivities();
+void compute_moves();
 
 int main() 
 {
 	// bit_index_find_benchmark();
 	// do_pinned_piece_lookup_benchmark();
-	compute_connectivities();
+	// compute_connectivities();
+	compute_moves();
+	return 0;
 }
 
 void bit_index_find_benchmark() 
@@ -41,6 +44,13 @@ void do_pinned_piece_lookup_benchmark()
 
 void compute_connectivities() 
 {
-	chesslib::Connectivity con;
+	chesslib::precompute::Connectivity con;
 	con.Export("../Benchmark/data/connections.txt");
+}
+
+void compute_moves() 
+{
+	chesslib::precompute::PrecomputeMoves pcm;
+	pcm.Compute();
+	pcm.Export_MovesAndIndexes("../Benchmark/data/moves.txt");
 }

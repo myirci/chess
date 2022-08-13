@@ -1,0 +1,221 @@
+# of moves: 220
+a2-a3 Quite
+a2-a4 Double Pawn Push
+a2-b3 Capture
+b2-b3 Quite
+b2-b4 Double Pawn Push
+b2-c3 Capture
+b2-a3 Capture
+c2-c3 Quite
+c2-c4 Double Pawn Push
+c2-d3 Capture
+c2-b3 Capture
+d2-d3 Quite
+d2-d4 Double Pawn Push
+d2-e3 Capture
+d2-c3 Capture
+e2-e3 Quite
+e2-e4 Double Pawn Push
+e2-f3 Capture
+e2-d3 Capture
+f2-f3 Quite
+f2-f4 Double Pawn Push
+f2-g3 Capture
+f2-e3 Capture
+g2-g3 Quite
+g2-g4 Double Pawn Push
+g2-h3 Capture
+g2-f3 Capture
+h2-h3 Quite
+h2-h4 Double Pawn Push
+h2-g3 Capture
+a3-a4 Quite
+a3-b4 Capture
+b3-b4 Quite
+b3-c4 Capture
+b3-a4 Capture
+c3-c4 Quite
+c3-d4 Capture
+c3-b4 Capture
+d3-d4 Quite
+d3-e4 Capture
+d3-c4 Capture
+e3-e4 Quite
+e3-f4 Capture
+e3-d4 Capture
+f3-f4 Quite
+f3-g4 Capture
+f3-e4 Capture
+g3-g4 Quite
+g3-h4 Capture
+g3-f4 Capture
+h3-h4 Quite
+h3-g4 Capture
+a4-a5 Quite
+a4-b5 Capture
+b4-b5 Quite
+b4-c5 Capture
+b4-a5 Capture
+c4-c5 Quite
+c4-d5 Capture
+c4-b5 Capture
+d4-d5 Quite
+d4-e5 Capture
+d4-c5 Capture
+e4-e5 Quite
+e4-f5 Capture
+e4-d5 Capture
+f4-f5 Quite
+f4-g5 Capture
+f4-e5 Capture
+g4-g5 Quite
+g4-h5 Capture
+g4-f5 Capture
+h4-h5 Quite
+h4-g5 Capture
+a5-a6 Quite
+a5-b6 Capture
+a5-b6 En-passant Capture
+b5-b6 Quite
+b5-c6 Capture
+b5-c6 En-passant Capture
+b5-a6 Capture
+b5-a6 En-passant Capture
+c5-c6 Quite
+c5-d6 Capture
+c5-d6 En-passant Capture
+c5-b6 Capture
+c5-b6 En-passant Capture
+d5-d6 Quite
+d5-e6 Capture
+d5-e6 En-passant Capture
+d5-c6 Capture
+d5-c6 En-passant Capture
+e5-e6 Quite
+e5-f6 Capture
+e5-f6 En-passant Capture
+e5-d6 Capture
+e5-d6 En-passant Capture
+f5-f6 Quite
+f5-g6 Capture
+f5-g6 En-passant Capture
+f5-e6 Capture
+f5-e6 En-passant Capture
+g5-g6 Quite
+g5-h6 Capture
+g5-h6 En-passant Capture
+g5-f6 Capture
+g5-f6 En-passant Capture
+h5-h6 Quite
+h5-g6 Capture
+h5-g6 En-passant Capture
+a6-a7 Quite
+a6-b7 Capture
+b6-b7 Quite
+b6-c7 Capture
+b6-a7 Capture
+c6-c7 Quite
+c6-d7 Capture
+c6-b7 Capture
+d6-d7 Quite
+d6-e7 Capture
+d6-c7 Capture
+e6-e7 Quite
+e6-f7 Capture
+e6-d7 Capture
+f6-f7 Quite
+f6-g7 Capture
+f6-e7 Capture
+g6-g7 Quite
+g6-h7 Capture
+g6-f7 Capture
+h6-h7 Quite
+h6-g7 Capture
+a7-a8 Queen Promotion
+a7-a8 Rook Promotion
+a7-a8 Knight Promotion
+a7-a8 Bishop Promotion
+a7-b8 Queen Promotion Capture
+a7-b8 Rook Promotion Capture
+a7-b8 Knight Promotion Capture
+a7-b8 Bishop Promotion Capture
+b7-b8 Queen Promotion
+b7-b8 Rook Promotion
+b7-b8 Knight Promotion
+b7-b8 Bishop Promotion
+b7-c8 Queen Promotion Capture
+b7-c8 Rook Promotion Capture
+b7-c8 Knight Promotion Capture
+b7-c8 Bishop Promotion Capture
+b7-a8 Queen Promotion Capture
+b7-a8 Rook Promotion Capture
+b7-a8 Knight Promotion Capture
+b7-a8 Bishop Promotion Capture
+c7-c8 Queen Promotion
+c7-c8 Rook Promotion
+c7-c8 Knight Promotion
+c7-c8 Bishop Promotion
+c7-d8 Queen Promotion Capture
+c7-d8 Rook Promotion Capture
+c7-d8 Knight Promotion Capture
+c7-d8 Bishop Promotion Capture
+c7-b8 Queen Promotion Capture
+c7-b8 Rook Promotion Capture
+c7-b8 Knight Promotion Capture
+c7-b8 Bishop Promotion Capture
+d7-d8 Queen Promotion
+d7-d8 Rook Promotion
+d7-d8 Knight Promotion
+d7-d8 Bishop Promotion
+d7-e8 Queen Promotion Capture
+d7-e8 Rook Promotion Capture
+d7-e8 Knight Promotion Capture
+d7-e8 Bishop Promotion Capture
+d7-c8 Queen Promotion Capture
+d7-c8 Rook Promotion Capture
+d7-c8 Knight Promotion Capture
+d7-c8 Bishop Promotion Capture
+e7-e8 Queen Promotion
+e7-e8 Rook Promotion
+e7-e8 Knight Promotion
+e7-e8 Bishop Promotion
+e7-f8 Queen Promotion Capture
+e7-f8 Rook Promotion Capture
+e7-f8 Knight Promotion Capture
+e7-f8 Bishop Promotion Capture
+e7-d8 Queen Promotion Capture
+e7-d8 Rook Promotion Capture
+e7-d8 Knight Promotion Capture
+e7-d8 Bishop Promotion Capture
+f7-f8 Queen Promotion
+f7-f8 Rook Promotion
+f7-f8 Knight Promotion
+f7-f8 Bishop Promotion
+f7-g8 Queen Promotion Capture
+f7-g8 Rook Promotion Capture
+f7-g8 Knight Promotion Capture
+f7-g8 Bishop Promotion Capture
+f7-e8 Queen Promotion Capture
+f7-e8 Rook Promotion Capture
+f7-e8 Knight Promotion Capture
+f7-e8 Bishop Promotion Capture
+g7-g8 Queen Promotion
+g7-g8 Rook Promotion
+g7-g8 Knight Promotion
+g7-g8 Bishop Promotion
+g7-h8 Queen Promotion Capture
+g7-h8 Rook Promotion Capture
+g7-h8 Knight Promotion Capture
+g7-h8 Bishop Promotion Capture
+g7-f8 Queen Promotion Capture
+g7-f8 Rook Promotion Capture
+g7-f8 Knight Promotion Capture
+g7-f8 Bishop Promotion Capture
+h7-h8 Queen Promotion
+h7-h8 Rook Promotion
+h7-h8 Knight Promotion
+h7-h8 Bishop Promotion
+h7-g8 Queen Promotion Capture
+h7-g8 Rook Promotion Capture
+h7-g8 Knight Promotion Capture
+h7-g8 Bishop Promotion Capture
