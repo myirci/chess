@@ -270,7 +270,7 @@ namespace chesslib
 		if (ep == Empty) ss << '-';
 		else
 		{
-			auto c = typename BoardType::GetCharPair(ep);
+			auto c = BoardType::GetCharPair(ep);
 			ss << c.first << c.second;
 		}
 
@@ -338,6 +338,6 @@ namespace chesslib
 		if constexpr (std::is_same_v<BoardType, BasicBoard>)
 			return BasicBoard::IsInside(from, to);
 		else
-			return typename BoardType::IsInside(to);
+			return BoardType::IsInside(to);
 	}
 }

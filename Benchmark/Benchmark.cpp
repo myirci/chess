@@ -51,6 +51,11 @@ void compute_connectivities()
 void compute_moves() 
 {
 	chesslib::precompute::PrecomputeMoves pcm;
-	pcm.Compute();
-	pcm.Export_MovesAndIndexes("../Benchmark/data/moves.txt");
+	pcm.ComputeRookMoves();
+	pcm.ComputeBishopMoves();
+	pcm.ComputeKnightMoves();
+	pcm.ComputeKingMoves();
+	pcm.ComputeWhitePawnMoves();
+	pcm.ComputeBlackPawnMoves();
+	pcm.Export_PieceMoves("../Benchmark/data");
 }

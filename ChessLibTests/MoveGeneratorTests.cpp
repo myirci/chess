@@ -300,31 +300,6 @@ TEST_F(MoveGeneratorTests, precomputed_connections_test)
     EXPECT_EQ(conn::ConnectionsAndIndices.second[21], idxVec[11]._indexes_start);
 }
 
-TEST_F(MoveGeneratorTests, precomputed_moves_test) 
-{
-    // Runtime moves and indexes
-    precompute::PrecomputeMoves runtimeComputer;
-    runtimeComputer.Compute();
-    const auto& expected_moves = runtimeComputer.GetMoves();
-    const auto& expected_indexes = runtimeComputer.GetIndexes();
-
-    // Compile-time moves and indexes
-    const auto& moves = precomputed_moves::MovesAndIndices.first;
-    constexpr std::size_t size = precomputed_moves::MovesAndIndices.first.size();
-    const auto& indexes = precomputed_moves::MovesAndIndices.second;
-
-    // Check the equality of run-time and compile-time moves
-    bool isequal = IsEqual<Move, size>(moves, expected_moves);
-    EXPECT_TRUE(isequal);
-
-    // Check the equility of indexes
-    for (int i = 0, j = 0; i < 6; i++, j+=2) 
-    {
-        EXPECT_EQ(expected_indexes[i]._indexes_start, indexes[j]);
-        EXPECT_EQ(expected_indexes[i]._indexes_end, indexes[j+1]);
-    }
-}
-
 TEST_F(MoveGeneratorTests, simple_board_precomputed_connections_test_1_king_moves)
 {
     auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);

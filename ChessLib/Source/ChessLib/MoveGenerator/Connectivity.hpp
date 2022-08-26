@@ -56,10 +56,8 @@ namespace chesslib::precompute
 		void ComputeKingMoves();
 		void ComputeWhitePawnMoves();
 		void ComputeBlackPawnMoves();
-		void Compute();
 
 		void Export_PieceMoves(const std::string& folder_path);
-		void Export_MovesAndIndexes(const std::string_view& file_path);
 
 		const std::vector<Move>& GetRookMoves() const  { return _rook_moves; }
 		const std::vector<Move>& GetBishopMoves() const { return _bishop_moves; }
@@ -67,8 +65,6 @@ namespace chesslib::precompute
 		const std::vector<Move>& GetKingMoves() const { return _king_moves; }
 		const std::vector<Move>& GetWhitePawnMoves() const { return _white_pawn_moves; }
 		const std::vector<Move>& GetBlackPawnMoves() const { return _black_pawn_moves; }
-		const std::vector<Move>& GetMoves() const { return _moves; }
-		const std::vector<MoveIndexes>& GetIndexes() const { return _indexes; }
 	
 	private:
 
@@ -78,9 +74,6 @@ namespace chesslib::precompute
 		std::vector<Move> _king_moves;
 		std::vector<Move> _white_pawn_moves;
 		std::vector<Move> _black_pawn_moves;
-
-		std::vector<Move> _moves;
-		std::vector<MoveIndexes> _indexes;
 
 		static void Export(std::string_view file_path, std::vector<Move>& moves);
 
