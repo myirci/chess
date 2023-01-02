@@ -16,8 +16,7 @@ namespace chesslib
 {
 	class BoardFactory;
 
-	class BasicBoard : 
-		public SimpleBoard
+	class BasicBoard : public SimpleBoard
 	{
 	public: 
 

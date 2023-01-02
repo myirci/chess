@@ -9,7 +9,7 @@ namespace chesslib
 	{
 	public:
 
-		using PieceMap = std::unordered_multimap<Piece, Square>;
+		using PieceMap        = std::unordered_multimap<Piece, Square>;
 		using EqualPieceRange = std::pair<PieceMap::const_iterator, PieceMap::const_iterator>;
 
 		const PieceMap& GetWhitePieces() const noexcept { return _white_pieces; }

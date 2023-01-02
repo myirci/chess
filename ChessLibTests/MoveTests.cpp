@@ -48,6 +48,7 @@ TEST(MoveTest, Promotion)
     Move m14{ 0, 1, MoveType::Queen_Side_Castle};
     EXPECT_FALSE(m14.IsPromotion());
 }
+
 TEST(MoveTest, Capture)
 {
     Move m1{ 0, 1, MoveType::Capture};

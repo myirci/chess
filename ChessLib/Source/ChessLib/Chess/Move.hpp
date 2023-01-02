@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <string_view>
 
 #include <ChessLib/Chess/Definitions.hpp>
 #include <ChessLib/Chess/ColorTraits.hpp>
@@ -14,8 +15,7 @@ namespace chesslib
 
         constexpr Move() : from{ Empty }, to{ Empty }, mtype{ MoveType::Quite } { }
 
-        constexpr Move(Square loc_from, Square loc_to, MoveType move_type = MoveType::Quite) :
-             from{ loc_from }, to{ loc_to }, mtype{ move_type } { }
+        constexpr Move(Square loc_from, Square loc_to, MoveType move_type = MoveType::Quite) : from{ loc_from }, to{ loc_to }, mtype{ move_type } { }
 
         constexpr Square GetFrom() const          { return from; }
         constexpr Square GetTo() const            { return to; }
