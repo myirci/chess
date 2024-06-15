@@ -7,6 +7,7 @@
 #include <ChessLib/Board/BoardFactory.hpp>
 #include <ChessLib/Board/BasicBoard.hpp>
 #include <ChessLib/Board/x88Board.hpp>
+#include <ChessLib/Board/ObjBoard.hpp>
 #include <ChessLib/MoveGenerator/MoveGenerator.hpp>
 #include <ChessLib/MoveGenerator/MoveGeneratorConn.hpp>
 #include <ChessLib/MoveGenerator/Connectivity.hpp>
@@ -14,6 +15,7 @@
 #include <ChessLib/MoveGenerator/PrecomputedMoves.hpp>
 
 using namespace chesslib;
+using ObjBoard = objboard::ObjBoard;
 
 class MoveGeneratorTests : public ::testing::Test
 {
@@ -422,4 +424,29 @@ TEST_F(MoveGeneratorTests, simple_board_precomputed_connections_test_7_en_passan
         EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expectedMoves.begin()));
     } 
 }
+#pragma endregion
+
+#pragma region ObjBoardTests
+
+TEST_F(MoveGeneratorTests, object_board_test_1_king_moves)
+{
+    auto scoped_open = ScopedOpen(TestHelpers::MoveGeneratorTestCases);
+    auto lines = TestHelpers::GetCleanLines(scoped_open.GetFile(), "Group-1");
+
+    EXPECT_TRUE(lines.size() != 0 && lines.size() % 3 == 0);
+
+    for (auto i{ 0 }; i < lines.size(); i += 3)
+    {
+        auto b = BoardFactory::make_unique_board<ObjBoard>(lines[(size_t)(i + 1)]);
+        auto expectedMoves = TestHelpers::GetMoves<ObjBoard>(lines[(size_t)(i + 2)]);
+        // auto moves = GenerateMoves<ObjBoard>(*b);
+        // EXPECT_EQ(expectedMoves.size(), moves.size());
+        // EXPECT_TRUE(std::is_permutation(moves.begin(), moves.end(), expectedMoves.begin()));
+    }
+}
+
+#pragma endregion
+
+#pragma region BitBoardTests
+
 #pragma endregion

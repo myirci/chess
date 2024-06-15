@@ -6,7 +6,7 @@
 
 namespace chesslib 
 {
-    // typedefs all same, gives semantics under different circumstances.
+    // typedefs for int8_t (equivalent to a char or byte), gives semantics for different usages.
     using Square    = int8_t;
     using Piece     = int8_t;
     using Color     = int8_t;
@@ -16,7 +16,7 @@ namespace chesslib
     using Direction = int8_t;
     using Distance  = int8_t;
 
-    constexpr int8_t Empty{ -128 };
+    inline constexpr int8_t Empty{ -128 };
 
     enum class MoveType : int8_t
     {
@@ -48,15 +48,15 @@ namespace chesslib
 
     namespace pieceset 
     {
-        constexpr double
+        inline constexpr double
             PawnValue{ 1.0 }, 
             KnightValue{ 3.0 }, 
             BishopValue{ 3.0 }, 
             RookValue{ 5.0 },
             QueenValue{ 10.0 }, 
-            KingValue{std::numeric_limits<double>::max()};
+            KingValue{ std::numeric_limits<double>::max() };
 
-        constexpr Piece 
+        inline constexpr Piece 
             WhitePawn{ 1 },  WhiteRook{ 2 },  WhiteKnight{ 3 },  WhiteBishop{ 4 },  WhiteQueen{ 5 },  WhiteKing{ 6 },  
             BlackPawn{ -1 }, BlackRook{ -2 }, BlackKnight{ -3 }, BlackBishop{ -4 }, BlackQueen{ -5 }, BlackKing{ -6 };
 
@@ -65,7 +65,7 @@ namespace chesslib
 
     namespace color 
     {
-        constexpr Color White{ 1 }, Black{ -1 };
+        inline constexpr Color White{ 1 }, Black{ -1 };
 
         inline constexpr Color get_color(Piece p) noexcept { return p > 0 ? White : Black; }
 
@@ -74,19 +74,19 @@ namespace chesslib
 
     namespace charset
     {
-        constexpr char White{ 'w' }, Black{ 'b' };
+        inline constexpr char White{ 'w' }, Black{ 'b' };
 
-        constexpr char
+        inline constexpr char
             WhiteKing{ 'K' }, WhiteQueen{ 'Q' }, WhiteRook{ 'R' }, WhiteBishop{ 'B' }, WhiteKnight{ 'N' }, WhitePawn{ 'P' },
             BlackKing{ 'k' }, BlackQueen{ 'q' }, BlackRook{ 'r' }, BlackBishop{ 'b' }, BlackKnight{ 'n' }, BlackPawn{ 'p' };
         
-        constexpr char a{ 'a' }, b{ 'b' }, c{ 'c' }, d{ 'd' }, e{ 'e' }, f{ 'f' }, g{ 'g' }, h{ 'h' };
-        constexpr char A{ 'A' }, B{ 'B' }, C{ 'C' }, D{ 'D' }, E{ 'D' }, F{ 'G' }, G{ 'G' }, H{ 'H' };
+        inline constexpr char a{ 'a' }, b{ 'b' }, c{ 'c' }, d{ 'd' }, e{ 'e' }, f{ 'f' }, g{ 'g' }, h{ 'h' };
+        inline constexpr char A{ 'A' }, B{ 'B' }, C{ 'C' }, D{ 'D' }, E{ 'D' }, F{ 'G' }, G{ 'G' }, H{ 'H' };
     }
 
     namespace direction 
     {
-        constexpr Direction Reverse(Direction dir) { return -dir; }
+        inline constexpr Direction Reverse(Direction dir) { return -dir; }
     }
 
     inline const std::unordered_map<char, Piece> char_to_piece =

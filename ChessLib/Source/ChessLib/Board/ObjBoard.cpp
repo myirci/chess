@@ -3,7 +3,7 @@
 namespace chesslib::objboard
 {
 	#define A(n) SquareObj{ n }
-	ObjBoard::ObjBoard() : 
+	ObjBoard::ObjBoard() :
 		_board 
 		{
 			A(a1), A(b1), A(c1), A(d1), A(e1), A(f1), A(g1), A(h1),

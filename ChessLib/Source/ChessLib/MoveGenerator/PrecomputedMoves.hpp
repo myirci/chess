@@ -13,16 +13,16 @@ namespace chesslib::precomputed_moves
 	using IndicesArray = std::array<IndexArrayType, 12>;
 	using MovesAndIndicesPair = std::pair<MoveArrayType, IndicesArray>;
 
-	inline constexpr int SSI = 0;  // Straight Start Index
-	inline constexpr int SEI = 1;  // Straight End Index
-	inline constexpr int DSI = 2;  // Diagonal Start Index
-	inline constexpr int DEI = 3;  // Diagoanl End Index
-	inline constexpr int NSI = 4;  // Knight Start Index
-	inline constexpr int NEI = 5;  // Knight End Index
-	inline constexpr int KSI = 6;  // King Start Index
-	inline constexpr int KEI = 7;  // King End Index
-	inline constexpr int WSI = 8;  // White Pawn Start Index
-	inline constexpr int WEI = 9;  // White Pawn End Index
+	inline constexpr int SSI = 0;   // Straight Start Index
+	inline constexpr int SEI = 1;   // Straight End Index
+	inline constexpr int DSI = 2;   // Diagonal Start Index
+	inline constexpr int DEI = 3;   // Diagonal End Index
+	inline constexpr int NSI = 4;   // Knight Start Index
+	inline constexpr int NEI = 5;   // Knight End Index
+	inline constexpr int KSI = 6;   // King Start Index
+	inline constexpr int KEI = 7;   // King End Index
+	inline constexpr int WSI = 8;   // White Pawn Start Index
+	inline constexpr int WEI = 9;   // White Pawn End Index
 	inline constexpr int SWSI = 10; // Black Pawn Start Index
 	inline constexpr int SWEI = 11; // Black Pawn End Index
 	

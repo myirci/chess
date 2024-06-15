@@ -23,18 +23,37 @@ namespace chesslib::objboard
 	public:
 		
 		using BoardArray = std::array<SquareObj, BOARDSIZE>;
-		using PieceMap = std::unordered_multimap<Piece, std::unique_ptr<PieceObj>>;
+		using PieceMap   = std::unordered_multimap<Piece, std::unique_ptr<PieceObj>>;
 
-		const BoardArray& GetBoard() const noexcept			{ return _board; }
-		BoardArray& GetBoard() noexcept						{ return _board; }
+		const BoardArray& GetBoard() const noexcept		{ return _board; }
+		BoardArray& GetBoard() noexcept					{ return _board; }
 
-		const PieceMap& GetWhitePieces() const noexcept		{ return _white_pieces; }
-		PieceMap& GetWhitePieces() noexcept					{ return _white_pieces; }
+		const PieceMap& GetWhitePieces() const noexcept	{ return _white_pieces; }
+		PieceMap& GetWhitePieces() noexcept				{ return _white_pieces; }
 		
-		const PieceMap& GetBlackPieces() const noexcept		{ return _black_pieces; }
-		PieceMap& GetBlackPieces() noexcept					{ return _black_pieces; }
+		const PieceMap& GetBlackPieces() const noexcept	{ return _black_pieces; }
+		PieceMap& GetBlackPieces() noexcept				{ return _black_pieces; }
 
 		inline Piece GetPiece(Square s) const { return _board[s]._piece ? _board[s]._piece->_code : Empty; }
+
+		template <Color PieceColor>
+		Square GetKingPosition() const
+		{
+			if constexpr (PieceColor == color::White)
+			{
+				auto it = _white_pieces.find(pieceset::WhiteKing);
+				if (it == _white_pieces.end())
+					throw std::logic_error("White king could not be found");
+				return it->second->_loc;
+			}
+			else
+			{
+				auto it = _black_pieces.find(pieceset::BlackKing);
+				if (it == _black_pieces.end())
+					throw std::logic_error("Black king could not be found");
+				return it->second->_loc;
+			}
+		}
 
 		template <Color PieceColor>
 		void PutPiece(Piece p, Square s)

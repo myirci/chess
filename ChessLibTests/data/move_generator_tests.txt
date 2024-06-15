@@ -1,6 +1,10 @@
 Group-1
 # King moves, all moves are listed
 {
+	# Test name
+	# Starting position
+	# Expected list of moves to be generated
+
 	Test-1
 	8/8/4k3/8/4K3/8/8/8 w - - 0 1
 	e4-d4, e4-f4, e4-d3, e4-e3, e4-f3
@@ -41,6 +45,10 @@ Group-1
 Group-2
 # Check eliminating moves, only subset of all moves are listed
 {
+    # Test name
+	# Starting position
+	# Generated moves should include the given list of moves
+	
 	Test-1
 	k7/8/q7/8/1N6/8/1P6/KR6 w - - 0 1
 	b4-a2, b4-a6-cm
@@ -85,6 +93,10 @@ Group-2
 Group-3
 # Random positions - All moves are listed
 {
+    # Test name
+	# Starting position
+	# Expected list of moves to be generated
+	
 	Test-1
 	3qk3/pp2pppb/b6n/2n2P2/2N5/r1PKB2r/P1PRN1PP/1q1r1b1R w - - 0 1
 	-
@@ -134,6 +146,10 @@ Group-3
 Group-4
 # Random positions - Only subset of all moves are listed.
 {
+    # Test name
+	# Starting position
+	# Generated moves should include the given list of moves
+	
 	Test-1
 	r3k2r/p3p3/8/8/1q6/8/P2P3P/R3K2R w KQkq - 0 1
 	e1-e2, e1-f1, e1-d1, e1-f2, e1-g1-ksc, e1-c1-qsc
@@ -190,6 +206,10 @@ Group-4
 Group-5
 # Number of moves
 {
+    # Test name
+	# Starting position
+	# Number of moves to be generated
+	
 	Test-1
 	8/8/1p6/p6q/PP6/2Qp4/6P1/k5K1 b - - 0 1
 	2
@@ -230,6 +250,10 @@ Group-5
 Group-6
 # Single Piece Moves - All moves are listed
 {
+    # Test name
+	# Starting position
+	# Expected list of moves to be generated
+	
 	# White knight
 	Test-1
 	k7/8/8/8/4N3/6r1/5r2/NN5K w - - 0 1
@@ -317,8 +341,12 @@ Group-6
 }
 
 Group-7
-# En-passant capture tests
+# En-passant capture tests - All moves are listed
 {
+    # Test name
+	# Starting position
+	# Expected list of moves to be generated
+
 	# White en-passant capture to the left
 	Test-1
 	4k3/8/8/1pP5/8/3r1r2/7r/4K3 w - b6 0 1

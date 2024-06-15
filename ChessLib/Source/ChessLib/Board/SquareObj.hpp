@@ -9,7 +9,7 @@ namespace chesslib::objboard
 
 	struct SquareObj
 	{
-		SquareObj(Square code = Empty) : 
+		constexpr explicit SquareObj(Square code = Empty) : 
 			_code{ code }, 
 			_piece{ nullptr },
 			_neighbors { conn::details::GetDirectNeighbors(code) }
@@ -18,6 +18,5 @@ namespace chesslib::objboard
 		Square				  _code;							
 		PieceObj*			  _piece;
 		conn::NeighborSquares _neighbors;
-
 	};
 }
